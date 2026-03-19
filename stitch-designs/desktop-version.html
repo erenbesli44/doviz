@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface-variant": "#414755",
+              "error": "#ba1a1a",
+              "secondary-container": "#6664e4",
+              "on-error": "#ffffff",
+              "inverse-surface": "#2f3034",
+              "inverse-primary": "#b5c4ff",
+              "tertiary-container": "#c64f00",
+              "surface": "#faf9fe",
+              "on-surface": "#1a1b1f",
+              "on-secondary-fixed-variant": "#3631b4",
+              "surface-container": "#eeedf3",
+              "outline": "#717786",
+              "on-tertiary": "#ffffff",
+              "on-primary-container": "#fefbff",
+              "secondary-fixed-dim": "#c2c1ff",
+              "on-secondary-container": "#fffbff",
+              "on-secondary": "#ffffff",
+              "on-error-container": "#93000a",
+              "on-background": "#1a1b1f",
+              "surface-container-highest": "#e3e2e7",
+              "on-primary-fixed": "#00164d",
+              "tertiary-fixed-dim": "#ffb595",
+              "secondary": "#4c4aca",
+              "on-primary-fixed-variant": "#003cac",
+              "tertiary-fixed": "#ffdbcc",
+              "on-tertiary-fixed-variant": "#7c2e00",
+              "surface-container-high": "#e9e7ed",
+              "surface-tint": "#0051e0",
+              "primary-fixed-dim": "#b5c4ff",
+              "primary": "#004fdb",
+              "inverse-on-surface": "#f1f0f5",
+              "tertiary": "#9e3d00",
+              "error-container": "#ffdad6",
+              "primary-container": "#3269f7",
+              "surface-container-low": "#f4f3f8",
+              "on-primary": "#ffffff",
+              "background": "#faf9fe",
+              "surface-dim": "#dad9df",
+              "on-tertiary-fixed": "#351000",
+              "surface-bright": "#faf9fe",
+              "outline-variant": "#c1c6d7",
+              "secondary-fixed": "#e2dfff",
+              "on-tertiary-container": "#fffbff",
+              "on-secondary-fixed": "#0c006a",
+              "surface-variant": "#e3e2e7",
+              "surface-container-lowest": "#ffffff",
+              "primary-fixed": "#dbe1ff"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #faf9fe; color: #1a1b1f; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .liquid-glass { backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .gradient-text { background: linear-gradient(135deg, #004fdb 0%, #3269f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl shadow-sm shadow-blue-900/5 transition-all duration-200">
+<div class="flex justify-between items-center h-16 px-8 max-w-[1440px] mx-auto w-full font-['Inter'] antialiased tracking-tight text-sm font-medium">
+<div class="text-xl font-bold tracking-tighter text-slate-900">
+                The Liquid Economy
+            </div>
+<div class="hidden lg:flex items-center gap-8">
+<a class="text-blue-700 border-b-2 border-blue-600 pb-1" href="#">Piyasalar</a>
+<a class="text-slate-500 hover:text-slate-900 transition-colors" href="#">Döviz</a>
+<a class="text-slate-500 hover:text-slate-900 transition-colors" href="#">Altın</a>
+<a class="text-slate-500 hover:text-slate-900 transition-colors" href="#">Endeksler</a>
+<a class="text-slate-500 hover:text-slate-900 transition-colors" href="#">Emtialar</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 text-sm w-64 focus:ring-1 focus:ring-primary transition-all" placeholder="Sembol veya haber ara..." type="text"/>
+</div>
+<button class="p-2 hover:bg-slate-50 rounded-lg active:scale-95 duration-200"><span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span></button>
+<button class="p-2 hover:bg-slate-50 rounded-lg active:scale-95 duration-200"><span class="material-symbols-outlined text-on-surface-variant" data-icon="account_circle">account_circle</span></button>
+</div>
+</div>
+</nav>
+<main class="pt-24 pb-12 px-8 max-w-[1440px] mx-auto">
+<!-- Section: Güncel Varlıklar (Current Assets) -->
+<header class="mb-10">
+<h1 class="text-[2.75rem] font-bold tracking-tight mb-2 leading-tight">Piyasalar</h1>
+<p class="text-on-surface-variant text-sm tracking-wide uppercase font-semibold opacity-70">Veri Güncelleme: 14:32:05</p>
+</header>
+<section class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-12">
+<!-- Asset Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/15 hover:shadow-xl hover:shadow-blue-900/5 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<span class="text-xs font-bold px-2 py-1 bg-secondary-fixed text-on-secondary-fixed rounded">FX</span>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">trending_up</span>
+</div>
+<h3 class="text-on-surface-variant text-xs font-semibold uppercase tracking-widest mb-1">Dolar/TL</h3>
+<div class="flex flex-col">
+<span class="text-2xl font-bold tracking-tight">32.4150</span>
+<span class="text-sm font-medium text-emerald-600 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">arrow_drop_up</span>
+                        %0.12
+                    </span>
+</div>
+</div>
+<!-- Asset Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/15 hover:shadow-xl hover:shadow-blue-900/5 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<span class="text-xs font-bold px-2 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded">ALTIN</span>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">trending_up</span>
+</div>
+<h3 class="text-on-surface-variant text-xs font-semibold uppercase tracking-widest mb-1">Gram Altın</h3>
+<div class="flex flex-col">
+<span class="text-2xl font-bold tracking-tight">2.441,82</span>
+<span class="text-sm font-medium text-emerald-600 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">arrow_drop_up</span>
+                        %1.42
+                    </span>
+</div>
+</div>
+<!-- Asset Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/15 hover:shadow-xl hover:shadow-blue-900/5 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<span class="text-xs font-bold px-2 py-1 bg-secondary-fixed text-on-secondary-fixed rounded">FX</span>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">trending_down</span>
+</div>
+<h3 class="text-on-surface-variant text-xs font-semibold uppercase tracking-widest mb-1">Euro/TL</h3>
+<div class="flex flex-col">
+<span class="text-2xl font-bold tracking-tight">34.9214</span>
+<span class="text-sm font-medium text-rose-600 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">arrow_drop_down</span>
+                        %0.08
+                    </span>
+</div>
+</div>
+<!-- Asset Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/15 hover:shadow-xl hover:shadow-blue-900/5 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<span class="text-xs font-bold px-2 py-1 bg-surface-container-high text-on-surface rounded">INDEX</span>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">show_chart</span>
+</div>
+<h3 class="text-on-surface-variant text-xs font-semibold uppercase tracking-widest mb-1">Nasdaq</h3>
+<div class="flex flex-col">
+<span class="text-2xl font-bold tracking-tight">18.672,7</span>
+<span class="text-sm font-medium text-emerald-600 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">arrow_drop_up</span>
+                        %0.85
+                    </span>
+</div>
+</div>
+<!-- Asset Card 5 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/15 hover:shadow-xl hover:shadow-blue-900/5 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<span class="text-xs font-bold px-2 py-1 bg-surface-container-high text-on-surface rounded">INDEX</span>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">show_chart</span>
+</div>
+<h3 class="text-on-surface-variant text-xs font-semibold uppercase tracking-widest mb-1">S&amp;P 500</h3>
+<div class="flex flex-col">
+<span class="text-2xl font-bold tracking-tight">5.473,23</span>
+<span class="text-sm font-medium text-emerald-600 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">arrow_drop_up</span>
+                        %0.33
+                    </span>
+</div>
+</div>
+</section>
+<!-- Main Chart Area -->
+<section class="mb-16">
+<div class="bg-surface-container-low rounded-[2rem] p-10 relative overflow-hidden">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 relative z-10">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="w-3 h-3 rounded-full bg-primary animate-pulse"></span>
+<span class="text-sm font-bold tracking-widest text-primary uppercase">Nasdaq 100 Live Focus</span>
+</div>
+<h2 class="text-5xl font-extrabold tracking-tighter mb-1">18,672.71 <span class="text-2xl font-medium text-on-surface-variant ml-2">USD</span></h2>
+<p class="text-emerald-600 font-semibold text-lg flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+                            +157.34 (+0.85%) bugün
+                        </p>
+</div>
+<div class="flex gap-2 mt-6 md:mt-0">
+<button class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface hover:bg-surface-container-low transition-all">1S</button>
+<button class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-primary text-on-primary shadow-lg shadow-primary/20">1G</button>
+<button class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface hover:bg-surface-container-low transition-all">1H</button>
+<button class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface hover:bg-surface-container-low transition-all">1A</button>
+<button class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface hover:bg-surface-container-low transition-all">1Y</button>
+<button class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface hover:bg-surface-container-low transition-all">TÜMÜ</button>
+</div>
+</div>
+<!-- Simplified Vector Chart -->
+<div class="h-[400px] w-full relative flex items-end">
+<svg class="w-full h-full drop-shadow-2xl" viewbox="0 0 1000 400">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#004fdb" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#004fdb" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,350 Q100,320 200,340 T400,280 T600,220 T800,120 T1000,50 L1000,400 L0,400 Z" fill="url(#chartGradient)"></path>
+<path d="M0,350 Q100,320 200,340 T400,280 T600,220 T800,120 T1000,50" fill="none" stroke="#004fdb" stroke-linecap="round" stroke-width="4"></path>
+<!-- Tooltip line mockup -->
+<line opacity="0.3" stroke="#004fdb" stroke-dasharray="8 4" stroke-width="1" x1="800" x2="800" y1="0" y2="400"></line>
+<circle cx="800" cy="120" fill="#004fdb" r="6"></circle>
+</svg>
+<!-- Floating Data Node -->
+<div class="absolute right-[15%] top-1/4 bg-white shadow-2xl rounded-2xl p-4 border border-outline-variant/20 liquid-glass bg-white/80">
+<p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Zirve Noktası</p>
+<p class="text-lg font-bold">18,742.10</p>
+<p class="text-[10px] text-on-surface-variant">14:15, 24 Haz 2024</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Market Overview List (Asymmetric Layout) -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+<div class="lg:col-span-2">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-2xl font-bold tracking-tight">Piyasa Özeti</h2>
+<a class="text-primary text-sm font-bold flex items-center gap-1 group" href="#">
+                        Tümünü Gör 
+                        <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+<div class="space-y-4">
+<!-- List Item 1 -->
+<div class="bg-surface-container-low/50 hover:bg-surface-container-highest rounded-2xl p-5 flex items-center transition-all cursor-pointer">
+<div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-primary font-black shadow-sm mr-5">B10</div>
+<div class="flex-1">
+<h4 class="font-bold">BIST 100</h4>
+<p class="text-xs text-on-surface-variant font-medium">İstanbul Menkul Kıymetler</p>
+</div>
+<div class="w-32 h-10 mr-8 hidden md:block">
+<svg class="w-full h-full" viewbox="0 0 100 40">
+<path d="M0,30 L10,25 L20,28 L30,15 L40,18 L50,10 L60,15 L70,5 L80,12 L90,8 L100,2" fill="none" stroke="#059669" stroke-width="2"></path>
+</svg>
+</div>
+<div class="text-right">
+<p class="font-bold">10.743,54</p>
+<p class="text-xs font-bold text-emerald-600">+%1.12</p>
+</div>
+</div>
+<!-- List Item 2 -->
+<div class="bg-surface-container-low/50 hover:bg-surface-container-highest rounded-2xl p-5 flex items-center transition-all cursor-pointer">
+<div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-on-surface font-black shadow-sm mr-5">DAX</div>
+<div class="flex-1">
+<h4 class="font-bold">DAX 40</h4>
+<p class="text-xs text-on-surface-variant font-medium">Almanya Endeksi</p>
+</div>
+<div class="w-32 h-10 mr-8 hidden md:block">
+<svg class="w-full h-full" viewbox="0 0 100 40">
+<path d="M0,10 L10,15 L20,12 L30,25 L40,22 L50,30 L60,25 L70,35 L80,28 L90,32 L100,38" fill="none" stroke="#e11d48" stroke-width="2"></path>
+</svg>
+</div>
+<div class="text-right">
+<p class="font-bold">18.177,62</p>
+<p class="text-xs font-bold text-rose-600">-%0.47</p>
+</div>
+</div>
+<!-- List Item 3 -->
+<div class="bg-surface-container-low/50 hover:bg-surface-container-highest rounded-2xl p-5 flex items-center transition-all cursor-pointer">
+<div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-slate-400 font-black shadow-sm mr-5">AG</div>
+<div class="flex-1">
+<h4 class="font-bold">Gümüş</h4>
+<p class="text-xs text-on-surface-variant font-medium">XAG/USD</p>
+</div>
+<div class="w-32 h-10 mr-8 hidden md:block">
+<svg class="w-full h-full" viewbox="0 0 100 40">
+<path d="M0,35 L10,32 L20,34 L30,20 L40,25 L50,15 L60,18 L70,8 L80,15 L90,12 L100,5" fill="none" stroke="#059669" stroke-width="2"></path>
+</svg>
+</div>
+<div class="text-right">
+<p class="font-bold">29,521</p>
+<p class="text-xs font-bold text-emerald-600">+%2.41</p>
+</div>
+</div>
+</div>
+</div>
+<!-- News/Insights Sidebar (The "Authority" Editorial touch) -->
+<div class="bg-surface-container rounded-[2rem] p-8">
+<h3 class="text-xs font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-8 opacity-60">Liquid Insights</h3>
+<div class="space-y-10">
+<article class="relative group cursor-pointer">
+<div class="overflow-hidden rounded-2xl mb-4 aspect-video">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Stock market digital graph on a large screen with city background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF-R3WppKAYsqgYiZdO8SCJ077bQE__LjVAWAEWRmdVJhPuh2dTpDYKiEMpPmMNwx7d42G7Evpo5oY6XAZ7sKHC-qZxarM03bLgfWH7o-leuRHfi0APq9YKSk53lXXXKvtsAa5oX3lYrw7-cb5e2NzSWdCHP290by3Xfn16jEkXPttXMsYphxyqEKv0VrGlIy4t7_g8PAZs6GaHq9f4yrirM13D7zFmUXDWMZDNwMVG4Um-SwNThPR_FfZy2mwFRrK0O5c_9NHYGY"/>
+</div>
+<span class="text-[10px] font-bold uppercase text-primary mb-2 block">Analiz</span>
+<h4 class="text-lg font-bold leading-tight group-hover:text-primary transition-colors">FED Faiz Kararı Sonrası Küresel Piyasalar: Yeni Bir Boğa Koşusu mu?</h4>
+<p class="text-sm text-on-surface-variant mt-2 line-clamp-2">Amerikan Merkez Bankası'nın son açıklamaları sonrası teknoloji hisselerinde yaşanan ralli...</p>
+</article>
+<div class="space-y-6">
+<div class="border-t border-outline-variant/30 pt-6">
+<h5 class="text-sm font-bold leading-snug hover:underline cursor-pointer">TCMB Brüt Rezervleri Geçen Hafta 2.4 Milyar Dolar Arttı</h5>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest mt-2 block">12 Dakika Önce</span>
+</div>
+<div class="border-t border-outline-variant/30 pt-6">
+<h5 class="text-sm font-bold leading-snug hover:underline cursor-pointer">Bitcoin 65.000 Dolar Direncini Zorluyor: ETF Girişleri Güçleniyor</h5>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest mt-2 block">2 Saat Önce</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="w-full py-12 bg-slate-50 border-t border-slate-200/50">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto">
+<div class="text-[11px] uppercase tracking-widest font-semibold text-slate-400 mb-4 md:mb-0">
+                © 2024 The Liquid Economy. Institutional Grade Data.
+            </div>
+<div class="flex gap-8">
+<a class="text-[11px] uppercase tracking-widest font-semibold text-slate-400 hover:text-blue-500 transition-colors opacity-80 hover:opacity-100" href="#">Privacy</a>
+<a class="text-[11px] uppercase tracking-widest font-semibold text-slate-400 hover:text-blue-500 transition-colors opacity-80 hover:opacity-100" href="#">Terms</a>
+<a class="text-[11px] uppercase tracking-widest font-semibold text-slate-400 hover:text-blue-500 transition-colors opacity-80 hover:opacity-100" href="#">API Documentation</a>
+<a class="text-[11px] uppercase tracking-widest font-semibold text-slate-400 hover:text-blue-500 transition-colors opacity-80 hover:opacity-100" href="#">Support</a>
+</div>
+</div>
+</footer>
+</body></html>

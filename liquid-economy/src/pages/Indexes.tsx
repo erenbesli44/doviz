@@ -1,0 +1,77 @@
+import { useState } from 'react';
+import { useMarketData } from '../hooks/useMarketData';
+import { useHistory } from '../hooks/useHistory';
+import AssetCard from '../components/ui/AssetCard';
+import AssetListRow from '../components/ui/AssetListRow';
+import FocusChart from '../components/ui/FocusChart';
+
+export default function Indexes() {
+  const { indexAssets, status } = useMarketData();
+  const [selectedId, setSelectedId] = useState<string>('XU100');
+  const [historyHours, setHistoryHours] = useState(24);
+
+  const focusAsset = indexAssets.find((a) => a.id === selectedId) ?? indexAssets[0];
+  const focusHistory = useHistory(focusAsset?.code ?? 'XU100', historyHours);
+
+  if (status === 'loading') {
+    return (
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="h-32 rounded-xl bg-[var(--color-surface-container)] animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <header className="mb-8 mt-4">
+        <h2 className="text-[2.75rem] font-extrabold tracking-tight leading-none">Endeksler</h2>
+        <p className="text-[var(--color-on-surface-variant)] font-medium mt-2">Küresel Borsa Endeksleri</p>
+      </header>
+
+      {/* Focus chart */}
+      <section className="mb-8">
+        <FocusChart
+          assetName={focusAsset.name}
+          assetCode={focusAsset.code}
+          price={focusAsset.price}
+          change={focusAsset.change}
+          history={focusHistory}
+          icon={focusAsset.icon}
+          iconBg={focusAsset.iconBg}
+          onRangeChange={setHistoryHours}
+          compact
+        />
+      </section>
+
+      {/* Desktop: card grid */}
+      <section className="hidden md:grid grid-cols-3 gap-4 mb-8">
+        {indexAssets.map((asset) => (
+          <AssetCard
+            key={asset.id}
+            asset={asset}
+            onClick={() => setSelectedId(asset.id)}
+          />
+        ))}
+      </section>
+
+      {/* Mobile: list */}
+      <section className="md:hidden">
+        <h3 className="text-sm font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60 ml-2 mb-4">
+          TÜM ENDEKSLER
+        </h3>
+        <div className="bg-[var(--color-surface-container-low)] rounded-[2rem] p-2 space-y-1">
+          {indexAssets.map((asset) => (
+            <AssetListRow
+              key={asset.id}
+              asset={asset}
+              active={asset.id === selectedId}
+              onClick={() => setSelectedId(asset.id)}
+            />
+          ))}
+        </div>
+      </section>
+    </>
+  );
+}

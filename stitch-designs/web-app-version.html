@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#ffdbcc",
+              "primary-fixed-dim": "#b5c4ff",
+              "surface-container-highest": "#e3e2e7",
+              "on-tertiary": "#ffffff",
+              "outline-variant": "#c1c6d7",
+              "primary": "#004fdb",
+              "secondary": "#4c4aca",
+              "on-secondary": "#ffffff",
+              "secondary-fixed-dim": "#c2c1ff",
+              "secondary-container": "#6664e4",
+              "surface-tint": "#0051e0",
+              "secondary-fixed": "#e2dfff",
+              "on-primary": "#ffffff",
+              "on-surface-variant": "#414755",
+              "on-background": "#1a1b1f",
+              "on-tertiary-container": "#fffbff",
+              "on-secondary-fixed-variant": "#3631b4",
+              "error-container": "#ffdad6",
+              "tertiary-container": "#c64f00",
+              "surface-container-lowest": "#ffffff",
+              "on-error-container": "#93000a",
+              "surface-bright": "#faf9fe",
+              "surface-container": "#eeedf3",
+              "surface": "#faf9fe",
+              "background": "#faf9fe",
+              "on-surface": "#1a1b1f",
+              "on-primary-fixed-variant": "#003cac",
+              "outline": "#717786",
+              "on-tertiary-fixed-variant": "#7c2e00",
+              "tertiary-fixed-dim": "#ffb595",
+              "surface-variant": "#e3e2e7",
+              "inverse-primary": "#b5c4ff",
+              "on-secondary-fixed": "#0c006a",
+              "surface-container-low": "#f4f3f8",
+              "primary-container": "#3269f7",
+              "error": "#ba1a1a",
+              "on-tertiary-fixed": "#351000",
+              "on-error": "#ffffff",
+              "on-secondary-container": "#fffbff",
+              "on-primary-fixed": "#00164d",
+              "surface-dim": "#dad9df",
+              "inverse-on-surface": "#f1f0f5",
+              "on-primary-container": "#fefbff",
+              "inverse-surface": "#2f3034",
+              "primary-fixed": "#dbe1ff",
+              "surface-container-high": "#e9e7ed",
+              "tertiary": "#9e3d00"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        .liquid-glass {
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+        body {
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased mb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-3xl">
+<div class="flex justify-between items-center w-full px-6 pt-12 pb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden flex-shrink-0">
+<img alt="User profile photo avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4_uSX_cTunvc8GVKb8q1iPljybhZKDQTQdC03A2Yg3s788BwXPJn-kPYr6uTnLNi1EbxbLI7f1c7auTbVLR0pmYe4MF1PEJ_6S2ypRoBsUibHDg9uoVHG5zjCkPnvPpIo23qEi3iDh3RbSnwnfh5om1uVp5DlXuE45zKmAEsymbYh2nxAgwBxAOItwj73oep3IQ7J7VE4QXyNxdOboe9jbSJgz2_HUmxQKa-ACHfn-7u6vuGnYdyqfzxo_GcMASl-Uu2ATgS60PY"/>
+</div>
+<h1 class="text-2xl font-bold tracking-tighter text-blue-700 dark:text-blue-500">The Liquid Economy</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-50" data-icon="search">search</span>
+</button>
+</div>
+</div>
+</header>
+<main class="mt-32 px-6">
+<!-- Page Title -->
+<div class="mb-8 mt-4">
+<h2 class="text-[2.75rem] font-extrabold tracking-tight leading-none text-on-surface">Piyasalar</h2>
+<p class="text-on-surface-variant font-medium mt-2">Canlı Veri • 12:45:02</p>
+</div>
+<!-- REORDERED: Market List at Top -->
+<div class="space-y-6 mb-10">
+<h3 class="text-sm font-bold tracking-widest uppercase text-on-surface-variant/60 ml-2">GÜNCEL VARLIKLAR</h3>
+<div class="bg-surface-container-low rounded-[2rem] p-2 space-y-1">
+<!-- Row: Dolar/TL -->
+<button class="w-full flex items-center justify-between p-4 rounded-2xl bg-surface-container-lowest hover:bg-surface-container-high ring-2 ring-primary/10 transition-all active:scale-[0.98] duration-200">
+<div class="flex items-center gap-4">
+<div class="w-11 h-11 rounded-full bg-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-fixed" data-icon="attach_money">attach_money</span>
+</div>
+<div class="text-left">
+<span class="block text-base font-bold tracking-tight">Dolar/TL</span>
+<span class="block text-[10px] font-bold text-on-surface-variant/60 uppercase">USD/TRY</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<span class="block text-base font-extrabold tracking-tight">34,1240</span>
+<span class="block text-xs font-bold text-primary">+0,12%</span>
+</div>
+</div>
+</button>
+<!-- Row: Gram Altın -->
+<button class="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-surface-container-high transition-all active:scale-[0.98] duration-200">
+<div class="flex items-center gap-4">
+<div class="w-11 h-11 rounded-full bg-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-fixed" data-icon="savings">savings</span>
+</div>
+<div class="text-left">
+<span class="block text-base font-bold tracking-tight">Gram Altın</span>
+<span class="block text-[10px] font-bold text-on-surface-variant/60 uppercase">GAUTRY</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<span class="block text-base font-extrabold tracking-tight">2.845,12</span>
+<span class="block text-xs font-bold text-primary">+0,45%</span>
+</div>
+</div>
+</button>
+<!-- Row: Euro/TL -->
+<button class="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-surface-container-high transition-all active:scale-[0.98] duration-200">
+<div class="flex items-center gap-4">
+<div class="w-11 h-11 rounded-full bg-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-fixed" data-icon="euro">euro</span>
+</div>
+<div class="text-left">
+<span class="block text-base font-bold tracking-tight">Euro/TL</span>
+<span class="block text-[10px] font-bold text-on-surface-variant/60 uppercase">EUR/TRY</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<span class="block text-base font-extrabold tracking-tight">38,1540</span>
+<span class="block text-xs font-bold text-error">-0,08%</span>
+</div>
+</div>
+</button>
+</div>
+</div>
+<!-- NEW: Large Interactive Asset Chart Preview Area -->
+<div class="mb-10">
+<div class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_4px_40px_rgba(0,0,0,0.04)] border border-outline-variant/10 overflow-hidden relative">
+<!-- Header of Focus Chart -->
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-on-secondary-fixed" data-icon="attach_money">attach_money</span>
+</div>
+<span class="text-xs font-bold tracking-widest uppercase text-on-surface-variant/60">USD/TRY DETAY</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-black tracking-tighter">34,1240</span>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-primary">+0,12%</span>
+<span class="text-[10px] font-medium text-on-surface-variant/40">SON 24 SAAT</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1 rounded-full bg-primary text-white text-[10px] font-bold tracking-widest uppercase">1G</button>
+<button class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant text-[10px] font-bold tracking-widest uppercase">1H</button>
+</div>
+</div>
+<!-- Main Focus Chart (Vector Style) -->
+<div class="relative h-48 w-full group">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 400 150">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="rgba(0, 79, 219, 0.2)"></stop>
+<stop offset="100%" stop-color="rgba(0, 79, 219, 0)"></stop>
+</lineargradient>
+</defs>
+<!-- Area Fill -->
+<path d="M0,150 L0,110 L50,90 L100,105 L150,70 L200,85 L250,40 L300,55 L350,20 L400,35 L400,150 Z" fill="url(#chartGradient)"></path>
+<!-- Main Line -->
+<path class="text-primary" d="M0,110 L50,90 L100,105 L150,70 L200,85 L250,40 L300,55 L350,20 L400,35" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Interactive Pointer -->
+<circle class="text-primary" cx="350" cy="20" fill="white" r="5" stroke="currentColor" stroke-width="3"></circle>
+<line class="text-outline-variant/30" stroke="currentColor" stroke-dasharray="4" stroke-width="1" x1="350" x2="350" y1="20" y2="150"></line>
+</svg>
+<!-- Chart Labels -->
+<div class="absolute bottom-0 left-0 w-full flex justify-between text-[10px] font-bold text-on-surface-variant/40 tracking-widest uppercase pt-2">
+<span>08:00</span>
+<span>12:00</span>
+<span>16:00</span>
+<span>20:00</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Integrated BIST 100 Summary -->
+<div class="mb-10">
+<h3 class="text-sm font-bold tracking-widest uppercase text-on-surface-variant/60 ml-2 mb-4">PİYASA ÖZETİ</h3>
+<div class="bg-surface-container rounded-3xl p-6 flex items-center justify-between">
+<div>
+<span class="text-[10px] font-bold text-on-surface-variant/60 uppercase">BİST 100</span>
+<div class="flex items-center gap-2">
+<span class="text-2xl font-bold tracking-tighter">9.142,40</span>
+<span class="text-xs font-bold text-primary">+1,24%</span>
+</div>
+</div>
+<div class="flex items-center gap-1 bg-primary/10 px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="trending_up">trending_up</span>
+<span class="text-xs font-bold text-primary uppercase">BOĞA PİYASASI</span>
+</div>
+</div>
+</div>
+<!-- Horizontal Scroll Section: Commodities -->
+<div class="mt-10 mb-8 overflow-hidden">
+<h3 class="text-sm font-bold tracking-widest uppercase text-on-surface-variant/60 ml-2 mb-4">EMTİA &amp; METAL</h3>
+<div class="flex gap-4 overflow-x-auto hide-scrollbar pb-4 -mx-6 px-6">
+<div class="min-w-[140px] p-4 rounded-3xl bg-surface-container-high flex flex-col gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant/60 uppercase">Gümüş</span>
+<span class="text-lg font-extrabold tracking-tight">31.24</span>
+<span class="text-xs font-bold text-primary">+2,1%</span>
+</div>
+<div class="min-w-[140px] p-4 rounded-3xl bg-surface-container-high flex flex-col gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant/60 uppercase">Brent Petrol</span>
+<span class="text-lg font-extrabold tracking-tight">72.48</span>
+<span class="text-xs font-bold text-error">-1,4%</span>
+</div>
+<div class="min-w-[140px] p-4 rounded-3xl bg-surface-container-high flex flex-col gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant/60 uppercase">Doğal Gaz</span>
+<span class="text-lg font-extrabold tracking-tight">2.31</span>
+<span class="text-xs font-bold text-primary">+0,8%</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-3 bg-white/70 dark:bg-slate-900/70 backdrop-blur-3xl shadow-[0_-4px_40px_rgba(0,0,0,0.06)]">
+<!-- Piyasalar (Active) -->
+<a class="flex flex-col items-center justify-center text-blue-700 dark:text-blue-400 font-bold scale-110 transition-transform tap-highlight-none duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="equalizer" data-weight="fill">equalizer</span>
+<span class="font-['Inter'] text-[10px] font-medium leading-none mt-1">Piyasalar</span>
+</a>
+<!-- Döviz -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 opacity-60 hover:opacity-100 transition-opacity tap-highlight-none duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-['Inter'] text-[10px] font-medium leading-none mt-1">Döviz</span>
+</a>
+<!-- Altın -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 opacity-60 hover:opacity-100 transition-opacity tap-highlight-none duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="savings">savings</span>
+<span class="font-['Inter'] text-[10px] font-medium leading-none mt-1">Altın</span>
+</a>
+<!-- Endeksler -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 opacity-60 hover:opacity-100 transition-opacity tap-highlight-none duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="show_chart">show_chart</span>
+<span class="font-['Inter'] text-[10px] font-medium leading-none mt-1">Endeksler</span>
+</a>
+<!-- Emtialar -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 opacity-60 hover:opacity-100 transition-opacity tap-highlight-none duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="toll">toll</span>
+<span class="font-['Inter'] text-[10px] font-medium leading-none mt-1">Emtialar</span>
+</a>
+</nav>
+<!-- FAB -->
+<button class="fixed bottom-28 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary-container text-white shadow-[0_4px_40px_rgba(0,79,219,0.3)] flex items-center justify-center z-40 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</body></html>
