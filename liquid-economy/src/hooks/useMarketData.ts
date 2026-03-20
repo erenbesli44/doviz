@@ -5,17 +5,21 @@ import { newsItems } from '../data/mock';
 import { useSSEQuotes } from './useSSEQuotes';
 import type { Asset, MarketSummaryItem, NewsItem, CommodityItem, TickerItem } from '../data/types';
 
-// Symbols shown in the Markets page overview — kept fresh via SSE
-const OVERVIEW_SYMBOLS = ['USD/TRY', 'EUR/TRY', 'GBP/TRY', 'BTC/USD', 'XAU/USD'];
+// Symbols subscribed to SSE for live price refresh
+const OVERVIEW_SYMBOLS = ['USD/TRY', 'EUR/TRY', 'GBP/TRY', 'BTC/USD', 'GAUTRY', 'XU100', 'NDX', 'SPX', 'GAGTRY', 'BRENT'];
 
 // Ordered list for the main piyasalar ticker board
 const TICKER_ORDER = ['GAUTRY', 'USD/TRY', 'EUR/TRY', 'GBP/TRY', 'XU100', 'BTC/USD', 'GAGTRY', 'BRENT'];
+
+// All 10 symbols shown in the extended overview grid (deduplicates the old TickerBoard)
+const EXTENDED_OVERVIEW_ORDER = ['USD/TRY', 'EUR/TRY', 'GBP/TRY', 'GAUTRY', 'GAGTRY', 'XU100', 'NDX', 'SPX', 'BTC/USD', 'BRENT'];
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
 interface MarketData {
   status: Status;
   overviewAssets: Asset[];
+  extendedOverviewAssets: Asset[];
   fxAssets: Asset[];
   goldAssets: Asset[];
   indexAssets: Asset[];
@@ -29,16 +33,17 @@ interface MarketData {
 }
 
 export function useMarketData(): MarketData {
-  const [status,          setStatus]    = useState<Status>('loading');
-  const [overviewAssets,  setOverview]  = useState<Asset[]>([]);
-  const [fxAssets,        setFx]        = useState<Asset[]>([]);
-  const [goldAssets,      setGold]      = useState<Asset[]>([]);
-  const [indexAssets,     setIndexes]   = useState<Asset[]>([]);
-  const [commodityAssets, setCommodities] = useState<Asset[]>([]);
-  const [commodityCards,  setCards]     = useState<CommodityItem[]>([]);
-  const [marketSummary,   setSummary]   = useState<MarketSummaryItem[]>([]);
-  const [tickerItems,     setTicker]    = useState<TickerItem[]>([]);
-  const [lastUpdated,     setUpdated]   = useState<Date | null>(null);
+  const [status,                 setStatus]           = useState<Status>('loading');
+  const [overviewAssets,         setOverview]         = useState<Asset[]>([]);
+  const [extendedOverviewAssets, setExtendedOverview] = useState<Asset[]>([]);
+  const [fxAssets,               setFx]               = useState<Asset[]>([]);
+  const [goldAssets,             setGold]             = useState<Asset[]>([]);
+  const [indexAssets,            setIndexes]          = useState<Asset[]>([]);
+  const [commodityAssets,        setCommodities]      = useState<Asset[]>([]);
+  const [commodityCards,         setCards]            = useState<CommodityItem[]>([]);
+  const [marketSummary,          setSummary]          = useState<MarketSummaryItem[]>([]);
+  const [tickerItems,            setTicker]           = useState<TickerItem[]>([]);
+  const [lastUpdated,            setUpdated]          = useState<Date | null>(null);
 
   // Real-time SSE for overview symbols — falls back to polling gracefully
   const { quotes: sseQuotes, sseAvailable } = useSSEQuotes(OVERVIEW_SYMBOLS);
@@ -78,6 +83,13 @@ export function useMarketData(): MarketData {
       });
       setTicker(ordered);
 
+      // Extended overview grid — 10 symbols covering FX, gold, indexes, crypto, commodity
+      const extended = EXTENDED_OVERVIEW_ORDER.flatMap((sym) => {
+        const q = quoteMap.get(sym);
+        return q ? [quoteToAsset(q)] : [];
+      });
+      setExtendedOverview(extended);
+
       setUpdated(new Date());
       setStatus('success');
     } catch {
@@ -85,16 +97,17 @@ export function useMarketData(): MarketData {
     }
   }, []);
 
-  // Apply SSE real-time overrides to overviewAssets whenever new quotes arrive
+  // Apply SSE real-time overrides to overview assets whenever new quotes arrive
   useEffect(() => {
     if (Object.keys(sseQuotes).length === 0) return;
-    setOverview((prev) =>
+    const applyLive = (prev: Asset[]) =>
       prev.map((asset) => {
-        const live = sseQuotes[asset.id]; // asset.id == internal symbol (e.g. "USD/TRY")
+        const live = sseQuotes[asset.id];
         if (!live) return asset;
         return quoteToAsset(live);
-      })
-    );
+      });
+    setOverview(applyLive);
+    setExtendedOverview(applyLive);
   }, [sseQuotes]);
 
   useEffect(() => {
@@ -110,6 +123,7 @@ export function useMarketData(): MarketData {
   return {
     status,
     overviewAssets,
+    extendedOverviewAssets,
     fxAssets,
     goldAssets,
     indexAssets,

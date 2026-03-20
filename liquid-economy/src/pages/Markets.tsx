@@ -7,7 +7,6 @@ import FocusChart from '../components/ui/FocusChart';
 import CommodityCard from '../components/ui/CommodityCard';
 import MarketSummaryRow from '../components/ui/MarketSummaryRow';
 import InsightsCard from '../components/ui/InsightsCard';
-import TickerBoard from '../components/ui/TickerBoard';
 
 function LiveClock() {
   const [time, setTime] = useState(() => new Date());
@@ -23,7 +22,7 @@ function LiveClock() {
 }
 
 export default function Markets() {
-  const { status, overviewAssets, fxAssets, goldAssets, commodityCards, marketSummary, tickerItems, news } = useMarketData();
+  const { status, extendedOverviewAssets, fxAssets, goldAssets, commodityCards, marketSummary, news } = useMarketData();
 
   // Selected asset for the focus chart; id === symbol code, e.g. "USD/TRY"
   const [selectedId, setSelectedId] = useState<string>('USD/TRY');
@@ -32,8 +31,8 @@ export default function Markets() {
 
   const allFeatured = [...fxAssets.slice(0, 3), ...goldAssets.slice(0, 1)];
   const focusAsset =
+    extendedOverviewAssets.find((a) => a.id === selectedId) ??
     allFeatured.find((a) => a.id === selectedId) ??
-    overviewAssets.find((a) => a.id === selectedId) ??
     fxAssets[0];
 
   if (status === 'loading') {
@@ -58,19 +57,9 @@ export default function Markets() {
         </p>
       </header>
 
-      {/* ── TICKER BOARD (all breakpoints) ──────────── */}
-      {tickerItems.length > 0 && (
-        <section className="mb-10">
-          <h3 className="text-sm font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60 ml-2 mb-4">
-            PİYASALAR
-          </h3>
-          <TickerBoard items={tickerItems} />
-        </section>
-      )}
-
-      {/* ── DESKTOP: 5-col asset overview grid ──────── */}
+      {/* ── DESKTOP: extended 10-asset overview grid (5 cols × 2 rows) ─── */}
       <section className="hidden md:grid grid-cols-5 gap-4 mb-12">
-        {overviewAssets.map((asset) => (
+        {extendedOverviewAssets.map((asset) => (
           <AssetCard
             key={asset.id}
             asset={asset}
