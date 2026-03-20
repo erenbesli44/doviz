@@ -1,23 +1,28 @@
 """
 Yahoo Finance provider adapter (unofficial).
 
-Used for: BIST 100 (XU100.IS), and as a fallback for indices/commodities.
+Used for: FX pairs (TRY crosses, EUR/USD, GBP/USD), commodities (gold, oil, gas),
+indices (XU100, NDX, DAX), and as a fallback for many other symbols.
 
 NOTE: This uses Yahoo Finance's unofficial JSON endpoint — no API key required
-but the feed is inherently unstable and subject to BIST data being ~15 min delayed.
-We do NOT use the yfinance library to keep the dependency footprint minimal; instead
-we call the v8 chart API directly with httpx.
+but the feed is inherently unstable. We do NOT use the yfinance library to keep
+the dependency footprint minimal; instead we call the v8 chart API directly with httpx.
 
-Data is explicitly marked as delayed in the symbol registry (is_live=False).
+Change % is anchored to Istanbul midnight (00:00 TRT = 21:00 UTC previous day)
+so that "daily change" matches what Turkish financial sites (BloombergHT, etc.) show.
+If the hourly bars don't extend back far enough, we fall back to chartPreviousClose.
 """
 import logging
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta, timezone
 
 import httpx
 
 from .base import ProviderError, RawHistoryPoint, RawQuote
 
 logger = logging.getLogger(__name__)
+
+# Turkey Standard Time — UTC+3, no DST
+_TRT = timezone(timedelta(hours=3))
 
 # Yahoo Finance chart API (v8) — no auth required
 _BASE = "https://query1.finance.yahoo.com/v8/finance/chart"
@@ -29,6 +34,36 @@ _HEADERS = {
     "User-Agent": "Mozilla/5.0",
     "Accept": "application/json",
 }
+
+
+def _istanbul_midnight_utc() -> datetime:
+    """Return today's 00:00 TRT expressed as a UTC-aware datetime.
+
+    Istanbul midnight = 21:00 UTC of the previous calendar day.
+    Example: 2026-03-20 00:00 TRT → 2026-03-19 21:00 UTC
+    """
+    now_trt = datetime.now(_TRT)
+    midnight_trt = now_trt.replace(hour=0, minute=0, second=0, microsecond=0)
+    return midnight_trt.astimezone(UTC)
+
+
+def _prev_close_at_istanbul_midnight(
+    timestamps: list[int], closes: list[float | None]
+) -> float | None:
+    """Find the last valid close price at or before today's Istanbul midnight.
+
+    Yahoo returns hourly bars as UNIX timestamps. We walk backwards and return
+    the latest bar whose timestamp is <= the Istanbul midnight UTC cutoff.
+    Returns None if no suitable bar exists (e.g., feed only goes back a few hours).
+    """
+    cutoff = _istanbul_midnight_utc()
+    cutoff_ts = cutoff.timestamp()
+
+    # Walk in reverse to find the most recent bar at or before the cutoff
+    for ts, close in zip(reversed(timestamps), reversed(closes)):
+        if ts <= cutoff_ts and close is not None:
+            return float(close)
+    return None
 
 
 class YahooFinanceProvider:
@@ -52,10 +87,13 @@ class YahooFinanceProvider:
         raise ProviderError(self.provider_id, symbol, "both Yahoo endpoints failed")
 
     async def fetch_quote(self, external_symbol: str) -> RawQuote:
-        data = await self._get(external_symbol, params={"interval": "1d", "range": "5d"})
+        # Use 1h interval over 2 days — gives enough bars to find Istanbul midnight
+        # while still returning regularMarketPrice in `meta` for the current price.
+        data = await self._get(external_symbol, params={"interval": "1h", "range": "2d"})
 
         try:
-            meta = data["chart"]["result"][0]["meta"]
+            result = data["chart"]["result"][0]
+            meta = result["meta"]
         except (KeyError, IndexError, TypeError) as e:
             raise ProviderError(self.provider_id, external_symbol, f"unexpected response structure: {e}") from e
 
@@ -63,9 +101,23 @@ class YahooFinanceProvider:
         if price is None:
             raise ProviderError(self.provider_id, external_symbol, "null regularMarketPrice")
 
-        prev_close = meta.get("chartPreviousClose") or meta.get("previousClose") or price
-        change_pct = ((price - prev_close) / prev_close * 100) if prev_close else 0.0
+        # Attempt Istanbul-midnight anchor first
+        try:
+            timestamps = result.get("timestamp") or []
+            closes = result.get("indicators", {}).get("quote", [{}])[0].get("close") or []
+            prev_close = _prev_close_at_istanbul_midnight(timestamps, closes)
+        except Exception:
+            prev_close = None
 
+        # Fall back to Yahoo's own chartPreviousClose (UTC/NY session) if needed
+        if not prev_close:
+            prev_close = meta.get("chartPreviousClose") or meta.get("previousClose") or float(price)
+            logger.debug(
+                "%s: Istanbul-midnight bar not found, using chartPreviousClose=%.4f",
+                external_symbol, prev_close,
+            )
+
+        change_pct = ((float(price) - prev_close) / prev_close * 100) if prev_close else 0.0
         market_state = meta.get("marketState", "").lower() or None
 
         return RawQuote(
