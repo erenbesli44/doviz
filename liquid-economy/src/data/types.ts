@@ -50,3 +50,12 @@ export interface CommodityItem {
   price: number;
   change: number;
 }
+
+// ---- Ticker board item (main page piyasalar list) ----
+export interface TickerItem {
+  id: string;       // symbol, e.g. "USD/TRY"
+  label: string;    // display label, e.g. "DOLAR"
+  price: number;
+  changePct: number;
+  currency: string; // "TRY" | "USD"
+}

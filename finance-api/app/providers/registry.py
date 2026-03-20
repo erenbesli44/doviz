@@ -8,6 +8,7 @@ injected into services through FastAPI's dependency system.
 import httpx
 
 from ..config import Settings
+from ..providers.altinkaynak_gold import AltinkaynakGoldProvider
 from ..providers.coingecko import CoinGeckoProvider
 from ..providers.finnhub import FinnhubProvider
 from ..providers.fmp import FMPProvider
@@ -25,6 +26,7 @@ class ProviderRegistry:
             "fmp": FMPProvider(client, settings.fmp_api_key),
             "yahoo": YahooFinanceProvider(client),
             "harem_altin": HaremAltinProvider(client),
+            "altinkaynak_gold": AltinkaynakGoldProvider(client),
         }
 
     def get(self, provider_id: str):

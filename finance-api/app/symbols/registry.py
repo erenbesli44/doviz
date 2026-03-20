@@ -120,7 +120,8 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         internal="GAUTRY", name="Gram Altın", category="gold",
         currency="TRY", unit="gram",
         primary_provider="derived", fallback_provider=None,
-        external_primary="", external_fallback=None,
+        external_primary="HH_T",  # Altinkaynak Kod: Has Toptan (fine gold wholesale)
+        external_fallback=None,
         ttl_seconds=60,
     ),
     "HAREM1KG": SymbolConfig(
@@ -130,6 +131,13 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         external_primary="", external_fallback=None,
         ttl_seconds=120,
         is_live=False,
+    ),
+    "GAGTRY": SymbolConfig(
+        internal="GAGTRY", name="Gram Gümüş", category="commodity",
+        currency="TRY", unit="gram",
+        primary_provider="derived", fallback_provider=None,
+        external_primary="", external_fallback=None,
+        ttl_seconds=60,
     ),
 
     # ── Indices ──────────────────────────────────────────────────────────────

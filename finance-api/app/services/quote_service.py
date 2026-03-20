@@ -200,40 +200,75 @@ class QuoteService:
             )
 
     async def _fetch_derived(self, config: SymbolConfig) -> QuoteResponse:
-        """Compute GAUTRY / HAREM1KG from live XAU/USD × USD/TRY prices.
+        """Compute GAUTRY / HAREM1KG / GAGTRY from live sub-quotes × USD/TRY.
 
-        Both sub-quotes go through the normal cache+fallback path so they
-        benefit from caching and won't count double against provider rate limits.
+        For GAUTRY, the price is first attempted from the Altınkaynak Kapalıçarşı
+        endpoint (physical Istanbul Grand Bazaar price). If that fails, the price
+        falls back to the derived XAU/USD × USD/TRY formula.
+
+        change_pct is computed from the Istanbul-day changes of the underlying
+        sub-quotes (XAU/USD + USD/TRY for gold; XAG/USD + USD/TRY for silver).
         """
         _TROY_OZ_TO_GRAMS = 31.1035
 
         try:
-            xau = await self.get_quote("XAU/USD")
             usdtry = await self.get_quote("USD/TRY")
+            usd_try_rate = usdtry.data.price
+
+            if config.internal in ("GAUTRY", "HAREM1KG"):
+                xau = await self.get_quote("XAU/USD")
+                base_price_usd = xau.data.price
+                # Combined change: gold move (USD) + FX move (TRY/USD)
+                base_change_pct = round(xau.data.change_pct + usdtry.data.change_pct, 4)
+            elif config.internal == "GAGTRY":
+                xag = await self.get_quote("XAG/USD")
+                base_price_usd = xag.data.price
+                base_change_pct = round(xag.data.change_pct + usdtry.data.change_pct, 4)
+            else:
+                raise ProviderError("derived", config.internal, "unknown derived symbol")
         except HTTPException as e:
             raise HTTPException(
                 status_code=503,
                 detail=f"Cannot derive {config.internal}: sub-quote unavailable ({e.detail})",
             ) from e
 
-        xau_usd = xau.data.price          # USD per troy oz
-        usd_try_rate = usdtry.data.price  # TRY per 1 USD
-
+        # ── Price computation ─────────────────────────────────────────────────
         if config.internal == "GAUTRY":
-            # (USD/troy_oz) ÷ 31.1035 g/troy_oz × TRY/USD  →  TRY per gram
-            price = (xau_usd / _TROY_OZ_TO_GRAMS) * usd_try_rate
+            # Try Kapalıçarşı physical price first (reflects actual dealer price
+            # in Istanbul Grand Bazaar; includes physical premium over spot).
+            # Fall back to derived XAU × USDTRY formula on any failure.
+            try:
+                kapalicarsi = self._providers.get("altinkaynak_gold")
+                raw_kc = await asyncio.wait_for(
+                    kapalicarsi.fetch_quote(config.external_primary),
+                    timeout=self._timeout,
+                )
+                price = raw_kc.price
+                is_live = True
+                provider_used = "altinkaynak_gold"
+                logger.debug("GAUTRY: Kapalıçarşı price %.2f TRY (HH_T Alış)", price)
+            except Exception as exc:
+                logger.warning("GAUTRY: Kapalıçarşı fetch failed (%s), using derived", exc)
+                price = (base_price_usd / _TROY_OZ_TO_GRAMS) * usd_try_rate
+                is_live = config.is_live
+                provider_used = "derived"
+
         elif config.internal == "HAREM1KG":
-            # same formula × 1000  →  TRY per kg
-            price = (xau_usd / _TROY_OZ_TO_GRAMS) * usd_try_rate * 1000
-        else:
-            raise ProviderError("derived", config.internal, "unknown derived symbol")
+            price = (base_price_usd / _TROY_OZ_TO_GRAMS) * usd_try_rate * 1000
+            is_live = config.is_live
+            provider_used = "derived"
+
+        else:  # GAGTRY
+            price = (base_price_usd / _TROY_OZ_TO_GRAMS) * usd_try_rate
+            is_live = config.is_live
+            provider_used = "derived"
 
         raw = RawQuote(
             price=round(price, 2),
-            change_pct=round(xau.data.change_pct, 4),  # track gold's daily move
+            change_pct=base_change_pct,
             fetched_at=datetime.now(UTC),
         )
-        return self._normalize(raw, config, provider_id="derived", is_live=config.is_live)
+        return self._normalize(raw, config, provider_id=provider_used, is_live=is_live)
 
     async def _fetch(self, provider: MarketProvider, symbol: str) -> RawQuote:
         """Wrap provider call with timeout."""

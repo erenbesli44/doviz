@@ -13,13 +13,7 @@ export default function TopAppBar() {
             The Liquid Economy
           </h1>
         </div>
-        {/* Right: search */}
-        <button
-          aria-label="Ara"
-          className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-slate-100/50 transition-colors active:scale-95 duration-200"
-        >
-          <span className="material-symbols-outlined text-slate-900">search</span>
-        </button>
+
       </div>
     </header>
   );

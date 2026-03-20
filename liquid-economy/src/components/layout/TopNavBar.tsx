@@ -37,16 +37,7 @@ export default function TopNavBar() {
 
         {/* Right side */}
         <div className="flex items-center gap-4">
-          <div className="relative hidden md:block">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-on-surface-variant)] text-[18px]">
-              search
-            </span>
-            <input
-              type="text"
-              placeholder="Sembol veya haber ara..."
-              className="bg-[var(--color-surface-container-low)] border-none rounded-full pl-10 pr-4 py-2 text-sm w-64 focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)] transition-all"
-            />
-          </div>
+
           <button
             aria-label="Bildirimler"
             className="p-2 hover:bg-slate-50 rounded-lg active:scale-95 duration-200"

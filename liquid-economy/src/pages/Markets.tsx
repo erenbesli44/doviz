@@ -7,6 +7,7 @@ import FocusChart from '../components/ui/FocusChart';
 import CommodityCard from '../components/ui/CommodityCard';
 import MarketSummaryRow from '../components/ui/MarketSummaryRow';
 import InsightsCard from '../components/ui/InsightsCard';
+import TickerBoard from '../components/ui/TickerBoard';
 
 function LiveClock() {
   const [time, setTime] = useState(() => new Date());
@@ -22,7 +23,7 @@ function LiveClock() {
 }
 
 export default function Markets() {
-  const { status, overviewAssets, fxAssets, goldAssets, commodityCards, marketSummary, news } = useMarketData();
+  const { status, overviewAssets, fxAssets, goldAssets, commodityCards, marketSummary, tickerItems, news } = useMarketData();
 
   // Selected asset for the focus chart; id === symbol code, e.g. "USD/TRY"
   const [selectedId, setSelectedId] = useState<string>('USD/TRY');
@@ -56,6 +57,16 @@ export default function Markets() {
           Canlı Veri • <LiveClock />
         </p>
       </header>
+
+      {/* ── TICKER BOARD (all breakpoints) ──────────── */}
+      {tickerItems.length > 0 && (
+        <section className="mb-10">
+          <h3 className="text-sm font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60 ml-2 mb-4">
+            PİYASALAR
+          </h3>
+          <TickerBoard items={tickerItems} />
+        </section>
+      )}
 
       {/* ── DESKTOP: 5-col asset overview grid ──────── */}
       <section className="hidden md:grid grid-cols-5 gap-4 mb-12">
@@ -129,7 +140,7 @@ export default function Markets() {
             </span>
             <div className="flex items-center gap-2">
               <span className="text-2xl font-bold tracking-tighter">
-                {bist?.price.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) ?? '—'}
+                {bist?.price.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? '—'}
               </span>
               <span className="text-xs font-bold text-[var(--color-primary)]">
                 +{bist?.change.toFixed(2) ?? '0.00'}%

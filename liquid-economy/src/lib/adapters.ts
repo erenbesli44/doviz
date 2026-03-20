@@ -1,5 +1,17 @@
 import type { QuoteResponse } from '../data/api-types';
-import type { Asset, MarketSummaryItem, CommodityItem } from '../data/types';
+import type { Asset, MarketSummaryItem, CommodityItem, TickerItem } from '../data/types';
+
+// ── Display labels for main page ticker board ────────────────────────────────
+const TICKER_LABEL: Record<string, string> = {
+  'GAUTRY':   'GRAM ALTIN',
+  'USD/TRY':  'DOLAR',
+  'EUR/TRY':  'EURO',
+  'GBP/TRY':  'STERLİN',
+  'XU100':    'BIST 100',
+  'BTC/USD':  'BITCOIN',
+  'GAGTRY':   'GRAM GÜMÜŞ',
+  'BRENT':    'BRENT',
+};
 
 // ── Icon + background per symbol ─────────────────────────────────────────────
 
@@ -28,6 +40,7 @@ const ICON_MAP: Record<string, { icon: string; iconBg: string }> = {
   'NATGAS':   { icon: 'local_fire_department', iconBg: 'bg-surface-container-highest' },
   'HG':       { icon: 'toll',                  iconBg: 'bg-surface-container-highest' },
   'ZW':       { icon: 'grass',                 iconBg: 'bg-surface-container-highest' },
+  'GAGTRY':   { icon: 'toll',                  iconBg: 'bg-surface-container-highest' },
 };
 
 const FALLBACK_ICON = { icon: 'trending_up', iconBg: 'bg-surface-container' };
@@ -59,6 +72,7 @@ const SUMMARY_META: Record<string, { ticker: string; description: string }> = {
   'NATGAS':   { ticker: 'GAS', description: 'Doğal Gaz' },
   'HG':       { ticker: 'CU',  description: 'Bakır' },
   'ZW':       { ticker: 'ZW',  description: 'Buğday' },
+  'GAGTRY':   { ticker: 'AG',  description: 'Gram Gümüş TL' },
 };
 
 // ── Converters ────────────────────────────────────────────────────────────────
@@ -111,6 +125,17 @@ export function quoteToCommodityItem(q: QuoteResponse): CommodityItem {
   };
 }
 
+/** Convert an API quote to a TickerItem for the main page piyasalar list. */
+export function quoteToTickerItem(q: QuoteResponse): TickerItem {
+  return {
+    id:        q.data.symbol,
+    label:     TICKER_LABEL[q.data.symbol] ?? q.data.name.toUpperCase(),
+    price:     q.data.price,
+    changePct: q.data.change_pct,
+    currency:  q.data.currency,
+  };
+}
+
 /** Locale-aware price formatter respecting each instrument's precision. */
 export function formatPrice(price: number, symbol: string, currency: string): string {
   const locale = currency === 'TRY' ? 'tr-TR' : 'en-US';
@@ -120,5 +145,5 @@ export function formatPrice(price: number, symbol: string, currency: string): st
   if (symbol === 'HAREM1KG' || symbol === 'BTC/USD') {
     return price.toLocaleString(locale, { maximumFractionDigits: 0 });
   }
-  return price.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+  return price.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }

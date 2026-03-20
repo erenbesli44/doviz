@@ -18,7 +18,7 @@ from .quote_service import QuoteService
 logger = logging.getLogger(__name__)
 
 # Symbols refreshed by RefreshService; derived ones depend on their sub-quotes being fresh
-_SKIP = frozenset({"GAUTRY", "HAREM1KG"})
+_SKIP = frozenset({"GAUTRY", "HAREM1KG", "GAGTRY"})
 
 
 class RefreshService:
