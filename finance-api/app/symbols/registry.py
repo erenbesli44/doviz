@@ -140,14 +140,14 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         currency="USD", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="^GSPC", external_fallback="^GSPC",
-        ttl_seconds=1800,  # FMP free: 15-min delayed; cache matches update frequency
+        ttl_seconds=300,  # FMP free: ~15-min delayed at source; refresh every 5 min
     ),
     "DJI": SymbolConfig(
         internal="DJI", name="Dow Jones", category="index",
         currency="USD", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="^DJI", external_fallback="^DJI",
-        ttl_seconds=1800,  # FMP free: 15-min delayed
+        ttl_seconds=300,  # FMP free: ~15-min delayed at source; refresh every 5 min
     ),
     "NDX": SymbolConfig(
         internal="NDX", name="Nasdaq 100", category="index",
@@ -176,14 +176,14 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         currency="GBP", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="^FTSE", external_fallback="^FTSE",
-        ttl_seconds=1800,  # FMP free: 15-min delayed
+        ttl_seconds=300,  # FMP free: ~15-min delayed at source; refresh every 5 min
     ),
     "N225": SymbolConfig(
         internal="N225", name="Nikkei 225", category="index",
         currency="JPY", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="^N225", external_fallback="^N225",
-        ttl_seconds=1800,  # FMP free: 15-min delayed
+        ttl_seconds=300,  # FMP free: ~15-min delayed at source; refresh every 5 min
     ),
 
     # ── Commodities ──────────────────────────────────────────────────────────
@@ -194,7 +194,7 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         currency="USD", unit="barrel",
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="BZUSD", external_fallback="BZ=F",
-        ttl_seconds=1800,  # FMP free: 15-min delayed
+        ttl_seconds=300,  # FMP free: ~15-min delayed at source; refresh every 5 min
     ),
     "WTI": SymbolConfig(
         internal="WTI", name="WTI Ham Petrol", category="commodity",

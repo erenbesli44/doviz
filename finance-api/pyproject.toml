@@ -32,6 +32,10 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+markers = [
+    "live: hit real external APIs — run with: pytest -m live",
+    "e2e: require a running local server — run with: pytest -m e2e",
+]
 
 [tool.uv.sources]
 # remove this section when using pip/poetry instead of uv
