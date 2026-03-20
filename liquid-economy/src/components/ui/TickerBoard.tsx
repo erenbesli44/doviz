@@ -16,7 +16,7 @@ function formatTickerPrice(price: number, id: string, currency: string): string 
     return prefix + price.toLocaleString('tr-TR', { maximumFractionDigits: 0 });
   }
   if (currency === 'TRY' && price < 100) {
-    return prefix + price.toLocaleString('tr-TR', { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+    return prefix + price.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
   return prefix + price.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
@@ -32,7 +32,7 @@ function formatTickerChange(changePct: number, price: number, id: string, curren
   if (id === 'BTC/USD') {
     absFormatted = absChange.toLocaleString('tr-TR', { maximumFractionDigits: 0 });
   } else if (currency === 'TRY' && price < 100) {
-    absFormatted = absChange.toLocaleString('tr-TR', { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+    absFormatted = absChange.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   } else {
     absFormatted = absChange.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }

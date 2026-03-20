@@ -31,7 +31,7 @@ export default function AssetCard({ asset, onClick }: Props) {
 
   const formattedPrice = asset.price.toLocaleString('tr-TR', {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 4,
+    maximumFractionDigits: 2,
   });
 
   return (

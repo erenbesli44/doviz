@@ -30,21 +30,6 @@ export default function Indexes() {
         <p className="text-[var(--color-on-surface-variant)] font-medium mt-2">Küresel Borsa Endeksleri</p>
       </header>
 
-      {/* Focus chart */}
-      <section className="mb-8">
-        <FocusChart
-          assetName={focusAsset.name}
-          assetCode={focusAsset.code}
-          price={focusAsset.price}
-          change={focusAsset.change}
-          history={focusHistory}
-          icon={focusAsset.icon}
-          iconBg={focusAsset.iconBg}
-          onRangeChange={setHistoryHours}
-          compact
-        />
-      </section>
-
       {/* Desktop: card grid */}
       <section className="hidden md:grid grid-cols-3 gap-4 mb-8">
         {indexAssets.map((asset) => (
@@ -57,7 +42,7 @@ export default function Indexes() {
       </section>
 
       {/* Mobile: list */}
-      <section className="md:hidden">
+      <section className="md:hidden mb-8">
         <h3 className="text-sm font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60 ml-2 mb-4">
           TÜM ENDEKSLER
         </h3>
@@ -70,6 +55,35 @@ export default function Indexes() {
               onClick={() => setSelectedId(asset.id)}
             />
           ))}
+        </div>
+      </section>
+
+      {/* Focus chart */}
+      <section className="mb-8">
+        <div className="md:hidden">
+          <FocusChart
+            assetName={focusAsset.name}
+            assetCode={focusAsset.code}
+            price={focusAsset.price}
+            change={focusAsset.change}
+            history={focusHistory}
+            icon={focusAsset.icon}
+            iconBg={focusAsset.iconBg}
+            onRangeChange={setHistoryHours}
+            compact
+          />
+        </div>
+        <div className="hidden md:block">
+          <FocusChart
+            assetName={focusAsset.name}
+            assetCode={focusAsset.code}
+            price={focusAsset.price}
+            change={focusAsset.change}
+            history={focusHistory}
+            icon={focusAsset.icon}
+            iconBg={focusAsset.iconBg}
+            onRangeChange={setHistoryHours}
+          />
         </div>
       </section>
     </>

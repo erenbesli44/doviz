@@ -41,21 +41,6 @@ export default function Currency() {
         <p className="text-[var(--color-on-surface-variant)] font-medium mt-2">Kur Çiftleri</p>
       </header>
 
-      {/* Focus chart */}
-      <section className="mb-8">
-        <FocusChart
-          assetName={focusAsset.name}
-          assetCode={focusAsset.code}
-          price={focusAsset.price}
-          change={focusAsset.change}
-          history={focusHistory}
-          icon={focusAsset.icon}
-          iconBg={focusAsset.iconBg}
-          onRangeChange={setHistoryHours}
-          compact
-        />
-      </section>
-
       {/* Filter chips */}
       <div className="flex gap-2 mb-6 overflow-x-auto hide-scrollbar pb-1">
         {filters.map((f) => (
@@ -74,7 +59,7 @@ export default function Currency() {
       </div>
 
       {/* Asset list */}
-      <section>
+      <section className="mb-8">
         <div className="bg-[var(--color-surface-container-low)] rounded-[2rem] p-2 space-y-1">
           {filtered.map((asset) => (
             <AssetListRow
@@ -84,6 +69,35 @@ export default function Currency() {
               onClick={() => setSelectedId(asset.id)}
             />
           ))}
+        </div>
+      </section>
+
+      {/* Focus chart */}
+      <section className="mb-8">
+        <div className="md:hidden">
+          <FocusChart
+            assetName={focusAsset.name}
+            assetCode={focusAsset.code}
+            price={focusAsset.price}
+            change={focusAsset.change}
+            history={focusHistory}
+            icon={focusAsset.icon}
+            iconBg={focusAsset.iconBg}
+            onRangeChange={setHistoryHours}
+            compact
+          />
+        </div>
+        <div className="hidden md:block">
+          <FocusChart
+            assetName={focusAsset.name}
+            assetCode={focusAsset.code}
+            price={focusAsset.price}
+            change={focusAsset.change}
+            history={focusHistory}
+            icon={focusAsset.icon}
+            iconBg={focusAsset.iconBg}
+            onRangeChange={setHistoryHours}
+          />
         </div>
       </section>
     </>

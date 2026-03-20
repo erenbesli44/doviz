@@ -13,7 +13,7 @@ interface Props {
 export default function AssetListRow({ asset, active = false, onClick }: Props) {
   const formattedPrice = asset.price.toLocaleString('tr-TR', {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 4,
+    maximumFractionDigits: 2,
   });
 
   return (

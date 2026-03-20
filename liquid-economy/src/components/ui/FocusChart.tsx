@@ -71,7 +71,7 @@ export default function FocusChart({
 
   const formattedPrice = displayPrice.toLocaleString('tr-TR', {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 4,
+    maximumFractionDigits: 2,
   });
 
   const chartHeight = compact ? 192 : 400;

@@ -35,26 +35,8 @@ export default function TopNavBar() {
           ))}
         </div>
 
-        {/* Right side */}
-        <div className="flex items-center gap-4">
-
-          <button
-            aria-label="Bildirimler"
-            className="p-2 hover:bg-slate-50 rounded-lg active:scale-95 duration-200"
-          >
-            <span className="material-symbols-outlined text-[var(--color-on-surface-variant)]">
-              notifications
-            </span>
-          </button>
-          <button
-            aria-label="Hesap"
-            className="p-2 hover:bg-slate-50 rounded-lg active:scale-95 duration-200"
-          >
-            <span className="material-symbols-outlined text-[var(--color-on-surface-variant)]">
-              account_circle
-            </span>
-          </button>
-        </div>
+        {/* Right side — intentionally empty */}
+        <div className="flex items-center gap-4" />
       </div>
     </nav>
   );

@@ -22,17 +22,15 @@ function LiveClock() {
 }
 
 export default function Markets() {
-  const { status, extendedOverviewAssets, fxAssets, goldAssets, commodityCards, marketSummary, news } = useMarketData();
+  const { status, extendedOverviewAssets, fxAssets, commodityCards, marketSummary, news } = useMarketData();
 
   // Selected asset for the focus chart; id === symbol code, e.g. "USD/TRY"
   const [selectedId, setSelectedId] = useState<string>('USD/TRY');
   const [historyHours, setHistoryHours] = useState(24);
   const focusHistory = useHistory(selectedId, historyHours);
 
-  const allFeatured = [...fxAssets.slice(0, 3), ...goldAssets.slice(0, 1)];
   const focusAsset =
     extendedOverviewAssets.find((a) => a.id === selectedId) ??
-    allFeatured.find((a) => a.id === selectedId) ??
     fxAssets[0];
 
   if (status === 'loading') {
@@ -74,7 +72,7 @@ export default function Markets() {
           GÜNCEL VARLIKLAR
         </h3>
         <div className="bg-[var(--color-surface-container-low)] rounded-[2rem] p-2 space-y-1">
-          {allFeatured.map((asset) => (
+          {extendedOverviewAssets.map((asset) => (
             <AssetListRow
               key={asset.id}
               asset={asset}
