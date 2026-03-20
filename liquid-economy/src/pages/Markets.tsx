@@ -6,7 +6,6 @@ import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
 import CommodityCard from '../components/ui/CommodityCard';
 import MarketSummaryRow from '../components/ui/MarketSummaryRow';
-import InsightsCard from '../components/ui/InsightsCard';
 
 function LiveClock() {
   const [time, setTime] = useState(() => new Date());
@@ -22,7 +21,7 @@ function LiveClock() {
 }
 
 export default function Markets() {
-  const { status, extendedOverviewAssets, fxAssets, commodityCards, marketSummary, news } = useMarketData();
+  const { status, extendedOverviewAssets, fxAssets, commodityCards, marketSummary } = useMarketData();
 
   // Selected asset for the focus chart; id === symbol code, e.g. "USD/TRY"
   const [selectedId, setSelectedId] = useState<string>('USD/TRY');
@@ -158,31 +157,25 @@ export default function Markets() {
         </div>
       </section>
 
-      {/* ── DESKTOP: market summary + insights ──────── */}
-      <section className="hidden md:grid grid-cols-1 lg:grid-cols-3 gap-12 mt-4">
-        {/* Market summary list */}
-        <div className="lg:col-span-2">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold tracking-tight">Piyasa Özeti</h2>
-            <a
-              href="#"
-              className="text-[var(--color-primary)] text-sm font-bold flex items-center gap-1 group"
-            >
-              Tümünü Gör
-              <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">
-                arrow_forward
-              </span>
-            </a>
-          </div>
-          <div className="space-y-4">
-            {marketSummary.map((item) => (
-              <MarketSummaryRow key={item.id} item={item} />
-            ))}
-          </div>
+      {/* ── DESKTOP: market summary ──────────────── */}
+      <section className="hidden md:block mt-4">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-bold tracking-tight">Piyasa Özeti</h2>
+          <a
+            href="#"
+            className="text-[var(--color-primary)] text-sm font-bold flex items-center gap-1 group"
+          >
+            Tümünü Gör
+            <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">
+              arrow_forward
+            </span>
+          </a>
         </div>
-
-        {/* News sidebar */}
-        <InsightsCard news={news} />
+        <div className="space-y-4">
+          {marketSummary.map((item) => (
+            <MarketSummaryRow key={item.id} item={item} />
+          ))}
+        </div>
       </section>
     </>
   );
