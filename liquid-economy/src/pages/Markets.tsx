@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useMarketData } from '../hooks/useMarketData';
 import { useHistory } from '../hooks/useHistory';
 import AssetCard from '../components/ui/AssetCard';
-import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
 import CommodityCard from '../components/ui/CommodityCard';
 import MarketSummaryRow from '../components/ui/MarketSummaryRow';
@@ -44,40 +43,26 @@ export default function Markets() {
 
   return (
     <>
-      {/* ── PAGE HEADER ─────────────────────────────── */}
-      <header className="mb-8 mt-4">
-        <h2 className="text-[2.75rem] font-extrabold tracking-tight leading-none text-[var(--color-on-surface)]">
-          Piyasalar
-        </h2>
-        <p className="text-[var(--color-on-surface-variant)] font-medium mt-2">
+      {/* ── PAGE HEADER (compact) ───────────────────── */}
+      <header className="mb-3 mt-3 flex items-center justify-between">
+        <span className="text-xs font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60">
+          GÜNCEL VARLIKLAR
+        </span>
+        <span className="text-xs text-[var(--color-on-surface-variant)]/50 font-medium">
           Canlı Veri • <LiveClock />
-        </p>
+        </span>
       </header>
 
-      {/* ── DESKTOP: extended 10-asset overview grid (5 cols × 2 rows) ─── */}
-      <section className="hidden md:grid grid-cols-5 gap-4 mb-12">
-        {extendedOverviewAssets.map((asset) => (
-          <AssetCard
-            key={asset.id}
-            asset={asset}
-            onClick={() => setSelectedId(asset.id)}
-          />
-        ))}
-      </section>
-
-      {/* ── MOBILE: vertical asset list ─────────────── */}
-      <section className="md:hidden space-y-6 mb-10">
-        <h3 className="text-sm font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60 ml-2">
-          GÜNCEL VARLIKLAR
-        </h3>
-        <div className="bg-[var(--color-surface-container-low)] rounded-[2rem] p-2 space-y-1">
+      {/* ── HORIZONTAL SCROLL ASSET ROW (all breakpoints) ─────────────── */}
+      <section className="mb-8 -mx-4 px-4 overflow-hidden">
+        <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-3">
           {extendedOverviewAssets.map((asset) => (
-            <AssetListRow
-              key={asset.id}
-              asset={asset}
-              active={asset.id === selectedId}
-              onClick={() => setSelectedId(asset.id)}
-            />
+            <div key={asset.id} className="min-w-[152px] flex-shrink-0">
+              <AssetCard
+                asset={asset}
+                onClick={() => setSelectedId(asset.id)}
+              />
+            </div>
           ))}
         </div>
       </section>
