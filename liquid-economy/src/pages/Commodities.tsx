@@ -42,11 +42,6 @@ export default function Commodities() {
 
   return (
     <>
-      <header className="mb-8 mt-4">
-        <h2 className="text-[2.75rem] font-extrabold tracking-tight leading-none">Emtialar</h2>
-        <p className="text-[var(--color-on-surface-variant)] font-medium mt-2">Enerji, Metaller &amp; Tarım</p>
-      </header>
-
       {/* Category filter chips */}
       <div className="flex gap-2 mb-6 overflow-x-auto hide-scrollbar pb-1">
         {categoryFilters.map((f) => (

@@ -117,17 +117,27 @@ class YahooFinanceProvider:
                 external_symbol, prev_close,
             )
 
-        change_pct = ((float(price) - prev_close) / prev_close * 100) if prev_close else 0.0
+        price_f = float(price)
+        change_pct = ((price_f - prev_close) / prev_close * 100) if prev_close else 0.0
         market_state = meta.get("marketState", "").lower() or None
 
+        # Prefer Yahoo's own change fields for accuracy; fall back to computed
+        raw_change = meta.get("regularMarketChange")
+        change_value: float | None = float(raw_change) if raw_change is not None else (
+            round(price_f - prev_close, 6) if prev_close else None
+        )
+        prev_close_f: float | None = float(prev_close) if prev_close else None
+
         return RawQuote(
-            price=float(price),
+            price=price_f,
             change_pct=round(change_pct, 4),
             open=meta.get("regularMarketOpen"),
             high=meta.get("regularMarketDayHigh"),
             low=meta.get("regularMarketDayLow"),
             fetched_at=datetime.now(UTC),
             market_status=market_state,
+            previous_close=prev_close_f,
+            change_value=change_value,
         )
 
     async def fetch_history(self, external_symbol: str, hours: int = 24) -> list[RawHistoryPoint]:

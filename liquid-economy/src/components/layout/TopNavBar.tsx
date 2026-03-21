@@ -13,7 +13,7 @@ export default function TopNavBar() {
     <nav className="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl shadow-sm shadow-blue-900/5">
       <div className="flex justify-between items-center h-16 px-8 max-w-[1440px] mx-auto text-sm font-medium tracking-tight antialiased">
         {/* Logo */}
-        <span className="text-xl font-bold tracking-tighter text-slate-900 select-none">
+        <span className="text-sm font-semibold tracking-tight text-slate-500 select-none">
           The Liquid Economy
         </span>
 

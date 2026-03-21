@@ -19,30 +19,30 @@ export default function AssetListRow({ asset, active = false, onClick }: Props) 
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all active:scale-[0.98] duration-200 ${
+      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all active:scale-[0.98] duration-200 ${
         active
           ? 'bg-[var(--color-surface-container-lowest)] hover:bg-[var(--color-surface-container-high)] ring-2 ring-[var(--color-primary)]/10'
           : 'hover:bg-[var(--color-surface-container-high)]'
       }`}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         {/* Icon circle */}
-        <div className={`w-11 h-11 rounded-full ${asset.iconBg} flex items-center justify-center flex-shrink-0`}>
-          <span className="material-symbols-outlined text-[var(--color-on-surface-variant)] text-[20px]">
+        <div className={`w-8 h-8 rounded-full ${asset.iconBg} flex items-center justify-center flex-shrink-0`}>
+          <span className="material-symbols-outlined text-[var(--color-on-surface-variant)] text-[16px]">
             {asset.icon}
           </span>
         </div>
         {/* Name + code */}
         <div className="text-left">
-          <span className="block text-base font-bold tracking-tight">{asset.name}</span>
-          <span className="block text-[10px] font-bold text-[var(--color-on-surface-variant)]/60 uppercase">
+          <span className="block text-sm font-bold tracking-tight">{asset.name}</span>
+          <span className="block text-[9px] font-bold text-[var(--color-on-surface-variant)]/60 uppercase">
             {asset.code}
           </span>
         </div>
       </div>
       {/* Price + change */}
       <div className="text-right">
-        <span className="block text-base font-extrabold tracking-tight">{formattedPrice}</span>
+        <span className="block text-sm font-extrabold tracking-tight">{formattedPrice}</span>
         <PriceChange value={asset.change} />
       </div>
     </button>

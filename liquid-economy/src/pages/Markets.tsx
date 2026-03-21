@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useMarketData } from '../hooks/useMarketData';
 import { useHistory } from '../hooks/useHistory';
 import AssetCard from '../components/ui/AssetCard';
+import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
 import CommodityCard from '../components/ui/CommodityCard';
-import MarketSummaryRow from '../components/ui/MarketSummaryRow';
 
 function LiveClock() {
   const [time, setTime] = useState(() => new Date());
@@ -20,7 +20,7 @@ function LiveClock() {
 }
 
 export default function Markets() {
-  const { status, extendedOverviewAssets, fxAssets, commodityCards, marketSummary } = useMarketData();
+  const { status, extendedOverviewAssets, fxAssets, commodityCards, goldAssets } = useMarketData();
 
   // Selected asset for the focus chart; id === symbol code, e.g. "USD/TRY"
   const [selectedId, setSelectedId] = useState<string>('USD/TRY');
@@ -43,26 +43,59 @@ export default function Markets() {
 
   return (
     <>
-      {/* ── PAGE HEADER (compact) ───────────────────── */}
-      <header className="mb-3 mt-3 flex items-center justify-between">
-        <span className="text-xs font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60">
-          GÜNCEL VARLIKLAR
-        </span>
-        <span className="text-xs text-[var(--color-on-surface-variant)]/50 font-medium">
+      {/* ── PAGE HEADER ─────────────────────────────── */}
+      <header className="mb-2 mt-2 flex items-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-[var(--color-primary)] animate-pulse" />
+        <p className="text-sm font-semibold text-[var(--color-on-surface-variant)]">
           Canlı Veri • <LiveClock />
-        </span>
+        </p>
       </header>
 
-      {/* ── HORIZONTAL SCROLL ASSET ROW (all breakpoints) ─────────────── */}
-      <section className="mb-8 -mx-4 px-4 overflow-hidden">
-        <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-3">
+      {/* ── GÜNCEL VARLIKLAR ─────────────────────────────────────── */}
+      {/* Mobile: compact list rows — all assets fit on one screen */}
+      <section className="md:hidden mb-4">
+        <h3 className="text-[10px] font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60 mb-2 ml-1">
+          GÜNCEL VARLIKLAR
+        </h3>
+        <div className="bg-[var(--color-surface-container-low)] rounded-xl p-1 space-y-0">
+          {goldAssets.filter((a) => a.id === 'GAUTRY').map((a) => (
+            <AssetListRow
+              key="GAUTRY-physical"
+              asset={{ ...a, name: 'Fiziksel Gram Altın' }}
+              active={a.id === selectedId}
+              onClick={() => setSelectedId(a.id)}
+            />
+          ))}
           {extendedOverviewAssets.map((asset) => (
-            <div key={asset.id} className="min-w-[152px] flex-shrink-0">
-              <AssetCard
-                asset={asset}
-                onClick={() => setSelectedId(asset.id)}
-              />
-            </div>
+            <AssetListRow
+              key={asset.id}
+              asset={asset}
+              active={asset.id === selectedId}
+              onClick={() => setSelectedId(asset.id)}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Desktop: 5-col × 2-row grid — all assets visible at once */}
+      <section className="hidden md:block mb-4">
+        <h3 className="text-[10px] font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60 mb-2 ml-1">
+          GÜNCEL VARLIKLAR
+        </h3>
+        <div className="grid grid-cols-5 gap-2">
+          {goldAssets.filter((a) => a.id === 'GAUTRY').map((a) => (
+            <AssetCard
+              key="GAUTRY-physical"
+              asset={{ ...a, name: 'Fiziksel Gram Altın' }}
+              onClick={() => setSelectedId(a.id)}
+            />
+          ))}
+          {extendedOverviewAssets.map((asset) => (
+            <AssetCard
+              key={asset.id}
+              asset={asset}
+              onClick={() => setSelectedId(asset.id)}
+            />
           ))}
         </div>
       </section>
@@ -98,38 +131,6 @@ export default function Markets() {
         </div>
       </section>
 
-      {/* ── MOBILE: BIST 100 summary card ───────────── */}
-      <section className="md:hidden mb-10">
-        <h3 className="text-sm font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60 ml-2 mb-4">
-          PİYASA ÖZETİ
-        </h3>
-        <div className="bg-[var(--color-surface-container)] rounded-3xl p-6 flex items-center justify-between">
-          {(() => { const bist = marketSummary.find(m => m.id === 'XU100') ?? marketSummary[0]; return (
-          <div>
-            <span className="text-[10px] font-bold text-[var(--color-on-surface-variant)]/60 uppercase">
-              BİST 100
-            </span>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold tracking-tighter">
-                {bist?.price.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? '—'}
-              </span>
-              <span className="text-xs font-bold text-[var(--color-primary)]">
-                +{bist?.change.toFixed(2) ?? '0.00'}%
-              </span>
-            </div>
-          </div>
-          ); })()}
-          <div className="flex items-center gap-1 bg-[var(--color-primary)]/10 px-3 py-1.5 rounded-full">
-            <span className="material-symbols-outlined text-[18px] text-[var(--color-primary)]">
-              trending_up
-            </span>
-            <span className="text-xs font-bold text-[var(--color-primary)] uppercase">
-              BOĞA PİYASASI
-            </span>
-          </div>
-        </div>
-      </section>
-
       {/* ── MOBILE: commodity horizontal scroll ─────── */}
       <section className="md:hidden mt-10 mb-8 overflow-hidden">
         <h3 className="text-sm font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60 ml-2 mb-4">
@@ -142,26 +143,6 @@ export default function Markets() {
         </div>
       </section>
 
-      {/* ── DESKTOP: market summary ──────────────── */}
-      <section className="hidden md:block mt-4">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold tracking-tight">Piyasa Özeti</h2>
-          <a
-            href="#"
-            className="text-[var(--color-primary)] text-sm font-bold flex items-center gap-1 group"
-          >
-            Tümünü Gör
-            <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">
-              arrow_forward
-            </span>
-          </a>
-        </div>
-        <div className="space-y-4">
-          {marketSummary.map((item) => (
-            <MarketSummaryRow key={item.id} item={item} />
-          ))}
-        </div>
-      </section>
     </>
   );
 }

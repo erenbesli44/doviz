@@ -54,14 +54,20 @@ class FMPProvider:
             raise ProviderError(self.provider_id, external_symbol, "null price in response")
 
         change_pct = float(q.get("changesPercentage") or 0.0)
+        price_f = float(price)
+        prev_close = q.get("previousClose")
+        prev_close_f = float(prev_close) if prev_close is not None else None
+        change_value = round(price_f - prev_close_f, 6) if prev_close_f is not None else None
 
         return RawQuote(
-            price=float(price),
+            price=price_f,
             change_pct=round(change_pct, 4),
             open=q.get("open"),
             high=q.get("dayHigh"),
             low=q.get("dayLow"),
             fetched_at=datetime.now(UTC),
+            previous_close=prev_close_f,
+            change_value=change_value,
         )
 
     async def fetch_history(self, external_symbol: str, hours: int = 24) -> list[RawHistoryPoint]:

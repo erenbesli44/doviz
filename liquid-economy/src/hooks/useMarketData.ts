@@ -13,7 +13,7 @@ const OVERVIEW_SYMBOLS = ['USD/TRY', 'EUR/TRY', 'GBP/TRY', 'BTC/USD', 'XAU/USD',
 const TICKER_ORDER = ['GAUTRY', 'USD/TRY', 'EUR/TRY', 'GBP/TRY', 'XU100', 'BTC/USD', 'GAGTRY', 'BRENT'];
 
 // All 10 symbols shown in the extended overview grid (deduplicates the old TickerBoard)
-const EXTENDED_OVERVIEW_ORDER = ['USD/TRY', 'EUR/TRY', 'GBP/TRY', 'GAUTRY', 'GAGTRY', 'XU100', 'NDX', 'SPX', 'BTC/USD', 'BRENT'];
+const EXTENDED_OVERVIEW_ORDER = ['GAUTRY', 'USD/TRY', 'EUR/TRY', 'GBP/TRY', 'XU100', 'BTC/USD', 'GAGTRY', 'BRENT', 'NDX'];
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 

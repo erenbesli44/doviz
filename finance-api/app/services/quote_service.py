@@ -10,6 +10,13 @@ Responsibilities:
   6. Normalize raw provider data → QuoteResponse
   7. Populate cache with the result
 
+When a MarketCalendarService + SessionCloseStore + FallbackPriceResolver are
+injected (optional), the service additionally:
+  - Short-circuits to the session store for closed-market requests
+  - Saves an intraday snapshot on every successful provider fetch
+  - Enriches QuoteMeta with display_mode / source_type / session context
+  - Falls back to the session store (or lazy EOD fetch) on provider failure
+
 The service does not know about HTTP or routing — that is the API layer's job.
 """
 import asyncio
@@ -27,18 +34,34 @@ from ..schemas.quote import QuoteData, QuoteMeta, QuoteResponse
 from ..symbols.registry import SymbolConfig, get_symbol_config
 
 if TYPE_CHECKING:
-    from .event_bus import EventBus
+    from ..cache.session_store import SessionCloseData, SessionCloseStore
+    from ..services.event_bus import EventBus
+    from ..services.fallback_resolver import FallbackPriceResolver, ResolvedPrice
+    from ..services.market_calendar import MarketCalendarService, SessionState
 
 logger = logging.getLogger(__name__)
 
 
 class QuoteService:
-    def __init__(self, providers: ProviderRegistry, cache: MemoryCache, timeout: float = 5.0, event_bus: "EventBus | None" = None, app_state: object | None = None) -> None:
+    def __init__(
+        self,
+        providers: ProviderRegistry,
+        cache: MemoryCache,
+        timeout: float = 5.0,
+        event_bus: "EventBus | None" = None,
+        app_state: object | None = None,
+        calendar: "MarketCalendarService | None" = None,
+        session_store: "SessionCloseStore | None" = None,
+        fallback_resolver: "FallbackPriceResolver | None" = None,
+    ) -> None:
         self._providers = providers
         self._cache = cache
         self._timeout = timeout
         self._event_bus = event_bus
-        self._app_state = app_state  # for real-time overrides (e.g. btc_realtime)
+        self._app_state = app_state
+        self._calendar = calendar
+        self._session_store = session_store
+        self._fallback_resolver = fallback_resolver
 
     # ------------------------------------------------------------------
     # Public API
@@ -56,11 +79,9 @@ class QuoteService:
         if config.internal == "BTC/USD" and self._app_state is not None:
             rt = getattr(self._app_state, "btc_realtime", None)
             if rt and (datetime.now(UTC).timestamp() - rt["ts"]) < 30:
-                import time as _time
                 cached = await self._cache.get(cache_key)
                 base = cached or await self._cache.get_stale(cache_key)
                 if base is not None:
-                    # Patch price from real-time feed; keep everything else
                     patched = QuoteResponse(
                         data=QuoteData(
                             symbol=base.data.symbol, name=base.data.name,
@@ -77,33 +98,57 @@ class QuoteService:
                     )
                     return patched
 
-        # Check cache first — avoids hitting providers on every request
+        # ── Fast path: closed market with stored session close ──────────────
+        if self._calendar is not None and self._session_store is not None:
+            now_utc = datetime.now(UTC)
+            state = self._calendar.get_session_state(config.exchange, now_utc)
+            if not state.is_open:
+                last_close = self._session_store.get(config.internal)
+                if last_close is not None:
+                    return _build_closed_response(config, last_close, state)
+
+        # ── Standard cache → provider flow ──────────────────────────────────
         cached = await self._cache.get(cache_key)
         if cached is not None:
-            return cached
+            return self._enrich_live(cached, config)
 
-        # Stale-while-revalidate: serve expired value immediately and refresh in background
         stale = await self._cache.get_stale(cache_key)
         if stale is not None:
             asyncio.create_task(self._background_refresh(config))
-            return stale
+            return self._enrich_live(stale, config)
 
-        # Use a per-key lock to prevent cache stampede on cold keys
         async with self._cache.lock(cache_key):
-            # Re-check after acquiring lock (another coroutine may have populated it)
             cached = await self._cache.get(cache_key)
             if cached is not None:
-                return cached
+                return self._enrich_live(cached, config)
 
-            response = await self._fetch_with_fallback(config)
+            try:
+                response = await self._fetch_with_fallback(config)
+            except HTTPException as exc:
+                if exc.status_code == 503 and self._fallback_resolver is not None:
+                    # All providers failed — try resolver (lazy EOD or stored snapshot)
+                    now_utc = datetime.now(UTC)
+                    resolved = await self._fallback_resolver.resolve(
+                        symbol=config.internal,
+                        config=config,
+                        live_quote=None,
+                        now_utc=now_utc,
+                    )
+                    if resolved.display_mode != "no_data":
+                        return _build_from_resolved(config, resolved)
+                raise
+
             await self._cache.set(cache_key, response, ttl_seconds=config.ttl_seconds)
-            return response
+            # Record intraday snapshot in session store for future closed-market fallback
+            self._snapshot(config, response)
+            return self._enrich_live(response, config)
 
     async def _background_refresh(self, config: SymbolConfig) -> None:
         """Refresh a symbol in the background and update the cache silently."""
         try:
             response = await self._fetch_with_fallback(config)
             await self._cache.set(config.internal, response, ttl_seconds=config.ttl_seconds)
+            self._snapshot(config, response)
             if self._event_bus is not None:
                 await self._event_bus.publish(config.internal, response)
         except Exception as e:
@@ -130,7 +175,6 @@ class QuoteService:
             provider_id = config.primary_provider
         except (ProviderError, TimeoutError, Exception) as e:
             logger.warning("History fetch failed for %s via %s: %s", symbol, config.primary_provider, e)
-            # Try fallback if available
             if config.fallback_provider:
                 fp = self._providers.get(config.fallback_provider)
                 raw_points = await asyncio.wait_for(
@@ -151,7 +195,6 @@ class QuoteService:
             is_live=is_live,
             fetched_at=datetime.now(UTC),
         )
-        # History caches longer than the quote TTL
         await self._cache.set(cache_key, result, ttl_seconds=config.ttl_seconds * 4)
         return result
 
@@ -159,9 +202,53 @@ class QuoteService:
     # Internal helpers
     # ------------------------------------------------------------------
 
+    def _enrich_live(self, response: QuoteResponse, config: SymbolConfig) -> QuoteResponse:
+        """Overlay open-market session context onto a cached/live response."""
+        if self._calendar is None:
+            return response
+
+        now_utc = datetime.now(UTC)
+        state = self._calendar.get_session_state(config.exchange, now_utc)
+        freshness = self._calendar.freshness_window(config.exchange)
+        age = (now_utc - response.meta.fetched_at).total_seconds()
+        is_fresh = age <= freshness
+        source_type = "live" if (is_fresh and response.meta.is_live) else "delayed"
+
+        return QuoteResponse(
+            data=response.data,
+            meta=response.meta.model_copy(update={
+                "market_status": "open",
+                "display_mode": "live",
+                "source_type": source_type,
+                "as_of": response.meta.fetched_at,
+                "session_date": str(state.session_date),
+                "is_stale": not is_fresh,
+                "stale_reason": "stale_cache" if not is_fresh else None,
+                "next_market_open": None,
+            }),
+        )
+
+    def _snapshot(self, config: SymbolConfig, response: QuoteResponse) -> None:
+        """Save the latest successful quote as an intraday snapshot in the session store."""
+        if self._session_store is None:
+            return
+        from ..cache.session_store import SessionCloseData
+        now_utc = datetime.now(UTC)
+        self._session_store.store(
+            config.internal,
+            SessionCloseData(
+                symbol=config.internal,
+                price=response.data.price,
+                change_pct=response.data.change_pct,
+                change_value=response.data.change_value,
+                as_of=response.meta.fetched_at,
+                session_date=now_utc.date(),
+                provider=response.meta.provider,
+            ),
+        )
+
     async def _fetch_with_fallback(self, config: SymbolConfig) -> QuoteResponse:
         """Try primary provider, fall back if it fails, raise 503 if both fail."""
-        # Derived symbols are computed from two other quotes, not a direct provider call.
         if config.primary_provider == "derived":
             return await self._fetch_derived(config)
 
@@ -187,7 +274,6 @@ class QuoteService:
 
         try:
             raw = await self._fetch(fallback, fallback_symbol)
-            # Fallback data is always treated as delayed, regardless of the symbol config
             return self._normalize(raw, config, provider_id=config.fallback_provider, is_live=False)
         except (ProviderError, TimeoutError, Exception) as fallback_err:
             logger.error(
@@ -200,15 +286,7 @@ class QuoteService:
             )
 
     async def _fetch_derived(self, config: SymbolConfig) -> QuoteResponse:
-        """Compute GAUTRY / HAREM1KG / GAGTRY from live sub-quotes × USD/TRY.
-
-        For GAUTRY, the price is first attempted from the Altınkaynak Kapalıçarşı
-        endpoint (physical Istanbul Grand Bazaar price). If that fails, the price
-        falls back to the derived XAU/USD × USD/TRY formula.
-
-        change_pct is computed from the Istanbul-day changes of the underlying
-        sub-quotes (XAU/USD + USD/TRY for gold; XAG/USD + USD/TRY for silver).
-        """
+        """Compute GAUTRY / HAREM1KG / GAGTRY from live sub-quotes × USD/TRY."""
         _TROY_OZ_TO_GRAMS = 31.1035
 
         try:
@@ -218,7 +296,6 @@ class QuoteService:
             if config.internal in ("GAUTRY", "HAREM1KG"):
                 xau = await self.get_quote("XAU/USD")
                 base_price_usd = xau.data.price
-                # Combined change: gold move (USD) + FX move (TRY/USD)
                 base_change_pct = round(xau.data.change_pct + usdtry.data.change_pct, 4)
             elif config.internal == "GAGTRY":
                 xag = await self.get_quote("XAG/USD")
@@ -234,9 +311,6 @@ class QuoteService:
 
         # ── Price computation ─────────────────────────────────────────────────
         if config.internal == "GAUTRY":
-            # Try Kapalıçarşı physical price first (reflects actual dealer price
-            # in Istanbul Grand Bazaar; includes physical premium over spot).
-            # Fall back to derived XAU × USDTRY formula on any failure.
             try:
                 kapalicarsi = self._providers.get("altinkaynak_gold")
                 raw_kc = await asyncio.wait_for(
@@ -246,7 +320,6 @@ class QuoteService:
                 price = raw_kc.price
                 is_live = True
                 provider_used = "altinkaynak_gold"
-                logger.debug("GAUTRY: Kapalıçarşı price %.2f TRY (HH_T Alış)", price)
             except Exception as exc:
                 logger.warning("GAUTRY: Kapalıçarşı fetch failed (%s), using derived", exc)
                 price = (base_price_usd / _TROY_OZ_TO_GRAMS) * usd_try_rate
@@ -263,15 +336,16 @@ class QuoteService:
             is_live = config.is_live
             provider_used = "derived"
 
+        change_value: float | None = round(price * base_change_pct / 100, 4) if price else None
         raw = RawQuote(
             price=round(price, 2),
             change_pct=base_change_pct,
+            change_value=change_value,
             fetched_at=datetime.now(UTC),
         )
         return self._normalize(raw, config, provider_id=provider_used, is_live=is_live)
 
     async def _fetch(self, provider: MarketProvider, symbol: str) -> RawQuote:
-        """Wrap provider call with timeout."""
         return await asyncio.wait_for(
             provider.fetch_quote(symbol),
             timeout=self._timeout,
@@ -279,13 +353,13 @@ class QuoteService:
 
     @staticmethod
     def _normalize(raw: RawQuote, config: SymbolConfig, provider_id: str, is_live: bool) -> QuoteResponse:
-        """Convert RawQuote + SymbolConfig → the API's canonical QuoteResponse."""
         return QuoteResponse(
             data=QuoteData(
                 symbol=config.internal,
                 name=config.name,
                 price=raw.price,
                 change_pct=raw.change_pct,
+                change_value=getattr(raw, "change_value", None),
                 open=raw.open,
                 high=raw.high,
                 low=raw.low,
@@ -301,3 +375,77 @@ class QuoteService:
                 market_status=raw.market_status,
             ),
         )
+
+
+# ---------------------------------------------------------------------------
+# Module-level helpers (no self needed)
+# ---------------------------------------------------------------------------
+
+
+def _build_closed_response(
+    config: SymbolConfig,
+    last_close: "SessionCloseData",
+    state: "SessionState",
+) -> QuoteResponse:
+    """Build a QuoteResponse from a stored session close (market is closed)."""
+    return QuoteResponse(
+        data=QuoteData(
+            symbol=config.internal,
+            name=config.name,
+            price=last_close.price,
+            change_pct=last_close.change_pct,
+            change_value=last_close.change_value,
+            currency=config.currency,
+            category=config.category,
+            unit=config.unit,
+        ),
+        meta=QuoteMeta(
+            provider=last_close.provider,
+            is_live=False,
+            delay_minutes=None,
+            fetched_at=last_close.as_of,
+            market_status="closed",
+            display_mode="last_completed_session",
+            source_type="last_session_close",
+            as_of=last_close.as_of,
+            session_date=str(last_close.session_date),
+            is_stale=False,
+            stale_reason=None,
+            next_market_open=state.next_open,
+        ),
+    )
+
+
+def _build_from_resolved(config: SymbolConfig, resolved: "ResolvedPrice") -> QuoteResponse:
+    """Build a QuoteResponse from a FallbackPriceResolver result."""
+    market_status = "open" if resolved.display_mode == "live" else "closed"
+    next_open = None if resolved.display_mode == "live" else resolved.next_market_open
+    return QuoteResponse(
+        data=QuoteData(
+            symbol=config.internal,
+            name=config.name,
+            price=resolved.price,
+            change_pct=resolved.change_pct,
+            change_value=resolved.change_value,
+            currency=config.currency,
+            category=config.category,
+            unit=config.unit,
+        ),
+        meta=QuoteMeta(
+            provider=resolved.source_type,
+            is_live=(resolved.display_mode == "live"),
+            delay_minutes=None,
+            fetched_at=resolved.as_of,
+            market_status=market_status,
+            display_mode=resolved.display_mode,
+            source_type=resolved.source_type,
+            as_of=resolved.as_of,
+            session_date=str(resolved.session_date),
+            is_stale=resolved.is_stale,
+            stale_reason=resolved.stale_reason,
+            next_market_open=next_open,
+        ),
+    )
+
+
+

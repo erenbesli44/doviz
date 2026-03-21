@@ -25,11 +25,6 @@ export default function Indexes() {
 
   return (
     <>
-      <header className="mb-8 mt-4">
-        <h2 className="text-[2.75rem] font-extrabold tracking-tight leading-none">Endeksler</h2>
-        <p className="text-[var(--color-on-surface-variant)] font-medium mt-2">Küresel Borsa Endeksleri</p>
-      </header>
-
       {/* Desktop: card grid */}
       <section className="hidden md:grid grid-cols-3 gap-4 mb-8">
         {indexAssets.map((asset) => (

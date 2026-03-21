@@ -17,7 +17,7 @@ export default function AppLayout() {
           md:mt-16 offsets desktop nav (h-16)
           pb-32 leaves space for mobile bottom nav + FAB
           md:pb-12 just standard desktop padding */}
-      <main className="mt-32 md:mt-16 px-6 md:px-8 pb-32 md:pb-12 max-w-[1440px] md:mx-auto">
+      <main className="mt-24 md:mt-16 px-6 md:px-8 pb-32 md:pb-12 max-w-[1440px] md:mx-auto">
         <Outlet />
       </main>
 

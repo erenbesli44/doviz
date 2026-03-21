@@ -40,22 +40,22 @@ export default function AssetCard({ asset, onClick }: Props) {
       tabIndex={0}
       onClick={onClick}
       onKeyDown={(e) => e.key === 'Enter' && onClick?.()}
-      className="bg-[var(--color-surface-container-lowest)] rounded-xl p-5 border border-[var(--color-outline-variant)]/15 hover:shadow-xl hover:shadow-blue-900/5 transition-all group cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+      className="bg-[var(--color-surface-container-lowest)] rounded-lg p-3 border border-[var(--color-outline-variant)]/15 hover:shadow-lg hover:shadow-blue-900/5 transition-all group cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
     >
-      <div className="flex justify-between items-start mb-4">
-        <span className={`text-xs font-bold px-2 py-1 rounded ${badge.classes}`}>
+      <div className="flex justify-between items-start mb-2">
+        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${badge.classes}`}>
           {badge.label}
         </span>
-        <span className="material-symbols-outlined text-[var(--color-primary)] opacity-0 group-hover:opacity-100 transition-opacity">
+        <span className="material-symbols-outlined text-[16px] text-[var(--color-primary)] opacity-0 group-hover:opacity-100 transition-opacity">
           {icon}
         </span>
       </div>
-      <h3 className="text-[var(--color-on-surface-variant)] text-xs font-semibold uppercase tracking-widest mb-1">
+      <h3 className="text-[var(--color-on-surface-variant)] text-[10px] font-semibold uppercase tracking-widest mb-0.5">
         {asset.name}
       </h3>
       <div className="flex flex-col">
-        <span className="text-2xl font-bold tracking-tight">{formattedPrice}</span>
-        <PriceChange value={asset.change} className="text-sm! font-medium!" />
+        <span className="text-base font-bold tracking-tight">{formattedPrice}</span>
+        <PriceChange value={asset.change} className="text-xs! font-medium!" />
       </div>
     </div>
   );

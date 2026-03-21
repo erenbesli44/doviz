@@ -24,6 +24,7 @@ class SymbolConfig:
     ttl_seconds: int           # how long to cache a successful response
     is_live: bool = True       # False = source is structurally delayed (e.g. Yahoo BIST)
     delay_minutes: int | None = None
+    exchange: str = "UNKNOWN"  # exchange calendar id: BIST|NYSE|XETRA|LSE|TSE|COMEX|NYMEX|FOREX|CRYPTO
 
 
 # ---------------------------------------------------------------------------
@@ -42,49 +43,49 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         currency="TRY", unit=None,
         primary_provider="yahoo", fallback_provider=None,
         external_primary="USDTRY=X", external_fallback=None,
-        ttl_seconds=30,
+        ttl_seconds=30, exchange="FOREX",
     ),
     "EUR/TRY": SymbolConfig(
         internal="EUR/TRY", name="Euro/TL", category="fx",
         currency="TRY", unit=None,
         primary_provider="yahoo", fallback_provider=None,
         external_primary="EURTRY=X", external_fallback=None,
-        ttl_seconds=30,
+        ttl_seconds=30, exchange="FOREX",
     ),
     "GBP/TRY": SymbolConfig(
         internal="GBP/TRY", name="Sterlin/TL", category="fx",
         currency="TRY", unit=None,
         primary_provider="yahoo", fallback_provider=None,
         external_primary="GBPTRY=X", external_fallback=None,
-        ttl_seconds=30,
+        ttl_seconds=30, exchange="FOREX",
     ),
     "EUR/USD": SymbolConfig(
         internal="EUR/USD", name="Euro/Dolar", category="fx",
         currency="USD", unit=None,
         primary_provider="yahoo", fallback_provider="fmp",
         external_primary="EURUSD=X", external_fallback="EURUSD",
-        ttl_seconds=30,
+        ttl_seconds=30, exchange="FOREX",
     ),
     "GBP/USD": SymbolConfig(
         internal="GBP/USD", name="Sterlin/Dolar", category="fx",
         currency="USD", unit=None,
         primary_provider="yahoo", fallback_provider="fmp",
         external_primary="GBPUSD=X", external_fallback="GBPUSD",
-        ttl_seconds=30,
+        ttl_seconds=30, exchange="FOREX",
     ),
     "CHF/TRY": SymbolConfig(
         internal="CHF/TRY", name="İsviçre Frangı/TL", category="fx",
         currency="TRY", unit=None,
         primary_provider="yahoo", fallback_provider=None,
         external_primary="CHFTRY=X", external_fallback=None,
-        ttl_seconds=30,
+        ttl_seconds=30, exchange="FOREX",
     ),
     "JPY/TRY": SymbolConfig(
         internal="JPY/TRY", name="Yen/TL", category="fx",
         currency="TRY", unit=None,
         primary_provider="yahoo", fallback_provider=None,
         external_primary="JPYTRY=X", external_fallback=None,
-        ttl_seconds=30,
+        ttl_seconds=30, exchange="FOREX",
     ),
 
     # ── Crypto ──────────────────────────────────────────────────────────────
@@ -94,7 +95,7 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         currency="USD", unit=None,
         primary_provider="coingecko", fallback_provider="yahoo",
         external_primary="bitcoin", external_fallback="BTC-USD",
-        ttl_seconds=60,
+        ttl_seconds=60, exchange="CRYPTO",
     ),
 
     # ── Gold & Silver ────────────────────────────────────────────────────────
@@ -105,14 +106,14 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         currency="USD", unit="troy oz",
         primary_provider="yahoo", fallback_provider="fmp",
         external_primary="GC=F", external_fallback="GCUSD",
-        ttl_seconds=60,
+        ttl_seconds=60, exchange="COMEX",
     ),
     "XAG/USD": SymbolConfig(
         internal="XAG/USD", name="Gümüş", category="commodity",
         currency="USD", unit="troy oz",
         primary_provider="yahoo", fallback_provider="fmp",
         external_primary="SI=F", external_fallback="SIUSD",
-        ttl_seconds=60,
+        ttl_seconds=60, exchange="COMEX",
     ),
 
     # ── Derived gold in TRY ──────────────────────────────────────────────────
@@ -122,7 +123,7 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         primary_provider="derived", fallback_provider=None,
         external_primary="HH_T",  # Altinkaynak Kod: Has Toptan (fine gold wholesale)
         external_fallback=None,
-        ttl_seconds=60,
+        ttl_seconds=60, exchange="COMEX",  # follows gold futures calendar
     ),
     "HAREM1KG": SymbolConfig(
         internal="HAREM1KG", name="Harem Altın 1kg", category="gold",
@@ -130,14 +131,14 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         primary_provider="derived", fallback_provider=None,
         external_primary="", external_fallback=None,
         ttl_seconds=120,
-        is_live=False,
+        is_live=False, exchange="BIST",  # Turkish local gold, tracks BIST hours
     ),
     "GAGTRY": SymbolConfig(
         internal="GAGTRY", name="Gram Gümüş", category="commodity",
         currency="TRY", unit="gram",
         primary_provider="derived", fallback_provider=None,
         external_primary="", external_fallback=None,
-        ttl_seconds=60,
+        ttl_seconds=60, exchange="COMEX",
     ),
 
     # ── Indices ──────────────────────────────────────────────────────────────
@@ -148,21 +149,21 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         currency="USD", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="^GSPC", external_fallback="^GSPC",
-        ttl_seconds=300,  # FMP free: ~15-min delayed at source; refresh every 5 min
+        ttl_seconds=300, exchange="NYSE",
     ),
     "DJI": SymbolConfig(
         internal="DJI", name="Dow Jones", category="index",
         currency="USD", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="^DJI", external_fallback="^DJI",
-        ttl_seconds=300,  # FMP free: ~15-min delayed at source; refresh every 5 min
+        ttl_seconds=300, exchange="NYSE",
     ),
     "NDX": SymbolConfig(
         internal="NDX", name="Nasdaq 100", category="index",
         currency="USD", unit=None,
         primary_provider="yahoo", fallback_provider=None,
         external_primary="^NDX", external_fallback=None,
-        ttl_seconds=60,
+        ttl_seconds=60, exchange="NYSE",
     ),
     "XU100": SymbolConfig(
         internal="XU100", name="BIST 100", category="index",
@@ -170,28 +171,28 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         primary_provider="yahoo", fallback_provider=None,
         external_primary="XU100.IS", external_fallback=None,
         ttl_seconds=300,
-        is_live=False, delay_minutes=15,
+        is_live=False, delay_minutes=15, exchange="BIST",
     ),
     "DAX": SymbolConfig(
         internal="DAX", name="DAX 40", category="index",
         currency="EUR", unit=None,
         primary_provider="yahoo", fallback_provider=None,
         external_primary="^GDAXI", external_fallback=None,
-        ttl_seconds=60,
+        ttl_seconds=60, exchange="XETRA",
     ),
     "UKX": SymbolConfig(
         internal="UKX", name="FTSE 100", category="index",
         currency="GBP", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="^FTSE", external_fallback="^FTSE",
-        ttl_seconds=300,  # FMP free: ~15-min delayed at source; refresh every 5 min
+        ttl_seconds=300, exchange="LSE",
     ),
     "N225": SymbolConfig(
         internal="N225", name="Nikkei 225", category="index",
         currency="JPY", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="^N225", external_fallback="^N225",
-        ttl_seconds=300,  # FMP free: ~15-min delayed at source; refresh every 5 min
+        ttl_seconds=300, exchange="TSE",
     ),
 
     # ── Commodities ──────────────────────────────────────────────────────────
@@ -202,35 +203,35 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         currency="USD", unit="barrel",
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="BZUSD", external_fallback="BZ=F",
-        ttl_seconds=300,  # FMP free: ~15-min delayed at source; refresh every 5 min
+        ttl_seconds=300, exchange="NYMEX",
     ),
     "WTI": SymbolConfig(
         internal="WTI", name="WTI Ham Petrol", category="commodity",
         currency="USD", unit="barrel",
         primary_provider="yahoo", fallback_provider=None,
         external_primary="CL=F", external_fallback=None,
-        ttl_seconds=60,
+        ttl_seconds=60, exchange="NYMEX",
     ),
     "NATGAS": SymbolConfig(
         internal="NATGAS", name="Doğal Gaz", category="commodity",
         currency="USD", unit="MMBtu",
         primary_provider="yahoo", fallback_provider=None,
         external_primary="NG=F", external_fallback=None,
-        ttl_seconds=60,
+        ttl_seconds=60, exchange="NYMEX",
     ),
     "HG": SymbolConfig(
         internal="HG", name="Bakır", category="commodity",
         currency="USD", unit="lb",
         primary_provider="yahoo", fallback_provider=None,
         external_primary="HG=F", external_fallback=None,
-        ttl_seconds=60,
+        ttl_seconds=60, exchange="COMEX",
     ),
     "ZW": SymbolConfig(
         internal="ZW", name="Buğday", category="commodity",
         currency="USD", unit="bushel",
         primary_provider="yahoo", fallback_provider=None,
         external_primary="ZW=F", external_fallback=None,
-        ttl_seconds=60,
+        ttl_seconds=60, exchange="COMEX",  # CBOT (CME Group) — similar calendar
     ),
 }
 
