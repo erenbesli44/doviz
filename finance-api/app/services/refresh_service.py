@@ -1,13 +1,14 @@
 """
 RefreshService — pre-warms the quote cache on startup, then keeps it fresh.
 
-Strategy per symbol type:
-- Real-time symbols (TTL ≤ 60s):   refresh at TTL × 0.8 to keep cache hot
-- Delayed symbols  (TTL > 60s):    refresh at TTL × 0.8 (still much less than TTL)
-- Derived symbols (GAUTRY, etc.):  follow their configured TTL × 0.8
+Tiered refresh strategy (per-symbol TTL):
+- Each symbol is refreshed at TTL × 0.8, tracked individually.
+- The loop ticks every _TICK_INTERVAL seconds and only fires symbols
+  whose refresh window has elapsed — no wasted calls.
+- Derived symbols (GAUTRY, etc.) are skipped — they depend on sub-quotes.
 
 Exchange-transition detection:
-- On each refresh cycle, per-exchange open/closed state is compared to the
+- On each tick, per-exchange open/closed state is compared to the
   previous cycle. If an exchange transitions open → closed, an EOD fetch is
   triggered for all symbols on that exchange and the results are stored in
   the SessionCloseStore so the fallback resolver can serve them immediately.
@@ -16,6 +17,7 @@ On startup all symbols are fetched concurrently to eliminate cold-start latency.
 """
 import asyncio
 import logging
+import time
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
@@ -32,6 +34,9 @@ logger = logging.getLogger(__name__)
 # Symbols refreshed by RefreshService; derived ones depend on their sub-quotes being fresh
 _SKIP = frozenset({"GAUTRY", "HAREM1KG", "GAGTRY"})
 
+# Base loop tick — determines refresh granularity (smaller = more responsive)
+_TICK_INTERVAL = 5  # seconds
+
 
 class RefreshService:
     def __init__(
@@ -40,14 +45,18 @@ class RefreshService:
         event_bus: EventBus,
         calendar: "MarketCalendarService | None" = None,
         eod_fetcher: "EODFetcher | None" = None,
+        fmp_blocked: set[str] | None = None,
     ) -> None:
         self._qs = quote_service
         self._bus = event_bus
         self._calendar = calendar
         self._eod_fetcher = eod_fetcher
+        self._fmp_blocked = fmp_blocked or set()
         self._task: asyncio.Task | None = None
         # Track per-exchange open/closed state to detect transitions
         self._prev_open: dict[str, bool] = {}
+        # Per-symbol last-refresh monotonic timestamp
+        self._last_refresh: dict[str, float] = {}
 
     async def start(self) -> None:
         """Warm cache for all symbols, then kick off background refresh loop."""
@@ -81,23 +90,25 @@ class RefreshService:
             logger.info("Cache warm complete.")
 
     async def _refresh_loop(self) -> None:
-        """Continuously refresh symbols before their TTL expires."""
+        """Continuously refresh symbols based on their individual TTL."""
         while True:
             now_utc = datetime.now(UTC)
+            now_ts = time.monotonic()
             await self._detect_exchange_transitions(now_utc)
 
             for symbol, config in SYMBOL_REGISTRY.items():
                 if symbol in _SKIP:
                     continue
-                # Skip symbols whose market is currently closed AND we have stored data
                 if self._is_market_closed_with_data(config.exchange, symbol, now_utc):
                     continue
+                # Only refresh when TTL × 0.8 has elapsed since last refresh
+                last = self._last_refresh.get(symbol, 0.0)
+                if now_ts - last < config.ttl_seconds * 0.8:
+                    continue
+                self._last_refresh[symbol] = now_ts
                 asyncio.create_task(self._safe_fetch(symbol), name=f"refresh:{symbol}")
 
-            min_ttl = min(
-                c.ttl_seconds for s, c in SYMBOL_REGISTRY.items() if s not in _SKIP
-            )
-            await asyncio.sleep(min_ttl * 0.8)
+            await asyncio.sleep(_TICK_INTERVAL)
 
     def _is_market_closed_with_data(
         self, exchange: str, symbol: str, now_utc: datetime

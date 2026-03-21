@@ -14,6 +14,8 @@ Free-plan coverage (tested 2026-03):
 History is end-of-day (daily bars) only on the free plan.
 """
 import logging
+import time
+from collections import deque
 from datetime import UTC, datetime, timedelta
 
 import httpx
@@ -23,6 +25,7 @@ from .base import ProviderError, RawHistoryPoint, RawQuote
 logger = logging.getLogger(__name__)
 
 _BASE = "https://financialmodelingprep.com/stable"
+_RATE_WINDOW = 60  # seconds
 
 
 class FMPProvider:
@@ -31,8 +34,21 @@ class FMPProvider:
     def __init__(self, client: httpx.AsyncClient, api_key: str) -> None:
         self._client = client
         self._api_key = api_key
+        self._call_timestamps: deque[float] = deque()  # monotonic timestamps of recent calls
+
+    @property
+    def calls_last_minute(self) -> int:
+        """Number of FMP API calls made in the last 60 seconds."""
+        now = time.monotonic()
+        while self._call_timestamps and self._call_timestamps[0] < now - _RATE_WINDOW:
+            self._call_timestamps.popleft()
+        return len(self._call_timestamps)
+
+    def _record_call(self) -> None:
+        self._call_timestamps.append(time.monotonic())
 
     async def fetch_quote(self, external_symbol: str) -> RawQuote:
+        self._record_call()
         try:
             resp = await self._client.get(
                 f"{_BASE}/quote",
@@ -53,10 +69,19 @@ class FMPProvider:
         if price is None:
             raise ProviderError(self.provider_id, external_symbol, "null price in response")
 
-        change_pct = float(q.get("changesPercentage") or 0.0)
+        change_pct_raw = q.get("changesPercentage")
         price_f = float(price)
         prev_close = q.get("previousClose")
         prev_close_f = float(prev_close) if prev_close is not None else None
+
+        # FMP returns changesPercentage=None outside market hours — compute from previousClose
+        if change_pct_raw is not None:
+            change_pct = float(change_pct_raw)
+        elif prev_close_f and prev_close_f != 0:
+            change_pct = round((price_f - prev_close_f) / prev_close_f * 100, 4)
+        else:
+            change_pct = 0.0
+
         change_value = round(price_f - prev_close_f, 6) if prev_close_f is not None else None
 
         return RawQuote(
@@ -76,6 +101,7 @@ class FMPProvider:
         """
         from_ = (datetime.now(UTC) - timedelta(hours=hours)).strftime("%Y-%m-%d")
 
+        self._record_call()
         try:
             resp = await self._client.get(
                 f"{_BASE}/historical-price-eod/light",

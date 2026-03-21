@@ -19,6 +19,7 @@ from .services.fallback_resolver import FallbackPriceResolver
 from .services.market_calendar import MarketCalendarService
 from .services.quote_service import QuoteService
 from .services.refresh_service import RefreshService
+from .services.startup_probe import StartupProbe
 
 
 logger = logging.getLogger(__name__)
@@ -43,6 +44,10 @@ async def lifespan(app: FastAPI):
     app.state.event_bus = EventBus()
     providers = ProviderRegistry(app.state.http_client, settings)
 
+    # Probe FMP symbols to discover plan-limited 402s before serving traffic
+    probe = StartupProbe(providers)
+    app.state.fmp_blocked = await probe.run()
+
     app.state.eod_fetcher = EODFetcher(
         providers=providers,
         session_store=app.state.session_store,
@@ -62,12 +67,14 @@ async def lifespan(app: FastAPI):
         calendar=app.state.calendar,
         session_store=app.state.session_store,
         fallback_resolver=app.state.fallback_resolver,
+        fmp_blocked=app.state.fmp_blocked,
     )
     app.state.refresh_service = RefreshService(
         quote_service=app.state.quote_service,
         event_bus=app.state.event_bus,
         calendar=app.state.calendar,
         eod_fetcher=app.state.eod_fetcher,
+        fmp_blocked=app.state.fmp_blocked,
     )
 
     # Finnhub real-time WebSocket (no-op if key absent)

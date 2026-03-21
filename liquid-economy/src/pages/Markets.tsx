@@ -20,7 +20,7 @@ function LiveClock() {
 }
 
 export default function Markets() {
-  const { status, extendedOverviewAssets, fxAssets, commodityCards, goldAssets } = useMarketData();
+  const { status, extendedOverviewAssets, fxAssets, commodityCards } = useMarketData();
 
   // Selected asset for the focus chart; id === symbol code, e.g. "USD/TRY"
   const [selectedId, setSelectedId] = useState<string>('USD/TRY');
@@ -58,14 +58,6 @@ export default function Markets() {
           GÜNCEL VARLIKLAR
         </h3>
         <div className="bg-[var(--color-surface-container-low)] rounded-xl p-1 space-y-0">
-          {goldAssets.filter((a) => a.id === 'GAUTRY').map((a) => (
-            <AssetListRow
-              key="GAUTRY-physical"
-              asset={{ ...a, name: 'Fiziksel Gram Altın' }}
-              active={a.id === selectedId}
-              onClick={() => setSelectedId(a.id)}
-            />
-          ))}
           {extendedOverviewAssets.map((asset) => (
             <AssetListRow
               key={asset.id}
@@ -83,13 +75,6 @@ export default function Markets() {
           GÜNCEL VARLIKLAR
         </h3>
         <div className="grid grid-cols-5 gap-2">
-          {goldAssets.filter((a) => a.id === 'GAUTRY').map((a) => (
-            <AssetCard
-              key="GAUTRY-physical"
-              asset={{ ...a, name: 'Fiziksel Gram Altın' }}
-              onClick={() => setSelectedId(a.id)}
-            />
-          ))}
           {extendedOverviewAssets.map((asset) => (
             <AssetCard
               key={asset.id}

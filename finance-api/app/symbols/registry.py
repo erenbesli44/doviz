@@ -36,8 +36,8 @@ class SymbolConfig:
 SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
     # ── Forex ───────────────────────────────────────────────────────────────
     # Yahoo Finance is the only free real-time source for TRY crosses.
-    # FMP /stable/quote 402s for all TRY pairs on the free plan → no useful fallback.
-    # EUR/USD and GBP/USD work on both Yahoo and FMP → FMP kept as fallback.
+    # FMP Starter 402s for all TRY pairs (not in the 10-pair sample).
+    # EUR/USD and GBP/USD work on both Yahoo and FMP → FMP as fallback.
     "USD/TRY": SymbolConfig(
         internal="USD/TRY", name="Dolar/TL", category="fx",
         currency="TRY", unit=None,
@@ -142,21 +142,22 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
     ),
 
     # ── Indices ──────────────────────────────────────────────────────────────
-    # FMP free plan covers: ^GSPC, ^DJI, ^FTSE, ^N225 → FMP primary, Yahoo fallback
-    # FMP 402 for: ^NDX, ^GDAXI → Yahoo primary only
+    # FMP Starter plan: ^GSPC, ^DJI confirmed in sample → real-time, FMP primary.
+    # ^FTSE, ^N225 likely in 9-index sample → FMP primary, probed at startup.
+    # ^NDX, ^GDAXI → 402 on Starter → Yahoo primary only.
     "SPX": SymbolConfig(
         internal="SPX", name="S&P 500", category="index",
         currency="USD", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="^GSPC", external_fallback="^GSPC",
-        ttl_seconds=300, exchange="NYSE",
+        ttl_seconds=30, exchange="NYSE",
     ),
     "DJI": SymbolConfig(
         internal="DJI", name="Dow Jones", category="index",
         currency="USD", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="^DJI", external_fallback="^DJI",
-        ttl_seconds=300, exchange="NYSE",
+        ttl_seconds=30, exchange="NYSE",
     ),
     "NDX": SymbolConfig(
         internal="NDX", name="Nasdaq 100", category="index",
@@ -185,25 +186,26 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         currency="GBP", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="^FTSE", external_fallback="^FTSE",
-        ttl_seconds=300, exchange="LSE",
+        ttl_seconds=60, exchange="LSE",
     ),
     "N225": SymbolConfig(
         internal="N225", name="Nikkei 225", category="index",
         currency="JPY", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="^N225", external_fallback="^N225",
-        ttl_seconds=300, exchange="TSE",
+        ttl_seconds=60, exchange="TSE",
     ),
 
     # ── Commodities ──────────────────────────────────────────────────────────
-    # FMP free: BZUSD (Brent) ✓ → FMP primary, Yahoo fallback
-    # FMP 402: CLUSD, NGUSD, HGUSD, KWUSD → Yahoo only (futures tickers)
+    # FMP Starter: BZUSD (Brent) in sample but shows significant drift vs Yahoo BZ=F
+    # (different settlement/contract reference). Yahoo BZ=F is more accurate → Yahoo primary.
+    # CLUSD, NGUSD, HGUSD, KWUSD → 402 on Starter → Yahoo only.
     "BRENT": SymbolConfig(
         internal="BRENT", name="Brent Petrol", category="commodity",
         currency="USD", unit="barrel",
-        primary_provider="fmp", fallback_provider="yahoo",
-        external_primary="BZUSD", external_fallback="BZ=F",
-        ttl_seconds=300, exchange="NYMEX",
+        primary_provider="yahoo", fallback_provider="fmp",
+        external_primary="BZ=F", external_fallback="BZUSD",
+        ttl_seconds=30, exchange="NYMEX",
     ),
     "WTI": SymbolConfig(
         internal="WTI", name="WTI Ham Petrol", category="commodity",

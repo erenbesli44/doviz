@@ -101,32 +101,38 @@ class YahooFinanceProvider:
         if price is None:
             raise ProviderError(self.provider_id, external_symbol, "null regularMarketPrice")
 
-        # Attempt Istanbul-midnight anchor first
-        try:
-            timestamps = result.get("timestamp") or []
-            closes = result.get("indicators", {}).get("quote", [{}])[0].get("close") or []
-            prev_close = _prev_close_at_istanbul_midnight(timestamps, closes)
-        except Exception:
-            prev_close = None
-
-        # Fall back to Yahoo's own chartPreviousClose (UTC/NY session) if needed
-        if not prev_close:
-            prev_close = meta.get("chartPreviousClose") or meta.get("previousClose") or float(price)
-            logger.debug(
-                "%s: Istanbul-midnight bar not found, using chartPreviousClose=%.4f",
-                external_symbol, prev_close,
-            )
-
         price_f = float(price)
-        change_pct = ((price_f - prev_close) / prev_close * 100) if prev_close else 0.0
         market_state = meta.get("marketState", "").lower() or None
 
-        # Prefer Yahoo's own change fields for accuracy; fall back to computed
+        # Yahoo's authoritative change fields — use these first.
+        raw_change_pct = meta.get("regularMarketChangePercent")
         raw_change = meta.get("regularMarketChange")
+
+        # chartPreviousClose = prior session close (always correct for session % change).
+        # This is the reference Yahoo website uses and what EODFetcher needs.
+        chart_prev = meta.get("chartPreviousClose") or meta.get("previousClose")
+        prev_close_f: float | None = float(chart_prev) if chart_prev else None
+
+        if raw_change_pct is not None:
+            # Yahoo provides the authoritative session change — use it directly.
+            change_pct = round(float(raw_change_pct), 4)
+        elif prev_close_f:
+            # Fall back to (price − prev_session_close) / prev_session_close.
+            # This is correct at all times (open / closed / weekend).
+            change_pct = round((price_f - prev_close_f) / prev_close_f * 100, 4)
+        else:
+            # Last resort: Istanbul-midnight anchor (intraday use only).
+            try:
+                timestamps = result.get("timestamp") or []
+                closes = result.get("indicators", {}).get("quote", [{}])[0].get("close") or []
+                istanbul_prev = _prev_close_at_istanbul_midnight(timestamps, closes)
+            except Exception:
+                istanbul_prev = None
+            change_pct = ((price_f - istanbul_prev) / istanbul_prev * 100) if istanbul_prev else 0.0
+
         change_value: float | None = float(raw_change) if raw_change is not None else (
-            round(price_f - prev_close, 6) if prev_close else None
+            round(price_f - prev_close_f, 6) if prev_close_f else None
         )
-        prev_close_f: float | None = float(prev_close) if prev_close else None
 
         return RawQuote(
             price=price_f,

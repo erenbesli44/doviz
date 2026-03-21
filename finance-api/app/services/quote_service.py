@@ -53,6 +53,7 @@ class QuoteService:
         calendar: "MarketCalendarService | None" = None,
         session_store: "SessionCloseStore | None" = None,
         fallback_resolver: "FallbackPriceResolver | None" = None,
+        fmp_blocked: set[str] | None = None,
     ) -> None:
         self._providers = providers
         self._cache = cache
@@ -62,6 +63,7 @@ class QuoteService:
         self._calendar = calendar
         self._session_store = session_store
         self._fallback_resolver = fallback_resolver
+        self._fmp_blocked = fmp_blocked or set()
 
     # ------------------------------------------------------------------
     # Public API
@@ -98,7 +100,7 @@ class QuoteService:
                     )
                     return patched
 
-        # ── Fast path: closed market with stored session close ──────────────
+        # ── Fast path: closed market ──────────────────────────────────────────
         if self._calendar is not None and self._session_store is not None:
             now_utc = datetime.now(UTC)
             state = self._calendar.get_session_state(config.exchange, now_utc)
@@ -106,6 +108,19 @@ class QuoteService:
                 last_close = self._session_store.get(config.internal)
                 if last_close is not None:
                     return _build_closed_response(config, last_close, state)
+
+                # Cold-start on closed market: fetch proper EOD data (daily bars)
+                # rather than calling the live provider (which gives change_pct=0.0).
+                if self._fallback_resolver is not None:
+                    resolved = await self._fallback_resolver.resolve(
+                        symbol=config.internal,
+                        config=config,
+                        live_quote=None,
+                        now_utc=now_utc,
+                    )
+                    if resolved.display_mode != "no_data":
+                        return _build_from_resolved(config, resolved)
+                # EOD unavailable → fall through to live provider as last resort
 
         # ── Standard cache → provider flow ──────────────────────────────────
         cached = await self._cache.get(cache_key)
@@ -164,6 +179,11 @@ class QuoteService:
         cached = await self._cache.get(cache_key)
         if cached is not None:
             return cached
+
+        if config.primary_provider == "derived":
+            result = await self._get_history_derived(config, hours)
+            await self._cache.set(cache_key, result, ttl_seconds=config.ttl_seconds * 4)
+            return result
 
         provider = self._providers.get(config.primary_provider)
         try:
@@ -229,9 +249,19 @@ class QuoteService:
         )
 
     def _snapshot(self, config: SymbolConfig, response: QuoteResponse) -> None:
-        """Save the latest successful quote as an intraday snapshot in the session store."""
+        """Save the latest successful quote as an intraday snapshot in the session store.
+
+        Only stores when the market is open — live providers return 0.0% change
+        when market is closed (regularMarketPrice == previousClose), which would
+        corrupt correct EOD values already in the store.
+        """
         if self._session_store is None:
             return
+        if self._calendar is not None:
+            now_utc = datetime.now(UTC)
+            state = self._calendar.get_session_state(config.exchange, now_utc)
+            if not state.is_open:
+                return  # Don't overwrite correct EOD values with 0.0% live data
         from ..cache.session_store import SessionCloseData
         now_utc = datetime.now(UTC)
         self._session_store.store(
@@ -247,20 +277,106 @@ class QuoteService:
             ),
         )
 
+    async def _get_history_derived(self, config: SymbolConfig, hours: int) -> HistoryResponse:
+        """Compose history for derived TRY-denominated symbols (GAUTRY, GAGTRY, HAREM1KG).
+
+        Fetches the USD base asset's history and scales each point by the current
+        USD/TRY spot rate.  This is a sparkline approximation — intraday USD/TRY
+        variation is not accounted for, but is acceptable for trend display.
+        """
+        _TROY_OZ_TO_GRAMS = 31.1035
+
+        try:
+            usdtry_quote = await self.get_quote("USD/TRY")
+            usd_try = usdtry_quote.data.price
+        except HTTPException:
+            usd_try = 1.0  # degenerate fallback; history will show wrong scale but not crash
+
+        if config.internal in ("GAUTRY", "HAREM1KG"):
+            base_symbol = "XAU/USD"
+            divisor = _TROY_OZ_TO_GRAMS
+            if config.internal == "HAREM1KG":
+                divisor = _TROY_OZ_TO_GRAMS / 1000  # per kg
+        elif config.internal == "GAGTRY":
+            base_symbol = "XAG/USD"
+            divisor = _TROY_OZ_TO_GRAMS
+        else:
+            return HistoryResponse(
+                symbol=config.internal, points=[],
+                provider="derived", is_live=False, fetched_at=datetime.now(UTC),
+            )
+
+        base_config = get_symbol_config(base_symbol)
+        if base_config is None:
+            return HistoryResponse(
+                symbol=config.internal, points=[],
+                provider="derived", is_live=False, fetched_at=datetime.now(UTC),
+            )
+
+        base_provider = self._providers.get(base_config.primary_provider)
+        try:
+            raw_points = await asyncio.wait_for(
+                base_provider.fetch_history(base_config.external_primary, hours),
+                timeout=self._timeout,
+            )
+        except Exception as e:
+            logger.warning("Derived history fetch failed for %s (base %s): %s", config.internal, base_symbol, e)
+            raw_points = []
+
+        scaled = [
+            HistoryPoint(time=p.time, value=round(p.value / divisor * usd_try, 4))
+            for p in raw_points
+        ]
+        return HistoryResponse(
+            symbol=config.internal,
+            points=scaled,
+            provider=base_config.primary_provider,
+            is_live=base_config.is_live,
+            fetched_at=datetime.now(UTC),
+        )
+
     async def _fetch_with_fallback(self, config: SymbolConfig) -> QuoteResponse:
-        """Try primary provider, fall back if it fails, raise 503 if both fail."""
+        """Try primary provider, fall back if it fails, raise 503 if both fail.
+
+        If the symbol was blocked by the startup probe (FMP 402), skip FMP
+        entirely and go straight to the fallback provider.
+        """
         if config.primary_provider == "derived":
             return await self._fetch_derived(config)
 
-        primary = self._providers.get(config.primary_provider)
+        # If FMP is primary but symbol is blocked, skip to fallback immediately
+        use_primary = config.primary_provider
+        ext_primary = config.external_primary
+        if config.primary_provider == "fmp" and config.internal in self._fmp_blocked:
+            if config.fallback_provider:
+                use_primary = config.fallback_provider
+                ext_primary = config.external_fallback or config.external_primary
+                logger.debug(
+                    "Skipping blocked FMP for %s, using %s directly",
+                    config.internal, use_primary,
+                )
+            else:
+                raise HTTPException(
+                    status_code=503,
+                    detail=f"FMP blocked for {config.internal} and no fallback configured.",
+                )
+
+        primary = self._providers.get(use_primary)
 
         try:
-            raw = await self._fetch(primary, config.external_primary)
-            return self._normalize(raw, config, provider_id=config.primary_provider, is_live=config.is_live)
+            raw = await self._fetch(primary, ext_primary)
+            return self._normalize(raw, config, provider_id=use_primary, is_live=config.is_live)
         except (ProviderError, TimeoutError, Exception) as primary_err:
             logger.warning(
                 "Primary provider %s failed for %s: %s",
-                config.primary_provider, config.internal, primary_err,
+                use_primary, config.internal, primary_err,
+            )
+
+        # If we already skipped FMP and used fallback as primary, no further fallback
+        if use_primary != config.primary_provider:
+            raise HTTPException(
+                status_code=503,
+                detail=f"Provider unavailable for {config.internal} (FMP blocked, fallback failed).",
             )
 
         if config.fallback_provider is None:
