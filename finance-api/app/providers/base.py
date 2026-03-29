@@ -21,6 +21,7 @@ class RawQuote:
     market_status: str | None = None  # "open" | "closed" | "pre-market"
     previous_close: float | None = None  # previous session close (for change_value)
     change_value: float | None = None    # absolute price change from previous_close
+    session_open: float | None = None    # first traded price of the current session (for derived instruments)
 
 
 @dataclass

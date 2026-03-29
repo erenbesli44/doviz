@@ -66,6 +66,23 @@ def _prev_close_at_istanbul_midnight(
     return None
 
 
+def _first_bar_after_istanbul_midnight(
+    timestamps: list[int], closes: list[float | None]
+) -> float | None:
+    """Return the first valid close AFTER today's Istanbul midnight (00:00 TRT = 21:00 UTC).
+
+    For COMEX gold and similar instruments that have a brief daily maintenance break
+    ending at 22:00 UTC (01:00 TRT), this returns the session-open price that
+    Turkish financial sites (doviz.com, BloombergHT) use as the daily change reference.
+    Returns None if no bar exists after midnight (market not yet open).
+    """
+    cutoff_ts = _istanbul_midnight_utc().timestamp()
+    for ts, close in zip(timestamps, closes):
+        if ts >= cutoff_ts and close is not None:
+            return float(close)
+    return None
+
+
 class YahooFinanceProvider:
     provider_id = "yahoo"
 
@@ -134,6 +151,17 @@ class YahooFinanceProvider:
             round(price_f - prev_close_f, 6) if prev_close_f else None
         )
 
+        # Session-open price: first non-null bar after Istanbul midnight (00:00 TRT = 21:00 UTC).
+        # Used by _fetch_derived to compute the intraday change for GAUTRY/GAGTRY
+        # in a way that matches doviz.com (change from session open, not from
+        # Friday's chartPreviousClose which would span the weekend gap).
+        try:
+            ts_list = result.get("timestamp") or []
+            cl_list = result.get("indicators", {}).get("quote", [{}])[0].get("close") or []
+            session_open_price = _first_bar_after_istanbul_midnight(ts_list, cl_list)
+        except Exception:
+            session_open_price = None
+
         return RawQuote(
             price=price_f,
             change_pct=round(change_pct, 4),
@@ -144,6 +172,7 @@ class YahooFinanceProvider:
             market_status=market_state,
             previous_close=prev_close_f,
             change_value=change_value,
+            session_open=session_open_price,
         )
 
     async def fetch_history(self, external_symbol: str, hours: int = 24) -> list[RawHistoryPoint]:

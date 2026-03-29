@@ -37,6 +37,7 @@ interface Props {
   price: number;
   change: number;
   history: ChartDataPoint[];
+  historyLoading?: boolean;
   compact?: boolean;
   icon?: string;
   iconBg?: string;
@@ -49,6 +50,7 @@ export default function FocusChart({
   price,
   change,
   history,
+  historyLoading = false,
   compact = false,
   icon = 'show_chart',
   iconBg = 'bg-secondary-fixed',
@@ -56,6 +58,7 @@ export default function FocusChart({
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeRange, setActiveRange] = useState<TimeRange>('1G');
+  const [unavailableRanges, setUnavailableRanges] = useState<Set<TimeRange>>(new Set());
   const [hoverValue, setHoverValue] = useState<number | null>(null);
   const [hoverTime, setHoverTime] = useState<string | null>(null);
 
@@ -77,7 +80,31 @@ export default function FocusChart({
   const chartHeight = compact ? 192 : 400;
 
   useEffect(() => {
-    if (!containerRef.current || history.length === 0) return;
+    setUnavailableRanges(new Set());
+    setActiveRange('1G');
+    onRangeChange?.(RANGE_HOURS['1G']);
+  }, [assetCode, onRangeChange]);
+
+  useEffect(() => {
+    if (historyLoading) return;
+    if (history.length >= 2) return;
+    setUnavailableRanges((prev) => {
+      if (prev.has(activeRange)) return prev;
+      const next = new Set(prev);
+      next.add(activeRange);
+      return next;
+    });
+
+    const fallbackOrder: TimeRange[] = ['1H', '1A', '1Y', 'TÜMÜ', '1G', '1S'];
+    const nextRange = fallbackOrder.find((r) => r !== activeRange && !unavailableRanges.has(r));
+    if (nextRange) {
+      setActiveRange(nextRange);
+      onRangeChange?.(RANGE_HOURS[nextRange]);
+    }
+  }, [history, historyLoading, activeRange, unavailableRanges, onRangeChange]);
+
+  useEffect(() => {
+    if (!containerRef.current || history.length < 2) return;
 
     const chart = createChart(containerRef.current, {
       layout: {
@@ -228,11 +255,14 @@ export default function FocusChart({
           {timeRanges.map((r) => (
             <button
               key={r}
+              disabled={unavailableRanges.has(r)}
               onClick={() => { setActiveRange(r); onRangeChange?.(RANGE_HOURS[r]); }}
               className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all ${
                 activeRange === r
                   ? 'bg-[var(--color-primary)] text-white'
-                  : 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)] hover:bg-[var(--color-surface-container-low)]'
+                  : unavailableRanges.has(r)
+                    ? 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)]/35 cursor-not-allowed'
+                    : 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)] hover:bg-[var(--color-surface-container-low)]'
               }`}
             >
               {r}
@@ -242,8 +272,23 @@ export default function FocusChart({
       </div>
 
       {/* ── CHART (lightweight-charts canvas) ───────────── */}
-      <div ref={containerRef} style={{ height: chartHeight, width: '100%' }} />
+      {historyLoading ? (
+        <div
+          className="rounded-2xl bg-[var(--color-surface-container)]/60 border border-[var(--color-outline-variant)]/20 flex items-center justify-center text-sm text-[var(--color-on-surface-variant)]"
+          style={{ height: chartHeight, width: '100%' }}
+        >
+          Grafik yükleniyor...
+        </div>
+      ) : history.length < 2 ? (
+        <div
+          className="rounded-2xl bg-[var(--color-surface-container)]/60 border border-[var(--color-outline-variant)]/20 flex items-center justify-center text-sm text-[var(--color-on-surface-variant)]"
+          style={{ height: chartHeight, width: '100%' }}
+        >
+          Bu aralıkta yeterli veri yok.
+        </div>
+      ) : (
+        <div ref={containerRef} style={{ height: chartHeight, width: '100%' }} />
+      )}
     </div>
   );
 }
-

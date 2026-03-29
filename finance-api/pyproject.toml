@@ -32,6 +32,7 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+addopts = "-m \"not live and not e2e\""
 markers = [
     "live: hit real external APIs — run with: pytest -m live",
     "e2e: require a running local server — run with: pytest -m e2e",

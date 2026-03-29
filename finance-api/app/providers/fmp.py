@@ -5,11 +5,11 @@ v3 endpoints are deprecated ("Legacy Endpoint" → 403). The current API is:
   Quote:   GET /stable/quote?symbol=X&apikey=KEY
   History: GET /stable/historical-price-eod/light?symbol=X&from=YYYY-MM-DD&apikey=KEY
 
-Free-plan coverage (tested 2026-03):
-  ✓ US indices: ^GSPC, ^DJI, ^FTSE, ^N225
-  ✓ Commodities: GCUSD (gold), SIUSD (silver), BZUSD (brent)
-  ✓ Major FX: EURUSD, GBPUSD
-  ✗ ^NDX, ^GDAXI, CLUSD, NGUSD, HGUSD, KWUSD, TRY pairs → 402 (premium)
+Starter-plan coverage (tested 2026-03):
+  ✓ US/global indices: ^GSPC, ^DJI, ^FTSE, ^N225
+  ✓ Metals/energy symbols: XAUUSD, XAGUSD, BZUSD
+  ✓ FX: USDTRY, EURTRY, GBPTRY, CHFTRY, JPYTRY, EURUSD, GBPUSD
+  ✗ ^NDX, ^GDAXI, XU100.IS, CLUSD, NGUSD, HGUSD, KWUSD → 402/empty
 
 History is end-of-day (daily bars) only on the free plan.
 """

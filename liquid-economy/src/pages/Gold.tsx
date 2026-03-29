@@ -39,7 +39,7 @@ export default function Gold() {
   // For history, both GAUTRY variants share the same symbol code
   const focusAsset = allAssets.find((a) => a.id === selectedId) ?? goldItems[0]?.asset ?? allAssets[0];
   const historySymbol = focusAsset?.id === 'GAUTRY-derived' ? 'GAUTRY' : (focusAsset?.code ?? 'GAUTRY');
-  const focusHistory = useHistory(historySymbol, historyHours);
+  const { points: focusHistory, loading: historyLoading } = useHistory(historySymbol, historyHours);
 
   if (status === 'loading') {
     return (
@@ -96,6 +96,7 @@ export default function Gold() {
             price={focusAsset.price}
             change={focusAsset.change}
             history={focusHistory}
+            historyLoading={historyLoading}
             icon={focusAsset.icon}
             iconBg={focusAsset.iconBg}
             onRangeChange={setHistoryHours}
@@ -109,6 +110,7 @@ export default function Gold() {
             price={focusAsset.price}
             change={focusAsset.change}
             history={focusHistory}
+            historyLoading={historyLoading}
             icon={focusAsset.icon}
             iconBg={focusAsset.iconBg}
             onRangeChange={setHistoryHours}
@@ -118,4 +120,3 @@ export default function Gold() {
     </>
   );
 }
-

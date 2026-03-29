@@ -22,11 +22,13 @@ function formatTickerPrice(price: number, id: string, currency: string): string 
 }
 
 /** Format change for ticker board: %0,63(41,72) or %-0,01(-0,0044) */
-function formatTickerChange(changePct: number, price: number, id: string, currency: string): string {
-  const absChange = Math.abs(price * changePct / 100);
+function formatTickerChange(changePct: number, changeValue: number | null | undefined, price: number, id: string, currency: string): string {
+  const computed = price * changePct / 100;
+  const signedChange = changeValue ?? computed;
+  const absChange = Math.abs(signedChange);
   const pctStr = changePct.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const prefix = currency === 'USD' ? '$' : '';
-  const absSign = changePct < 0 ? '-' : '';
+  const absSign = signedChange < 0 ? '-' : '';
 
   let absFormatted: string;
   if (id === 'BTC/USD') {
@@ -70,7 +72,7 @@ export default function TickerBoard({ items }: Props) {
 
             {/* Change */}
             <span className={`text-xs font-bold tabular-nums text-right flex-shrink-0 ${changeColor}`}>
-              {formatTickerChange(item.changePct, item.price, item.id, item.currency)}
+              {formatTickerChange(item.changePct, item.changeValue, item.price, item.id, item.currency)}
             </span>
           </div>
         );

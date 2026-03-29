@@ -193,6 +193,14 @@ class QuoteService:
             )
             is_live = config.is_live
             provider_id = config.primary_provider
+            if not raw_points and config.fallback_provider:
+                fp = self._providers.get(config.fallback_provider)
+                raw_points = await asyncio.wait_for(
+                    fp.fetch_history(config.external_fallback or config.external_primary, hours),
+                    timeout=self._timeout,
+                )
+                is_live = False
+                provider_id = config.fallback_provider
         except (ProviderError, TimeoutError, Exception) as e:
             logger.warning("History fetch failed for %s via %s: %s", symbol, config.primary_provider, e)
             if config.fallback_provider:
@@ -223,7 +231,7 @@ class QuoteService:
     # ------------------------------------------------------------------
 
     def _enrich_live(self, response: QuoteResponse, config: SymbolConfig) -> QuoteResponse:
-        """Overlay open-market session context onto a cached/live response."""
+        """Overlay session context onto a cached/provider response."""
         if self._calendar is None:
             return response
 
@@ -232,19 +240,34 @@ class QuoteService:
         freshness = self._calendar.freshness_window(config.exchange)
         age = (now_utc - response.meta.fetched_at).total_seconds()
         is_fresh = age <= freshness
-        source_type = "live" if (is_fresh and response.meta.is_live) else "delayed"
+
+        if state.is_open:
+            source_type = "live" if (is_fresh and response.meta.is_live) else "delayed"
+            display_mode = "live"
+            market_status = "open"
+            next_open = None
+        else:
+            # Closed market + live-provider fallback means "last completed session", not "live".
+            source_type = (
+                response.meta.source_type
+                if response.meta.source_type in {"last_session_close", "last_intraday_snapshot"}
+                else "last_session_close"
+            )
+            display_mode = "last_completed_session"
+            market_status = "closed"
+            next_open = state.next_open
 
         return QuoteResponse(
             data=response.data,
             meta=response.meta.model_copy(update={
-                "market_status": "open",
-                "display_mode": "live",
+                "market_status": market_status,
+                "display_mode": display_mode,
                 "source_type": source_type,
                 "as_of": response.meta.fetched_at,
                 "session_date": str(state.session_date),
                 "is_stale": not is_fresh,
                 "stale_reason": "stale_cache" if not is_fresh else None,
-                "next_market_open": None,
+                "next_market_open": next_open,
             }),
         )
 
@@ -257,13 +280,14 @@ class QuoteService:
         """
         if self._session_store is None:
             return
+        session_date = datetime.now(UTC).date()
         if self._calendar is not None:
             now_utc = datetime.now(UTC)
             state = self._calendar.get_session_state(config.exchange, now_utc)
             if not state.is_open:
                 return  # Don't overwrite correct EOD values with 0.0% live data
+            session_date = state.session_date
         from ..cache.session_store import SessionCloseData
-        now_utc = datetime.now(UTC)
         self._session_store.store(
             config.internal,
             SessionCloseData(
@@ -272,7 +296,7 @@ class QuoteService:
                 change_pct=response.data.change_pct,
                 change_value=response.data.change_value,
                 as_of=response.meta.fetched_at,
-                session_date=now_utc.date(),
+                session_date=session_date,
                 provider=response.meta.provider,
             ),
         )
@@ -408,15 +432,24 @@ class QuoteService:
         try:
             usdtry = await self.get_quote("USD/TRY")
             usd_try_rate = usdtry.data.price
+            usdtry_pct = usdtry.data.change_pct
 
             if config.internal in ("GAUTRY", "HAREM1KG"):
                 xau = await self.get_quote("XAU/USD")
                 base_price_usd = xau.data.price
-                base_change_pct = round(xau.data.change_pct + usdtry.data.change_pct, 4)
+                xau_pct = xau.data.change_pct
+                base_change_pct = round(
+                    (((1 + xau_pct / 100) * (1 + usdtry_pct / 100)) - 1) * 100,
+                    4,
+                )
             elif config.internal == "GAGTRY":
                 xag = await self.get_quote("XAG/USD")
                 base_price_usd = xag.data.price
-                base_change_pct = round(xag.data.change_pct + usdtry.data.change_pct, 4)
+                xag_pct = xag.data.change_pct
+                base_change_pct = round(
+                    (((1 + xag_pct / 100) * (1 + usdtry_pct / 100)) - 1) * 100,
+                    4,
+                )
             else:
                 raise ProviderError("derived", config.internal, "unknown derived symbol")
         except HTTPException as e:
@@ -426,21 +459,26 @@ class QuoteService:
             ) from e
 
         # ── Price computation ─────────────────────────────────────────────────
+        gram_open: float | None = None
         if config.internal == "GAUTRY":
-            try:
-                kapalicarsi = self._providers.get("altinkaynak_gold")
-                raw_kc = await asyncio.wait_for(
-                    kapalicarsi.fetch_quote(config.external_primary),
-                    timeout=self._timeout,
-                )
-                price = raw_kc.price
-                is_live = True
-                provider_used = "altinkaynak_gold"
-            except Exception as exc:
-                logger.warning("GAUTRY: Kapalıçarşı fetch failed (%s), using derived", exc)
-                price = (base_price_usd / _TROY_OZ_TO_GRAMS) * usd_try_rate
-                is_live = config.is_live
-                provider_used = "derived"
+            # Gram Altın (TRY) = Ons Altın (USD) × USD/TRY / 31.1035
+            # Pure international-spot formula — matches doviz.com standard "Gram Altın".
+            # Altinkaynak is NOT used: it returns fiziksel (physical bazaar) gold
+            # with a Kapalıçarşı premium of ~5% above international spot.
+            price = round((base_price_usd / _TROY_OZ_TO_GRAMS) * usd_try_rate, 2)
+            is_live = True   # both XAU/USD and USD/TRY sub-quotes are live
+            provider_used = "derived"
+
+            # Override change_pct: use today's session-open as reference (matches doviz.com).
+            # chartPreviousClose for GC=F on Monday = Friday's close (COMEX closed weekends)
+            # which produces a multi-day change. doviz.com anchors to the FIRST bar after
+            # Istanbul midnight (00:00 TRT = 22:00 UTC) = COMEX session open.
+            xau_open = xau.data.session_open
+            try_open = usdtry.data.session_open
+            if xau_open and try_open:
+                gram_open = xau_open * try_open / _TROY_OZ_TO_GRAMS
+                base_change_pct = round((price - gram_open) / gram_open * 100, 4)
+            # else: keep compounded component change_pct baseline.
 
         elif config.internal == "HAREM1KG":
             price = (base_price_usd / _TROY_OZ_TO_GRAMS) * usd_try_rate * 1000
@@ -452,7 +490,13 @@ class QuoteService:
             is_live = config.is_live
             provider_used = "derived"
 
-        change_value: float | None = round(price * base_change_pct / 100, 4) if price else None
+        if config.internal == "GAUTRY" and gram_open:
+            change_value = round(price - gram_open, 4)
+        elif (1 + base_change_pct / 100) != 0:
+            prev_price = price / (1 + base_change_pct / 100)
+            change_value = round(price - prev_price, 4)
+        else:
+            change_value = None
         raw = RawQuote(
             price=round(price, 2),
             change_pct=base_change_pct,
@@ -482,6 +526,7 @@ class QuoteService:
                 currency=config.currency,
                 category=config.category,
                 unit=config.unit,
+                session_open=getattr(raw, "session_open", None),
             ),
             meta=QuoteMeta(
                 provider=provider_id,
@@ -548,7 +593,7 @@ def _build_from_resolved(config: SymbolConfig, resolved: "ResolvedPrice") -> Quo
             unit=config.unit,
         ),
         meta=QuoteMeta(
-            provider=resolved.source_type,
+            provider=resolved.provider,
             is_live=(resolved.display_mode == "live"),
             delay_minutes=None,
             fetched_at=resolved.as_of,
@@ -562,6 +607,3 @@ def _build_from_resolved(config: SymbolConfig, resolved: "ResolvedPrice") -> Quo
             next_market_open=next_open,
         ),
     )
-
-
-

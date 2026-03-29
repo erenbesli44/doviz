@@ -6,12 +6,19 @@ import type { ChartDataPoint } from '../data/types';
  * Fetches 24h price history for a symbol and returns it as ChartDataPoint[].
  * Re-fetches whenever `symbol` changes. Does not poll — history is static once loaded.
  */
-export function useHistory(symbol: string, hours = 24): ChartDataPoint[] {
+interface UseHistoryResult {
+  points: ChartDataPoint[];
+  loading: boolean;
+}
+
+export function useHistory(symbol: string, hours = 24): UseHistoryResult {
   const [points, setPoints] = useState<ChartDataPoint[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!symbol) return;
     let cancelled = false;
+    setLoading(true);
 
     api
       .getHistory(symbol, hours)
@@ -20,6 +27,9 @@ export function useHistory(symbol: string, hours = 24): ChartDataPoint[] {
       })
       .catch(() => {
         // keep previous points on transient error
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
       });
 
     return () => {
@@ -27,5 +37,5 @@ export function useHistory(symbol: string, hours = 24): ChartDataPoint[] {
     };
   }, [symbol, hours]);
 
-  return points;
+  return { points, loading };
 }

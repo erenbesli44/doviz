@@ -59,9 +59,8 @@ class RefreshService:
         self._last_refresh: dict[str, float] = {}
 
     async def start(self) -> None:
-        """Warm cache for all symbols, then kick off background refresh loop."""
-        await self._warm_cache()
-        self._task = asyncio.create_task(self._refresh_loop(), name="refresh_loop")
+        """Kick off background refresh worker without blocking app startup."""
+        self._task = asyncio.create_task(self._run(), name="refresh_loop")
 
     async def stop(self) -> None:
         if self._task:
@@ -70,6 +69,11 @@ class RefreshService:
                 await self._task
             except asyncio.CancelledError:
                 pass
+
+    async def _run(self) -> None:
+        """Run warmup and periodic refresh in one cancellable background task."""
+        await self._warm_cache()
+        await self._refresh_loop()
 
     # ------------------------------------------------------------------
     # Internals
@@ -156,4 +160,3 @@ class RefreshService:
             await self._bus.publish(symbol, quote)
         except Exception as e:
             logger.debug("Refresh failed for %s: %s", symbol, e)
-

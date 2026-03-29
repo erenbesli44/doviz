@@ -28,7 +28,7 @@ export default function Commodities() {
 
   const filtered = filterByCategory(commodityAssets, activeFilter);
   const focusAsset = commodityAssets.find((a) => a.id === selectedId) ?? commodityAssets[0];
-  const focusHistory = useHistory(focusAsset?.code ?? 'BRENT', historyHours);
+  const { points: focusHistory, loading: historyLoading } = useHistory(focusAsset?.code ?? 'BRENT', historyHours);
 
   if (status === 'loading') {
     return (
@@ -93,6 +93,7 @@ export default function Commodities() {
             price={focusAsset.price}
             change={focusAsset.change}
             history={focusHistory}
+            historyLoading={historyLoading}
             icon={focusAsset.icon}
             iconBg={focusAsset.iconBg}
             onRangeChange={setHistoryHours}
@@ -106,6 +107,7 @@ export default function Commodities() {
             price={focusAsset.price}
             change={focusAsset.change}
             history={focusHistory}
+            historyLoading={historyLoading}
             icon={focusAsset.icon}
             iconBg={focusAsset.iconBg}
             onRangeChange={setHistoryHours}

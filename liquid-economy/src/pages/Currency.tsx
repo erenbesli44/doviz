@@ -10,7 +10,7 @@ export default function Currency() {
   const [historyHours, setHistoryHours] = useState(24);
 
   const focusAsset = fxAssets.find((a) => a.id === selectedId) ?? fxAssets[0];
-  const focusHistory = useHistory(focusAsset?.code ?? 'USD/TRY', historyHours);
+  const { points: focusHistory, loading: historyLoading } = useHistory(focusAsset?.code ?? 'USD/TRY', historyHours);
 
   if (status === 'loading') {
     return (
@@ -47,6 +47,7 @@ export default function Currency() {
             price={focusAsset.price}
             change={focusAsset.change}
             history={focusHistory}
+            historyLoading={historyLoading}
             icon={focusAsset.icon}
             iconBg={focusAsset.iconBg}
             onRangeChange={setHistoryHours}
@@ -60,6 +61,7 @@ export default function Currency() {
             price={focusAsset.price}
             change={focusAsset.change}
             history={focusHistory}
+            historyLoading={historyLoading}
             icon={focusAsset.icon}
             iconBg={focusAsset.iconBg}
             onRangeChange={setHistoryHours}

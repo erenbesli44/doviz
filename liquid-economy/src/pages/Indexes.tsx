@@ -11,7 +11,7 @@ export default function Indexes() {
   const [historyHours, setHistoryHours] = useState(24);
 
   const focusAsset = indexAssets.find((a) => a.id === selectedId) ?? indexAssets[0];
-  const focusHistory = useHistory(focusAsset?.code ?? 'XU100', historyHours);
+  const { points: focusHistory, loading: historyLoading } = useHistory(focusAsset?.code ?? 'XU100', historyHours);
 
   if (status === 'loading') {
     return (
@@ -62,6 +62,7 @@ export default function Indexes() {
             price={focusAsset.price}
             change={focusAsset.change}
             history={focusHistory}
+            historyLoading={historyLoading}
             icon={focusAsset.icon}
             iconBg={focusAsset.iconBg}
             onRangeChange={setHistoryHours}
@@ -75,6 +76,7 @@ export default function Indexes() {
             price={focusAsset.price}
             change={focusAsset.change}
             history={focusHistory}
+            historyLoading={historyLoading}
             icon={focusAsset.icon}
             iconBg={focusAsset.iconBg}
             onRangeChange={setHistoryHours}

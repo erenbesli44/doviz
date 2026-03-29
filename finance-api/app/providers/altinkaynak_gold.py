@@ -8,9 +8,11 @@ Endpoint: https://static.altinkaynak.com/public/Gold
 Returns a list of gold types with Alış (buy / bid) and Satış (sell / ask) prices.
 
 Supported external symbols (the "Kod" field):
-  HH_T  — Has Toptan   (fine gold wholesale, 24K, ref price for Kapalıçarşı)
-  GAT   — Gram Toptan  (gram wholesale)
-  CH_T  — Külçe Toptan (bar wholesale)
+  XAUUSD — Altinkaynak spot XAU/USD price in USD/troy-oz.  Used for GAUTRY:
+            price is XAUUSD / 31.1035 * USD/TRY.  Matches doviz.com "Gram Altın".
+  HH_T   — Has Toptan  (Kapalıçarşı fine-gold wholesale, includes ~5% physical premium)
+  GAT    — Gram Toptan (gram wholesale)
+  CH_T   — Külçe Toptan (bar wholesale)
 
 The Alış (bid) price is used as the reference price because it's closest
 to international spot and is the standard reference shown on Turkish sites.
@@ -35,7 +37,7 @@ _HEADERS = {
     "Referer": "https://www.altinkaynak.com/",
 }
 # Supported Kod values
-_KNOWN_CODES = {"HH_T", "GAT", "CH_T"}
+_KNOWN_CODES = {"XAUUSD", "HH_T", "GAT", "CH_T"}
 
 
 class AltinkaynakGoldProvider:

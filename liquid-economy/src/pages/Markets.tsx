@@ -25,7 +25,7 @@ export default function Markets() {
   // Selected asset for the focus chart; id === symbol code, e.g. "USD/TRY"
   const [selectedId, setSelectedId] = useState<string>('USD/TRY');
   const [historyHours, setHistoryHours] = useState(24);
-  const focusHistory = useHistory(selectedId, historyHours);
+  const { points: focusHistory, loading: historyLoading } = useHistory(selectedId, historyHours);
 
   const focusAsset =
     extendedOverviewAssets.find((a) => a.id === selectedId) ??
@@ -95,6 +95,7 @@ export default function Markets() {
             price={focusAsset.price}
             change={focusAsset.change}
             history={focusHistory}
+            historyLoading={historyLoading}
             icon={focusAsset.icon}
             iconBg={focusAsset.iconBg}
             onRangeChange={setHistoryHours}
@@ -109,6 +110,7 @@ export default function Markets() {
             price={focusAsset.price}
             change={focusAsset.change}
             history={focusHistory}
+            historyLoading={historyLoading}
             icon={focusAsset.icon}
             iconBg={focusAsset.iconBg}
             onRangeChange={setHistoryHours}

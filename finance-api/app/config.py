@@ -13,5 +13,8 @@ class Settings(BaseSettings):
     coingecko_api_key: str = ""  # empty = unauthenticated free tier
 
     quote_timeout_seconds: float = 5.0
+    http_verify_tls: bool = True
+    http_ca_bundle: str = ""
     debug: bool = False
     log_level: str = "INFO"
+    cors_allow_origins: str = "*"

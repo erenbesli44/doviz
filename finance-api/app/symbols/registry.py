@@ -35,56 +35,55 @@ class SymbolConfig:
 
 SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
     # ── Forex ───────────────────────────────────────────────────────────────
-    # Yahoo Finance is the only free real-time source for TRY crosses.
-    # FMP Starter 402s for all TRY pairs (not in the 10-pair sample).
-    # EUR/USD and GBP/USD work on both Yahoo and FMP → FMP as fallback.
+    # FMP Starter supports major TRY crosses and major USD pairs (validated live).
+    # Keep Yahoo as fallback because its symbol coverage is broad and resilient.
     "USD/TRY": SymbolConfig(
         internal="USD/TRY", name="Dolar/TL", category="fx",
         currency="TRY", unit=None,
-        primary_provider="yahoo", fallback_provider=None,
-        external_primary="USDTRY=X", external_fallback=None,
+        primary_provider="fmp", fallback_provider="yahoo",
+        external_primary="USDTRY", external_fallback="USDTRY=X",
         ttl_seconds=30, exchange="FOREX",
     ),
     "EUR/TRY": SymbolConfig(
         internal="EUR/TRY", name="Euro/TL", category="fx",
         currency="TRY", unit=None,
-        primary_provider="yahoo", fallback_provider=None,
-        external_primary="EURTRY=X", external_fallback=None,
+        primary_provider="fmp", fallback_provider="yahoo",
+        external_primary="EURTRY", external_fallback="EURTRY=X",
         ttl_seconds=30, exchange="FOREX",
     ),
     "GBP/TRY": SymbolConfig(
         internal="GBP/TRY", name="Sterlin/TL", category="fx",
         currency="TRY", unit=None,
-        primary_provider="yahoo", fallback_provider=None,
-        external_primary="GBPTRY=X", external_fallback=None,
+        primary_provider="fmp", fallback_provider="yahoo",
+        external_primary="GBPTRY", external_fallback="GBPTRY=X",
         ttl_seconds=30, exchange="FOREX",
     ),
     "EUR/USD": SymbolConfig(
         internal="EUR/USD", name="Euro/Dolar", category="fx",
         currency="USD", unit=None,
-        primary_provider="yahoo", fallback_provider="fmp",
-        external_primary="EURUSD=X", external_fallback="EURUSD",
+        primary_provider="fmp", fallback_provider="yahoo",
+        external_primary="EURUSD", external_fallback="EURUSD=X",
         ttl_seconds=30, exchange="FOREX",
     ),
     "GBP/USD": SymbolConfig(
         internal="GBP/USD", name="Sterlin/Dolar", category="fx",
         currency="USD", unit=None,
-        primary_provider="yahoo", fallback_provider="fmp",
-        external_primary="GBPUSD=X", external_fallback="GBPUSD",
+        primary_provider="fmp", fallback_provider="yahoo",
+        external_primary="GBPUSD", external_fallback="GBPUSD=X",
         ttl_seconds=30, exchange="FOREX",
     ),
     "CHF/TRY": SymbolConfig(
         internal="CHF/TRY", name="İsviçre Frangı/TL", category="fx",
         currency="TRY", unit=None,
-        primary_provider="yahoo", fallback_provider=None,
-        external_primary="CHFTRY=X", external_fallback=None,
+        primary_provider="fmp", fallback_provider="yahoo",
+        external_primary="CHFTRY", external_fallback="CHFTRY=X",
         ttl_seconds=30, exchange="FOREX",
     ),
     "JPY/TRY": SymbolConfig(
         internal="JPY/TRY", name="Yen/TL", category="fx",
         currency="TRY", unit=None,
-        primary_provider="yahoo", fallback_provider=None,
-        external_primary="JPYTRY=X", external_fallback=None,
+        primary_provider="fmp", fallback_provider="yahoo",
+        external_primary="JPYTRY", external_fallback="JPYTRY=X",
         ttl_seconds=30, exchange="FOREX",
     ),
 
@@ -99,29 +98,32 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
     ),
 
     # ── Gold & Silver ────────────────────────────────────────────────────────
-    # Yahoo GC=F / SI=F futures are live and free.
-    # FMP GCUSD / SIUSD available on free plan as fallback.
+    # FMP XAUUSD / XAGUSD are primary (spot-style symbols), Yahoo futures fallback.
     "XAU/USD": SymbolConfig(
         internal="XAU/USD", name="Ons Altın", category="gold",
         currency="USD", unit="troy oz",
-        primary_provider="yahoo", fallback_provider="fmp",
-        external_primary="GC=F", external_fallback="GCUSD",
+        primary_provider="fmp", fallback_provider="yahoo",
+        external_primary="XAUUSD", external_fallback="GC=F",
         ttl_seconds=60, exchange="COMEX",
     ),
     "XAG/USD": SymbolConfig(
         internal="XAG/USD", name="Gümüş", category="commodity",
         currency="USD", unit="troy oz",
-        primary_provider="yahoo", fallback_provider="fmp",
-        external_primary="SI=F", external_fallback="SIUSD",
+        primary_provider="fmp", fallback_provider="yahoo",
+        external_primary="XAGUSD", external_fallback="SI=F",
         ttl_seconds=60, exchange="COMEX",
     ),
 
     # ── Derived gold in TRY ──────────────────────────────────────────────────
+    # Gram Altın (TRY) = Ons Altın (USD) × USD/TRY / 31.1035
+    # Altinkaynak is intentionally NOT used here: it returns fiziksel (physical)
+    # bazaar gold which carries a Kapalıçarşı premium. doviz.com's standard
+    # "Gram Altın" is the pure spot-derived price from international XAU/USD.
     "GAUTRY": SymbolConfig(
         internal="GAUTRY", name="Gram Altın", category="gold",
         currency="TRY", unit="gram",
         primary_provider="derived", fallback_provider=None,
-        external_primary="HH_T",  # Altinkaynak Kod: Has Toptan (fine gold wholesale)
+        external_primary="",  # no provider symbol: computed from XAU/USD × USD/TRY / 31.1035
         external_fallback=None,
         ttl_seconds=60, exchange="COMEX",  # follows gold futures calendar
     ),
@@ -142,8 +144,7 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
     ),
 
     # ── Indices ──────────────────────────────────────────────────────────────
-    # FMP Starter plan: ^GSPC, ^DJI confirmed in sample → real-time, FMP primary.
-    # ^FTSE, ^N225 likely in 9-index sample → FMP primary, probed at startup.
+    # FMP Starter plan: ^GSPC, ^DJI, ^FTSE, ^N225 validated on live probes.
     # ^NDX, ^GDAXI → 402 on Starter → Yahoo primary only.
     "SPX": SymbolConfig(
         internal="SPX", name="S&P 500", category="index",

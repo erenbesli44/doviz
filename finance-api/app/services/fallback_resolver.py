@@ -36,6 +36,7 @@ class ResolvedPrice:
     price: float
     change_pct: float
     change_value: float | None
+    provider: str
     source_type: str          # "live" | "delayed" | "last_intraday_snapshot" | "last_session_close"
     display_mode: str         # "live" | "last_completed_session" | "no_data"
     as_of: datetime           # tz-aware UTC reference for this price
@@ -102,6 +103,7 @@ class FallbackPriceResolver:
                 price=live_quote.data.price,
                 change_pct=live_quote.data.change_pct,
                 change_value=getattr(live_quote.data, "change_value", None),
+                provider=live_quote.meta.provider,
                 source_type=source_type,
                 display_mode="live",
                 as_of=live_quote.meta.fetched_at,
@@ -118,6 +120,7 @@ class FallbackPriceResolver:
                 price=snapshot.price,
                 change_pct=snapshot.change_pct,
                 change_value=snapshot.change_value,
+                provider=snapshot.provider,
                 source_type="last_intraday_snapshot",
                 display_mode="live",
                 as_of=snapshot.as_of,
@@ -146,6 +149,7 @@ class FallbackPriceResolver:
                 price=last_close.price,
                 change_pct=last_close.change_pct,
                 change_value=last_close.change_value,
+                provider=last_close.provider,
                 source_type="last_session_close",
                 display_mode="last_completed_session",
                 as_of=last_close.as_of,
@@ -163,6 +167,7 @@ class FallbackPriceResolver:
                 price=fetched.price,
                 change_pct=fetched.change_pct,
                 change_value=fetched.change_value,
+                provider=fetched.provider,
                 source_type="last_session_close",
                 display_mode="last_completed_session",
                 as_of=fetched.as_of,
@@ -184,6 +189,7 @@ class FallbackPriceResolver:
             price=0.0,
             change_pct=0.0,
             change_value=None,
+            provider="unavailable",
             source_type="last_session_close",
             display_mode="no_data",
             as_of=datetime.now(UTC),

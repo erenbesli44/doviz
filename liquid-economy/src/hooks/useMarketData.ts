@@ -84,18 +84,8 @@ export function useMarketData(): MarketData {
       });
       setTicker(ordered);
 
-      // Extended overview grid — GAUTRY is shown as derived formula (XAU/USD / 31.1035 × USD/TRY)
-      // so the main page always shows the mathematical calculation, not the physical dealer price.
-      const _TROY_OZ_TO_GRAMS = 31.1035;
-      const xauQ    = quoteMap.get('XAU/USD');
-      const usdtryQ = quoteMap.get('USD/TRY');
+      // Extended overview grid — trust backend quote values to keep session baseline consistent.
       const extended = EXTENDED_OVERVIEW_ORDER.flatMap((sym) => {
-        if (sym === 'GAUTRY' && xauQ && usdtryQ) {
-          const base = quoteToAsset(quoteMap.get('GAUTRY') ?? xauQ);
-          const derivedPrice = (xauQ.data.price / _TROY_OZ_TO_GRAMS) * usdtryQ.data.price;
-          const combinedChange = xauQ.data.change_pct + usdtryQ.data.change_pct;
-          return [{ ...base, id: 'GAUTRY', price: Math.round(derivedPrice * 100) / 100, change: Math.round(combinedChange * 100) / 100 }];
-        }
         const q = quoteMap.get(sym);
         return q ? [quoteToAsset(q)] : [];
       });
@@ -111,7 +101,6 @@ export function useMarketData(): MarketData {
   // Apply SSE real-time overrides to overview assets whenever new quotes arrive
   useEffect(() => {
     if (Object.keys(sseQuotes).length === 0) return;
-    const _TROY_OZ_TO_GRAMS = 31.1035;
     const applyLive = (prev: Asset[]) =>
       prev.map((asset) => {
         const live = sseQuotes[asset.id];
@@ -119,24 +108,7 @@ export function useMarketData(): MarketData {
         return quoteToAsset(live);
       });
     setOverview(applyLive);
-    // Extended overview: GAUTRY is derived from live XAU/USD × USD/TRY, not the physical price
-    setExtendedOverview((prev) =>
-      prev.map((asset) => {
-        if (asset.id === 'GAUTRY') {
-          const xauLive    = sseQuotes['XAU/USD'];
-          const usdtryLive = sseQuotes['USD/TRY'];
-          if (xauLive && usdtryLive) {
-            const derivedPrice   = (xauLive.data.price / _TROY_OZ_TO_GRAMS) * usdtryLive.data.price;
-            const combinedChange = xauLive.data.change_pct + usdtryLive.data.change_pct;
-            return { ...asset, price: Math.round(derivedPrice * 100) / 100, change: Math.round(combinedChange * 100) / 100 };
-          }
-          return asset;
-        }
-        const live = sseQuotes[asset.id];
-        if (!live) return asset;
-        return quoteToAsset(live);
-      })
-    );
+    setExtendedOverview(applyLive);
   }, [sseQuotes]);
 
   useEffect(() => {

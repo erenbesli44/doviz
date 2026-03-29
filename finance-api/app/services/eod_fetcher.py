@@ -202,6 +202,20 @@ class EODFetcher:
             return await self._fetch_silver_try_eod()
         return None
 
+    @staticmethod
+    def _previous_price(close: SessionCloseData) -> float | None:
+        if close.change_value is not None:
+            prev = close.price - close.change_value
+            return prev if prev > 0 else None
+        if (1 + close.change_pct / 100) != 0:
+            prev = close.price / (1 + close.change_pct / 100)
+            return prev if prev > 0 else None
+        return None
+
+    @staticmethod
+    def _compound_change_pct(a_pct: float, b_pct: float) -> float:
+        return (((1 + a_pct / 100) * (1 + b_pct / 100)) - 1) * 100
+
     async def _fetch_gold_try_eod(self, symbol: str) -> SessionCloseData | None:
         # Ensure sub-components are in session store (fetch on-demand if needed)
         xau_close = await self._ensure_close("XAU/USD")
@@ -212,8 +226,19 @@ class EODFetcher:
 
         factor = 1000 if symbol == "HAREM1KG" else 1
         price = round((xau_close.price / _TROY_OZ_TO_GRAMS) * usdtry_close.price * factor, 2)
-        change_pct = round(xau_close.change_pct + usdtry_close.change_pct, 4)
-        change_value: float | None = round(price * change_pct / 100, 4) if price else None
+        xau_prev = self._previous_price(xau_close)
+        usdtry_prev = self._previous_price(usdtry_close)
+        if xau_prev is not None and usdtry_prev is not None:
+            prev_price = (xau_prev / _TROY_OZ_TO_GRAMS) * usdtry_prev * factor
+            change_value = round(price - prev_price, 4)
+            change_pct = round((change_value / prev_price) * 100, 4) if prev_price else 0.0
+        else:
+            change_pct = round(self._compound_change_pct(xau_close.change_pct, usdtry_close.change_pct), 4)
+            if (1 + change_pct / 100) != 0:
+                prev_price = price / (1 + change_pct / 100)
+                change_value = round(price - prev_price, 4)
+            else:
+                change_value = None
 
         session_date = max(xau_close.session_date, usdtry_close.session_date)
         return SessionCloseData(
@@ -234,8 +259,19 @@ class EODFetcher:
             return None
 
         price = round((xag_close.price / _TROY_OZ_TO_GRAMS) * usdtry_close.price, 4)
-        change_pct = round(xag_close.change_pct + usdtry_close.change_pct, 4)
-        change_value: float | None = round(price * change_pct / 100, 4) if price else None
+        xag_prev = self._previous_price(xag_close)
+        usdtry_prev = self._previous_price(usdtry_close)
+        if xag_prev is not None and usdtry_prev is not None:
+            prev_price = (xag_prev / _TROY_OZ_TO_GRAMS) * usdtry_prev
+            change_value = round(price - prev_price, 4)
+            change_pct = round((change_value / prev_price) * 100, 4) if prev_price else 0.0
+        else:
+            change_pct = round(self._compound_change_pct(xag_close.change_pct, usdtry_close.change_pct), 4)
+            if (1 + change_pct / 100) != 0:
+                prev_price = price / (1 + change_pct / 100)
+                change_value = round(price - prev_price, 4)
+            else:
+                change_value = None
 
         session_date = max(xag_close.session_date, usdtry_close.session_date)
         return SessionCloseData(

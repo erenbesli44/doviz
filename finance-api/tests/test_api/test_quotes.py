@@ -12,7 +12,7 @@ def test_get_quote_returns_200(client: TestClient):
     body = resp.json()
     assert body["data"]["symbol"] == "USD/TRY"
     assert body["data"]["category"] == "fx"
-    assert body["meta"]["provider"] == "yahoo"
+    assert body["meta"]["provider"] == "fmp"
     assert body["meta"]["is_live"] is True
 
 

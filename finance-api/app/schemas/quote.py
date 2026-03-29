@@ -18,6 +18,7 @@ class QuoteData(BaseModel):
     currency: str        # quote currency, e.g. "TRY" or "USD"
     category: AssetCategory
     unit: str | None = None  # "troy oz", "gram", "barrel"; None for fx/index/crypto
+    session_open: float | None = None  # first traded price of today's session (after Istanbul midnight)
 
 
 class QuoteMeta(BaseModel):

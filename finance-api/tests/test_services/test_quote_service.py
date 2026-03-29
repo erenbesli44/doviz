@@ -22,14 +22,14 @@ def make_service(raw_quote):
     """Factory to build QuoteService with configurable primary/fallback mocks."""
     def _make(primary_raises=None, fallback_raises=None):
         primary = MagicMock()
-        primary.provider_id = "yahoo"
+        primary.provider_id = "fmp"
         primary.fetch_quote = AsyncMock(
             side_effect=primary_raises,
             return_value=raw_quote,
         )
 
         fallback = MagicMock()
-        fallback.provider_id = "fmp"
+        fallback.provider_id = "yahoo"
         fallback.fetch_quote = AsyncMock(
             side_effect=fallback_raises,
             return_value=raw_quote,
@@ -38,9 +38,9 @@ def make_service(raw_quote):
         registry = MagicMock()  # sync mock — registry.get() is not a coroutine
 
         def _get(provider_id):
-            if provider_id == "yahoo":
+            if provider_id == "fmp":
                 return primary
-            return fallback  # covers "fmp" and anything else
+            return fallback  # covers "yahoo" and anything else
 
         registry.get.side_effect = _get
         cache = MemoryCache()
@@ -54,7 +54,7 @@ async def test_get_quote_success(make_service):
     service = make_service()
     result = await service.get_quote("USD/TRY")
     assert result.data.symbol == "USD/TRY"
-    assert result.meta.provider == "yahoo"
+    assert result.meta.provider == "fmp"
     assert result.meta.is_live is True
 
 
@@ -69,23 +69,23 @@ async def test_get_quote_uses_cache_on_second_call(make_service):
 
 @pytest.mark.asyncio
 async def test_get_quote_falls_back_on_primary_failure(make_service):
-    # EUR/USD has yahoo primary + fmp fallback — use it to test fallback logic
+    # EUR/USD has fmp primary + yahoo fallback — use it to test fallback logic
     service = make_service(
-        primary_raises=ProviderError("yahoo", "EURUSD=X", "timeout"),
+        primary_raises=ProviderError("fmp", "EURUSD", "timeout"),
     )
     result = await service.get_quote("EUR/USD")
     # Should succeed via fallback, marked as not live
-    assert result.meta.provider == "fmp"
+    assert result.meta.provider == "yahoo"
     assert result.meta.is_live is False
 
 
 @pytest.mark.asyncio
 async def test_get_quote_raises_503_when_all_fail(make_service):
     from fastapi import HTTPException
-    # EUR/USD has yahoo primary + fmp fallback — both fail → 503
+    # EUR/USD has fmp primary + yahoo fallback — both fail → 503
     service = make_service(
-        primary_raises=ProviderError("yahoo", "EURUSD=X", "down"),
-        fallback_raises=ProviderError("fmp", "EURUSD", "down"),
+        primary_raises=ProviderError("fmp", "EURUSD", "down"),
+        fallback_raises=ProviderError("yahoo", "EURUSD=X", "down"),
     )
     with pytest.raises(HTTPException) as exc_info:
         await service.get_quote("EUR/USD")

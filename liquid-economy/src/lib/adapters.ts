@@ -90,10 +90,17 @@ export function quoteToAsset(q: QuoteResponse): Asset {
     code:     q.data.symbol,
     price:    q.data.price,
     change:   q.data.change_pct,
+    changeValue: q.data.change_value ?? null,
     category: q.data.category,
     icon,
     iconBg,
     history:  [],
+    marketStatus: q.meta.market_status,
+    displayMode: q.meta.display_mode ?? null,
+    sourceType: q.meta.source_type ?? null,
+    isLive: q.meta.is_live,
+    isStale: q.meta.is_stale ?? false,
+    asOf: q.meta.as_of ?? q.meta.fetched_at,
   };
 }
 
@@ -110,6 +117,7 @@ export function quoteToMarketSummaryItem(q: QuoteResponse): MarketSummaryItem {
     description: meta.description,
     price:       q.data.price,
     change:      q.data.change_pct,
+    changeValue: q.data.change_value ?? null,
     history:     [],
   };
 }
@@ -122,6 +130,7 @@ export function quoteToCommodityItem(q: QuoteResponse): CommodityItem {
     code:   q.data.symbol,
     price:  q.data.price,
     change: q.data.change_pct,
+    changeValue: q.data.change_value ?? null,
   };
 }
 
@@ -132,6 +141,7 @@ export function quoteToTickerItem(q: QuoteResponse): TickerItem {
     label:     TICKER_LABEL[q.data.symbol] ?? q.data.name.toUpperCase(),
     price:     q.data.price,
     changePct: q.data.change_pct,
+    changeValue: q.data.change_value ?? null,
     currency:  q.data.currency,
   };
 }

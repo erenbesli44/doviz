@@ -4,7 +4,20 @@ export type AssetCategory = 'fx' | 'gold' | 'index' | 'commodity' | 'crypto';
 
 export type MarketStatus = 'open' | 'closed' | 'pre-market' | null;
 
-export type Provider = 'finnhub' | 'fmp' | 'coingecko' | 'yahoo' | 'harem_altin' | 'derived';
+export type Provider =
+  | 'finnhub'
+  | 'finnhub_ws'
+  | 'fmp'
+  | 'coingecko'
+  | 'yahoo'
+  | 'harem_altin'
+  | 'altinkaynak_gold'
+  | 'derived'
+  | 'unavailable'
+  | 'live'
+  | 'delayed'
+  | 'last_intraday_snapshot'
+  | 'last_session_close';
 
 // ── Quote ────────────────────────────────────────────────────────────────────
 
@@ -13,12 +26,14 @@ export interface QuoteData {
   name: string;           // e.g. "Dolar/TL"
   price: number;
   change_pct: number;     // 0.12 = +0.12%, -1.5 = -1.5%
+  change_value?: number | null;
   open: number | null;
   high: number | null;
   low: number | null;
   currency: string;       // e.g. "TRY" or "USD"
   category: AssetCategory;
   unit: string | null;    // "troy oz" | "gram" | "barrel" | "MMBtu" | "lb" | "bushel" | null
+  session_open?: number | null;
 }
 
 export interface QuoteMeta {
@@ -27,6 +42,13 @@ export interface QuoteMeta {
   delay_minutes: number | null;
   fetched_at: string;            // ISO-8601
   market_status: MarketStatus;
+  display_mode?: 'live' | 'last_completed_session' | 'no_data' | null;
+  source_type?: 'live' | 'delayed' | 'last_intraday_snapshot' | 'last_session_close' | null;
+  as_of?: string | null;
+  session_date?: string | null;
+  is_stale?: boolean;
+  stale_reason?: string | null;
+  next_market_open?: string | null;
 }
 
 export interface QuoteResponse {

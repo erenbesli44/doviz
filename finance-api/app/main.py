@@ -25,6 +25,13 @@ from .services.startup_probe import StartupProbe
 logger = logging.getLogger(__name__)
 
 
+def _parse_cors_origins(raw: str) -> list[str]:
+    value = (raw or "").strip()
+    if not value or value == "*":
+        return ["*"]
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup: create shared services; shutdown: clean up."""
@@ -32,7 +39,13 @@ async def lifespan(app: FastAPI):
     logging.basicConfig(level=settings.log_level)
 
     # Core infrastructure
-    app.state.http_client = httpx.AsyncClient(timeout=settings.quote_timeout_seconds)
+    verify: bool | str = settings.http_verify_tls
+    if settings.http_ca_bundle:
+        verify = settings.http_ca_bundle
+    app.state.http_client = httpx.AsyncClient(
+        timeout=settings.quote_timeout_seconds,
+        verify=verify,
+    )
     app.state.cache = MemoryCache()
     app.state.btc_realtime = None  # populated by FinnhubWSClient
 
@@ -96,6 +109,7 @@ async def lifespan(app: FastAPI):
 
 def create_app() -> FastAPI:
     settings = Settings()
+    allow_origins = _parse_cors_origins(settings.cors_allow_origins)
 
     app = FastAPI(
         title="Finance API",
@@ -107,7 +121,7 @@ def create_app() -> FastAPI:
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # tighten in production
+        allow_origins=allow_origins,
         allow_methods=["GET", "POST"],
         allow_headers=["*"],
     )
