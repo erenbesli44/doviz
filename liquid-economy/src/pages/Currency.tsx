@@ -3,9 +3,10 @@ import { useMarketData } from '../hooks/useMarketData';
 import { useHistory } from '../hooks/useHistory';
 import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
+import PageHeader from '../components/layout/PageHeader';
 
 export default function Currency() {
-  const { fxAssets, status } = useMarketData();
+  const { fxAssets, status, lastUpdated } = useMarketData();
   const [selectedId, setSelectedId] = useState<string>('USD/TRY');
   const [historyHours, setHistoryHours] = useState(24);
 
@@ -24,9 +25,15 @@ export default function Currency() {
 
   return (
     <>
+      <PageHeader
+        title="Döviz"
+        subtitle="Majör ve Çapraz Pariteler"
+        lastUpdated={lastUpdated}
+      />
+
       {/* Asset list */}
       <section className="mb-8">
-        <div className="bg-[var(--color-surface-container-low)] rounded-[2rem] p-2 space-y-1">
+        <div className="bg-[var(--color-surface-container-low)] rounded-2xl p-2 space-y-1 border border-[var(--color-outline-variant)]/20">
           {fxAssets.map((asset) => (
             <AssetListRow
               key={asset.id}

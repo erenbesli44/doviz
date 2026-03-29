@@ -4,13 +4,14 @@ import { useHistory } from '../hooks/useHistory';
 import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
 import type { Asset } from '../data/types';
+import PageHeader from '../components/layout/PageHeader';
 
 // Symbols shown in each section
 const GOLD_SYMBOLS   = ['GAUTRY', 'XAU/USD'];
 const SILVER_SYMBOLS = ['GAGTRY', 'XAG/USD'];
 
 export default function Gold() {
-  const { goldAssets, commodityAssets, extendedOverviewAssets, status } = useMarketData();
+  const { goldAssets, commodityAssets, extendedOverviewAssets, status, lastUpdated } = useMarketData();
   // 'GAUTRY-derived' is the main-page derived price; use 'GAUTRY' for history lookup
   const [selectedId, setSelectedId] = useState<string>('GAUTRY-derived');
   const [historyHours, setHistoryHours] = useState(24);
@@ -53,12 +54,18 @@ export default function Gold() {
 
   return (
     <>
+      <PageHeader
+        title="Altın ve Gümüş"
+        subtitle="Değerli Metaller"
+        lastUpdated={lastUpdated}
+      />
+
       {/* Altın section */}
       <section className="mb-6">
-        <h3 className="text-sm font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60 ml-2 mb-4">
+        <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65 ml-2 mb-3">
           ALTIN
         </h3>
-        <div className="bg-[var(--color-surface-container-low)] rounded-[2rem] p-2 space-y-1">
+        <div className="bg-[var(--color-surface-container-low)] rounded-2xl p-2 space-y-1 border border-[var(--color-outline-variant)]/20">
           {goldItems.map(({ key, asset }) => (
             <AssetListRow
               key={key}
@@ -72,10 +79,10 @@ export default function Gold() {
 
       {/* Gümüş section */}
       <section className="mb-8">
-        <h3 className="text-sm font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60 ml-2 mb-4">
+        <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65 ml-2 mb-3">
           GÜMÜŞ
         </h3>
-        <div className="bg-[var(--color-surface-container-low)] rounded-[2rem] p-2 space-y-1">
+        <div className="bg-[var(--color-surface-container-low)] rounded-2xl p-2 space-y-1 border border-[var(--color-outline-variant)]/20">
           {silverList.map((asset) => (
             <AssetListRow
               key={asset.id}

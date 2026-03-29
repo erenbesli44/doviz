@@ -5,6 +5,7 @@ import AssetCard from '../components/ui/AssetCard';
 import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
 import type { Asset } from '../data/types';
+import PageHeader from '../components/layout/PageHeader';
 
 const categoryFilters = ['Tümü', 'Enerji', 'Metaller', 'Tarım'] as const;
 type CatFilter = typeof categoryFilters[number];
@@ -21,7 +22,7 @@ function filterByCategory(assets: Asset[], f: CatFilter): Asset[] {
 }
 
 export default function Commodities() {
-  const { commodityAssets, status } = useMarketData();
+  const { commodityAssets, status, lastUpdated } = useMarketData();
   const [activeFilter, setActiveFilter] = useState<CatFilter>('Tümü');
   const [selectedId, setSelectedId] = useState<string>('BRENT');
   const [historyHours, setHistoryHours] = useState(24);
@@ -42,13 +43,19 @@ export default function Commodities() {
 
   return (
     <>
+      <PageHeader
+        title="Emtialar"
+        subtitle="Enerji, Metaller ve Tarım"
+        lastUpdated={lastUpdated}
+      />
+
       {/* Category filter chips */}
       <div className="flex gap-2 mb-6 overflow-x-auto hide-scrollbar pb-1">
         {categoryFilters.map((f) => (
           <button
             key={f}
             onClick={() => setActiveFilter(f)}
-            className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+            className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
               activeFilter === f
                 ? 'bg-[var(--color-primary)] text-white'
                 : 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)] hover:bg-[var(--color-surface-container-high)]'
@@ -72,7 +79,7 @@ export default function Commodities() {
 
       {/* Mobile: list */}
       <section className="md:hidden mb-8">
-        <div className="bg-[var(--color-surface-container-low)] rounded-[2rem] p-2 space-y-1">
+        <div className="bg-[var(--color-surface-container-low)] rounded-2xl p-2 space-y-1 border border-[var(--color-outline-variant)]/20">
           {filtered.map((asset) => (
             <AssetListRow
               key={asset.id}

@@ -19,9 +19,9 @@ export default function AssetListRow({ asset, active = false, onClick }: Props) 
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all active:scale-[0.98] duration-200 ${
+      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all active:scale-[0.99] duration-200 ${
         active
-          ? 'bg-[var(--color-surface-container-lowest)] hover:bg-[var(--color-surface-container-high)] ring-2 ring-[var(--color-primary)]/10'
+          ? 'bg-[var(--color-surface-container-lowest)] ring-1 ring-[var(--color-primary)]/20'
           : 'hover:bg-[var(--color-surface-container-high)]'
       }`}
     >
@@ -34,15 +34,15 @@ export default function AssetListRow({ asset, active = false, onClick }: Props) 
         </div>
         {/* Name + code */}
         <div className="text-left">
-          <span className="block text-sm font-bold tracking-tight">{asset.name}</span>
-          <span className="block text-[9px] font-bold text-[var(--color-on-surface-variant)]/60 uppercase">
+          <span className="block text-sm font-semibold tracking-tight">{asset.name}</span>
+          <span className="block text-[11px] font-medium text-[var(--color-on-surface-variant)]/70 uppercase tracking-[0.08em]">
             {asset.code}
           </span>
         </div>
       </div>
       {/* Price + change */}
       <div className="text-right">
-        <span className="block text-sm font-extrabold tracking-tight">{formattedPrice}</span>
+        <span className="block text-sm font-bold tracking-tight tabular-nums">{formattedPrice}</span>
         <PriceChange value={asset.change} />
       </div>
     </button>

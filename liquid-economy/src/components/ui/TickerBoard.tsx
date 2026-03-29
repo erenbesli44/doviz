@@ -44,7 +44,7 @@ function formatTickerChange(changePct: number, changeValue: number | null | unde
 
 export default function TickerBoard({ items }: Props) {
   return (
-    <div className="bg-[var(--color-surface-container-low)] rounded-[2rem] overflow-hidden">
+    <div className="bg-[var(--color-surface-container-low)] rounded-2xl overflow-hidden border border-[var(--color-outline-variant)]/20">
       {items.map((item, idx) => {
         const isPositive = item.changePct >= 0;
         const changeColor = isPositive
@@ -61,7 +61,7 @@ export default function TickerBoard({ items }: Props) {
             }`}
           >
             {/* Label */}
-            <span className="text-xs font-black tracking-wider uppercase w-28 flex-shrink-0 text-[var(--color-on-surface-variant)]">
+            <span className="text-xs font-semibold tracking-[0.08em] uppercase w-28 flex-shrink-0 text-[var(--color-on-surface-variant)]">
               {item.label}
             </span>
 
@@ -71,7 +71,7 @@ export default function TickerBoard({ items }: Props) {
             </span>
 
             {/* Change */}
-            <span className={`text-xs font-bold tabular-nums text-right flex-shrink-0 ${changeColor}`}>
+            <span className={`text-xs font-semibold tabular-nums text-right flex-shrink-0 ${changeColor}`}>
               {formatTickerChange(item.changePct, item.changeValue, item.price, item.id, item.currency)}
             </span>
           </div>

@@ -26,7 +26,7 @@ export default function MarketSummaryRow({ item, onClick }: Props) {
       tabIndex={0}
       onClick={onClick}
       onKeyDown={(e) => e.key === 'Enter' && onClick?.()}
-      className="bg-[var(--color-surface-container-low)]/50 hover:bg-[var(--color-surface-container-highest)] rounded-2xl p-5 flex items-center transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+      className="bg-[var(--color-surface-container-low)]/50 hover:bg-[var(--color-surface-container-highest)] rounded-2xl p-5 border border-[var(--color-outline-variant)]/20 flex items-center transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
     >
       {/* Ticker box */}
       <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center font-black text-sm shadow-sm mr-5 flex-shrink-0 text-[var(--color-on-surface)]">
@@ -35,8 +35,8 @@ export default function MarketSummaryRow({ item, onClick }: Props) {
 
       {/* Name + description */}
       <div className="flex-1 min-w-0">
-        <h4 className="font-bold truncate">{item.name}</h4>
-        <p className="text-xs text-[var(--color-on-surface-variant)] font-medium truncate">
+        <h4 className="font-semibold truncate">{item.name}</h4>
+        <p className="text-xs text-[var(--color-on-surface-variant)]/80 font-medium truncate">
           {item.description}
         </p>
       </div>

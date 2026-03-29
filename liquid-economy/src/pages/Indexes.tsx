@@ -4,9 +4,10 @@ import { useHistory } from '../hooks/useHistory';
 import AssetCard from '../components/ui/AssetCard';
 import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
+import PageHeader from '../components/layout/PageHeader';
 
 export default function Indexes() {
-  const { indexAssets, status } = useMarketData();
+  const { indexAssets, status, lastUpdated } = useMarketData();
   const [selectedId, setSelectedId] = useState<string>('XU100');
   const [historyHours, setHistoryHours] = useState(24);
 
@@ -25,6 +26,12 @@ export default function Indexes() {
 
   return (
     <>
+      <PageHeader
+        title="Endeksler"
+        subtitle="Yurt İçi ve Küresel"
+        lastUpdated={lastUpdated}
+      />
+
       {/* Desktop: card grid */}
       <section className="hidden md:grid grid-cols-3 gap-4 mb-8">
         {indexAssets.map((asset) => (
@@ -38,10 +45,10 @@ export default function Indexes() {
 
       {/* Mobile: list */}
       <section className="md:hidden mb-8">
-        <h3 className="text-sm font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60 ml-2 mb-4">
+        <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65 ml-2 mb-3">
           TÜM ENDEKSLER
         </h3>
-        <div className="bg-[var(--color-surface-container-low)] rounded-[2rem] p-2 space-y-1">
+        <div className="bg-[var(--color-surface-container-low)] rounded-2xl p-2 space-y-1 border border-[var(--color-outline-variant)]/20">
           {indexAssets.map((asset) => (
             <AssetListRow
               key={asset.id}

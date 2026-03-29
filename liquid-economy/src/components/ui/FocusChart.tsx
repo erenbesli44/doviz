@@ -78,6 +78,7 @@ export default function FocusChart({
   });
 
   const chartHeight = compact ? 192 : 400;
+  const visibleRanges = timeRanges.filter((r) => !unavailableRanges.has(r) || r === activeRange);
 
   useEffect(() => {
     setUnavailableRanges(new Set());
@@ -213,7 +214,7 @@ export default function FocusChart({
   }, [history, chartHeight, chartColor]);
 
   return (
-    <div className="bg-[var(--color-surface-container-lowest)] rounded-3xl p-6 shadow-[0_4px_40px_rgba(0,0,0,0.04)] border border-[var(--color-outline-variant)]/10 overflow-hidden relative">
+    <div className="bg-[var(--color-surface-container-lowest)] rounded-2xl p-5 md:p-6 shadow-sm border border-[var(--color-outline-variant)]/25 overflow-hidden relative">
       {/* ── HEADER ──────────────────────────────────────── */}
       <div className="flex justify-between items-start mb-6">
         <div>
@@ -224,20 +225,19 @@ export default function FocusChart({
                 {icon}
               </span>
             </div>
-            <span className="text-xs font-bold tracking-widest uppercase text-[var(--color-on-surface-variant)]/60">
+            <span className="text-xs font-semibold tracking-[0.1em] uppercase text-[var(--color-on-surface-variant)]/65">
               {assetCode}
             </span>
-            <span className="w-2 h-2 rounded-full bg-[var(--color-primary)] animate-pulse" />
           </div>
 
           {/* Price — updates live while hovering */}
           <div className="flex items-baseline gap-3">
-            <span className={`font-black tracking-tighter ${compact ? 'text-4xl' : 'text-5xl'}`}>
+            <span className={`font-bold tracking-tight tabular-nums ${compact ? 'text-3xl' : 'text-4xl'}`}>
               {formattedPrice}
             </span>
             <div className="flex flex-col">
               <PriceChange value={periodChangePct} className="text-sm!" />
-              <span className="text-[10px] font-medium text-[var(--color-on-surface-variant)]/40 uppercase">
+              <span className="text-[11px] font-medium text-[var(--color-on-surface-variant)]/55 uppercase tracking-[0.08em]">
                 {hoverTime ?? RANGE_LABELS[activeRange]}
               </span>
             </div>
@@ -252,17 +252,15 @@ export default function FocusChart({
 
         {/* Time range buttons */}
         <div className="flex gap-1 flex-wrap justify-end">
-          {timeRanges.map((r) => (
+          {visibleRanges.map((r) => (
             <button
               key={r}
               disabled={unavailableRanges.has(r)}
               onClick={() => { setActiveRange(r); onRangeChange?.(RANGE_HOURS[r]); }}
-              className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all ${
+              className={`px-3 py-1 rounded-full text-[11px] font-semibold tracking-[0.08em] uppercase transition-all ${
                 activeRange === r
                   ? 'bg-[var(--color-primary)] text-white'
-                  : unavailableRanges.has(r)
-                    ? 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)]/35 cursor-not-allowed'
-                    : 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)] hover:bg-[var(--color-surface-container-low)]'
+                  : 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)] hover:bg-[var(--color-surface-container-low)]'
               }`}
             >
               {r}

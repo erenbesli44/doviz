@@ -6,8 +6,8 @@ interface Props {
 export default function PriceChange({ value, className = '' }: Props) {
   const isPositive = value >= 0;
   const color = isPositive
-    ? 'text-[var(--color-primary)]'
-    : 'text-[var(--color-error)]';
+    ? 'text-emerald-600'
+    : 'text-rose-600';
   const sign = isPositive ? '+' : '';
 
   return (
