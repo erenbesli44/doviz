@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useMarketData } from '../hooks/useMarketData';
 import { useHistory } from '../hooks/useHistory';
 import AssetCard from '../components/ui/AssetCard';
 import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
 import PageHeader from '../components/layout/PageHeader';
+import SeoHead from '../components/seo/SeoHead';
+import { breadcrumbSchema, collectionPageSchema } from '../seo/schema';
 
 export default function Indexes() {
   const { indexAssets, status, lastUpdated } = useMarketData();
@@ -26,11 +29,28 @@ export default function Indexes() {
 
   return (
     <>
+      <SeoHead
+        path="/endeksler"
+        title="Canlı Endeksler: BIST, S&P 500, Nasdaq, Dow Jones | Döviz Veri"
+        description="Yurt içi ve küresel canlı endeks verileri: BIST 100, S&P 500, Nasdaq, Dow Jones ve daha fazlası."
+        jsonLd={[
+          breadcrumbSchema([
+            { name: 'Anasayfa', path: '/' },
+            { name: 'Endeksler', path: '/endeksler' },
+          ]),
+          collectionPageSchema('Canlı Endeksler', 'BIST ve küresel endekslerde anlık piyasa takibi.', '/endeksler'),
+        ]}
+      />
       <PageHeader
         title="Endeksler"
         subtitle="Yurt İçi ve Küresel"
         lastUpdated={lastUpdated}
       />
+      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mb-4 max-w-4xl">
+        BIST ve küresel endeksleri canlı takip edin.
+        ABD piyasaları için özel ekran:
+        <Link className="ml-1 underline text-[var(--color-primary)]" to="/amerika-borsasi">Amerika Borsası</Link>.
+      </p>
 
       {/* Desktop: card grid */}
       <section className="hidden md:grid grid-cols-3 gap-4 mb-8">

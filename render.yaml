@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: doviz-api
+    env: python
+    rootDir: finance-api
+    buildCommand: pip install uv && uv sync
+    startCommand: uv run uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /v1/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.0
+
+  - type: static
+    name: doviz-ui
+    rootDir: liquid-economy
+    buildCommand: npm ci && npm run build
+    publishPath: dist
+    pullRequestPreviewsEnabled: true
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useMarketData } from '../hooks/useMarketData';
 import { useHistory } from '../hooks/useHistory';
 import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
 import PageHeader from '../components/layout/PageHeader';
+import SeoHead from '../components/seo/SeoHead';
+import { breadcrumbSchema, collectionPageSchema } from '../seo/schema';
 
 export default function Currency() {
   const { fxAssets, status, lastUpdated } = useMarketData();
@@ -25,11 +28,29 @@ export default function Currency() {
 
   return (
     <>
+      <SeoHead
+        path="/doviz"
+        title="Canlı Döviz Kurları: Dolar, Euro, Sterlin | Döviz Veri"
+        description="Canlı döviz kurları ekranı: dolar kuru, euro kuru, sterlin ve majör pariteleri anlık takip edin."
+        jsonLd={[
+          breadcrumbSchema([
+            { name: 'Anasayfa', path: '/' },
+            { name: 'Döviz', path: '/doviz' },
+          ]),
+          collectionPageSchema('Canlı Döviz Kurları', 'Dolar, euro, sterlin ve çapraz kurlarda canlı fiyat takibi.', '/doviz'),
+        ]}
+      />
       <PageHeader
         title="Döviz"
         subtitle="Majör ve Çapraz Pariteler"
         lastUpdated={lastUpdated}
       />
+      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mb-4 max-w-4xl">
+        “Dolar kuru kaç TL?” ve “euro kuru canlı” aramalarına odaklı güncel döviz tablosu.
+        Popüler detay sayfaları:
+        <Link className="ml-1 underline text-[var(--color-primary)]" to="/piyasa/dolar-kuru-usd-try">USD/TRY</Link>,
+        <Link className="ml-1 underline text-[var(--color-primary)]" to="/piyasa/euro-kuru-eur-try">EUR/TRY</Link>.
+      </p>
 
       {/* Asset list */}
       <section className="mb-8">

@@ -1,0 +1,16 @@
+{
+  "name": "Döviz Veri",
+  "short_name": "Döviz Veri",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#faf9fe",
+  "theme_color": "#004fdb",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

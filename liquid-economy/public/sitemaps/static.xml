@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://dovizveri.com/</loc><changefreq>hourly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://dovizveri.com/doviz</loc><changefreq>hourly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://dovizveri.com/altin</loc><changefreq>hourly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://dovizveri.com/kapalicarsi</loc><changefreq>hourly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://dovizveri.com/endeksler</loc><changefreq>hourly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://dovizveri.com/amerika-borsasi</loc><changefreq>hourly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://dovizveri.com/emtialar</loc><changefreq>hourly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://dovizveri.com/kripto</loc><changefreq>hourly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://dovizveri.com/piyasa</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://dovizveri.com/sozluk</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+</urlset>

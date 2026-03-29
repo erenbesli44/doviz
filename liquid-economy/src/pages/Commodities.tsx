@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useMarketData } from '../hooks/useMarketData';
 import { useHistory } from '../hooks/useHistory';
 import AssetCard from '../components/ui/AssetCard';
@@ -6,6 +7,8 @@ import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
 import type { Asset } from '../data/types';
 import PageHeader from '../components/layout/PageHeader';
+import SeoHead from '../components/seo/SeoHead';
+import { breadcrumbSchema, collectionPageSchema } from '../seo/schema';
 
 const categoryFilters = ['Tümü', 'Enerji', 'Metaller', 'Tarım'] as const;
 type CatFilter = typeof categoryFilters[number];
@@ -43,11 +46,28 @@ export default function Commodities() {
 
   return (
     <>
+      <SeoHead
+        path="/emtialar"
+        title="Canlı Emtia Fiyatları: Brent, WTI, Gümüş, Doğal Gaz | Döviz Veri"
+        description="Brent petrol, WTI, gümüş ve diğer emtialar için canlı fiyat, değişim ve grafik takibi."
+        jsonLd={[
+          breadcrumbSchema([
+            { name: 'Anasayfa', path: '/' },
+            { name: 'Emtialar', path: '/emtialar' },
+          ]),
+          collectionPageSchema('Canlı Emtia Fiyatları', 'Brent, WTI, gümüş ve tarım emtialarında anlık fiyat takibi.', '/emtialar'),
+        ]}
+      />
       <PageHeader
         title="Emtialar"
         subtitle="Enerji, Metaller ve Tarım"
         lastUpdated={lastUpdated}
       />
+      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mb-4 max-w-4xl">
+        Brent petrol, WTI, doğal gaz ve metal emtiaları canlı izleyin.
+        Kripto varlıklar için
+        <Link className="ml-1 underline text-[var(--color-primary)]" to="/kripto">Kripto</Link> sayfasına geçebilirsiniz.
+      </p>
 
       {/* Category filter chips */}
       <div className="flex gap-2 mb-6 overflow-x-auto hide-scrollbar pb-1">

@@ -25,6 +25,7 @@ interface MarketData {
   goldAssets: Asset[];
   indexAssets: Asset[];
   commodityAssets: Asset[];
+  cryptoAssets: Asset[];
   commodityCards: CommodityItem[];
   marketSummary: MarketSummaryItem[];
   tickerItems: TickerItem[];
@@ -41,6 +42,7 @@ export function useMarketData(): MarketData {
   const [goldAssets,             setGold]             = useState<Asset[]>([]);
   const [indexAssets,            setIndexes]          = useState<Asset[]>([]);
   const [commodityAssets,        setCommodities]      = useState<Asset[]>([]);
+  const [cryptoAssets,           setCrypto]           = useState<Asset[]>([]);
   const [commodityCards,         setCards]            = useState<CommodityItem[]>([]);
   const [marketSummary,          setSummary]          = useState<MarketSummaryItem[]>([]);
   const [tickerItems,            setTicker]           = useState<TickerItem[]>([]);
@@ -62,6 +64,7 @@ export function useMarketData(): MarketData {
       setGold(summary.gold.map(quoteToAsset));
       setIndexes(summary.indexes.map(quoteToAsset));
       setCommodities(summary.commodities.map(quoteToAsset));
+      setCrypto(summary.crypto.map(quoteToAsset));
 
       // Mobile horizontal-scroll commodity cards (first 5)
       setCards(summary.commodities.slice(0, 5).map(quoteToCommodityItem));
@@ -129,6 +132,7 @@ export function useMarketData(): MarketData {
     goldAssets,
     indexAssets,
     commodityAssets,
+    cryptoAssets,
     commodityCards,
     marketSummary,
     tickerItems,

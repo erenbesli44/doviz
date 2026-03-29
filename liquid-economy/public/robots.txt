@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Block internal search pages if they become query-parameter driven.
+Disallow: /arama?
+
+Sitemap: https://dovizveri.com/sitemap.xml

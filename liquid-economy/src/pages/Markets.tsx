@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useMarketData } from '../hooks/useMarketData';
 import { useHistory } from '../hooks/useHistory';
 import AssetCard from '../components/ui/AssetCard';
@@ -6,6 +7,8 @@ import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
 import CommodityCard from '../components/ui/CommodityCard';
 import PageHeader from '../components/layout/PageHeader';
+import SeoHead from '../components/seo/SeoHead';
+import { breadcrumbSchema, collectionPageSchema } from '../seo/schema';
 
 export default function Markets() {
   const { status, extendedOverviewAssets, fxAssets, commodityCards, lastUpdated } = useMarketData();
@@ -31,11 +34,27 @@ export default function Markets() {
 
   return (
     <>
+      <SeoHead
+        path="/"
+        title="Canlı Döviz, Altın, Endeks, Emtia ve Kripto Verileri | Döviz Veri"
+        description="Türkiye odaklı canlı piyasa ekranı: döviz, altın, endeks, emtia ve kripto fiyatlarını anlık takip edin."
+        jsonLd={[
+          breadcrumbSchema([{ name: 'Anasayfa', path: '/' }]),
+          collectionPageSchema('Canlı Piyasalar', 'Döviz, altın, endeks, emtia ve kripto için canlı piyasa verileri.', '/'),
+        ]}
+      />
       <PageHeader
         title="Piyasalar"
         subtitle="Genel Görünüm"
         lastUpdated={lastUpdated}
       />
+      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mb-4 max-w-4xl">
+        Canlı piyasa takibinde en çok aranan varlıkları tek ekranda sunuyoruz.
+        Detay için <Link to="/doviz" className="underline text-[var(--color-primary)]">döviz</Link>,
+        <Link to="/altin" className="underline text-[var(--color-primary)] ml-1">altın</Link>,
+        <Link to="/kapalicarsi" className="underline text-[var(--color-primary)] ml-1">kapalıçarşı</Link> ve
+        <Link to="/amerika-borsasi" className="underline text-[var(--color-primary)] ml-1">ABD endeksleri</Link> sayfalarına geçebilirsiniz.
+      </p>
 
       {/* ── GÜNCEL VARLIKLAR ─────────────────────────────────────── */}
       {/* Mobile: compact list rows — all assets fit on one screen */}

@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useMarketData } from '../hooks/useMarketData';
 import { useHistory } from '../hooks/useHistory';
 import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
 import type { Asset } from '../data/types';
 import PageHeader from '../components/layout/PageHeader';
+import SeoHead from '../components/seo/SeoHead';
+import { breadcrumbSchema, collectionPageSchema } from '../seo/schema';
 
 // Symbols shown in each section
 const GOLD_SYMBOLS   = ['GAUTRY', 'XAU/USD'];
@@ -54,11 +57,28 @@ export default function Gold() {
 
   return (
     <>
+      <SeoHead
+        path="/altin"
+        title="Canlı Altın Fiyatları: Gram, Ons ve Gümüş | Döviz Veri"
+        description="Canlı altın fiyatları: gram altın, ons altın ve gümüş fiyatlarını anlık değişim ve grafikle takip edin."
+        jsonLd={[
+          breadcrumbSchema([
+            { name: 'Anasayfa', path: '/' },
+            { name: 'Altın', path: '/altin' },
+          ]),
+          collectionPageSchema('Canlı Altın Fiyatları', 'Gram altın, ons altın ve gümüş fiyatları için canlı takip ekranı.', '/altin'),
+        ]}
+      />
       <PageHeader
         title="Altın ve Gümüş"
         subtitle="Değerli Metaller"
         lastUpdated={lastUpdated}
       />
+      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mb-4 max-w-4xl">
+        Gram altın, ons altın ve gümüş fiyatlarını tek ekranda izleyin.
+        Kapalıçarşı odaklı görünüm için
+        <Link className="ml-1 underline text-[var(--color-primary)]" to="/kapalicarsi">Kapalıçarşı</Link> sayfasına geçebilirsiniz.
+      </p>
 
       {/* Altın section */}
       <section className="mb-6">

@@ -4,8 +4,10 @@ const navLinks = [
   { to: '/',           label: 'Piyasalar' },
   { to: '/doviz',      label: 'Döviz'     },
   { to: '/altin',      label: 'Altın'     },
+  { to: '/kapalicarsi',label: 'Kapalıçarşı' },
   { to: '/endeksler',  label: 'Endeksler' },
   { to: '/emtialar',   label: 'Emtialar'  },
+  { to: '/kripto',     label: 'Kripto'    },
 ];
 
 export default function TopNavBar() {
@@ -28,7 +30,7 @@ export default function TopNavBar() {
         </div>
 
         {/* Nav links — hidden below lg */}
-        <div className="hidden lg:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-6">
           {navLinks.map(({ to, label }) => (
             <NavLink
               key={to}
