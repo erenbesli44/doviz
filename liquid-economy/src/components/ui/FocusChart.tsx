@@ -62,15 +62,24 @@ export default function FocusChart({
   const [hoverValue, setHoverValue] = useState<number | null>(null);
   const [hoverTime, setHoverTime] = useState<string | null>(null);
 
-  const isPositive = change >= 0;
-  const chartColor = isPositive ? '#1a7f4b' : '#c0392b';
-
   const displayPrice  = hoverValue ?? price;
   const firstValue    = history[0]?.value ?? price;
+  const lastValue     = history.length > 0 ? history[history.length - 1].value : price;
+
+  // Chart-derived change: always computed from chart's first point (Istanbul midnight
+  // for 1G) to the hover point or the last point. This keeps the displayed % change
+  // visually consistent with the chart line direction.
   const periodChangePct =
     hoverValue != null
       ? ((hoverValue - firstValue) / firstValue) * 100
-      : change;
+      : history.length >= 2
+        ? ((lastValue - firstValue) / firstValue) * 100
+        : change;
+
+  // Chart color tracks the actual chart direction (first→current), not the backend
+  // session change, so the green/red always matches the visible slope.
+  const isPositive = periodChangePct >= 0;
+  const chartColor = isPositive ? '#1a7f4b' : '#c0392b';
 
   const formattedPrice = displayPrice.toLocaleString('tr-TR', {
     minimumFractionDigits: 2,
