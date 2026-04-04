@@ -87,7 +87,6 @@ export default function FocusChart({
   });
 
   const chartHeight = compact ? 192 : 400;
-  const visibleRanges = timeRanges.filter((r) => !unavailableRanges.has(r) || r === activeRange);
 
   useEffect(() => {
     setUnavailableRanges(new Set());
@@ -98,6 +97,7 @@ export default function FocusChart({
   useEffect(() => {
     if (historyLoading) return;
     if (history.length >= 2) return;
+    // Current range returned insufficient data — mark it unavailable and try next
     setUnavailableRanges((prev) => {
       if (prev.has(activeRange)) return prev;
       const next = new Set(prev);
@@ -105,7 +105,7 @@ export default function FocusChart({
       return next;
     });
 
-    const fallbackOrder: TimeRange[] = ['1H', '1A', '1Y', 'TÜMÜ', '1G', '1S'];
+    const fallbackOrder: TimeRange[] = ['1G', '1H', '1A', '1Y', 'TÜMÜ', '1S'];
     const nextRange = fallbackOrder.find((r) => r !== activeRange && !unavailableRanges.has(r));
     if (nextRange) {
       setActiveRange(nextRange);
@@ -259,17 +259,25 @@ export default function FocusChart({
           )}
         </div>
 
-        {/* Time range buttons */}
+        {/* Time range buttons — always show all, dim unavailable ones */}
         <div className="flex gap-1 flex-wrap justify-end">
-          {visibleRanges.map((r) => (
+          {timeRanges.map((r) => (
             <button
               key={r}
               disabled={unavailableRanges.has(r)}
-              onClick={() => { setActiveRange(r); onRangeChange?.(RANGE_HOURS[r]); }}
+              onClick={() => {
+                if (unavailableRanges.has(r)) return;
+                // Clear unavailable flag if user explicitly re-selects this range
+                setUnavailableRanges((prev) => { const next = new Set(prev); next.delete(r); return next; });
+                setActiveRange(r);
+                onRangeChange?.(RANGE_HOURS[r]);
+              }}
               className={`px-3 py-1 rounded-full text-[11px] font-semibold tracking-[0.08em] uppercase transition-all ${
-                activeRange === r
-                  ? 'bg-[var(--color-primary)] text-white'
-                  : 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)] hover:bg-[var(--color-surface-container-low)]'
+                unavailableRanges.has(r)
+                  ? 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)]/30 cursor-not-allowed'
+                  : activeRange === r
+                    ? 'bg-[var(--color-primary)] text-white'
+                    : 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)] hover:bg-[var(--color-surface-container-low)]'
               }`}
             >
               {r}
