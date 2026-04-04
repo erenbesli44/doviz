@@ -194,8 +194,12 @@ class YahooFinanceProvider:
         elif hours <= 2160:
             interval, range_, fmt = "1d", "90d", "%d %b"
             params = {"interval": interval, "range": range_}
-        else:
+        elif hours <= 8760:
             interval, range_, fmt = "1wk", "365d", "%b '%y"
+            params = {"interval": interval, "range": range_}
+        else:
+            # 3-year window: Yahoo "5y" at weekly resolution
+            interval, range_, fmt = "1wk", "5y", "%b '%y"
             params = {"interval": interval, "range": range_}
 
         data = await self._get(external_symbol, params=params)

@@ -19,7 +19,7 @@ const RANGE_HOURS: Record<TimeRange, number> = {
   '1H':   168,
   '1A':   720,
   '1Y':   8760,
-  'TÜMÜ': 8760,
+  'TÜMÜ': 26280,  // 3 years — genuinely wider than 1Y
 };
 
 const RANGE_LABELS: Record<TimeRange, string> = {
@@ -28,7 +28,7 @@ const RANGE_LABELS: Record<TimeRange, string> = {
   '1H':   '1 HAFTA DEĞİŞİMİ',
   '1A':   '1 AY DEĞİŞİMİ',
   '1Y':   '1 YIL DEĞİŞİMİ',
-  'TÜMÜ': 'TÜM DÖNEM DEĞİŞİMİ',
+  'TÜMÜ': '3 YIL DEĞİŞİMİ',
 };
 
 interface Props {

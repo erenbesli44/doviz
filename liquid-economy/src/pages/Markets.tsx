@@ -43,12 +43,6 @@ export default function Markets() {
           collectionPageSchema('Canlı Piyasalar', 'Döviz, altın, endeks, emtia ve kripto için canlı piyasa verileri.', '/'),
         ]}
       />
-      <PageHeader
-        title="Piyasalar"
-        subtitle="Genel Görünüm"
-        lastUpdated={lastUpdated}
-      />
-
       {/* ── GÜNCEL VARLIKLAR ─────────────────────────────────────── */}
       {/* Mobile: compact list rows — all assets fit on one screen */}
       <section className="md:hidden mb-4">
@@ -127,6 +121,12 @@ export default function Markets() {
           ))}
         </div>
       </section>
+
+      <PageHeader
+        title="Piyasalar"
+        subtitle="Genel Görünüm"
+        lastUpdated={lastUpdated}
+      />
 
       <p className="text-sm text-[var(--color-on-surface-variant)]/85 mt-4 max-w-4xl">
         Canlı piyasa takibinde en çok aranan varlıkları tek ekranda sunuyoruz.

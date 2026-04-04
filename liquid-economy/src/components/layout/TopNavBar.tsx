@@ -15,19 +15,10 @@ export default function TopNavBar() {
     <nav className="fixed top-0 w-full z-50 bg-white border-b border-[var(--color-outline-variant)]/40">
       <div className="flex justify-between items-center h-16 px-8 max-w-[1440px] mx-auto text-sm font-medium tracking-tight antialiased">
         {/* Logo */}
-        <div className="flex items-center gap-2 select-none">
-          <svg width="24" height="16" viewBox="0 0 24 16" fill="none" className="text-[var(--color-primary)] shrink-0">
-            <polyline
-              points="0,13 5,8 9,11 14,3 19,6"
-              stroke="currentColor"
-              strokeWidth="1.75"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <circle cx="22" cy="5.5" r="2" fill="currentColor" />
-          </svg>
+        <a href="https://dovizveri.com/" className="flex items-center gap-2 select-none no-underline">
+          <img src="/favicon.svg" alt="Döviz Veri" width="22" height="22" className="shrink-0" />
           <span className="text-sm font-semibold tracking-tight text-slate-700">Döviz Veri</span>
-        </div>
+        </a>
 
         {/* Nav links — hidden below lg */}
         <div className="hidden lg:flex items-center gap-6">

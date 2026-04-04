@@ -10,7 +10,7 @@ import SeoHead from '../components/seo/SeoHead';
 import { breadcrumbSchema, collectionPageSchema } from '../seo/schema';
 
 // Symbols shown in each section
-const GOLD_SYMBOLS   = ['GAUTRY', 'XAU/USD'];
+const GOLD_SYMBOLS   = ['XAU/USD'];
 const SILVER_SYMBOLS = ['GAGTRY', 'XAG/USD'];
 
 export default function Gold() {
@@ -22,14 +22,15 @@ export default function Gold() {
   const goldMap      = new Map(goldAssets.map((a) => [a.id, a]));
   const commodityMap = new Map(commodityAssets.map((a) => [a.id, a]));
 
-  // Build gold list: derived GAUTRY (main-page formula) first, then physical + XAU/USD
+  // Build gold list: derived GAUTRY (spot-formula gram gold) first, then XAU/USD.
+  // Override id to 'GAUTRY-derived' so selectedId matching works correctly —
+  // the backend asset has id='GAUTRY' but we need a stable unique id for the list.
   const derivedGautry = extendedOverviewAssets.find((a) => a.id === 'GAUTRY');
   const goldItems: { key: string; asset: Asset }[] = [
-    ...(derivedGautry ? [{ key: 'GAUTRY-derived', asset: { ...derivedGautry, name: 'Gram Altın' } }] : []),
+    ...(derivedGautry ? [{ key: 'GAUTRY-derived', asset: { ...derivedGautry, id: 'GAUTRY-derived', name: 'Gram Altın' } }] : []),
     ...GOLD_SYMBOLS.flatMap((sym) => {
       const a = goldMap.get(sym);
-      if (!a) return [];
-      return [{ key: sym + '-physical', asset: sym === 'GAUTRY' ? { ...a, name: 'Fiziksel Gram Altın' } : a }];
+      return a ? [{ key: sym, asset: a }] : [];
     }),
   ];
   const goldList = goldItems.map((i) => i.asset);
@@ -40,8 +41,8 @@ export default function Gold() {
   });
 
   const allAssets = [...goldList, ...silverList];
-  // For history, both GAUTRY variants share the same symbol code
   const focusAsset = allAssets.find((a) => a.id === selectedId) ?? goldItems[0]?.asset ?? allAssets[0];
+  // 'GAUTRY-derived' is a frontend-only id — map back to the real symbol for history fetch
   const historySymbol = focusAsset?.id === 'GAUTRY-derived' ? 'GAUTRY' : (focusAsset?.code ?? 'GAUTRY');
   const { points: focusHistory, loading: historyLoading } = useHistory(historySymbol, historyHours);
 

@@ -34,7 +34,7 @@ async def get_batch(
 async def get_history(
     symbol: Annotated[str, Path(description="Symbol in URL-safe form, e.g. 'USD-TRY'")],
     service: QuoteServiceDep,
-    hours: Annotated[int, Query(ge=1, le=8760, description="Look-back window in hours (max 1 year)")] = 24,
+    hours: Annotated[int, Query(ge=1, le=26280, description="Look-back window in hours (max 3 years)")] = 24,
 ) -> HistoryResponse:
     """Fetch historical price points for sparkline/chart rendering."""
     return await service.get_history(symbol, hours)
