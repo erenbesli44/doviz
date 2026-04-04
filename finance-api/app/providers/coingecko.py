@@ -8,9 +8,12 @@ Free tier works without an API key but has tight rate limits.
 Provide COINGECKO_API_KEY in .env to use the paid tier.
 """
 import logging
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta, timezone
 
 import httpx
+
+# Turkey Standard Time — UTC+3, no DST (same constant used in yahoo_finance.py)
+_TRT = timezone(timedelta(hours=3))
 
 from .base import MarketProvider, ProviderError, RawHistoryPoint, RawQuote
 
@@ -79,7 +82,9 @@ class CoinGeckoProvider:
         prices = resp.json().get("prices", [])
         return [
             RawHistoryPoint(
-                time=datetime.fromtimestamp(ts / 1000, UTC).strftime("%H:%M"),
+                # Format in Istanbul time (TRT = UTC+3) so hover labels match
+                # local Turkish time, consistent with yahoo_finance.py.
+                time=datetime.fromtimestamp(ts / 1000, _TRT).strftime("%H:%M"),
                 value=round(float(price), 2),
             )
             for ts, price in prices

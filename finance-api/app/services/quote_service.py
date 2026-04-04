@@ -537,16 +537,17 @@ class QuoteService:
 
     @staticmethod
     def _normalize(raw: RawQuote, config: SymbolConfig, provider_id: str, is_live: bool) -> QuoteResponse:
+        m = config.price_multiplier
         return QuoteResponse(
             data=QuoteData(
                 symbol=config.internal,
                 name=config.name,
-                price=raw.price,
+                price=raw.price * m,
                 change_pct=raw.change_pct,
-                change_value=getattr(raw, "change_value", None),
-                open=raw.open,
-                high=raw.high,
-                low=raw.low,
+                change_value=(getattr(raw, "change_value", None) or 0) * m if getattr(raw, "change_value", None) is not None else None,
+                open=raw.open * m if raw.open is not None else None,
+                high=raw.high * m if raw.high is not None else None,
+                low=raw.low * m if raw.low is not None else None,
                 currency=config.currency,
                 category=config.category,
                 unit=config.unit,
@@ -573,13 +574,14 @@ def _build_closed_response(
     state: "SessionState",
 ) -> QuoteResponse:
     """Build a QuoteResponse from a stored session close (market is closed)."""
+    m = config.price_multiplier
     return QuoteResponse(
         data=QuoteData(
             symbol=config.internal,
             name=config.name,
-            price=last_close.price,
+            price=last_close.price * m,
             change_pct=last_close.change_pct,
-            change_value=last_close.change_value,
+            change_value=last_close.change_value * m if last_close.change_value is not None else None,
             currency=config.currency,
             category=config.category,
             unit=config.unit,

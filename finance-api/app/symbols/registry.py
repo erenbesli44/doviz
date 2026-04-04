@@ -25,6 +25,7 @@ class SymbolConfig:
     is_live: bool = True       # False = source is structurally delayed (e.g. Yahoo BIST)
     delay_minutes: int | None = None
     exchange: str = "UNKNOWN"  # exchange calendar id: BIST|NYSE|XETRA|LSE|TSE|COMEX|NYMEX|FOREX|CRYPTO
+    price_multiplier: float = 1.0  # scale factor applied at serve time (e.g. 100.0 for JPY/TRY)
 
 
 # ---------------------------------------------------------------------------
@@ -80,11 +81,12 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         ttl_seconds=30, exchange="FOREX",
     ),
     "JPY/TRY": SymbolConfig(
-        internal="JPY/TRY", name="Yen/TL", category="fx",
+        internal="JPY/TRY", name="Yen/TL (100 JPY)", category="fx",
         currency="TRY", unit=None,
         primary_provider="fmp", fallback_provider="yahoo",
         external_primary="JPYTRY", external_fallback="JPYTRY=X",
         ttl_seconds=30, exchange="FOREX",
+        price_multiplier=100.0,
     ),
 
     # ── Crypto ──────────────────────────────────────────────────────────────

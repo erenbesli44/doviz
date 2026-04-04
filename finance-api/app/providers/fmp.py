@@ -111,17 +111,17 @@ class FMPProvider:
         except (httpx.HTTPStatusError, httpx.RequestError) as e:
             raise ProviderError(self.provider_id, external_symbol, str(e)) from e
 
-        records = resp.json()  # list of {date, open, high, low, close, volume}
+        records = resp.json()  # list of {symbol, date, price, volume}
         if not isinstance(records, list):
             raise ProviderError(self.provider_id, external_symbol, f"unexpected history shape: {type(records)}")
 
         return [
             RawHistoryPoint(
                 time=r.get("date", ""),
-                value=round(float(r["close"]), 4),
+                value=round(float(r["price"]), 4),
             )
             for r in reversed(records)  # FMP returns newest-first → reverse to chronological
-            if r.get("close") is not None
+            if r.get("price") is not None
         ]
 
     async def is_healthy(self) -> bool:
