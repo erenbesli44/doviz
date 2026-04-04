@@ -1,10 +1,13 @@
 import { Outlet } from 'react-router-dom';
+import { usePageTracking } from '../../hooks/usePageTracking';
 import TopNavBar from './TopNavBar';
 import TopAppBar from './TopAppBar';
 import BottomNavBar from './BottomNavBar';
 import SiteFooter from './SiteFooter';
 
 export default function AppLayout() {
+  usePageTracking();
+
   return (
     <>
       {/* Desktop top nav */}
