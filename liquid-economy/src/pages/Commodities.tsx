@@ -63,11 +63,6 @@ export default function Commodities() {
         subtitle="Enerji, Metaller ve Tarım"
         lastUpdated={lastUpdated}
       />
-      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mb-4 max-w-4xl">
-        Brent petrol, WTI, doğal gaz ve metal emtiaları canlı izleyin.
-        Kripto varlıklar için
-        <Link className="ml-1 underline text-[var(--color-primary)]" to="/kripto">Kripto</Link> sayfasına geçebilirsiniz.
-      </p>
 
       {/* Category filter chips */}
       <div className="flex gap-2 mb-6 overflow-x-auto hide-scrollbar pb-1">
@@ -141,6 +136,12 @@ export default function Commodities() {
           />
         </div>
       </section>
+
+      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mt-4 max-w-4xl">
+        Brent petrol, WTI, doğal gaz ve metal emtiaları canlı izleyin.
+        Kripto varlıklar için
+        <Link className="ml-1 underline text-[var(--color-primary)]" to="/kripto">Kripto</Link> sayfasına geçebilirsiniz.
+      </p>
     </>
   );
 }

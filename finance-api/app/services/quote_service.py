@@ -193,7 +193,12 @@ class QuoteService:
             )
             is_live = config.is_live
             provider_id = config.primary_provider
-            if not raw_points and config.fallback_provider:
+            # FMP only returns end-of-day bars. For intraday windows (≤ 72 h) that
+            # yields at most 1–2 daily points — not enough for a line chart.
+            # Treat < 2 points on an intraday window the same as no data and fall
+            # back to Yahoo (hourly bars) when a fallback is configured.
+            needs_intraday_fallback = len(raw_points) < 2 and hours <= 72 and config.fallback_provider
+            if (not raw_points or needs_intraday_fallback) and config.fallback_provider:
                 fp = self._providers.get(config.fallback_provider)
                 raw_points = await asyncio.wait_for(
                     fp.fetch_history(config.external_fallback or config.external_primary, hours),
@@ -338,6 +343,7 @@ class QuoteService:
             )
 
         base_provider = self._providers.get(base_config.primary_provider)
+        provider_used = base_config.primary_provider
         try:
             raw_points = await asyncio.wait_for(
                 base_provider.fetch_history(base_config.external_primary, hours),
@@ -347,6 +353,24 @@ class QuoteService:
             logger.warning("Derived history fetch failed for %s (base %s): %s", config.internal, base_symbol, e)
             raw_points = []
 
+        # FMP only provides end-of-day bars — for intraday windows (≤ 72 h) it returns
+        # at most 1–2 daily points which is not enough for a usable line chart.
+        # Fall back to Yahoo (hourly bars) in that case.
+        if len(raw_points) < 2 and base_config.fallback_provider and hours <= 72:
+            try:
+                fb = self._providers.get(base_config.fallback_provider)
+                fallback_sym = base_config.external_fallback or base_config.external_primary
+                raw_points = await asyncio.wait_for(
+                    fb.fetch_history(fallback_sym, hours),
+                    timeout=self._timeout,
+                )
+                provider_used = base_config.fallback_provider
+            except Exception as e:
+                logger.warning(
+                    "Derived history fallback failed for %s (base %s via %s): %s",
+                    config.internal, base_symbol, base_config.fallback_provider, e,
+                )
+
         scaled = [
             HistoryPoint(time=p.time, value=round(p.value / divisor * usd_try, 4))
             for p in raw_points
@@ -354,7 +378,7 @@ class QuoteService:
         return HistoryResponse(
             symbol=config.internal,
             points=scaled,
-            provider=base_config.primary_provider,
+            provider=provider_used,
             is_live=base_config.is_live,
             fetched_at=datetime.now(UTC),
         )

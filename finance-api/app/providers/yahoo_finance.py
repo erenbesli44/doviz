@@ -176,16 +176,29 @@ class YahooFinanceProvider:
         )
 
     async def fetch_history(self, external_symbol: str, hours: int = 24) -> list[RawHistoryPoint]:
-        if hours <= 72:
-            interval, range_, fmt = "60m", f"{max(1, hours // 24)}d", "%H:%M"
+        if hours <= 24:
+            # Anchor the window to today's Istanbul midnight (00:00 TRT = 21:00 UTC the day
+            # before) so the 1-day chart starts exactly at the Turkish calendar boundary,
+            # matching what BloombergHT and doviz.com show as the daily range.
+            interval = "60m"
+            fmt = "%H:%M"
+            period1 = int(_istanbul_midnight_utc().timestamp())
+            period2 = int(datetime.now(UTC).timestamp())
+            params: dict = {"interval": interval, "period1": period1, "period2": period2}
+        elif hours <= 72:
+            interval, range_, fmt = "60m", f"{hours // 24}d", "%H:%M"
+            params = {"interval": interval, "range": range_}
         elif hours <= 720:
             interval, range_, fmt = "1d", "30d", "%d %b"
+            params = {"interval": interval, "range": range_}
         elif hours <= 2160:
             interval, range_, fmt = "1d", "90d", "%d %b"
+            params = {"interval": interval, "range": range_}
         else:
             interval, range_, fmt = "1wk", "365d", "%b '%y"
+            params = {"interval": interval, "range": range_}
 
-        data = await self._get(external_symbol, params={"interval": interval, "range": range_})
+        data = await self._get(external_symbol, params=params)
 
         try:
             result = data["chart"]["result"][0]
@@ -196,7 +209,9 @@ class YahooFinanceProvider:
 
         return [
             RawHistoryPoint(
-                time=datetime.fromtimestamp(ts, UTC).strftime(fmt),
+                # Always format in Istanbul time (TRT = UTC+3, no DST) so hover labels
+                # display the correct local time for Turkish users.
+                time=datetime.fromtimestamp(ts, _TRT).strftime(fmt),
                 value=round(float(close), 4),
             )
             for ts, close in zip(timestamps, closes)

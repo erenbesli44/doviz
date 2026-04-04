@@ -74,11 +74,6 @@ export default function Gold() {
         subtitle="Değerli Metaller"
         lastUpdated={lastUpdated}
       />
-      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mb-4 max-w-4xl">
-        Gram altın, ons altın ve gümüş fiyatlarını tek ekranda izleyin.
-        Kapalıçarşı odaklı görünüm için
-        <Link className="ml-1 underline text-[var(--color-primary)]" to="/kapalicarsi">Kapalıçarşı</Link> sayfasına geçebilirsiniz.
-      </p>
 
       {/* Altın section */}
       <section className="mb-6">
@@ -144,6 +139,12 @@ export default function Gold() {
           />
         </div>
       </section>
+
+      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mt-4 max-w-4xl">
+        Gram altın, ons altın ve gümüş fiyatlarını tek ekranda izleyin.
+        Kapalıçarşı odaklı görünüm için
+        <Link className="ml-1 underline text-[var(--color-primary)]" to="/kapalicarsi">Kapalıçarşı</Link> sayfasına geçebilirsiniz.
+      </p>
     </>
   );
 }

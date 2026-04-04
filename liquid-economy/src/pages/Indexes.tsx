@@ -46,11 +46,6 @@ export default function Indexes() {
         subtitle="Yurt İçi ve Küresel"
         lastUpdated={lastUpdated}
       />
-      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mb-4 max-w-4xl">
-        BIST ve küresel endeksleri canlı takip edin.
-        ABD piyasaları için özel ekran:
-        <Link className="ml-1 underline text-[var(--color-primary)]" to="/amerika-borsasi">Amerika Borsası</Link>.
-      </p>
 
       {/* Desktop: card grid */}
       <section className="hidden md:grid grid-cols-3 gap-4 mb-8">
@@ -110,6 +105,12 @@ export default function Indexes() {
           />
         </div>
       </section>
+
+      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mt-4 max-w-4xl">
+        BIST ve küresel endeksleri canlı takip edin.
+        ABD piyasaları için özel ekran:
+        <Link className="ml-1 underline text-[var(--color-primary)]" to="/amerika-borsasi">Amerika Borsası</Link>.
+      </p>
     </>
   );
 }

@@ -24,7 +24,7 @@ const RANGE_HOURS: Record<TimeRange, number> = {
 
 const RANGE_LABELS: Record<TimeRange, string> = {
   '1S':   '1 SAAT DEĞİŞİMİ',
-  '1G':   '24 SAAT DEĞİŞİMİ',
+  '1G':   'GÜNLÜK DEĞİŞİM',
   '1H':   '1 HAFTA DEĞİŞİMİ',
   '1A':   '1 AY DEĞİŞİMİ',
   '1Y':   '1 YIL DEĞİŞİMİ',

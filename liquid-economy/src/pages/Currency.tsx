@@ -45,12 +45,7 @@ export default function Currency() {
         subtitle="Majör ve Çapraz Pariteler"
         lastUpdated={lastUpdated}
       />
-      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mb-4 max-w-4xl">
-        “Dolar kuru kaç TL?” ve “euro kuru canlı” aramalarına odaklı güncel döviz tablosu.
-        Popüler detay sayfaları:
-        <Link className="ml-1 underline text-[var(--color-primary)]" to="/piyasa/dolar-kuru-usd-try">USD/TRY</Link>,
-        <Link className="ml-1 underline text-[var(--color-primary)]" to="/piyasa/euro-kuru-eur-try">EUR/TRY</Link>.
-      </p>
+
 
       {/* Asset list */}
       <section className="mb-8">
@@ -96,6 +91,13 @@ export default function Currency() {
           />
         </div>
       </section>
+
+      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mt-4 max-w-4xl">
+        "Dolar kuru kaç TL?" ve "euro kuru canlı" aramalarına odaklı güncel döviz tablosu.
+        Popüler detay sayfaları:
+        <Link className="ml-1 underline text-[var(--color-primary)]" to="/piyasa/dolar-kuru-usd-try">USD/TRY</Link>,
+        <Link className="ml-1 underline text-[var(--color-primary)]" to="/piyasa/euro-kuru-eur-try">EUR/TRY</Link>.
+      </p>
     </>
   );
 }

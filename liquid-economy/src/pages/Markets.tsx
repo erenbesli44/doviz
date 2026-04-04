@@ -48,13 +48,6 @@ export default function Markets() {
         subtitle="Genel Görünüm"
         lastUpdated={lastUpdated}
       />
-      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mb-4 max-w-4xl">
-        Canlı piyasa takibinde en çok aranan varlıkları tek ekranda sunuyoruz.
-        Detay için <Link to="/doviz" className="underline text-[var(--color-primary)]">döviz</Link>,
-        <Link to="/altin" className="underline text-[var(--color-primary)] ml-1">altın</Link>,
-        <Link to="/kapalicarsi" className="underline text-[var(--color-primary)] ml-1">kapalıçarşı</Link> ve
-        <Link to="/amerika-borsasi" className="underline text-[var(--color-primary)] ml-1">ABD endeksleri</Link> sayfalarına geçebilirsiniz.
-      </p>
 
       {/* ── GÜNCEL VARLIKLAR ─────────────────────────────────────── */}
       {/* Mobile: compact list rows — all assets fit on one screen */}
@@ -134,6 +127,14 @@ export default function Markets() {
           ))}
         </div>
       </section>
+
+      <p className="text-sm text-[var(--color-on-surface-variant)]/85 mt-4 max-w-4xl">
+        Canlı piyasa takibinde en çok aranan varlıkları tek ekranda sunuyoruz.
+        Detay için <Link to="/doviz" className="underline text-[var(--color-primary)]">döviz</Link>,
+        <Link to="/altin" className="underline text-[var(--color-primary)] ml-1">altın</Link>,
+        <Link to="/kapalicarsi" className="underline text-[var(--color-primary)] ml-1">kapalıçarşı</Link> ve
+        <Link to="/amerika-borsasi" className="underline text-[var(--color-primary)] ml-1">ABD endeksleri</Link> sayfalarına geçebilirsiniz.
+      </p>
 
     </>
   );
