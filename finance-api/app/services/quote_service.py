@@ -355,9 +355,10 @@ class QuoteService:
             raw_points = []
 
         # FMP only provides end-of-day bars — for intraday windows (≤ 72 h) it returns
-        # at most 1–2 daily points which is not enough for a usable line chart.
-        # Fall back to Yahoo (hourly bars) in that case.
-        if len(raw_points) < 2 and base_config.fallback_provider and hours <= 72:
+        # 1–2 daily points (e.g. yesterday + today) which is not enough for a usable
+        # intraday line chart.  Use < 3 so that even exactly 2 EOD bars trigger the
+        # fallback to Yahoo hourly bars.
+        if len(raw_points) < 3 and base_config.fallback_provider and hours <= 72:
             try:
                 fb = self._providers.get(base_config.fallback_provider)
                 fallback_sym = base_config.external_fallback or base_config.external_primary
@@ -387,7 +388,7 @@ class QuoteService:
                 )
                 # Mirror the same intraday fallback: FMP returns daily-only bars,
                 # so switch to Yahoo for short windows.
-                if len(usdtry_raw) < 2 and usdtry_config.fallback_provider and hours <= 72:
+                if len(usdtry_raw) < 3 and usdtry_config.fallback_provider and hours <= 72:
                     fb = self._providers.get(usdtry_config.fallback_provider)
                     fallback_sym = usdtry_config.external_fallback or usdtry_config.external_primary
                     usdtry_raw = await asyncio.wait_for(
