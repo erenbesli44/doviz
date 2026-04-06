@@ -15,9 +15,8 @@ export default function TopNavBar() {
     <nav className="fixed top-0 w-full z-50 bg-white border-b border-[var(--color-outline-variant)]/40">
       <div className="flex justify-between items-center h-16 px-8 max-w-[1440px] mx-auto text-sm font-medium tracking-tight antialiased">
         {/* Logo */}
-        <a href="https://dovizveri.com/" className="flex items-center gap-2 select-none no-underline">
-          <img src="/favicon.svg" alt="Döviz Veri" width="22" height="22" className="shrink-0" />
-          <span className="text-sm font-semibold tracking-tight text-slate-700">Döviz Veri</span>
+        <a href="https://dovizveri.com/" className="flex items-center select-none no-underline">
+          <img src="/logo.svg" alt="Döviz Veri" height="28" className="shrink-0" />
         </a>
 
         {/* Nav links — hidden below lg */}

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 36" fill="none" role="img" aria-label="Döviz Veri">
+  <defs>
+    <clipPath id="badge-clip">
+      <rect width="36" height="36" rx="5"/>
+    </clipPath>
+  </defs>
+
+  <!-- Badge: deep navy (Moody's-style square mark) -->
+  <rect width="36" height="36" rx="5" fill="#0A1628"/>
+
+  <!-- Left accent stripe (S&P-style coloured bar, brand blue) -->
+  <rect x="0" y="0" width="5" height="36" fill="#004fdb" clip-path="url(#badge-clip)"/>
+
+  <!-- DV monogram -->
+  <text
+    x="21" y="24"
+    font-family="Inter, Helvetica Neue, Arial, sans-serif"
+    font-size="15" font-weight="800"
+    fill="white" text-anchor="middle"
+    dominant-baseline="auto">DV</text>
+
+  <!-- Separator: thin vertical line between badge and wordmark -->
+  <line x1="46" y1="7" x2="46" y2="29" stroke="#E2E8F0" stroke-width="0.75"/>
+
+  <!-- Wordmark top: DÖVİZ (Fitch-style all-caps, tight tracking) -->
+  <text
+    x="54" y="14"
+    font-family="Inter, Helvetica Neue, Arial, sans-serif"
+    font-size="12.5" font-weight="700"
+    fill="#0A1628" letter-spacing="1.2">DÖVİZ</text>
+
+  <!-- Wordmark bottom: VERİ (lighter, wide tracking like rating agency sub-label) -->
+  <text
+    x="55" y="28"
+    font-family="Inter, Helvetica Neue, Arial, sans-serif"
+    font-size="9" font-weight="500"
+    fill="#64748B" letter-spacing="3.8">VERİ</text>
+</svg>
