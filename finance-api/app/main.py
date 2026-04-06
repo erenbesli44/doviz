@@ -5,6 +5,8 @@ import httpx
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
 
 from .api.v1.router import v1_router
 from .cache.memory import MemoryCache
@@ -30,6 +32,29 @@ def _parse_cors_origins(raw: str) -> list[str]:
     if not value or value == "*":
         return ["*"]
     return [item.strip() for item in value.split(",") if item.strip()]
+
+
+class APIKeyMiddleware(BaseHTTPMiddleware):
+    """Reject requests without a valid X-API-Key header, except health endpoint."""
+
+    def __init__(self, app, secret_key: str):
+        super().__init__(app)
+        self.secret_key = secret_key
+
+    async def dispatch(self, request: Request, call_next) -> Response:
+        # Skip healthcheck and CORS preflight
+        if request.url.path in ("/v1/health", "/health") or request.method == "OPTIONS":
+            return await call_next(request)
+
+        if not self.secret_key:
+            # Key not configured — allow all (dev mode)
+            return await call_next(request)
+
+        key = request.headers.get("X-API-Key", "")
+        if key != self.secret_key:
+            return JSONResponse(status_code=401, content={"error": "unauthorized", "message": "Invalid or missing API key."})
+
+        return await call_next(request)
 
 
 @asynccontextmanager
@@ -125,6 +150,7 @@ def create_app() -> FastAPI:
         allow_methods=["GET", "POST"],
         allow_headers=["*"],
     )
+    app.add_middleware(APIKeyMiddleware, secret_key=settings.api_secret_key)
 
     app.include_router(v1_router)
 

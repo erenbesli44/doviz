@@ -8,6 +8,8 @@ class Settings(BaseSettings):
         case_sensitive=False,
     )
 
+    api_secret_key: str = ""
+
     finnhub_api_key: str = ""
     fmp_api_key: str = ""
     coingecko_api_key: str = ""  # empty = unauthenticated free tier

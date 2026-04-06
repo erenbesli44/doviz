@@ -9,12 +9,15 @@ import type {
 } from '../data/api-types';
 
 const BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/v1';
+const API_KEY = import.meta.env.VITE_API_KEY ?? '';
 
 // "USD/TRY" → "USD-TRY", "GAUTRY" → "GAUTRY"
 const toPath = (symbol: string) => symbol.replace('/', '-');
 
 async function get<T>(path: string): Promise<T> {
-  const res = await fetch(`${BASE}${path}`);
+  const res = await fetch(`${BASE}${path}`, {
+    headers: { 'X-API-Key': API_KEY },
+  });
   if (!res.ok) {
     const body = await res
       .json()
@@ -30,7 +33,7 @@ async function get<T>(path: string): Promise<T> {
 async function post<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-API-Key': API_KEY },
     body: JSON.stringify(body),
   });
   if (!res.ok) {
