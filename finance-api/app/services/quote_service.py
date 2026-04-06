@@ -309,9 +309,10 @@ class QuoteService:
     async def _get_history_derived(self, config: SymbolConfig, hours: int) -> HistoryResponse:
         """Compose history for derived TRY-denominated symbols (GAUTRY, GAGTRY, HAREM1KG).
 
-        Fetches the USD base asset's history and scales each point by the current
-        USD/TRY spot rate.  This is a sparkline approximation — intraday USD/TRY
-        variation is not accounted for, but is acceptable for trend display.
+        Fetches the USD base asset's history and the USD/TRY history for the same
+        window, then scales each base bar by the USD/TRY rate recorded at the same
+        timestamp.  Falls back to the current spot rate for any bar whose timestamp
+        has no matching USD/TRY entry.
         """
         _TROY_OZ_TO_GRAMS = 31.1035
 
@@ -371,8 +372,35 @@ class QuoteService:
                     config.internal, base_symbol, base_config.fallback_provider, e,
                 )
 
+        # Fetch USD/TRY history for the same window so each base bar is scaled by
+        # the exchange rate that was actually in effect at that time, rather than
+        # today's spot rate.  This makes the chart percentage match the backend's
+        # change_pct (which already uses an Istanbul-midnight anchor for both legs).
+        usdtry_rates: dict[str, float] = {}
+        usdtry_config = get_symbol_config("USD/TRY")
+        if usdtry_config is not None:
+            try:
+                usdtry_provider = self._providers.get(usdtry_config.primary_provider)
+                usdtry_raw = await asyncio.wait_for(
+                    usdtry_provider.fetch_history(usdtry_config.external_primary, hours),
+                    timeout=self._timeout,
+                )
+                # Mirror the same intraday fallback: FMP returns daily-only bars,
+                # so switch to Yahoo for short windows.
+                if len(usdtry_raw) < 2 and usdtry_config.fallback_provider and hours <= 72:
+                    fb = self._providers.get(usdtry_config.fallback_provider)
+                    fallback_sym = usdtry_config.external_fallback or usdtry_config.external_primary
+                    usdtry_raw = await asyncio.wait_for(
+                        fb.fetch_history(fallback_sym, hours),
+                        timeout=self._timeout,
+                    )
+                usdtry_rates = {p.time: p.value for p in usdtry_raw}
+            except Exception as e:
+                logger.warning("USD/TRY history fetch failed for derived scaling (%s): %s", config.internal, e)
+                # usdtry_rates stays empty → all bars fall back to current spot rate below
+
         scaled = [
-            HistoryPoint(time=p.time, value=round(p.value / divisor * usd_try, 4))
+            HistoryPoint(time=p.time, value=round(p.value / divisor * usdtry_rates.get(p.time, usd_try), 4))
             for p in raw_points
         ]
         return HistoryResponse(

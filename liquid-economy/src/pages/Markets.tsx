@@ -46,9 +46,18 @@ export default function Markets() {
       {/* ── GÜNCEL VARLIKLAR ─────────────────────────────────────── */}
       {/* Mobile: compact list rows — all assets fit on one screen */}
       <section className="md:hidden mb-4">
-        <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65 mb-2 ml-1">
-          GÜNCEL VARLIKLAR
-        </h3>
+        <div className="flex items-center justify-between mb-2 ml-1 mr-1">
+          <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65">
+            GÜNCEL VARLIKLAR
+          </h3>
+          <span className="flex items-center gap-1.5">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            <span className="text-[10px] font-medium text-emerald-600 tracking-wide">canlı veri</span>
+          </span>
+        </div>
         <div className="bg-[var(--color-surface-container-low)] rounded-2xl p-1 space-y-0">
           {extendedOverviewAssets.map((asset) => (
             <AssetListRow
@@ -63,9 +72,18 @@ export default function Markets() {
 
       {/* Desktop: 5-col × 2-row grid — all assets visible at once */}
       <section className="hidden md:block mb-4">
-        <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65 mb-2 ml-1">
-          GÜNCEL VARLIKLAR
-        </h3>
+        <div className="flex items-center justify-between mb-2 ml-1 mr-1">
+          <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65">
+            GÜNCEL VARLIKLAR
+          </h3>
+          <span className="flex items-center gap-1.5">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            <span className="text-[10px] font-medium text-emerald-600 tracking-wide">canlı veri</span>
+          </span>
+        </div>
         <div className="grid grid-cols-5 gap-2">
           {extendedOverviewAssets.map((asset) => (
             <AssetCard
