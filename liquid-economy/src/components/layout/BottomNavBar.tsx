@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 const tabs = [
   { to: '/',          label: 'Piyasalar', icon: 'equalizer'  },
   { to: '/doviz',     label: 'Döviz',     icon: 'payments'   },
-  { to: '/altin',     label: 'Altın',     icon: 'savings'    },
+  { to: '/altin',     label: 'Altın',     icon: 'diamond'    },
   { to: '/endeksler', label: 'Endeksler', icon: 'show_chart' },
   { to: '/emtialar',  label: 'Emtialar',  icon: 'toll'       },
 ];
