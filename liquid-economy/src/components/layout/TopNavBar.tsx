@@ -17,7 +17,7 @@ export default function TopNavBar() {
       <div className="flex justify-between items-center h-16 px-8 max-w-[1440px] mx-auto text-sm font-medium tracking-tight antialiased">
         {/* Logo */}
         <a href="https://dovizveri.com/" className="flex items-center select-none no-underline">
-          <Logo height={28} />
+          <Logo height={34} />
         </a>
 
         {/* Nav links — hidden below lg */}
