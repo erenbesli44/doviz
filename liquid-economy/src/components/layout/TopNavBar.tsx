@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import Logo from '../ui/Logo';
 
 const navLinks = [
   { to: '/',           label: 'Piyasalar' },
@@ -16,7 +17,7 @@ export default function TopNavBar() {
       <div className="flex justify-between items-center h-16 px-8 max-w-[1440px] mx-auto text-sm font-medium tracking-tight antialiased">
         {/* Logo */}
         <a href="https://dovizveri.com/" className="flex items-center select-none no-underline">
-          <img src="/logo.svg" alt="Döviz Veri" height="28" className="shrink-0" />
+          <Logo height={28} />
         </a>
 
         {/* Nav links — hidden below lg */}
