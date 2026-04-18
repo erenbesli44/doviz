@@ -1,4 +1,5 @@
 import Logo from '../ui/Logo';
+import LiveDataBadge from './LiveDataBadge';
 
 export default function TopAppBar() {
   return (
@@ -7,6 +8,7 @@ export default function TopAppBar() {
         <a href="https://dovizveri.com/" className="flex items-center select-none no-underline">
           <Logo height={34} />
         </a>
+        <LiveDataBadge />
       </div>
     </header>
   );

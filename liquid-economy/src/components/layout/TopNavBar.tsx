@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import Logo from '../ui/Logo';
+import LiveDataBadge from './LiveDataBadge';
 
 const navLinks = [
   { to: '/',           label: 'Piyasalar' },
@@ -38,8 +39,10 @@ export default function TopNavBar() {
           ))}
         </div>
 
-        {/* Right side — intentionally empty */}
-        <div className="flex items-center gap-4" />
+        {/* Right side */}
+        <div className="flex items-center gap-4">
+          <LiveDataBadge />
+        </div>
       </div>
     </nav>
   );
