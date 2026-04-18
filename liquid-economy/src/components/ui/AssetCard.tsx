@@ -62,16 +62,21 @@ export default function AssetCard({ asset, onClick, showChangeValue = false }: P
         {asset.name}
       </h3>
       <div className="flex flex-col">
-        <span className="text-base font-bold tracking-tight">{formattedPrice}</span>
         {showChangeValue ? (
-          <div className="flex items-center gap-1.5">
-            <span className={`text-[11px] font-medium tabular-nums ${changeColor}`}>
-              {changeSign}{formattedChangeValue}
-            </span>
-            <PriceChange value={asset.change} className="text-xs!" />
-          </div>
+          <>
+            <PriceChange value={asset.change} className="text-sm! font-black! leading-none" />
+            <div className="mt-0.5 flex items-baseline gap-1.5">
+              <span className="text-base font-bold tracking-tight tabular-nums">{formattedPrice}</span>
+              <span className={`text-[11px] font-medium tabular-nums ${changeColor}`}>
+                {changeSign}{formattedChangeValue}
+              </span>
+            </div>
+          </>
         ) : (
-          <PriceChange value={asset.change} className="text-xs! font-medium!" />
+          <>
+            <span className="text-base font-bold tracking-tight">{formattedPrice}</span>
+            <PriceChange value={asset.change} className="text-xs! font-medium!" />
+          </>
         )}
       </div>
     </div>

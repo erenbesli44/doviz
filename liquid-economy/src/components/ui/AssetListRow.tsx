@@ -50,16 +50,21 @@ export default function AssetListRow({ asset, active = false, onClick, showChang
       </div>
       {/* Price + change */}
       <div className="text-right">
-        <span className="block text-sm font-bold tracking-tight tabular-nums">{formattedPrice}</span>
         {showChangeValue ? (
-          <div className="flex items-center justify-end gap-1.5">
-            <span className={`text-[11px] font-medium tabular-nums ${changeColor}`}>
-              {changeSign}{formattedChangeValue}
-            </span>
-            <PriceChange value={asset.change} />
+          <div className="flex flex-col items-end">
+            <PriceChange value={asset.change} className="text-sm! font-black! leading-none" />
+            <div className="mt-0.5 flex items-center justify-end gap-1.5">
+              <span className="text-sm font-bold tracking-tight tabular-nums">{formattedPrice}</span>
+              <span className={`text-[11px] font-medium tabular-nums ${changeColor}`}>
+                {changeSign}{formattedChangeValue}
+              </span>
+            </div>
           </div>
         ) : (
-          <PriceChange value={asset.change} />
+          <>
+            <span className="block text-sm font-bold tracking-tight tabular-nums">{formattedPrice}</span>
+            <PriceChange value={asset.change} />
+          </>
         )}
       </div>
     </button>
