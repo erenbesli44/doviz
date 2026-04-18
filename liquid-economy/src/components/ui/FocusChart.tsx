@@ -5,6 +5,7 @@ import {
   ColorType,
   LineStyle,
   CrosshairMode,
+  type Time,
 } from 'lightweight-charts';
 import type { UTCTimestamp } from 'lightweight-charts';
 import type { ChartDataPoint } from '../../data/types';
@@ -42,6 +43,13 @@ interface Props {
   icon?: string;
   iconBg?: string;
   onRangeChange?: (hours: number) => void;
+}
+
+function labelForChartTime(time: Time, points: ChartDataPoint[]): string {
+  if (typeof time !== 'number') return '';
+  const idx = Math.round(time);
+  if (idx < 0 || idx >= points.length) return '';
+  return points[idx]?.time ?? '';
 }
 
 export default function FocusChart({
@@ -133,7 +141,11 @@ export default function FocusChart({
         ticksVisible: false,
       },
       timeScale: {
-        visible: false,          // we render time in the header on hover
+        visible: true,
+        borderVisible: false,
+        ticksVisible: false,
+        allowBoldLabels: false,
+        tickMarkFormatter: (time) => labelForChartTime(time, history),
       },
       crosshair: {
         mode: CrosshairMode.Magnet,
@@ -151,8 +163,8 @@ export default function FocusChart({
       height: chartHeight,
     });
 
-    // Map ChartDataPoint[] → { time: UTCTimestamp, value }
-    // Using array index as time avoids format-parsing the backend strings
+    // Map ChartDataPoint[] → { time: UTCTimestamp, value }.
+    // We keep index-based time and render axis labels from `history.time`.
     const series = chart.addSeries(AreaSeries, {
       lineColor: chartColor,
       topColor: `${chartColor}20`,
@@ -197,7 +209,8 @@ export default function FocusChart({
       }
       const d = param.seriesData?.get(series) as { value?: number } | undefined;
       if (d?.value != null) {
-        const idx = (param.logical as number | undefined) ?? (param.time as number);
+        const rawIdx = (param.logical as number | undefined) ?? (param.time as number);
+        const idx = Math.max(0, Math.min(history.length - 1, Math.round(rawIdx)));
         setHoverValue(d.value);
         setHoverTime(history[idx]?.time ?? null);
       }

@@ -5,16 +5,24 @@ interface Props {
   asset: Asset;
   active?: boolean;
   onClick?: () => void;
+  showChangeValue?: boolean;
 }
 
 /**
  * Mobile asset list row — used in vertical asset lists.
  */
-export default function AssetListRow({ asset, active = false, onClick }: Props) {
+export default function AssetListRow({ asset, active = false, onClick, showChangeValue = false }: Props) {
   const formattedPrice = asset.price.toLocaleString('tr-TR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+  const signedChangeValue = asset.changeValue ?? (asset.price * asset.change) / 100;
+  const formattedChangeValue = Math.abs(signedChangeValue).toLocaleString('tr-TR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const changeSign = signedChangeValue >= 0 ? '+' : '-';
+  const changeColor = signedChangeValue >= 0 ? 'text-emerald-600' : 'text-rose-600';
 
   return (
     <button
@@ -43,7 +51,16 @@ export default function AssetListRow({ asset, active = false, onClick }: Props) 
       {/* Price + change */}
       <div className="text-right">
         <span className="block text-sm font-bold tracking-tight tabular-nums">{formattedPrice}</span>
-        <PriceChange value={asset.change} />
+        {showChangeValue ? (
+          <div className="flex items-center justify-end gap-1.5">
+            <span className={`text-[11px] font-medium tabular-nums ${changeColor}`}>
+              {changeSign}{formattedChangeValue}
+            </span>
+            <PriceChange value={asset.change} />
+          </div>
+        ) : (
+          <PriceChange value={asset.change} />
+        )}
       </div>
     </button>
   );

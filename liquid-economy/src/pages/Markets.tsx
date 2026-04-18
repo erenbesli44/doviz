@@ -64,6 +64,7 @@ export default function Markets() {
               key={asset.id}
               asset={asset}
               active={asset.id === selectedId}
+              showChangeValue
               onClick={() => setSelectedId(asset.id)}
             />
           ))}
@@ -89,6 +90,7 @@ export default function Markets() {
             <AssetCard
               key={asset.id}
               asset={asset}
+              showChangeValue
               onClick={() => setSelectedId(asset.id)}
             />
           ))}

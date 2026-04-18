@@ -20,12 +20,13 @@ const trendIcon: Record<string, string> = {
 interface Props {
   asset: Asset;
   onClick?: () => void;
+  showChangeValue?: boolean;
 }
 
 /**
  * Desktop asset summary card — used in the 5-col top grid.
  */
-export default function AssetCard({ asset, onClick }: Props) {
+export default function AssetCard({ asset, onClick, showChangeValue = false }: Props) {
   const badge = categoryBadge[asset.category] ?? categoryBadge.fx;
   const icon  = trendIcon[asset.category] ?? 'trending_up';
 
@@ -33,6 +34,13 @@ export default function AssetCard({ asset, onClick }: Props) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+  const signedChangeValue = asset.changeValue ?? (asset.price * asset.change) / 100;
+  const formattedChangeValue = Math.abs(signedChangeValue).toLocaleString('tr-TR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const changeSign = signedChangeValue >= 0 ? '+' : '-';
+  const changeColor = signedChangeValue >= 0 ? 'text-emerald-600' : 'text-rose-600';
 
   return (
     <div
@@ -55,7 +63,16 @@ export default function AssetCard({ asset, onClick }: Props) {
       </h3>
       <div className="flex flex-col">
         <span className="text-base font-bold tracking-tight">{formattedPrice}</span>
-        <PriceChange value={asset.change} className="text-xs! font-medium!" />
+        {showChangeValue ? (
+          <div className="flex items-center gap-1.5">
+            <span className={`text-[11px] font-medium tabular-nums ${changeColor}`}>
+              {changeSign}{formattedChangeValue}
+            </span>
+            <PriceChange value={asset.change} className="text-xs!" />
+          </div>
+        ) : (
+          <PriceChange value={asset.change} className="text-xs! font-medium!" />
+        )}
       </div>
     </div>
   );
