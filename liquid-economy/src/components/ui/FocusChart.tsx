@@ -145,7 +145,7 @@ export default function FocusChart({
         borderVisible: false,
         ticksVisible: false,
         allowBoldLabels: false,
-        tickMarkFormatter: (time) => labelForChartTime(time, history),
+        tickMarkFormatter: (time: Time) => labelForChartTime(time, history),
       },
       crosshair: {
         mode: CrosshairMode.Magnet,
