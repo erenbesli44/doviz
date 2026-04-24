@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useLatestNews } from '../../hooks/useLatestNews';
 import NewsCard from './NewsCard';
 
@@ -18,18 +19,27 @@ export default function NewsStrip() {
   const { status, stories } = useLatestNews(5);
 
   return (
-    <section className="mb-10">
+    <section id="haberler" className="mb-10 scroll-mt-20">
       <div className="flex items-center justify-between mb-3 ml-1 mr-1">
-        <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65">
-          PİYASA GÜNDEMİ
-        </h3>
-        <span className="text-[10px] font-medium text-[var(--color-on-surface-variant)]/70 hidden sm:inline-flex items-center gap-1">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+        <div className="flex items-center gap-3">
+          <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65">
+            PİYASA GÜNDEMİ
+          </h3>
+          <span className="text-[10px] font-medium text-[var(--color-on-surface-variant)]/70 hidden sm:inline-flex items-center gap-1">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+            </span>
+            <span className="ml-0.5">youtube özetleri</span>
           </span>
-          <span className="ml-0.5">youtube özetleri</span>
-        </span>
+        </div>
+        <Link
+          to="/haberler"
+          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-primary)] opacity-80 hover:opacity-100 transition-opacity"
+        >
+          Tümünü gör
+          <span className="material-symbols-outlined text-[14px] leading-none">arrow_forward</span>
+        </Link>
       </div>
 
       {status === 'loading' && <Skeleton />}

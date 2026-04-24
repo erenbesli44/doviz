@@ -84,6 +84,29 @@ export default function Markets() {
         </div>
       </section>
 
+      {/* ── HABERLER SHORTCUT ───────────────────────── */}
+      <div className="mb-6">
+        <button
+          onClick={() => document.getElementById('haberler')?.scrollIntoView({ behavior: 'smooth' })}
+          className="group w-full flex items-center justify-between rounded-2xl border border-[var(--color-outline-variant)]/30 bg-[var(--color-surface-container-lowest)] px-5 py-3.5 hover:bg-[var(--color-surface-container)] transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <span className="material-symbols-outlined text-[20px] text-amber-500">newspaper</span>
+            <div className="text-left">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-on-surface-variant)]/65">
+                PİYASA GÜNDEMİ
+              </p>
+              <p className="text-xs font-medium text-[var(--color-on-surface)] mt-0.5">
+                Güncel haber özetleri için aşağı kaydır
+              </p>
+            </div>
+          </div>
+          <span className="material-symbols-outlined text-[20px] text-[var(--color-on-surface-variant)]/50 group-hover:text-[var(--color-primary)] transition-colors">
+            keyboard_arrow_down
+          </span>
+        </button>
+      </div>
+
       {/* ── FOCUS CHART (both breakpoints) ──────────── */}
       <section className="mb-10">
         {/* Mobile: compact */}
