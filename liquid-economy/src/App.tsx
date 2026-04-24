@@ -16,6 +16,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import LegalNotice from './pages/LegalNotice';
 import Glossary from './pages/Glossary';
+import NewsDetail from './pages/NewsDetail';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="iletisim" element={<Contact />} />
           <Route path="yasal-uyari" element={<LegalNotice />} />
           <Route path="sozluk" element={<Glossary />} />
+          <Route path="haberler/:videoId" element={<NewsDetail />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

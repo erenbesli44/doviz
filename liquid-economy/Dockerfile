@@ -25,7 +25,12 @@ RUN apk add --no-cache wget
 RUN rm /etc/nginx/conf.d/default.conf
 
 COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Rendered at container start: nginx:alpine runs envsubst on
+# /etc/nginx/templates/*.template → /etc/nginx/conf.d/ using only the
+# variables listed below, so we don't accidentally eat nginx's own $vars.
+COPY nginx.conf /etc/nginx/templates/default.conf.template
+ENV NGINX_ENVSUBST_FILTER_VARIABLES="TRACKER_API_KEY"
 
 EXPOSE 80
 

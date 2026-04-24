@@ -6,6 +6,7 @@ import AssetCard from '../components/ui/AssetCard';
 import AssetListRow from '../components/ui/AssetListRow';
 import FocusChart from '../components/ui/FocusChart';
 import CommodityCard from '../components/ui/CommodityCard';
+import NewsStrip from '../components/ui/NewsStrip';
 import PageHeader from '../components/layout/PageHeader';
 import SeoHead from '../components/seo/SeoHead';
 import { breadcrumbSchema, collectionPageSchema } from '../seo/schema';
@@ -129,6 +130,9 @@ export default function Markets() {
           />
         </div>
       </section>
+
+      {/* ── PIYASA GÜNDEMİ — YouTube özetleri ───────── */}
+      <NewsStrip />
 
       {/* ── MOBILE: commodity horizontal scroll ─────── */}
       <section className="md:hidden mt-10 mb-8 overflow-hidden">
