@@ -1,30 +1,8 @@
 import { useEffect, useState } from 'react';
 import { newsApi } from '../lib/newsClient';
-import type { NewsStory, TrackerVideo } from '../data/news-types';
+import type { NewsStory } from '../data/news-types';
 
 type Status = 'loading' | 'success' | 'not_found' | 'error';
-
-// Upstream doesn't expose a working GET /videos/{id}, so we locate the
-// video by scanning each channel's listing in parallel.
-async function findVideo(id: number, signal: AbortSignal): Promise<{
-  video: TrackerVideo;
-  channelId: number;
-} | null> {
-  const channels = await newsApi.listChannels(signal);
-  const lists = await Promise.all(
-    channels.map((c) =>
-      newsApi
-        .listVideos(c.id, signal)
-        .then((videos) => ({ channelId: c.id, videos }))
-        .catch(() => ({ channelId: c.id, videos: [] as TrackerVideo[] })),
-    ),
-  );
-  for (const { channelId, videos } of lists) {
-    const match = videos.find((v) => v.id === id);
-    if (match) return { video: match, channelId };
-  }
-  return null;
-}
 
 export function useNewsStory(videoId: number | null) {
   const [status, setStatus] = useState<Status>('loading');
@@ -44,23 +22,9 @@ export function useNewsStory(videoId: number | null) {
       setStatus('loading');
       setStory(null);
       try {
-        const [summary, located, channels] = await Promise.all([
-          newsApi.getSummary(videoId, ctl.signal),
-          findVideo(videoId, ctl.signal),
-          newsApi.listChannels(ctl.signal).catch(() => []),
-        ]);
-
-        if (!located) {
-          if (cancelled) return;
-          setStatus('not_found');
-          return;
-        }
-
-        const channel =
-          channels.find((c) => c.id === located.channelId) ?? null;
-
+        const result = await newsApi.story(videoId, ctl.signal);
         if (cancelled) return;
-        setStory({ video: located.video, summary, channel });
+        setStory(result);
         setStatus('success');
       } catch (err) {
         if (cancelled) return;

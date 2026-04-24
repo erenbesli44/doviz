@@ -20,3 +20,9 @@ class Settings(BaseSettings):
     debug: bool = False
     log_level: str = "INFO"
     cors_allow_origins: str = "*"
+
+    # YouTube summary tracker — proxied through /v1/news/* so the key
+    # stays server-side.
+    tracker_api_url: str = "http://t122yraee5v724x7tonr3d6g.204.168.192.245.sslip.io"
+    tracker_api_key: str = ""
+    tracker_timeout_seconds: float = 10.0

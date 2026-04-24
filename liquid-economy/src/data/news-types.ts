@@ -41,3 +41,7 @@ export interface NewsStory {
   channel: TrackerChannel | null;
   summary: TrackerVideoSummary;
 }
+
+export interface LatestNewsResponse {
+  stories: NewsStory[];
+}
