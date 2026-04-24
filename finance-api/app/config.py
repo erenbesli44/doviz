@@ -1,3 +1,4 @@
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,6 +10,12 @@ class Settings(BaseSettings):
     )
 
     api_secret_key: str = ""
+
+    @model_validator(mode="after")
+    def require_secret_key(self) -> "Settings":
+        if not self.api_secret_key:
+            raise ValueError("API_SECRET_KEY must be set — refusing to start without authentication")
+        return self
 
     finnhub_api_key: str = ""
     fmp_api_key: str = ""

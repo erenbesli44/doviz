@@ -46,10 +46,6 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
         if request.url.path in ("/v1/health", "/health") or request.method == "OPTIONS":
             return await call_next(request)
 
-        if not self.secret_key:
-            # Key not configured — allow all (dev mode)
-            return await call_next(request)
-
         key = request.headers.get("X-API-Key", "")
         if key != self.secret_key:
             return JSONResponse(status_code=401, content={"error": "unauthorized", "message": "Invalid or missing API key."})

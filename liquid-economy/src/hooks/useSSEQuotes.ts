@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { QuoteResponse } from '../data/api-types';
 
-const SSE_BASE = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/v1') + '/stream/quotes';
+const SSE_BASE = '/api/v1/stream/quotes';
 
 type QuoteMap = Record<string, QuoteResponse>;
 

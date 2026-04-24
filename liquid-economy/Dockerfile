@@ -7,10 +7,6 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts
 
-# Pass API base URL as a build arg so Coolify can override it
-ARG VITE_API_BASE_URL=https://api.dovizveri.com/v1
-ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
-
 COPY . .
 RUN npm run build
 
@@ -25,11 +21,18 @@ RUN apk add --no-cache wget
 RUN rm /etc/nginx/conf.d/default.conf
 
 COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 
 EXPOSE 80
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget -qO- http://localhost/healthz || exit 1
 
-CMD ["nginx", "-g", "daemon off;"]
+# envsubst fills in ${FINANCE_API_UPSTREAM} and ${FINANCE_API_KEY} from
+# runtime env vars (set in Coolify), then starts nginx. Only those two
+# placeholders are substituted — nginx's own $variables are left untouched.
+CMD ["/bin/sh", "-c", \
+  "envsubst '${FINANCE_API_UPSTREAM}${FINANCE_API_KEY}' \
+     < /etc/nginx/templates/default.conf.template \
+     > /etc/nginx/conf.d/default.conf \
+  && exec nginx -g 'daemon off;'"]

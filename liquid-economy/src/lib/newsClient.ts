@@ -1,16 +1,10 @@
 import type { LatestNewsResponse, NewsStory } from '../data/news-types';
 
-// Finance-api proxies to the tracker and injects the tracker key server-side.
-// We share VITE_API_BASE_URL + VITE_API_KEY with the existing market data
-// client — auth is handled by the finance-api middleware.
-const BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/v1';
-const API_KEY = import.meta.env.VITE_API_KEY ?? '';
+// Relative base — nginx BFF proxy injects X-API-Key server-side.
+const BASE = '/api/v1';
 
 async function get<T>(path: string, signal?: AbortSignal): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
-    headers: { 'X-API-Key': API_KEY },
-    signal,
-  });
+  const res = await fetch(`${BASE}${path}`, { signal });
   if (!res.ok) {
     const err = new Error(`news_api_${res.status}`);
     (err as Error & { status?: number }).status = res.status;

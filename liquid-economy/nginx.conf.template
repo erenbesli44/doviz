@@ -1,0 +1,49 @@
+server {
+    listen 80;
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Gzip
+    gzip on;
+    gzip_types text/plain text/css application/javascript application/json image/svg+xml;
+    gzip_min_length 1024;
+
+    # Cache static assets aggressively (Vite content-hashes them)
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff2?|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        try_files $uri =404;
+    }
+
+    # BFF proxy — browser calls /api/v1/..., nginx forwards to finance-api
+    # and injects the secret key. The key never reaches the browser.
+    location /api/ {
+        proxy_pass ${FINANCE_API_UPSTREAM}/;
+
+        proxy_set_header X-API-Key "${FINANCE_API_KEY}";
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        # SSE: disable buffering so events stream immediately
+        proxy_http_version 1.1;
+        proxy_set_header Connection '';
+        proxy_buffering off;
+        proxy_cache off;
+        proxy_read_timeout 3600s;
+    }
+
+    # SPA fallback — all routes resolve to index.html
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Health probe for Coolify
+    location /healthz {
+        access_log off;
+        return 200 "ok";
+        add_header Content-Type text/plain;
+    }
+}
