@@ -95,7 +95,9 @@ export default function NewsDetail() {
           Anasayfa
         </Link>
         <span className="mx-1.5">/</span>
-        <span>Haberler</span>
+        <Link to="/haberler" className="hover:text-[var(--color-primary)]">
+          Haberler
+        </Link>
       </nav>
 
       <header className="mb-8">
