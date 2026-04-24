@@ -10,6 +10,7 @@ const navLinks = [
   { to: '/endeksler',  label: 'Endeksler' },
   { to: '/emtialar',   label: 'Emtialar'  },
   { to: '/kripto',     label: 'Kripto'    },
+  { to: '/haberler',   label: 'Haberler'  },
 ];
 
 export default function TopNavBar() {

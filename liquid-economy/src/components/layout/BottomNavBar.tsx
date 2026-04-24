@@ -6,6 +6,7 @@ const tabs = [
   { to: '/altin',     label: 'Altın',     icon: 'monetization_on' },
   { to: '/endeksler', label: 'Endeksler', icon: 'show_chart' },
   { to: '/emtialar',  label: 'Emtialar',  icon: 'toll'       },
+  { to: '/haberler',  label: 'Haberler',  icon: 'newspaper'  },
 ];
 
 export default function BottomNavBar() {

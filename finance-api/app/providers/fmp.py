@@ -2,21 +2,22 @@
 Financial Modeling Prep (FMP) provider adapter — uses the /stable/ API.
 
 v3 endpoints are deprecated ("Legacy Endpoint" → 403). The current API is:
-  Quote:   GET /stable/quote?symbol=X&apikey=KEY
-  History: GET /stable/historical-price-eod/light?symbol=X&from=YYYY-MM-DD&apikey=KEY
+  Quote:         GET /stable/quote?symbol=X&apikey=KEY
+  Intraday (1h): GET /stable/historical-chart/1hour?symbol=X&apikey=KEY
+  History (EOD): GET /stable/historical-price-eod/light?symbol=X&from=YYYY-MM-DD&apikey=KEY
 
-Starter-plan coverage (tested 2026-03):
+Starter-plan coverage (tested 2026-04):
   ✓ US/global indices: ^GSPC, ^DJI, ^FTSE, ^N225
-  ✓ Metals/energy symbols: XAUUSD, XAGUSD, BZUSD
+  ✓ Metals/energy symbols: XAUUSD, XAGUSD, BZUSD (intraday 1h also works for BZUSD)
   ✓ FX: USDTRY, EURTRY, GBPTRY, CHFTRY, JPYTRY, EURUSD, GBPUSD
   ✗ ^NDX, ^GDAXI, XU100.IS, CLUSD, NGUSD, HGUSD, KWUSD → 402/empty
 
-History is end-of-day (daily bars) only on the free plan.
+FMP intraday timestamps are in US Eastern time (EDT/EST). convert to TRT (+3) for display.
 """
 import logging
 import time
 from collections import deque
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime, timedelta, timezone
 
 import httpx
 
@@ -69,7 +70,7 @@ class FMPProvider:
         if price is None:
             raise ProviderError(self.provider_id, external_symbol, "null price in response")
 
-        change_pct_raw = q.get("changesPercentage")
+        change_pct_raw = q.get("changePercentage")
         price_f = float(price)
         prev_close = q.get("previousClose")
         prev_close_f = float(prev_close) if prev_close is not None else None
@@ -95,10 +96,49 @@ class FMPProvider:
             change_value=change_value,
         )
 
+    # FMP intraday timestamps are US Eastern time. Convert to TRT for display labels.
+    _ET = timezone(timedelta(hours=-4))   # EDT (UTC-4); close enough year-round for display
+    _TRT = timezone(timedelta(hours=3))   # Turkey Standard Time, no DST
+
     async def fetch_history(self, external_symbol: str, hours: int = 24) -> list[RawHistoryPoint]:
-        """FMP stable API only provides end-of-day (daily) history on the free plan.
-        Returns daily closing prices going back `hours` worth of calendar time.
-        """
+        if hours <= 72:
+            return await self._fetch_history_intraday(external_symbol, hours)
+        return await self._fetch_history_eod(external_symbol, hours)
+
+    async def _fetch_history_intraday(self, external_symbol: str, hours: int) -> list[RawHistoryPoint]:
+        """1-hour bars from FMP /stable/historical-chart/1hour, timestamps converted ET→TRT."""
+        self._record_call()
+        try:
+            resp = await self._client.get(
+                f"{_BASE}/historical-chart/1hour",
+                params={"symbol": external_symbol, "apikey": self._api_key},
+            )
+            resp.raise_for_status()
+        except (httpx.HTTPStatusError, httpx.RequestError) as e:
+            raise ProviderError(self.provider_id, external_symbol, str(e)) from e
+
+        records = resp.json()  # list newest-first, dates in US Eastern time
+        if not isinstance(records, list):
+            raise ProviderError(self.provider_id, external_symbol, f"unexpected intraday shape: {type(records)}")
+
+        cutoff = datetime.now(UTC) - timedelta(hours=hours)
+        points = []
+        for r in reversed(records):  # chronological
+            close = r.get("close")
+            if close is None:
+                continue
+            try:
+                dt_et = datetime.strptime(r["date"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=self._ET)
+            except (KeyError, ValueError):
+                continue
+            if dt_et.astimezone(UTC) < cutoff:
+                continue
+            dt_trt = dt_et.astimezone(self._TRT)
+            points.append(RawHistoryPoint(time=dt_trt.strftime("%H:%M"), value=round(float(close), 4)))
+        return points
+
+    async def _fetch_history_eod(self, external_symbol: str, hours: int) -> list[RawHistoryPoint]:
+        """End-of-day daily bars — used for windows > 72 h."""
         from_ = (datetime.now(UTC) - timedelta(hours=hours)).strftime("%Y-%m-%d")
 
         self._record_call()

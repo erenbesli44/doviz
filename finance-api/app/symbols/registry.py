@@ -200,15 +200,19 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
     ),
 
     # ── Commodities ──────────────────────────────────────────────────────────
-    # FMP Starter: BZUSD (Brent) in sample but shows significant drift vs Yahoo BZ=F
-    # (different settlement/contract reference). Yahoo BZ=F is more accurate → Yahoo primary.
-    # CLUSD, NGUSD, HGUSD, KWUSD → 402 on Starter → Yahoo only.
+    # Brent: FMP BZUSD tracks ICE Brent front-month (same as BloombergHT / doviz.com).
+    # Yahoo BZ=F is NYMEX Brent Last Day Financial, which rolls to the next contract
+    # earlier than ICE — so on days near expiry it drifts several dollars from the
+    # Turkish reference price. FMP's `previousClose` is the ICE daily settle, which
+    # is already the anchor BloombergHT uses for the daily % change, so no
+    # Istanbul-midnight adjustment is needed here.
+    # CLUSD, NGUSD, HGUSD, KWUSD → 402 on Starter → Yahoo only for WTI/NATGAS.
     "BRENT": SymbolConfig(
         internal="BRENT", name="Brent Petrol", category="commodity",
         currency="USD", unit="barrel",
-        primary_provider="yahoo", fallback_provider="fmp",
-        external_primary="BZ=F", external_fallback="BZUSD",
-        ttl_seconds=30, exchange="NYMEX",
+        primary_provider="fmp", fallback_provider="yahoo",
+        external_primary="BZUSD", external_fallback="BZ=F",
+        ttl_seconds=30, exchange="ICE",
     ),
     "WTI": SymbolConfig(
         internal="WTI", name="WTI Ham Petrol", category="commodity",

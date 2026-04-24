@@ -16,7 +16,7 @@ def _service(client: HttpClientDep, settings: SettingsDep) -> TrackerService:
 async def latest(
     client: HttpClientDep,
     settings: SettingsDep,
-    limit: int = Query(default=5, ge=1, le=20),
+    limit: int = Query(default=5, ge=1, le=50),
 ) -> LatestNewsResponse:
     """Newest YouTube summaries across all channels, ordered by publish time."""
     service = _service(client, settings)
