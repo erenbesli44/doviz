@@ -1,45 +1,105 @@
+# Rate-limit zones — http context (this file is included inside http {})
+limit_req_zone  $binary_remote_addr zone=api_ratelimit:10m rate=30r/m;
+limit_conn_zone $binary_remote_addr zone=api_conns:10m;
+limit_req_status  429;
+limit_conn_status 429;
+
 server {
     listen 80;
     server_name _;
 
-    root /usr/share/nginx/html;
+    # Extract real client IP from Traefik's X-Forwarded-For header
+    # so $remote_addr (and rate-limit keys) reflect the actual visitor IP.
+    set_real_ip_from  10.0.0.0/8;
+    set_real_ip_from  172.16.0.0/12;
+    set_real_ip_from  127.0.0.1;
+    real_ip_header    X-Forwarded-For;
+    real_ip_recursive on;
+
+    root  /usr/share/nginx/html;
     index index.html;
 
-    # Gzip
     gzip on;
     gzip_types text/plain text/css application/javascript application/json image/svg+xml;
     gzip_min_length 1024;
 
-    # Cache static assets aggressively (Vite content-hashes them)
+    # ── Static assets ──────────────────────────────────────────────────────
     location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff2?|ttf|eot)$ {
         expires 1y;
-        add_header Cache-Control "public, immutable";
+        add_header Cache-Control         "public, immutable";
+        add_header X-Content-Type-Options "nosniff" always;
         try_files $uri =404;
     }
 
-    # BFF proxy — browser calls /api/v1/..., nginx forwards to finance-api
-    # and injects the secret key. The key never reaches the browser.
-    location /api/ {
-        proxy_pass ${FINANCE_API_UPSTREAM}/;
+    # ── SSE stream — max 3 concurrent connections per IP ───────────────────
+    location /api/v1/stream/ {
+        limit_conn api_conns  3;
+        limit_req  zone=api_ratelimit burst=5 nodelay;
 
-        proxy_set_header X-API-Key "${FINANCE_API_KEY}";
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        if ($request_method = OPTIONS) {
+            add_header Access-Control-Allow-Origin  "https://dovizveri.com" always;
+            add_header Access-Control-Allow-Methods "GET, OPTIONS"          always;
+            add_header Content-Length 0;
+            return 204;
+        }
 
-        # SSE: disable buffering so events stream immediately
+        add_header Access-Control-Allow-Origin  "https://dovizveri.com" always;
+        add_header Access-Control-Allow-Methods "GET, OPTIONS"          always;
+        add_header X-Content-Type-Options       "nosniff"               always;
+        add_header X-Frame-Options              "SAMEORIGIN"            always;
+        add_header Referrer-Policy              "strict-origin-when-cross-origin" always;
+
+        proxy_pass         ${FINANCE_API_UPSTREAM}/v1/stream/;
+        proxy_set_header   X-API-Key          "${FINANCE_API_KEY}";
+        proxy_set_header   X-Real-IP          $remote_addr;
+        proxy_set_header   X-Forwarded-For    $proxy_add_x_forwarded_for;
         proxy_http_version 1.1;
-        proxy_set_header Connection '';
-        proxy_buffering off;
-        proxy_cache off;
+        proxy_set_header   Connection         '';
+        proxy_buffering    off;
+        proxy_cache        off;
         proxy_read_timeout 3600s;
     }
 
-    # SPA fallback — all routes resolve to index.html
+    # ── REST API — 30 req/min per IP, burst of 10 ──────────────────────────
+    location /api/ {
+        limit_conn api_conns  10;
+        limit_req  zone=api_ratelimit burst=10 nodelay;
+
+        if ($request_method = OPTIONS) {
+            add_header Access-Control-Allow-Origin  "https://dovizveri.com" always;
+            add_header Access-Control-Allow-Methods "GET, OPTIONS"          always;
+            add_header Access-Control-Allow-Headers "Content-Type, Accept"  always;
+            add_header Content-Length 0;
+            return 204;
+        }
+
+        add_header Access-Control-Allow-Origin  "https://dovizveri.com" always;
+        add_header Access-Control-Allow-Methods "GET, OPTIONS"          always;
+        add_header Access-Control-Allow-Headers "Content-Type, Accept"  always;
+        add_header X-Content-Type-Options       "nosniff"               always;
+        add_header X-Frame-Options              "SAMEORIGIN"            always;
+        add_header Referrer-Policy              "strict-origin-when-cross-origin" always;
+
+        proxy_pass         ${FINANCE_API_UPSTREAM}/;
+        proxy_set_header   X-API-Key          "${FINANCE_API_KEY}";
+        proxy_set_header   X-Real-IP          $remote_addr;
+        proxy_set_header   X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_http_version 1.1;
+        proxy_set_header   Connection         '';
+        proxy_buffering    off;
+        proxy_cache        off;
+        proxy_read_timeout 3600s;
+    }
+
+    # ── SPA fallback ────────────────────────────────────────────────────────
     location / {
+        add_header X-Content-Type-Options "nosniff"                       always;
+        add_header X-Frame-Options        "SAMEORIGIN"                    always;
+        add_header Referrer-Policy        "strict-origin-when-cross-origin" always;
         try_files $uri $uri/ /index.html;
     }
 
-    # Health probe for Coolify
+    # ── Health probe ────────────────────────────────────────────────────────
     location /healthz {
         access_log off;
         return 200 "ok";
