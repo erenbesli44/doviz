@@ -121,46 +121,59 @@ class YahooFinanceProvider:
         price_f = float(price)
         market_state = meta.get("marketState", "").lower() or None
 
-        # Yahoo's authoritative change fields — use these first.
+        # Yahoo's authoritative change fields — kept as a last resort (they use
+        # Yahoo's own session definition, not Istanbul midnight).
         raw_change_pct = meta.get("regularMarketChangePercent")
         raw_change = meta.get("regularMarketChange")
 
-        # chartPreviousClose = prior session close (always correct for session % change).
-        # This is the reference Yahoo website uses and what EODFetcher needs.
-        chart_prev = meta.get("chartPreviousClose") or meta.get("previousClose")
-        prev_close_f: float | None = float(chart_prev) if chart_prev else None
+        # Prior session close. Prefer `previousClose` over `chartPreviousClose`:
+        # the latter is the close BEFORE the chart window begins (e.g. 2 days
+        # stale for range=2d) which is wrong for continuously-traded futures
+        # like BZ=F that never gap across weekends.
+        prev_close_raw = meta.get("previousClose") or meta.get("chartPreviousClose")
+        prev_close_f: float | None = float(prev_close_raw) if prev_close_raw else None
 
-        if raw_change_pct is not None:
-            # Yahoo provides the authoritative session change — use it directly.
+        # Istanbul-midnight anchor (00:00 TRT = 21:00 UTC yesterday) so the
+        # daily change matches Turkish financial sites (BloombergHT, doviz.com).
+        timestamps = result.get("timestamp") or []
+        try:
+            closes = result.get("indicators", {}).get("quote", [{}])[0].get("close") or []
+        except (KeyError, IndexError, TypeError):
+            closes = []
+        istanbul_prev = _prev_close_at_istanbul_midnight(timestamps, closes)
+
+        # Futures contract rolls: the 20:00 UTC bar may reference the expiring
+        # front-month while regularMarketPrice/previousClose tracks the new
+        # one, producing a spurious multi-percent gap. When that happens, drop
+        # the hourly anchor and fall back to previousClose.
+        if (
+            istanbul_prev is not None
+            and prev_close_f
+            and abs(istanbul_prev - prev_close_f) / prev_close_f > 0.03
+        ):
+            istanbul_prev = None
+
+        day_ref = istanbul_prev or prev_close_f
+
+        if day_ref:
+            change_pct = round((price_f - day_ref) / day_ref * 100, 4)
+        elif raw_change_pct is not None:
             change_pct = round(float(raw_change_pct), 4)
-        elif prev_close_f:
-            # Fall back to (price − prev_session_close) / prev_session_close.
-            # This is correct at all times (open / closed / weekend).
-            change_pct = round((price_f - prev_close_f) / prev_close_f * 100, 4)
         else:
-            # Last resort: Istanbul-midnight anchor (intraday use only).
-            try:
-                timestamps = result.get("timestamp") or []
-                closes = result.get("indicators", {}).get("quote", [{}])[0].get("close") or []
-                istanbul_prev = _prev_close_at_istanbul_midnight(timestamps, closes)
-            except Exception:
-                istanbul_prev = None
-            change_pct = ((price_f - istanbul_prev) / istanbul_prev * 100) if istanbul_prev else 0.0
+            change_pct = 0.0
 
-        change_value: float | None = float(raw_change) if raw_change is not None else (
-            round(price_f - prev_close_f, 6) if prev_close_f else None
-        )
+        if day_ref:
+            change_value: float | None = round(price_f - day_ref, 6)
+        elif raw_change is not None:
+            change_value = float(raw_change)
+        else:
+            change_value = None
 
         # Session-open price: first non-null bar after Istanbul midnight (00:00 TRT = 21:00 UTC).
         # Used by _fetch_derived to compute the intraday change for GAUTRY/GAGTRY
         # in a way that matches doviz.com (change from session open, not from
         # Friday's chartPreviousClose which would span the weekend gap).
-        try:
-            ts_list = result.get("timestamp") or []
-            cl_list = result.get("indicators", {}).get("quote", [{}])[0].get("close") or []
-            session_open_price = _first_bar_after_istanbul_midnight(ts_list, cl_list)
-        except Exception:
-            session_open_price = None
+        session_open_price = _first_bar_after_istanbul_midnight(timestamps, closes)
 
         return RawQuote(
             price=price_f,
