@@ -140,7 +140,7 @@ export default function Markets() {
         </div>
       </section>
 
-      {/* ── PIYASA GÜNDEMİ — YouTube özetleri ───────── */}
+      {/* ── PİYASA GÜNDEMİ ───────── */}
       <NewsStrip />
 
       {/* ── MOBILE: commodity horizontal scroll ─────── */}
