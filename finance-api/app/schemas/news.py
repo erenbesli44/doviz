@@ -29,7 +29,7 @@ class NewsSummary(BaseModel):
     video_id: int
     short_summary: str
     long_summary: str
-    highlights: list[str]
+    highlights: list[str] = []
     language: str
     source: str
     created_at: str

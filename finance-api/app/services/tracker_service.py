@@ -67,9 +67,12 @@ class TrackerService:
     async def _get_summary(self, video_id: int) -> NewsSummary | None:
         try:
             data = await self._get(f"/videos/{video_id}/summary")
+            return NewsSummary.model_validate(data)
         except TrackerNotFoundError:
             return None
-        return NewsSummary.model_validate(data)
+        except Exception as exc:
+            logger.warning("tracker summary validation failed for video %s: %s", video_id, exc)
+            return None
 
     @staticmethod
     def _video_sort_key(v: NewsVideo) -> str:
