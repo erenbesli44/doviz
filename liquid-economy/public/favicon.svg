@@ -1,6 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none" role="img" aria-label="Döviz Veri">
+  <defs>
+    <clipPath id="badge-clip">
+      <rect width="36" height="36" rx="5"/>
+    </clipPath>
+  </defs>
   <rect width="36" height="36" rx="5" fill="#0A1628"/>
-  <rect x="0" y="0" width="5" height="36" fill="#004fdb"/>
-  <path d="M9 10h5.2c3.8 0 6.8 2.7 6.8 8s-3 8-6.8 8H9V10zM11.6 12.4v11.2h2.4c2.4 0 4.2-1.8 4.2-5.6s-1.8-5.6-4.2-5.6h-2.4z" fill="white"/>
-  <path d="M22.5 10h2.8l3.2 11.2L31.7 10H34.5L30 26h-3L22.5 10z" fill="white"/>
+  <rect x="0" y="0" width="5" height="36" fill="#004fdb" clip-path="url(#badge-clip)"/>
+  <text
+    x="21" y="24"
+    font-family="Inter, Helvetica Neue, Arial, sans-serif"
+    font-size="15" font-weight="800"
+    fill="white" text-anchor="middle"
+    dominant-baseline="auto">DV</text>
 </svg>
