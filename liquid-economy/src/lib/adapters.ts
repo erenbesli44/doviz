@@ -27,7 +27,6 @@ const ICON_MAP: Record<string, { icon: string; iconBg: string }> = {
   'ETH/USD':  { icon: 'token',                 iconBg: 'bg-surface-container-highest' },
   'SOL/USD':  { icon: 'token',                 iconBg: 'bg-surface-container-highest' },
   'XRP/USD':  { icon: 'token',                 iconBg: 'bg-surface-container-highest' },
-  'USDT/USD': { icon: 'paid',                  iconBg: 'bg-surface-container-highest' },
   'XAU/USD':  { icon: 'workspace_premium',     iconBg: 'bg-tertiary-fixed' },
   'XAG/USD':  { icon: 'toll',                  iconBg: 'bg-surface-container-highest' },
   'GAUTRY':   { icon: 'workspace_premium',     iconBg: 'bg-tertiary-fixed' },
@@ -74,7 +73,6 @@ const SUMMARY_META: Record<string, { ticker: string; description: string }> = {
   'ETH/USD':  { ticker: 'ETH', description: 'Ethereum' },
   'SOL/USD':  { ticker: 'SOL', description: 'Solana' },
   'XRP/USD':  { ticker: 'XRP', description: 'XRP' },
-  'USDT/USD': { ticker: 'USDT', description: 'Tether (Stablecoin)' },
   'BRENT':    { ticker: 'OIL', description: 'Ham Petrol Brent' },
   'WTI':      { ticker: 'WTI', description: 'Ham Petrol WTI' },
   'NATGAS':   { ticker: 'GAS', description: 'Doğal Gaz' },
@@ -163,7 +161,7 @@ export function formatPrice(price: number, symbol: string, currency: string): st
   if (symbol === 'HAREM1KG' || symbol === 'BTC/USD' || symbol === 'ETH/USD') {
     return price.toLocaleString(locale, { maximumFractionDigits: 0 });
   }
-  if (symbol === 'XRP/USD' || symbol === 'USDT/USD') {
+  if (symbol === 'XRP/USD') {
     return price.toLocaleString(locale, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
   }
   return price.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });

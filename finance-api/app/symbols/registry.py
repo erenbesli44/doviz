@@ -119,14 +119,6 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
         external_primary="ripple", external_fallback="XRP-USD",
         ttl_seconds=60, exchange="CRYPTO",
     ),
-    "USDT/USD": SymbolConfig(
-        internal="USDT/USD", name="Tether", category="crypto",
-        currency="USD", unit=None,
-        primary_provider="coingecko", fallback_provider="yahoo",
-        external_primary="tether", external_fallback="USDT-USD",
-        ttl_seconds=60, exchange="CRYPTO",
-    ),
-
     # ── Gold & Silver ────────────────────────────────────────────────────────
     # FMP XAUUSD / XAGUSD are primary (spot-style symbols), Yahoo futures fallback.
     "XAU/USD": SymbolConfig(
