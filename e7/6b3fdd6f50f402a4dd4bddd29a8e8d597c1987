@@ -1,0 +1,23 @@
+liquid-economy/src/hooks/useMarketData.ts
+  36d61ac3b72a6c2a 10,13,15-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "e76b3fdd6f50f402a4dd4bddd29a8e8d597c1987",
+  "prompts": {
+    "36d61ac3b72a6c2a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d75a5825-180a-4644-ba54-96bc7e0f6ffa",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "erenbesli44",
+      "messages": [],
+      "total_additions": 237,
+      "total_deletions": 147,
+      "accepted_lines": 331,
+      "overriden_lines": 0
+    }
+  }
+}
