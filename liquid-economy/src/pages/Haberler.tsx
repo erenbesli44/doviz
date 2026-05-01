@@ -3,7 +3,7 @@ import { useLatestNews } from '../hooks/useLatestNews';
 import NewsCard from '../components/ui/NewsCard';
 import SeoHead from '../components/seo/SeoHead';
 
-const BATCH = 12;
+const BATCH = 20;
 
 function Skeleton({ count }: { count: number }) {
   return (

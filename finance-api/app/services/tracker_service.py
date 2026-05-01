@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 # Over-fetch candidates so we can skip any whose summary isn't generated yet
 # (tracker returns 404 for those).
-CANDIDATE_POOL = 12
+CANDIDATE_POOL = 30
 
 
 class TrackerNotFoundError(Exception):
