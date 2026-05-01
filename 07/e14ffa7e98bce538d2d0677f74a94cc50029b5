@@ -1,0 +1,25 @@
+finance-api/app/services/tracker_service.py
+  36d61ac3b72a6c2a 21
+liquid-economy/src/pages/Haberler.tsx
+  36d61ac3b72a6c2a 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "07e14ffa7e98bce538d2d0677f74a94cc50029b5",
+  "prompts": {
+    "36d61ac3b72a6c2a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d75a5825-180a-4644-ba54-96bc7e0f6ffa",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "erenbesli44",
+      "messages": [],
+      "total_additions": 158,
+      "total_deletions": 234,
+      "accepted_lines": 239,
+      "overriden_lines": 0
+    }
+  }
+}
