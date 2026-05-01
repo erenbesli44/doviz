@@ -1,0 +1,38 @@
+liquid-economy/src/lib/adapters.ts
+  36d61ac3b72a6c2a 27-30,74-77,163,166-167
+finance-api/app/symbols/registry.py
+  36d61ac3b72a6c2a 93,101-126
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "c92feb121ec11227f71a09c2c9b2ad312ab14cac",
+  "prompts": {
+    "36d61ac3b72a6c2a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d75a5825-180a-4644-ba54-96bc7e0f6ffa",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "erenbesli44",
+      "messages": [],
+      "total_additions": 211,
+      "total_deletions": 2,
+      "accepted_lines": 489,
+      "overriden_lines": 0
+    },
+    "d39deb95c8c06bf6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5a94bd88-9103-4129-a98e-5882c43a65d0",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "erenbesli44",
+      "messages": [],
+      "total_additions": 283,
+      "total_deletions": 453,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    }
+  }
+}
