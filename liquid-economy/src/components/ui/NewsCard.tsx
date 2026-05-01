@@ -34,11 +34,11 @@ export default function NewsCard({ story }: Props) {
       className="group flex flex-col h-full bg-[var(--color-surface-container-lowest)] rounded-2xl border border-[var(--color-outline-variant)]/25 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] overflow-hidden"
     >
       {thumbnail && (
-        <div className="w-full h-24 overflow-hidden shrink-0">
+        <div className="relative w-full h-24 shrink-0">
           <img
             src={thumbnail}
             alt=""
-            className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+            className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
           />
         </div>
       )}
