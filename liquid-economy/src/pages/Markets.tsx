@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMarketData } from '../hooks/useMarketData';
-import { useHistory } from '../hooks/useHistory';
+// import { useHistory } from '../hooks/useHistory'; // hidden with focus chart
 import AssetCard from '../components/ui/AssetCard';
 import AssetListRow from '../components/ui/AssetListRow';
-import FocusChart from '../components/ui/FocusChart';
+// import FocusChart from '../components/ui/FocusChart'; // hidden; haberler moved to first place
 import CommodityCard from '../components/ui/CommodityCard';
 import NewsStrip from '../components/ui/NewsStrip';
 import PageHeader from '../components/layout/PageHeader';
@@ -12,16 +12,13 @@ import SeoHead from '../components/seo/SeoHead';
 import { breadcrumbSchema, collectionPageSchema } from '../seo/schema';
 
 export default function Markets() {
-  const { status, extendedOverviewAssets, fxAssets, commodityCards, lastUpdated } = useMarketData();
+  const { status, extendedOverviewAssets, fxAssets: _fxAssets, commodityCards, lastUpdated } = useMarketData();
 
-  // Selected asset for the focus chart; id === symbol code, e.g. "USD/TRY"
+  // State for focus chart — hidden; haberler moved to first place
   const [selectedId, setSelectedId] = useState<string>('USD/TRY');
-  const [historyHours, setHistoryHours] = useState(24);
-  const { points: focusHistory, loading: historyLoading } = useHistory(selectedId, historyHours);
-
-  const focusAsset =
-    extendedOverviewAssets.find((a) => a.id === selectedId) ??
-    fxAssets[0];
+  // const [historyHours, setHistoryHours] = useState(24);
+  // const { points: focusHistory, loading: historyLoading } = useHistory(selectedId, historyHours);
+  // const focusAsset = extendedOverviewAssets.find((a) => a.id === selectedId) ?? fxAssets[0];
 
   if (status === 'loading') {
     return (
@@ -107,9 +104,12 @@ export default function Markets() {
         </button>
       </div>
 
-      {/* ── FOCUS CHART (both breakpoints) ──────────── */}
+      {/* ── PİYASA GÜNDEMİ ───────── haberler moved here (was below focus chart) */}
+      <NewsStrip />
+
+      {/* ── FOCUS CHART (both breakpoints) ── hidden; haberler moved to first place ──────────── */}
+      {/*
       <section className="mb-10">
-        {/* Mobile: compact */}
         <div className="md:hidden">
           <FocusChart
             assetName={focusAsset.name}
@@ -124,7 +124,6 @@ export default function Markets() {
             compact
           />
         </div>
-        {/* Desktop: full height */}
         <div className="hidden md:block">
           <FocusChart
             assetName={focusAsset.name}
@@ -139,9 +138,7 @@ export default function Markets() {
           />
         </div>
       </section>
-
-      {/* ── PİYASA GÜNDEMİ ───────── */}
-      <NewsStrip />
+      */}
 
       {/* ── MOBILE: commodity horizontal scroll ─────── */}
       <section className="md:hidden mt-10 mb-8 overflow-hidden">
