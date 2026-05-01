@@ -7,7 +7,9 @@ interface Props {
 
 function formatRelative(iso: string | null): string {
   if (!iso) return '';
-  const t = new Date(iso).getTime();
+  // Upstream timestamps have no timezone suffix; append Z to force UTC parsing
+  const normalized = /Z|[+-]\d{2}:\d{2}$/.test(iso) ? iso : iso + 'Z';
+  const t = new Date(normalized).getTime();
   if (Number.isNaN(t)) return '';
   const diffMin = Math.round((Date.now() - t) / 60_000);
   if (diffMin < 1) return 'şimdi';
