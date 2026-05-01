@@ -7,13 +7,13 @@ import type { Asset, MarketSummaryItem, NewsItem, CommodityItem, TickerItem } fr
 
 // Symbols subscribed to SSE for live price refresh
 // XAU/USD is included so we can derive gram altın in real-time (instead of GAUTRY physical price)
-const OVERVIEW_SYMBOLS = ['USD/TRY', 'EUR/TRY', 'GBP/TRY', 'BTC/USD', 'XAU/USD', 'XU100', 'NDX', 'SPX', 'GAGTRY', 'BRENT'];
+const OVERVIEW_SYMBOLS = ['USD/TRY', 'EUR/TRY', 'BTC/USD', 'XAU/USD', 'XU100', 'NDX', 'SPX', 'GAGTRY', 'BRENT'];
 
 // Ordered list for the main piyasalar ticker board
-const TICKER_ORDER = ['GAUTRY', 'USD/TRY', 'EUR/TRY', 'GBP/TRY', 'XU100', 'BTC/USD', 'GAGTRY', 'BRENT'];
+const TICKER_ORDER = ['GAUTRY', 'USD/TRY', 'EUR/TRY', 'XU100', 'BTC/USD', 'GAGTRY', 'BRENT'];
 
-// All 10 symbols shown in the extended overview grid (deduplicates the old TickerBoard)
-const EXTENDED_OVERVIEW_ORDER = ['GAUTRY', 'USD/TRY', 'EUR/TRY', 'GBP/TRY', 'XU100', 'BTC/USD', 'GAGTRY', 'BRENT', 'NDX'];
+// All symbols shown in the extended overview grid (deduplicates the old TickerBoard)
+const EXTENDED_OVERVIEW_ORDER = ['GAUTRY', 'USD/TRY', 'EUR/TRY', 'XU100', 'BTC/USD', 'GAGTRY', 'BRENT', 'NDX'];
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
