@@ -90,12 +90,40 @@ SYMBOL_REGISTRY: dict[str, SymbolConfig] = {
     ),
 
     # ── Crypto ──────────────────────────────────────────────────────────────
-    # CoinGecko: free, no key, real-time. Yahoo BTC-USD as fallback.
+    # CoinGecko: free, no key, real-time. Yahoo as fallback.
     "BTC/USD": SymbolConfig(
         internal="BTC/USD", name="Bitcoin", category="crypto",
         currency="USD", unit=None,
         primary_provider="coingecko", fallback_provider="yahoo",
         external_primary="bitcoin", external_fallback="BTC-USD",
+        ttl_seconds=60, exchange="CRYPTO",
+    ),
+    "ETH/USD": SymbolConfig(
+        internal="ETH/USD", name="Ethereum", category="crypto",
+        currency="USD", unit=None,
+        primary_provider="coingecko", fallback_provider="yahoo",
+        external_primary="ethereum", external_fallback="ETH-USD",
+        ttl_seconds=60, exchange="CRYPTO",
+    ),
+    "SOL/USD": SymbolConfig(
+        internal="SOL/USD", name="Solana", category="crypto",
+        currency="USD", unit=None,
+        primary_provider="coingecko", fallback_provider="yahoo",
+        external_primary="solana", external_fallback="SOL-USD",
+        ttl_seconds=60, exchange="CRYPTO",
+    ),
+    "XRP/USD": SymbolConfig(
+        internal="XRP/USD", name="XRP", category="crypto",
+        currency="USD", unit=None,
+        primary_provider="coingecko", fallback_provider="yahoo",
+        external_primary="ripple", external_fallback="XRP-USD",
+        ttl_seconds=60, exchange="CRYPTO",
+    ),
+    "USDT/USD": SymbolConfig(
+        internal="USDT/USD", name="Tether", category="crypto",
+        currency="USD", unit=None,
+        primary_provider="coingecko", fallback_provider="yahoo",
+        external_primary="tether", external_fallback="USDT-USD",
         ttl_seconds=60, exchange="CRYPTO",
     ),
 

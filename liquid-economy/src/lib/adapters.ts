@@ -24,6 +24,10 @@ const ICON_MAP: Record<string, { icon: string; iconBg: string }> = {
   'EUR/USD':  { icon: 'euro',                  iconBg: 'bg-secondary-fixed' },
   'GBP/USD':  { icon: 'currency_pound',        iconBg: 'bg-secondary-fixed' },
   'BTC/USD':  { icon: 'currency_bitcoin',      iconBg: 'bg-surface-container-highest' },
+  'ETH/USD':  { icon: 'token',                 iconBg: 'bg-surface-container-highest' },
+  'SOL/USD':  { icon: 'token',                 iconBg: 'bg-surface-container-highest' },
+  'XRP/USD':  { icon: 'token',                 iconBg: 'bg-surface-container-highest' },
+  'USDT/USD': { icon: 'paid',                  iconBg: 'bg-surface-container-highest' },
   'XAU/USD':  { icon: 'workspace_premium',     iconBg: 'bg-tertiary-fixed' },
   'XAG/USD':  { icon: 'toll',                  iconBg: 'bg-surface-container-highest' },
   'GAUTRY':   { icon: 'workspace_premium',     iconBg: 'bg-tertiary-fixed' },
@@ -67,6 +71,10 @@ const SUMMARY_META: Record<string, { ticker: string; description: string }> = {
   'XAU/USD':  { ticker: 'XAU', description: 'Ons Altın (Dolar)' },
   'XAG/USD':  { ticker: 'XAG', description: 'Gümüş (Ons)' },
   'BTC/USD':  { ticker: 'BTC', description: 'Bitcoin' },
+  'ETH/USD':  { ticker: 'ETH', description: 'Ethereum' },
+  'SOL/USD':  { ticker: 'SOL', description: 'Solana' },
+  'XRP/USD':  { ticker: 'XRP', description: 'XRP' },
+  'USDT/USD': { ticker: 'USDT', description: 'Tether (Stablecoin)' },
   'BRENT':    { ticker: 'OIL', description: 'Ham Petrol Brent' },
   'WTI':      { ticker: 'WTI', description: 'Ham Petrol WTI' },
   'NATGAS':   { ticker: 'GAS', description: 'Doğal Gaz' },
@@ -152,8 +160,11 @@ export function formatPrice(price: number, symbol: string, currency: string): st
   if (['SPX', 'DJI', 'NDX', 'XU100', 'DAX', 'UKX', 'N225'].includes(symbol)) {
     return price.toLocaleString(locale, { maximumFractionDigits: 2 });
   }
-  if (symbol === 'HAREM1KG' || symbol === 'BTC/USD') {
+  if (symbol === 'HAREM1KG' || symbol === 'BTC/USD' || symbol === 'ETH/USD') {
     return price.toLocaleString(locale, { maximumFractionDigits: 0 });
+  }
+  if (symbol === 'XRP/USD' || symbol === 'USDT/USD') {
+    return price.toLocaleString(locale, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
   }
   return price.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
