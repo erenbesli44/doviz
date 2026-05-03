@@ -62,7 +62,8 @@ class TrackerService:
         except Exception as exc:
             logger.warning("tracker list_videos failed for channel %s: %s", channel_id, exc)
             return []
-        return [NewsVideo.model_validate(v) for v in data]
+        items = data["items"] if isinstance(data, dict) else data
+        return [NewsVideo.model_validate(v) for v in items]
 
     async def _get_summary(self, video_id: int) -> NewsSummary | None:
         try:
