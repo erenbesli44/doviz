@@ -25,7 +25,10 @@ export default function NewsCard({ story }: Props) {
   const { video, summary, channel } = story;
   const topHighlights = summary.highlights.slice(0, 2);
   const thumbnail = video.platform === 'youtube'
-    ? `https://img.youtube.com/vi/${video.video_id}/mqdefault.jpg`
+    ? `https://img.youtube.com/vi/${video.video_id}/maxresdefault.jpg`
+    : null;
+  const thumbnailFallback = video.platform === 'youtube'
+    ? `https://img.youtube.com/vi/${video.video_id}/hqdefault.jpg`
     : null;
 
   return (
@@ -38,6 +41,7 @@ export default function NewsCard({ story }: Props) {
           <img
             src={thumbnail}
             alt=""
+            onError={(e) => { (e.currentTarget as HTMLImageElement).src = thumbnailFallback!; }}
             className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
           />
         </div>
