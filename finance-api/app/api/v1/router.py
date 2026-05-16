@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from .health import router as health_router
+from .inference import router as inference_router
 from .market import router as market_router
 from .news import router as news_router
 from .quotes import router as quotes_router
@@ -11,5 +12,6 @@ v1_router = APIRouter(prefix="/v1")
 v1_router.include_router(quotes_router)
 v1_router.include_router(market_router)
 v1_router.include_router(news_router)
+v1_router.include_router(inference_router)
 v1_router.include_router(health_router)
 v1_router.include_router(stream_router)
