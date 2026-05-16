@@ -1,0 +1,71 @@
+liquid-economy/src/components/layout/TopNavBar.tsx
+  s_8e013625c04bd0::t_4987ba202499a0 14
+liquid-economy/src/data/news-types.ts
+  s_5203f50f252b10::t_ccf5a6ec0461db 11
+liquid-economy/src/components/ui/InsightStrip.tsx
+  s_8e013625c04bd0::t_5e297d49b82af3 1-57,59-64,77-184
+  s_8e013625c04bd0::t_1a5b0b6709817a 58,65-76
+liquid-economy/src/pages/Insights.tsx
+  s_8e013625c04bd0::t_0e577f0d37bfb2 1-85,88-89,95-99,105-133,135-168,200,203-326
+  s_8e013625c04bd0::t_23ecf82d679bb6 169-199,201-202
+  s_8e013625c04bd0::t_0fd52e71c80dcd 134
+  s_8e013625c04bd0::t_d61f8af54dd85d 86-87,90-94,100-104
+liquid-economy/src/lib/inferenceClient.ts
+  s_8e013625c04bd0::t_6c7da804c446ca 1-32
+liquid-economy/src/App.tsx
+  s_8e013625c04bd0::t_0d5dd937474bc0 21
+  s_8e013625c04bd0::t_93991f0c4eaefa 52
+finance-api/app/schemas/news.py
+  s_5203f50f252b10::t_bee093aad5526c 1,12-21
+liquid-economy/src/components/ui/NewsStrip.tsx
+  s_ada55908f30136::t_1bab5c5591550b 7-16,22-23,27-28,30-33,64-83
+liquid-economy/src/data/inference-types.ts
+  s_8e013625c04bd0::t_7121e104769e81 31-32
+  s_8e013625c04bd0::t_ccae2df1017003 2
+  s_8e013625c04bd0::t_816789996c8ee3 1,3-30,33-41
+liquid-economy/src/components/ui/NewsCard.tsx
+  s_ada55908f30136::t_bd03361662de47 72-125
+  s_ada55908f30136::t_b23b4c6870d6ec 49,51
+  s_ada55908f30136::t_9ae18982e32cc5 7
+  s_5203f50f252b10::t_2ca5e0236589f0 1,26-48,52-54,57,61-70,131,133-145
+liquid-economy/src/pages/Markets.tsx
+  s_8e013625c04bd0::t_56c3e5585fd7c8 5
+  s_ada55908f30136::t_2080afd7f02d54 10,34,38-43,45,48-49
+  s_8e013625c04bd0::t_fa6a3620ec7d16 35-37
+liquid-economy/src/hooks/useInference.ts
+  s_8e013625c04bd0::t_db40de9c0119be 1-35
+liquid-economy/vite.config.ts
+  s_8e013625c04bd0::t_a190526ec31be7 26-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "abfa52b9ba3cf022b06d49a09fe68d894479f4f1",
+  "prompts": {},
+  "sessions": {
+    "s_5203f50f252b10": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a604c43-c2e0-419e-bee1-8e261ce01bfc",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_8e013625c04bd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aa893bb5-5392-40a0-b165-98ae30468112",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_ada55908f30136": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "de2b9a20-7af8-4069-a0b7-264a23e3eecf",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
