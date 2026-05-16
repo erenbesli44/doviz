@@ -1,8 +1,7 @@
 import type { InferenceLatestResponse, TopicHistoryEntry } from '../data/inference-types';
 
-// Proxied via Vite dev server → /inference-api → external inference API.
-// In production, nginx BFF handles the proxy + X-API-Key injection.
-const BASE = '/inference-api';
+// Same BFF proxy as the rest of the API — nginx injects X-API-Key server-side.
+const BASE = '/api/v1';
 
 async function get<T>(path: string, signal?: AbortSignal): Promise<T> {
   const res = await fetch(`${BASE}${path}`, { signal });
