@@ -1,0 +1,27 @@
+liquid-economy/src/components/ui/InferenceTopicCard.tsx
+  s_252467a22273d3::t_243ea2847cc919 1-224
+liquid-economy/src/pages/Insights.tsx
+  s_252467a22273d3::t_1f3aeda811f4d2 2
+  s_252467a22273d3::t_70322103e0a1cb 57
+  s_252467a22273d3::t_1492648eeb1e58 82
+liquid-economy/src/pages/Markets.tsx
+  s_252467a22273d3::t_82ff65f9610721 35-38,40-43,45-66
+liquid-economy/src/components/ui/InsightStrip.tsx
+  s_252467a22273d3::t_6c59b347ee4bac 3,5,46,48,59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "b4442401a6bb7d491fac34f4da16eb88e98bccdf",
+  "prompts": {},
+  "sessions": {
+    "s_252467a22273d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d8e3e552-5abe-43f8-9b2b-c8ff0db65ef3",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
