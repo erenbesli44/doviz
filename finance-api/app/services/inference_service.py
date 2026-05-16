@@ -19,9 +19,8 @@ class InferenceService:
     def __init__(self, client: httpx.AsyncClient, settings: Settings) -> None:
         self._client = client
         self._base = settings.tracker_api_url.rstrip("/")
-        self._headers = (
-            {"X-API-Key": settings.inference_api_key} if settings.inference_api_key else {}
-        )
+        key = settings.inference_api_key or settings.tracker_api_key
+        self._headers = {"X-API-Key": key} if key else {}
         self._timeout = settings.tracker_timeout_seconds
 
     async def _get(self, path: str) -> Any:
@@ -32,6 +31,8 @@ class InferenceService:
             timeout=self._timeout,
             follow_redirects=True,
         )
+        if not resp.is_success:
+            logger.error("inference upstream %s returned %s: %s", url, resp.status_code, resp.text[:200])
         resp.raise_for_status()
         return resp.json()
 
