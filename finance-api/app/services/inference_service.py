@@ -13,14 +13,14 @@ logger = logging.getLogger(__name__)
 class InferenceService:
     """
     Thin proxy for the inference API. Wraps the upstream X-API-Key so it
-    never leaves the server. Reuses the same tracker upstream and key.
+    never leaves the server. Uses inference_api_key (separate from tracker_api_key).
     """
 
     def __init__(self, client: httpx.AsyncClient, settings: Settings) -> None:
         self._client = client
         self._base = settings.tracker_api_url.rstrip("/")
         self._headers = (
-            {"X-API-Key": settings.tracker_api_key} if settings.tracker_api_key else {}
+            {"X-API-Key": settings.inference_api_key} if settings.inference_api_key else {}
         )
         self._timeout = settings.tracker_timeout_seconds
 

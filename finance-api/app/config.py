@@ -33,3 +33,7 @@ class Settings(BaseSettings):
     tracker_api_url: str = "http://t122yraee5v724x7tonr3d6g.204.168.192.245.sslip.io"
     tracker_api_key: str = ""
     tracker_timeout_seconds: float = 10.0
+
+    # Inference API — proxied through /v1/inference/* so the key stays server-side.
+    # Same upstream host as tracker; separate key.
+    inference_api_key: str = ""
