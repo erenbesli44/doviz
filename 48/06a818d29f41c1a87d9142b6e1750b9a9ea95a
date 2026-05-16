@@ -1,0 +1,19 @@
+liquid-economy/src/lib/inferenceClient.ts
+  s_8e013625c04bd0::t_9c54118e7ca654 3-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "4806a818d29f41c1a87d9142b6e1750b9a9ea95a",
+  "prompts": {},
+  "sessions": {
+    "s_8e013625c04bd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aa893bb5-5392-40a0-b165-98ae30468112",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
