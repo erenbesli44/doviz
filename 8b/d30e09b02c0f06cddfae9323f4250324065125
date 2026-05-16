@@ -1,0 +1,19 @@
+liquid-economy/src/pages/Markets.tsx
+  s_fe9fbf7b2183f6::t_ae4d6a4fb96a50 37,56-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "8bd30e09b02c0f06cddfae9323f4250324065125",
+  "prompts": {},
+  "sessions": {
+    "s_fe9fbf7b2183f6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cfc580fa-64f9-4bc2-8b50-14fcd014462e",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
