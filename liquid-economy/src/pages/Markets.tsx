@@ -33,18 +33,8 @@ export default function Markets() {
       />
 
       <div className="flex flex-col">
-        {/* ── PIYASA ANALİZİ — AI insight teaser ───────── */}
-        <div className="md:order-2">
-          <InsightStrip />
-        </div>
-
-        {/* ── PİYASA GÜNDEMİ — news is the hero ─────────── */}
-        <div className="md:order-3">
-          <NewsStrip />
-        </div>
-
         {/* ── GÜNCEL VARLIKLAR — compact strip ──────────── */}
-        <section className="mb-8 md:order-1">
+        <section className="mb-8">
           <div className="mb-2 ml-1">
             <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65">
               Güncel Varlıklar
@@ -63,6 +53,12 @@ export default function Markets() {
             ))}
           </div>
         </section>
+
+        {/* ── PIYASA ANALİZİ — AI insight teaser ───────── */}
+        <InsightStrip />
+
+        {/* ── PİYASA GÜNDEMİ — news is the hero ─────────── */}
+        <NewsStrip />
       </div>
     </>
   );
