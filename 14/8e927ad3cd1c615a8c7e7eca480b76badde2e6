@@ -1,0 +1,25 @@
+finance-api/app/api/v1/router.py
+  s_8e013625c04bd0::t_0df5472790067a 4,15
+finance-api/app/schemas/inference.py
+  s_8e013625c04bd0::t_b8230a403ed4f2 1-46
+finance-api/app/api/v1/inference.py
+  s_8e013625c04bd0::t_050ad6f0cd0a57 1-38
+finance-api/app/services/inference_service.py
+  s_8e013625c04bd0::t_85fbd84d49a46c 1-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "148e927ad3cd1c615a8c7e7eca480b76badde2e6",
+  "prompts": {},
+  "sessions": {
+    "s_8e013625c04bd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aa893bb5-5392-40a0-b165-98ae30468112",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
