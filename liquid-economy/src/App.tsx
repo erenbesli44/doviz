@@ -18,6 +18,7 @@ import LegalNotice from './pages/LegalNotice';
 import Glossary from './pages/Glossary';
 import NewsDetail from './pages/NewsDetail';
 import Haberler from './pages/Haberler';
+import Insights from './pages/Insights';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -48,6 +49,7 @@ export default function App() {
           <Route path="sozluk" element={<Glossary />} />
           <Route path="haberler" element={<Haberler />} />
           <Route path="haberler/:videoId" element={<NewsDetail />} />
+          <Route path="analiz" element={<Insights />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

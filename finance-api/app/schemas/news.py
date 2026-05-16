@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
 
 
 class NewsChannel(BaseModel):
@@ -9,6 +9,16 @@ class NewsChannel(BaseModel):
     channel_handle: str | None = None
     channel_url: str | None = None
     bio: str | None = None
+    avatar_url: str | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _extract_avatar_from_metadata(cls, values: object) -> object:
+        if isinstance(values, dict) and not values.get("avatar_url"):
+            metadata = values.get("channel_metadata") or {}
+            if isinstance(metadata, dict):
+                values = {**values, "avatar_url": metadata.get("avatar_url")}
+        return values
 
 
 class NewsVideo(BaseModel):

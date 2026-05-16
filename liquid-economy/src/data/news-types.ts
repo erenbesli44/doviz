@@ -8,6 +8,7 @@ export interface TrackerChannel {
   channel_handle?: string | null;
   channel_url?: string | null;
   bio?: string | null;
+  avatar_url?: string | null;
 }
 
 export interface TrackerVideo {

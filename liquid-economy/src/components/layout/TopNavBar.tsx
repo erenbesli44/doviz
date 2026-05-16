@@ -11,6 +11,7 @@ const navLinks = [
   { to: '/emtialar',   label: 'Emtialar'  },
   { to: '/kripto',     label: 'Kripto'    },
   { to: '/haberler',   label: 'Haberler'  },
+  { to: '/analiz',     label: 'Analiz'    },
 ];
 
 export default function TopNavBar() {

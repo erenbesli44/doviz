@@ -23,6 +23,15 @@ export default defineConfig(({ mode }) => {
             })
           },
         },
+        '/inference-api': {
+          target: env.INFERENCE_API_UPSTREAM ?? 'http://t122yraee5v724x7tonr3d6g.204.168.192.245.sslip.io',
+          rewrite: (path) => path.replace(/^\/inference-api/, ''),
+          configure: (proxy) => {
+            proxy.on('proxyReq', (proxyReq) => {
+              proxyReq.setHeader('X-API-Key', env.INFERENCE_API_KEY ?? '')
+            })
+          },
+        },
       },
     },
   }

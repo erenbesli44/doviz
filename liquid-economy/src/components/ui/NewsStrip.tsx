@@ -4,28 +4,33 @@ import NewsCard from './NewsCard';
 
 function Skeleton() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-      {[...Array(5)].map((_, i) => (
-        <div
-          key={i}
-          className="h-40 rounded-2xl bg-[var(--color-surface-container)] animate-pulse"
-        />
-      ))}
+    <div className="space-y-3">
+      <div className="h-60 rounded-2xl bg-[var(--color-surface-container)] animate-pulse" />
+      <div className="grid grid-cols-3 gap-3">
+        {[...Array(6)].map((_, i) => (
+          <div
+            key={i}
+            className="h-40 rounded-2xl bg-[var(--color-surface-container)] animate-pulse"
+          />
+        ))}
+      </div>
     </div>
   );
 }
 
 export default function NewsStrip() {
-  const { status, stories } = useLatestNews(5);
+  const { status, stories } = useLatestNews(7);
+  const [featured, ...rest] = stories;
 
   return (
     <section id="haberler" className="mb-10 scroll-mt-20">
-      <div className="flex items-center justify-between mb-3 ml-1 mr-1">
+      {/* Section header */}
+      <div className="flex items-center justify-between mb-4 ml-1 mr-1">
         <div className="flex items-center gap-3">
-          <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65">
-            PİYASA GÜNDEMİ
-          </h3>
-          <span className="text-[10px] font-medium text-[var(--color-on-surface-variant)]/70 hidden sm:inline-flex items-center gap-1">
+          <h2 className="text-sm font-bold tracking-[0.08em] uppercase text-[var(--color-on-surface-variant)]">
+            Piyasa Gündemi
+          </h2>
+          <span className="inline-flex items-center gap-1.5">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
@@ -56,11 +61,26 @@ export default function NewsStrip() {
       )}
 
       {status === 'success' && stories.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          {stories.map((s) => (
-            <NewsCard key={s.video.id} story={s} />
-          ))}
-        </div>
+        <>
+          {/* Desktop: featured hero + 3-col grid */}
+          <div className="hidden md:flex flex-col gap-3">
+            <NewsCard story={featured} featured />
+            {rest.length > 0 && (
+              <div className="grid grid-cols-3 gap-3">
+                {rest.map((s) => (
+                  <NewsCard key={s.video.id} story={s} />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Mobile: simple single-col list */}
+          <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {stories.map((s) => (
+              <NewsCard key={s.video.id} story={s} />
+            ))}
+          </div>
+        </>
       )}
     </section>
   );
