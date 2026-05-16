@@ -5,7 +5,7 @@ export interface InferenceSource {
   video_id: number;
   title: string;
   channel_name: string;
-  person_name: string;
+  person_name: string | null;
   weight_used: number;
   contribution_note: string;
 }

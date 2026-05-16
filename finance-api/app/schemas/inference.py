@@ -11,7 +11,7 @@ class InferenceSource(BaseModel):
     video_id: int
     title: str
     channel_name: str
-    person_name: str
+    person_name: str | None = None
     weight_used: float
     contribution_note: str
 

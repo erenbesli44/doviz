@@ -171,10 +171,12 @@ export function InferenceTopicCard({ topic }: { topic: InferenceTopic }) {
                             isHighWeight ? 'font-bold' : 'font-medium'
                           } text-[var(--color-on-surface)]`}
                         >
-                          {src.person_name}
-                          <span className="font-normal text-[var(--color-on-surface-variant)]/50 ml-1">
-                            · {src.channel_name}
-                          </span>
+                          {src.person_name ?? src.channel_name}
+                          {src.person_name && (
+                            <span className="font-normal text-[var(--color-on-surface-variant)]/50 ml-1">
+                              · {src.channel_name}
+                            </span>
+                          )}
                         </p>
                         <p className="text-[10px] text-[var(--color-on-surface-variant)]/50 mt-0.5 leading-snug italic truncate">
                           {src.title}
