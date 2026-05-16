@@ -32,32 +32,38 @@ export default function Markets() {
         ]}
       />
 
-      {/* ── PIYASA ANALİZİ — AI insight teaser ───────── */}
-      <InsightStrip />
-
-      {/* ── PİYASA GÜNDEMİ — news is the hero ─────────── */}
-      <NewsStrip />
-
-      {/* ── GÜNCEL VARLIKLAR — compact strip ──────────── */}
-      <section className="mb-8">
-        <div className="mb-2 ml-1">
-          <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65">
-            Güncel Varlıklar
-          </h3>
+      <div className="flex flex-col">
+        {/* ── PIYASA ANALİZİ — AI insight teaser ───────── */}
+        <div className="md:order-2">
+          <InsightStrip />
         </div>
-        {/* Two-column grid on desktop, single col on mobile */}
-        <div className="bg-[var(--color-surface-container-low)] rounded-2xl p-1 grid grid-cols-1 md:grid-cols-2 gap-0">
-          {extendedOverviewAssets.map((asset) => (
-            <AssetListRow
-              key={asset.id}
-              asset={asset}
-              active={asset.id === selectedId}
-              showChangeValue
-              onClick={() => setSelectedId(asset.id)}
-            />
-          ))}
+
+        {/* ── PİYASA GÜNDEMİ — news is the hero ─────────── */}
+        <div className="md:order-3">
+          <NewsStrip />
         </div>
-      </section>
+
+        {/* ── GÜNCEL VARLIKLAR — compact strip ──────────── */}
+        <section className="mb-8 md:order-1">
+          <div className="mb-2 ml-1">
+            <h3 className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[var(--color-on-surface-variant)]/65">
+              Güncel Varlıklar
+            </h3>
+          </div>
+          {/* Two-column grid on desktop, single col on mobile */}
+          <div className="bg-[var(--color-surface-container-low)] rounded-2xl p-1 grid grid-cols-1 md:grid-cols-2 gap-0">
+            {extendedOverviewAssets.map((asset) => (
+              <AssetListRow
+                key={asset.id}
+                asset={asset}
+                active={asset.id === selectedId}
+                showChangeValue
+                onClick={() => setSelectedId(asset.id)}
+              />
+            ))}
+          </div>
+        </section>
+      </div>
     </>
   );
 }
