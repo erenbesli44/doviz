@@ -40,8 +40,6 @@ interface Props {
   history: ChartDataPoint[];
   historyLoading?: boolean;
   compact?: boolean;
-  icon?: string;
-  iconBg?: string;
   onRangeChange?: (hours: number) => void;
 }
 
@@ -60,8 +58,6 @@ export default function FocusChart({
   history,
   historyLoading = false,
   compact = false,
-  icon = 'show_chart',
-  iconBg = 'bg-secondary-fixed',
   onRangeChange,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -242,11 +238,6 @@ export default function FocusChart({
         <div>
           {/* Asset label */}
           <div className="flex items-center gap-2 mb-1">
-            <div className={`w-6 h-6 rounded-full ${iconBg} flex items-center justify-center`}>
-              <span className="material-symbols-outlined text-[14px] text-[var(--color-on-surface-variant)]">
-                {icon}
-              </span>
-            </div>
             <span className="text-xs font-semibold tracking-[0.1em] uppercase text-[var(--color-on-surface-variant)]/65">
               {assetCode}
             </span>
@@ -289,7 +280,7 @@ export default function FocusChart({
                 unavailableRanges.has(r)
                   ? 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)]/30 cursor-not-allowed'
                   : activeRange === r
-                    ? 'bg-[var(--color-primary)] text-white'
+                    ? 'bg-[var(--color-primary)] text-[var(--color-on-primary)]'
                     : 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)] hover:bg-[var(--color-surface-container-low)]'
               }`}
             >

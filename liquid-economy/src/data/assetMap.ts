@@ -1,53 +1,55 @@
 /**
- * assetMap.ts
+ * Market symbols ↔ editorial topics.
  *
- * Bidirectional mapping between:
- *   - topic_key  (inference API slug, e.g. "bitcoin")
- *   - symbol     (market API key,    e.g. "BTC/USD")
- *   - urlSlug    (URL path segment,  e.g. "bitcoin"  — same as topic_key when available)
- *
- * ⚠️  topic_key values must match exactly what GET /inference/latest returns.
- *     Verify by inspecting `topic_key` fields in the live response.
- *     Unmapped symbols will show price-only tiles (no ConsensusBar).
+ * Topic keys are the ones GET /inference/latest and /consensus actually return
+ * (bitcoin, dolar-tl, bist, us-markets, altin, gumus, petrol-enerji, …). A topic
+ * can cover several instruments; each topic names one primary symbol for its live price.
  */
 
 export interface AssetMeta {
-  symbol: string;      // market API key
-  topicKey: string;    // inference topic_key (slug)
-  label: string;       // short display label for category chips
-  category: 'fx' | 'gold' | 'index' | 'commodity' | 'crypto';
+  symbol: string;   // primary market symbol, for the live price tile
+  topicKey: string;
 }
 
-/** topic_key → asset metadata */
-export const TOPIC_KEY_MAP: Record<string, AssetMeta> = {
-  bitcoin:    { symbol: 'BTC/USD',  topicKey: 'bitcoin',    label: 'Bitcoin',       category: 'crypto'    },
-  ethereum:   { symbol: 'ETH/USD',  topicKey: 'ethereum',   label: 'Ethereum',      category: 'crypto'    },
-  'usd-try':  { symbol: 'USD/TRY',  topicKey: 'usd-try',    label: 'Dolar/TL',      category: 'fx'        },
-  'eur-try':  { symbol: 'EUR/TRY',  topicKey: 'eur-try',    label: 'Euro/TL',       category: 'fx'        },
-  altin:      { symbol: 'GAUTRY',   topicKey: 'altin',      label: 'Gram Altın',    category: 'gold'      },
-  'ons-altin':{ symbol: 'XAU/USD',  topicKey: 'ons-altin',  label: 'Ons Altın',     category: 'gold'      },
-  bist100:    { symbol: 'XU100',    topicKey: 'bist100',    label: 'BIST 100',      category: 'index'     },
-  nasdaq:     { symbol: 'NDX',      topicKey: 'nasdaq',     label: 'Nasdaq 100',    category: 'index'     },
-  sp500:      { symbol: 'SPX',      topicKey: 'sp500',      label: 'S&P 500',       category: 'index'     },
-  brent:      { symbol: 'BRENT',    topicKey: 'brent',      label: 'Brent Petrol',  category: 'commodity' },
+const TOPIC_PRIMARY_SYMBOL: Record<string, string> = {
+  bitcoin: 'BTC/USD',
+  'dolar-tl': 'USD/TRY',
+  bist: 'XU100',
+  'us-markets': 'SPX',
+  altin: 'GAUTRY',
+  gumus: 'XAG/USD',
+  'petrol-enerji': 'BRENT',
 };
 
-/** symbol → topic_key (for reverse lookup from market data) */
-export const SYMBOL_TO_TOPIC_KEY: Record<string, string> = Object.fromEntries(
-  Object.values(TOPIC_KEY_MAP).map((m) => [m.symbol, m.topicKey]),
-);
+/** symbol → topic key. Symbols without an entry have no expert coverage. */
+export const SYMBOL_TO_TOPIC_KEY: Record<string, string> = {
+  'BTC/USD': 'bitcoin',
+  'ETH/USD': 'bitcoin',
+  'USD/TRY': 'dolar-tl',
+  XU100: 'bist',
+  SPX: 'us-markets',
+  NDX: 'us-markets',
+  DJI: 'us-markets',
+  GAUTRY: 'altin',
+  'XAU/USD': 'altin',
+  'XAG/USD': 'gumus',
+  GAGTRY: 'gumus',
+  BRENT: 'petrol-enerji',
+  WTI: 'petrol-enerji',
+  NATGAS: 'petrol-enerji',
+};
 
-/** Resolve asset metadata from a URL slug (= topic_key). */
+/** Resolve the live-price symbol for a topic page (/piyasa/:slug). */
 export function assetFromSlug(slug: string): AssetMeta | null {
-  return TOPIC_KEY_MAP[slug] ?? null;
+  const symbol = TOPIC_PRIMARY_SYMBOL[slug];
+  return symbol ? { symbol, topicKey: slug } : null;
 }
 
-/** Category label for filter chips. */
 export const CATEGORY_LABELS: Record<string, string> = {
-  all:       'Tümü',
-  fx:        'Döviz',
-  gold:      'Altın',
-  index:     'Endeks',
+  all: 'Tümü',
+  fx: 'Döviz',
+  gold: 'Altın',
+  index: 'Endeks',
   commodity: 'Emtia',
-  crypto:    'Kripto',
+  crypto: 'Kripto',
 };

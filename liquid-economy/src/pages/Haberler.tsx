@@ -1,89 +1,94 @@
-import { useState } from 'react';
+/**
+ * Haberler — /haberler
+ *
+ * The full archive, newest first, grouped by day. Loading more is an explicit
+ * button: the list never reorders or grows under the reader.
+ */
+
+import { useMemo, useState } from 'react';
 import { useLatestNews } from '../hooks/useLatestNews';
-import NewsCard from '../components/ui/NewsCard';
+import { StoryRow, StoryRowSkeleton } from '../components/news/Story';
+import PageHeader from '../components/layout/PageHeader';
 import SeoHead from '../components/seo/SeoHead';
+import { dayKey, dayLabel } from '../lib/newsFormat';
+import type { NewsStory } from '../data/news-types';
 
-const BATCH = 20;
+const BATCH = 25;
+const MAX = 50; // API maximum for /news/latest
 
-function Skeleton({ count }: { count: number }) {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-      {[...Array(count)].map((_, i) => (
-        <div
-          key={i}
-          className="h-48 rounded-2xl bg-surface-2 animate-pulse"
-        />
-      ))}
-    </div>
-  );
+function groupByDay(stories: NewsStory[]) {
+  const groups: { key: string; label: string; items: NewsStory[] }[] = [];
+  for (const s of stories) {
+    const iso = s.video.published_at ?? s.video.created_at;
+    const key = dayKey(iso);
+    const last = groups[groups.length - 1];
+    if (last?.key === key) last.items.push(s);
+    else groups.push({ key, label: dayLabel(iso), items: [s] });
+  }
+  return groups;
 }
 
 export default function Haberler() {
   const [limit, setLimit] = useState(BATCH);
-  const { status, stories } = useLatestNews(limit);
+  const { status, stories, isFetching } = useLatestNews(limit);
+  const groups = useMemo(() => groupByDay(stories), [stories]);
 
-  const canLoadMore = status === 'success' && stories.length === limit;
+  const canLoadMore = status === 'success' && stories.length >= limit && limit < MAX;
+  const atEnd = status === 'success' && stories.length >= MAX;
 
   return (
-    <section>
+    <section className="mx-auto max-w-[760px]">
       <SeoHead
         path="/haberler"
         title="Tüm Haberler | Döviz Veri"
-        description="Piyasa gündemine dair YouTube kanallarından derlenen tüm haber özetleri, tam metinleriyle."
+        description="Finans YouTube kanallarından derlenen tüm piyasa haber özetleri — tarih sırasıyla, tam metinleriyle."
       />
 
-      <div className="flex items-center justify-between mb-5 ml-1 mr-1">
-        <div>
-          <h1 className="font-serif text-2xl font-semibold tracking-tight text-text">
-            Tüm Haberler
-          </h1>
-          <p className="text-xs text-text-muted mt-0.5">
-            YouTube kanallarından derlenen piyasa özetleri, tam metinleriyle
-          </p>
-        </div>
-        <span className="text-[10px] font-medium text-text-muted hidden sm:inline-flex items-center gap-1">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
-          </span>
-          <span className="ml-0.5">youtube özetleri</span>
-        </span>
-      </div>
+      <PageHeader
+        title="Haberler"
+        description="Takip ettiğimiz finans kanallarının videolarından derlenen özetler, en yeniden eskiye."
+      />
 
-      {status === 'loading' && <Skeleton count={limit} />}
+      {status === 'loading' && (
+        <div className="border-t-2 border-rule">
+          {Array.from({ length: 8 }).map((_, i) => <StoryRowSkeleton key={i} />)}
+        </div>
+      )}
 
       {status === 'error' && (
-        <div className="rounded-2xl border border-border bg-surface p-6 text-sm text-text-muted">
-          Haberler şu anda yüklenemedi. Lütfen daha sonra tekrar deneyin.
-        </div>
+        <p role="alert" className="border-y border-border py-6 text-[15px] text-text-muted">
+          Haberler şu anda yüklenemedi. Lütfen biraz sonra tekrar deneyin.
+        </p>
       )}
 
       {status === 'success' && stories.length === 0 && (
-        <div className="rounded-2xl border border-border bg-surface p-6 text-sm text-text-muted">
-          Henüz yayınlanmış özet bulunmuyor.
+        <p className="border-y border-border py-6 text-[15px] text-text-muted">Henüz yayınlanmış özet bulunmuyor.</p>
+      )}
+
+      {status === 'success' && groups.map((g) => (
+        <section key={g.key} aria-label={g.label} className="mb-8">
+          <div className="section-head sticky top-14 z-10 bg-bg pb-2">
+            <h2 className="first-letter:uppercase">{g.label}</h2>
+            <span className="text-[12px] text-text-subtle">{g.items.length} haber</span>
+          </div>
+          {g.items.map((s) => <StoryRow key={s.video.id} story={s} />)}
+        </section>
+      ))}
+
+      {canLoadMore && (
+        <div className="flex justify-center pt-2">
+          <button
+            onClick={() => setLimit((prev) => Math.min(prev + BATCH, MAX))}
+            disabled={isFetching}
+            className="h-11 cursor-pointer rounded-[var(--r-chip)] border border-text bg-transparent px-6 text-[15px] font-semibold text-text transition-colors hover:bg-text hover:text-bg disabled:cursor-default disabled:opacity-60"
+          >
+            {isFetching ? 'Yükleniyor…' : 'Daha fazla haber yükle'}
+          </button>
         </div>
       )}
 
-      {status === 'success' && stories.length > 0 && (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-            {stories.map((s) => (
-              <NewsCard key={s.video.id} story={s} />
-            ))}
-          </div>
-
-          {canLoadMore && (
-            <div className="flex justify-center mt-8">
-              <button
-                onClick={() => setLimit((prev) => prev + BATCH)}
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-6 py-2.5 text-sm font-semibold text-text hover:bg-surface-2 transition-colors"
-              >
-                <span className="material-symbols-outlined text-[18px] leading-none">expand_more</span>
-                Daha Fazla Yükle
-              </button>
-            </div>
-          )}
-        </>
+      {atEnd && (
+        <p className="pt-2 text-center text-[13px] text-text-subtle">Arşivde en yeni {MAX} haber gösteriliyor.</p>
       )}
     </section>
   );

@@ -92,21 +92,21 @@ export default function UzmanlarProfile() {
   const channel = channels.find((c) => c.slug === slug);
 
   return (
-    <div className="page-full-bleed" style={{ background: 'var(--bg)', minHeight: '100dvh', paddingBottom: 80 }}>
+    <div style={{ maxWidth: 820, margin: '0 auto' }}>
       {/* Header */}
-      <div style={{ padding: '16px 16px 0' }}>
-        <Link to="/uzmanlar" style={{ fontSize: 13, color: 'var(--accent)', textDecoration: 'none' }}>← Uzmanlar</Link>
+      <div>
+        <Link to="/uzmanlar" style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textDecoration: 'none' }}>← Uzmanlar</Link>
       </div>
 
       {channel ? (
-        <div style={{ padding: '16px 16px 0', display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div style={{ padding: '16px 0 0', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
           <ProAvatar channelAvatarUrl={channel.avatar_url ?? undefined} name={channel.name} size="lg" />
           <div>
-            <h1 style={{ margin: 0, fontSize: 'var(--font-h1-size)', fontWeight: 600, color: 'var(--text)' }}>
+            <h1 className="font-serif" style={{ margin: 0, fontSize: 'clamp(28px, 4vw, 36px)', lineHeight: 1.15, fontWeight: 600, letterSpacing: '-0.01em', color: 'var(--text)' }}>
               {channel.name}
             </h1>
             {channel.bio && (
-              <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--text-muted)', lineHeight: '20px' }}>{channel.bio}</p>
+              <p style={{ margin: '8px 0 0', fontSize: 15, color: 'var(--text-muted)', lineHeight: '24px', maxWidth: '62ch' }}>{channel.bio}</p>
             )}
             {channel.channel_url && (
               <a href={channel.channel_url} target="_blank" rel="noopener noreferrer"
@@ -117,16 +117,16 @@ export default function UzmanlarProfile() {
           </div>
         </div>
       ) : (
-        <div style={{ padding: '16px 16px 0' }}>
-          <h1 style={{ margin: 0, fontSize: 'var(--font-h1-size)', fontWeight: 600, color: 'var(--text)' }}>{slug}</h1>
+        <div style={{ padding: '16px 0 0' }}>
+          <h1 className="font-serif" style={{ margin: 0, fontSize: 32, fontWeight: 600, color: 'var(--text)' }}>{slug}</h1>
         </div>
       )}
 
       {/* Stances */}
-      <div style={{ padding: '20px 16px' }}>
-        <h2 style={{ margin: '0 0 4px', fontSize: 'var(--font-h2-size)', fontWeight: 600, color: 'var(--text)' }}>
-          Mevcut Görüşler
-        </h2>
+      <div style={{ padding: '32px 0 0' }}>
+        <div className="section-head">
+          <h2>Konulara göre güncel duruşu</h2>
+        </div>
 
         {status === 'loading' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 12 }}>

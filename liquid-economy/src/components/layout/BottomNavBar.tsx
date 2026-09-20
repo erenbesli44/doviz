@@ -1,46 +1,38 @@
 import { NavLink } from 'react-router-dom';
+import Icon, { type IconName } from '../ui/Icon';
 
-const TABS = [
-  { to: '/',         label: 'Gündem',   icon: 'today'      },
-  { to: '/konular',  label: 'Konular',  icon: 'topic'      },
-  { to: '/piyasa',   label: 'Piyasa',   icon: 'show_chart' },
-  { to: '/haberler', label: 'Haberler', icon: 'newspaper'  },
+const TABS: { to: string; label: string; icon: IconName }[] = [
+  { to: '/',         label: 'Gündem',   icon: 'home'   },
+  { to: '/haberler', label: 'Haberler', icon: 'news'   },
+  { to: '/konular',  label: 'Konular',  icon: 'topics' },
+  { to: '/uzmanlar', label: 'Uzmanlar', icon: 'users'  },
+  { to: '/piyasa',   label: 'Piyasa',   icon: 'chart'  },
 ];
 
 export default function BottomNavBar() {
   return (
     <nav
-      className="fixed bottom-0 left-0 w-full z-50 md:hidden liquid-glass"
-      style={{
-        display: 'flex', justifyContent: 'space-around', alignItems: 'center',
-        paddingTop: 10, paddingBottom: 'max(20px, env(safe-area-inset-bottom))',
-        height: 56,
-        background: 'var(--surface)',
-        borderTop: '1px solid var(--border)',
-      }}
+      aria-label="Alt menü"
+      className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-bg border-t border-border"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      {TABS.map(({ to, label, icon }) => (
-        <NavLink
-          key={to}
-          to={to}
-          end={to === '/'}
-          style={({ isActive }) => ({
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
-            color: isActive ? 'var(--accent)' : 'var(--text-muted)',
-            textDecoration: 'none', minWidth: 44, padding: '0 4px',
-            transition: 'color var(--t-hover)',
-          })}
-        >
-          <span
-            className="material-symbols-outlined"
-            style={{ fontSize: 22, lineHeight: 1 }}
-            aria-hidden="true"
+      <div className="flex h-14 items-stretch">
+        {TABS.map(({ to, label, icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            end={to === '/'}
+            className={({ isActive }) =>
+              `flex flex-1 flex-col items-center justify-center gap-1 no-underline transition-colors ${
+                isActive ? 'text-accent' : 'text-text-muted'
+              }`
+            }
           >
-            {icon}
-          </span>
-          <span style={{ fontSize: 11, fontWeight: 600, lineHeight: 1 }}>{label}</span>
-        </NavLink>
-      ))}
+            <Icon name={icon} size={20} />
+            <span className="text-[11px] font-semibold leading-none">{label}</span>
+          </NavLink>
+        ))}
+      </div>
     </nav>
   );
 }

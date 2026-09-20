@@ -9,6 +9,8 @@ import { useChannels } from '../hooks/useChannels';
 import { ProAvatar } from '../components/consensus/ProAvatar';
 import { SentimentChip } from '../components/consensus/SentimentChip';
 import { EmptyState } from '../components/consensus/EmptyState';
+import PageHeader from '../components/layout/PageHeader';
+import SeoHead from '../components/seo/SeoHead';
 import type { ChannelOverview } from '../data/consensus-types';
 
 function ChannelCard({ ch }: { ch: ChannelOverview }) {
@@ -23,12 +25,10 @@ function ChannelCard({ ch }: { ch: ChannelOverview }) {
         textDecoration: 'none', transition: 'border-color var(--t-hover), box-shadow var(--t-hover)',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = 'var(--accent)';
-        e.currentTarget.style.boxShadow = '0 2px 8px rgba(31,58,138,0.08)';
+        e.currentTarget.style.borderColor = 'var(--text)';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.borderColor = 'var(--border)';
-        e.currentTarget.style.boxShadow = 'none';
       }}
     >
       {/* Header */}
@@ -70,16 +70,19 @@ export default function Uzmanlar() {
   const { status, channels } = useChannels();
 
   return (
-    <div className="page-full-bleed" style={{ background: 'var(--bg)', minHeight: '100dvh', paddingBottom: 80 }}>
-      <div style={{ padding: '20px 16px 16px' }}>
-        <h1 style={{ margin: 0, fontSize: 'var(--font-h1-size)', fontWeight: 600, color: 'var(--text)' }}>Uzmanlar</h1>
-        <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--text-muted)' }}>
-          Takip ettiğimiz YouTube analistleri
-        </p>
-      </div>
+    <div>
+      <SeoHead
+        path="/uzmanlar"
+        title="Uzmanlar | Döviz Veri"
+        description="Özetlerini derlediğimiz finans YouTube kanalları ve analistler: en çok konuştukları konu ve son duruşları."
+      />
+      <PageHeader
+        title="Uzmanlar"
+        description="Özetlerin kaynağı olan finans kanalları. Bir kanalı seçerek konulara göre duruşunu ve geçmişini görün."
+      />
 
       {status === 'loading' && (
-        <div style={{ padding: '0 16px', display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
+        <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
           {[1, 2, 3, 4].map((i) => (
             <div key={i} style={{ height: 140, background: 'var(--surface-2)', borderRadius: 8 }} />
           ))}
@@ -87,19 +90,15 @@ export default function Uzmanlar() {
       )}
 
       {status === 'error' && (
-        <div style={{ padding: '0 16px' }}>
-          <EmptyState title="Uzmanlar yüklenemedi" body="Lütfen sayfayı yenileyin." />
-        </div>
+        <EmptyState title="Uzmanlar yüklenemedi" body="Lütfen sayfayı yenileyin." />
       )}
 
       {status === 'success' && channels.length === 0 && (
-        <div style={{ padding: '0 16px' }}>
-          <EmptyState title="Henüz uzman yok" body="Yakında eklenecek." />
-        </div>
+        <EmptyState title="Henüz uzman yok" body="Yakında eklenecek." />
       )}
 
       {status === 'success' && channels.length > 0 && (
-        <div style={{ padding: '0 16px', display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
+        <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
           {channels.map((ch) => <ChannelCard key={ch.id} ch={ch} />)}
         </div>
       )}

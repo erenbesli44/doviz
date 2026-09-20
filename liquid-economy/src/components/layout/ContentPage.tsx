@@ -7,13 +7,12 @@ interface Props {
   children: ReactNode;
 }
 
+/** Static text pages (about, methodology, …): a single readable column. */
 export default function ContentPage({ title, subtitle, children }: Props) {
   return (
-    <section className="max-w-4xl">
+    <section className="measure mx-auto">
       <PageHeader title={title} subtitle={subtitle} />
-      <div className="rounded-2xl border border-[var(--color-outline-variant)]/25 bg-white p-5 md:p-7 space-y-5 text-[15px] leading-7 text-[var(--color-on-surface)]">
-        {children}
-      </div>
+      <div className="prose-page">{children}</div>
     </section>
   );
 }

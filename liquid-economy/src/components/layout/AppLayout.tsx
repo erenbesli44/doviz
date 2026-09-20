@@ -3,28 +3,24 @@ import { usePageTracking } from '../../hooks/usePageTracking';
 import TopNavBar from './TopNavBar';
 import BottomNavBar from './BottomNavBar';
 import SiteFooter from './SiteFooter';
+import ScrollManager from './ScrollManager';
 
 export default function AppLayout() {
   usePageTracking();
 
   return (
     <>
-      {/* Single top nav — responsive (hides links below md) */}
+      <ScrollManager />
       <TopNavBar />
 
-      {/* Page content
-          mt-14 = 56px, matches the new nav height.
-          New full-bleed pages add class="page-full-bleed" to their root div;
-          the :has() selector removes horizontal padding for them.
-          Old kept pages (Haberler, Methodology, etc.) get px-4 md:px-8.    */}
-      <main className="mt-14 pb-24 md:pb-12 max-w-[1440px] md:mx-auto">
-        <div className="px-4 md:px-8 [&:has(.page-full-bleed)]:px-0 [&:has(.page-full-bleed)]:md:px-0">
+      {/* pt-14 clears the fixed masthead; pb-24 clears the mobile tab bar. */}
+      <div className="mx-auto max-w-[1120px] px-4 pt-14 pb-24 md:px-6 md:pb-10">
+        <main id="icerik" className="pt-6 md:pt-8">
           <Outlet />
-          <SiteFooter />
-        </div>
-      </main>
+        </main>
+        <SiteFooter />
+      </div>
 
-      {/* Mobile bottom nav */}
       <BottomNavBar />
     </>
   );

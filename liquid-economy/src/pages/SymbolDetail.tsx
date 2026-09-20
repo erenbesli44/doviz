@@ -92,9 +92,9 @@ function LivePriceTile({ symbol }: { symbol: string }) {
 
 function SectionHeading({ title }: { title: string }) {
   return (
-    <h2 style={{ margin: '0 0 12px', fontSize: 'var(--font-h2-size)', fontWeight: 600, color: 'var(--text)', lineHeight: 'var(--font-h2-lh)', paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>
-      {title}
-    </h2>
+    <div className="section-head" style={{ marginBottom: 14 }}>
+      <h2>{title}</h2>
+    </div>
   );
 }
 
@@ -120,7 +120,7 @@ export default function SymbolDetail() {
 
   if (consensusStatus === 'loading') {
     return (
-      <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }} aria-busy="true">
         {[200, 120, 80].map((h) => (
           <div key={h} style={{ height: h, background: 'var(--surface-2)', borderRadius: 8 }} />
         ))}
@@ -130,8 +130,8 @@ export default function SymbolDetail() {
 
   if (!consensus) {
     return (
-      <div style={{ padding: 24 }}>
-        <Link to="/piyasa" style={{ color: 'var(--accent)', fontSize: 14 }}>← Tüm varlıklar</Link>
+      <div>
+        <Link to="/piyasa" style={{ color: 'var(--text-muted)', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>← Piyasa</Link>
         <EmptyState
           title="Bu varlık için görüş verisi yok"
           body="Bu varlık için henüz analiz yok. İlk analiz yayınlandığında burada görünecek."
@@ -145,11 +145,11 @@ export default function SymbolDetail() {
   const fresh = consensus.fresh_signal;
 
   return (
-    <div className="page-full-bleed" style={{ background: 'var(--bg)', minHeight: '100dvh', paddingBottom: 80 }}>
+    <div>
       {/* Header */}
-      <div style={{ padding: '16px 16px 8px' }}>
-        <Link to="/piyasa" style={{ fontSize: 13, color: 'var(--accent)', textDecoration: 'none' }}>← Tüm varlıklar</Link>
-        <h1 style={{ margin: '6px 0 0', fontSize: 'var(--font-h1-size)', fontWeight: 600, color: 'var(--text)' }}>
+      <div style={{ paddingBottom: 8 }}>
+        <Link to="/piyasa" style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textDecoration: 'none' }}>← Piyasa</Link>
+        <h1 className="font-serif" style={{ margin: '14px 0 0', fontSize: 'clamp(30px, 4vw, 38px)', lineHeight: 1.15, fontWeight: 600, letterSpacing: '-0.01em', color: 'var(--text)' }}>
           {consensus.display_name}
         </h1>
         <div style={{ display: 'flex', gap: 6, marginTop: 4 }}>
@@ -162,7 +162,7 @@ export default function SymbolDetail() {
         </div>
       </div>
 
-      <div className="detail-layout" style={{ padding: '12px 16px' }}>
+      <div className="detail-layout" style={{ padding: '12px 0' }}>
         {/* Left column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, minWidth: 0 }}>
 

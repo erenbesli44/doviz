@@ -1,94 +1,60 @@
 /**
  * SymbolDirectory — /piyasa
  *
- * Filterable directory of all tracked assets.
- * Each row: name + live price + ConsensusBar + opinion count.
- * Filter chips: Tümü / Döviz / Altın / Endeks / Emtia / Kripto
- * URL: /piyasa?kategori=kripto
+ * Live prices as supporting context, with the expert view per instrument where
+ * one exists. Rows with coverage link to the topic page; rows without stay plain
+ * (no dead ends). URL: /piyasa?kategori=kripto
  */
 
 import { Link, useSearchParams } from 'react-router-dom';
 import { useConsensusDashboard } from '../hooks/useConsensusDashboard';
 import { useMarketData } from '../hooks/useMarketData';
 import { SYMBOL_TO_TOPIC_KEY, CATEGORY_LABELS } from '../data/assetMap';
-import { ConsensusBar } from '../components/consensus/ConsensusBar';
-import { DirectionBadge } from '../components/consensus/DirectionBadge';
+import DirectionTag from '../components/topics/DirectionTag';
+import LiveDataBadge from '../components/layout/LiveDataBadge';
+import PageHeader from '../components/layout/PageHeader';
+import Icon from '../components/ui/Icon';
+import SeoHead from '../components/seo/SeoHead';
 import { formatPrice } from '../lib/adapters';
 import type { InferenceTopic } from '../data/inference-types';
 import type { Asset } from '../data/types';
 
 const CATEGORIES = ['all', 'fx', 'gold', 'index', 'commodity', 'crypto'] as const;
+const ROW = 'grid grid-cols-[1fr_auto] items-center gap-x-4 px-1 py-3.5 sm:grid-cols-[1fr_120px_150px_20px]';
 
-function pctColor(v: number) {
-  if (v > 0) return 'var(--bull)';
-  if (v < 0) return 'var(--bear)';
-  return 'var(--text-muted)';
+function Change({ value }: { value: number }) {
+  const tone = value > 0 ? 'text-bull' : value < 0 ? 'text-bear' : 'text-text-muted';
+  const sign = value > 0 ? '+' : value < 0 ? '−' : '';
+  return <span className={`text-[13px] font-semibold tabular-nums ${tone}`}>{sign}%{Math.abs(value).toFixed(2)}</span>;
 }
 
-interface AssetRowProps {
-  asset: Asset;
-  topic?: InferenceTopic;
-}
-
-function AssetRow({ asset, topic }: AssetRowProps) {
-  const topicKey = SYMBOL_TO_TOPIC_KEY[asset.id];
-  const bull    = topic ? Math.round(topic.confidence * 100) : 0;
-  const bear    = topic ? (topic.direction === 'down' ? Math.round((1 - topic.confidence) * 80) : Math.round((1 - topic.confidence) * 20)) : 0;
-  const neutral = 100 - bull - bear;
+function AssetRow({ asset, topic }: { asset: Asset; topic?: InferenceTopic }) {
+  const currency = asset.id.includes('TRY') || asset.id === 'XU100' ? 'TRY' : 'USD';
+  const cells = (
+    <>
+      <div className="min-w-0">
+        <div className={`truncate text-[15px] font-semibold text-text ${topic ? 'headline-link' : ''}`}>{asset.name}</div>
+        <div className="text-[12px] text-text-subtle">{asset.id}</div>
+      </div>
+      <div className="text-right">
+        <div className="text-[15px] font-semibold tabular-nums text-text">{formatPrice(asset.price, asset.id, currency)}</div>
+        <Change value={asset.change} />
+      </div>
+      <div className="col-span-2 mt-1.5 text-[13px] sm:col-span-1 sm:mt-0">
+        {topic
+          ? <span className="inline-flex items-center gap-2"><DirectionTag direction={topic.direction} /><span className="text-text-subtle">{topic.sources.length} kaynak</span></span>
+          : <span className="text-text-subtle">Uzman görüşü yok</span>}
+      </div>
+      <span className="hidden justify-self-end text-text-subtle sm:block">{topic && <Icon name="arrow-right" size={15} />}</span>
+    </>
+  );
 
   return (
-    <Link
-      to={topicKey ? `/piyasa/${topicKey}` : `/piyasa/${asset.id.replace('/', '-')}`}
-      className="focus-ring"
-      style={{
-        display: 'flex', alignItems: 'center', gap: 12,
-        padding: '12px 16px', textDecoration: 'none',
-        borderBottom: '1px solid var(--border)',
-        transition: 'background var(--t-hover)',
-      }}
-      onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--surface-2)')}
-      onMouseLeave={(e) => (e.currentTarget.style.background = '')}
-    >
-      {/* Name */}
-      <div style={{ flex: '1 1 140px', minWidth: 0 }}>
-        <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-          {asset.name}
-        </div>
-        <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{asset.id}</div>
-      </div>
-
-      {/* Live price */}
-      <div style={{ textAlign: 'right', flexShrink: 0, minWidth: 90 }}>
-        <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>
-          {formatPrice(asset.price, asset.id, asset.id.includes('TRY') || asset.id === 'XU100' ? 'TRY' : 'USD')}
-        </div>
-        <div style={{ fontSize: 12, fontWeight: 600, color: pctColor(asset.change) }}>
-          {asset.change >= 0 ? '+' : ''}{asset.change.toFixed(2)}%
-        </div>
-      </div>
-
-      {/* Consensus bar */}
-      {topic ? (
-        <div style={{ flex: '0 0 100px' }}>
-          <ConsensusBar bullish={bull} neutral={neutral} bearish={bear} size="sm" />
-          <div style={{ marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
-            <DirectionBadge direction={topic.direction} />
-          </div>
-        </div>
-      ) : (
-        <div style={{ flex: '0 0 100px', fontSize: 12, color: 'var(--text-subtle)' }}>
-          Görüş yok
-        </div>
-      )}
-
-      {/* Source count */}
-      <div style={{ flexShrink: 0, fontSize: 12, color: 'var(--text-muted)', minWidth: 60, textAlign: 'right' }}>
-        {topic ? `${topic.sources.length} görüş` : ''}
-      </div>
-
-      {/* Arrow */}
-      <span style={{ color: 'var(--text-muted)', flexShrink: 0 }} aria-hidden="true">›</span>
-    </Link>
+    <li className="border-b border-border">
+      {topic
+        ? <Link to={`/piyasa/${topic.topic_key}`} className={`group ${ROW} no-underline transition-colors hover:bg-surface-2`}>{cells}</Link>
+        : <div className={ROW}>{cells}</div>}
+    </li>
   );
 }
 
@@ -97,69 +63,64 @@ export default function SymbolDirectory() {
   const activeCategory = (searchParams.get('kategori') ?? 'all') as typeof CATEGORIES[number];
 
   const { topics } = useConsensusDashboard();
-  const { fxAssets, goldAssets, indexAssets, commodityAssets, cryptoAssets } = useMarketData();
+  const { status, fxAssets, goldAssets, indexAssets, commodityAssets, cryptoAssets } = useMarketData();
 
-  const topicMap: Record<string, InferenceTopic> = {};
-  for (const t of topics) topicMap[t.topic_key] = t;
-
+  const topicByKey = new Map(topics.map((t) => [t.topic_key, t]));
   const allAssets: Asset[] = [...fxAssets, ...goldAssets, ...indexAssets, ...commodityAssets, ...cryptoAssets];
-
-  const filtered = activeCategory === 'all'
-    ? allAssets
-    : allAssets.filter((a) => a.category === activeCategory || (activeCategory === 'index' && a.category === 'index'));
+  const filtered = activeCategory === 'all' ? allAssets : allAssets.filter((a) => a.category === activeCategory);
 
   return (
-    <div className="page-full-bleed" style={{ background: 'var(--bg)', minHeight: '100dvh', paddingBottom: 80 }}>
-      {/* Header */}
-      <div style={{ padding: '20px 16px 12px' }}>
-        <h1 style={{ margin: 0, fontSize: 'var(--font-h1-size)', fontWeight: 600, color: 'var(--text)' }}>Piyasalar</h1>
-        <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--text-muted)' }}>Canlı fiyatlar ve uzman görüşleri</p>
-      </div>
+    <section className="mx-auto max-w-[920px]">
+      <SeoHead
+        path="/piyasa"
+        title="Piyasa: Canlı Fiyatlar ve Uzman Görüşleri | Döviz Veri"
+        description="Döviz, altın, endeks, emtia ve kripto için canlı fiyatlar; varsa ilgili konudaki uzman görüşüyle birlikte."
+      />
 
-      {/* Category filter chips */}
-      <div style={{ padding: '0 16px 12px', display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none' }}>
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSearchParams(cat === 'all' ? {} : { kategori: cat })}
-            className="focus-ring"
-            style={{
-              padding: '6px 14px', borderRadius: 'var(--r-chip)',
-              border: '1px solid',
-              borderColor: activeCategory === cat ? 'var(--accent)' : 'var(--border)',
-              background: activeCategory === cat ? 'var(--accent)' : 'var(--surface)',
-              color: activeCategory === cat ? '#fff' : 'var(--text)',
-              fontSize: 13, fontWeight: 600, whiteSpace: 'nowrap', cursor: 'pointer',
-              transition: 'all var(--t-hover)',
-            }}
-          >
-            {CATEGORY_LABELS[cat]}
-          </button>
-        ))}
-      </div>
+      <PageHeader
+        title="Piyasa"
+        description="Canlı fiyatlar ve, takip ettiğimiz uzmanların o konudaki ortak görüşü."
+        aside={<LiveDataBadge />}
+      />
 
-      {/* Table header */}
-      <div style={{ display: 'flex', gap: 12, padding: '8px 16px', borderBottom: '2px solid var(--border)' }}>
-        <div style={{ flex: '1 1 140px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)' }}>Varlık</div>
-        <div style={{ flexShrink: 0, minWidth: 90, textAlign: 'right', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)' }}>Fiyat</div>
-        <div style={{ flex: '0 0 100px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)' }}>Görüş</div>
-        <div style={{ flexShrink: 0, minWidth: 60, textAlign: 'right', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)' }}>Kaynak</div>
-        <div style={{ width: 12 }} />
-      </div>
-
-      {/* Rows */}
-      <div style={{ background: 'var(--surface)' }}>
-        {filtered.map((asset) => {
-          const topicKey = SYMBOL_TO_TOPIC_KEY[asset.id];
-          const topic = topicKey ? topicMap[topicKey] : undefined;
-          return <AssetRow key={asset.id} asset={asset} topic={topic} />;
+      <div role="group" aria-label="Kategori" className="hide-scrollbar mb-4 flex gap-2 overflow-x-auto">
+        {CATEGORIES.map((cat) => {
+          const active = activeCategory === cat;
+          return (
+            <button
+              key={cat}
+              onClick={() => setSearchParams(cat === 'all' ? {} : { kategori: cat })}
+              aria-pressed={active}
+              className={`h-9 shrink-0 cursor-pointer rounded-[var(--r-chip)] border px-3.5 text-[14px] font-semibold transition-colors ${
+                active ? 'border-text bg-text text-bg' : 'border-border bg-transparent text-text hover:border-text'
+              }`}
+            >
+              {CATEGORY_LABELS[cat]}
+            </button>
+          );
         })}
-        {filtered.length === 0 && (
-          <div style={{ padding: 32, textAlign: 'center', color: 'var(--text-muted)', fontSize: 14 }}>
-            Bu kategoride varlık bulunamadı.
-          </div>
-        )}
       </div>
-    </div>
+
+      <div className={`${ROW} kicker border-t-2 border-rule !py-2.5`} aria-hidden="true">
+        <span>Varlık</span>
+        <span className="text-right">Fiyat</span>
+        <span className="hidden sm:block">Uzman görüşü</span>
+        <span className="hidden sm:block" />
+      </div>
+
+      <ul className="m-0 list-none border-t border-border p-0">
+        {status === 'loading' && allAssets.length === 0
+          ? Array.from({ length: 8 }).map((_, i) => (
+              <li key={i} className="border-b border-border py-4" aria-hidden="true"><div className="skeleton h-9" /></li>
+            ))
+          : filtered.map((asset) => (
+              <AssetRow key={asset.id} asset={asset} topic={topicByKey.get(SYMBOL_TO_TOPIC_KEY[asset.id] ?? '')} />
+            ))}
+      </ul>
+
+      {status !== 'loading' && filtered.length === 0 && (
+        <p className="py-8 text-[15px] text-text-muted">Bu kategoride varlık bulunamadı.</p>
+      )}
+    </section>
   );
 }

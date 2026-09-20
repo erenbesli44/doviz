@@ -9,6 +9,7 @@ import SymbolDetail from './pages/SymbolDetail';
 import Uzmanlar from './pages/Uzmanlar';
 import UzmanlarProfile from './pages/UzmanlarProfile';
 import Konular from './pages/Konular';
+import Search from './pages/Search';
 
 // ── Kept pages ─────────────────────────────────────────────────────────────
 import Methodology from './pages/Methodology';
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="konular" element={<Konular />} />
           <Route path="haberler" element={<Haberler />} />
           <Route path="haberler/:videoId" element={<NewsDetail />} />
+          <Route path="ara" element={<Search />} />
 
           {/* ── Retired category pages → /piyasa with filter ─ */}
           <Route path="doviz"               element={<Navigate to="/piyasa?kategori=fx"        replace />} />

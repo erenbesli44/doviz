@@ -195,9 +195,27 @@ A high `RestartCount` means a crash loop. All-zero rules it out.
 curl -sS -H "Authorization: Bearer $TOKEN" "$API/applications/<uuid>/restart"
 ```
 
-**Deploy** — push to `main`; Coolify builds from the repo. Build one at a time.
+**Deploy** — pushing to `main` does **not** deploy by itself (verified 2026-09-20:
+no auto-deploy webhook is wired up; a push sat undeployed until triggered). After
+pushing, trigger each app explicitly, **one at a time**, waiting for `finished`
+before starting the next:
 
-**Check what's deployed** — `git_commit_sha` from `GET /applications/{uuid}`.
+```bash
+curl -sS -H "Authorization: Bearer $TOKEN" "$API/deploy?uuid=<app-uuid>"      # → deployment_uuid
+curl -sS -H "Authorization: Bearer $TOKEN" "$API/deployments/<deployment_uuid>" # status: queued → in_progress → finished
+```
+
+Typical build time: `doviz-api` ~1 min, `doviz-ui` ~1.5 min. Deploy `doviz-api`
+first when the frontend depends on new endpoints.
+
+**Check what's deployed** — `git_commit_sha` on `GET /applications/{uuid}` only
+ever reads `HEAD`, so it proves nothing. Use the `commit` field of the latest
+deployment, or check the live site directly (no CDN, so this is reliable):
+
+```bash
+curl -sSI "https://dovizveri.com/$(curl -sS https://dovizveri.com/ | grep -oE 'assets/index-[A-Za-z0-9_-]+\.js' | head -1)" | grep -i last-modified
+```
+
 Note: routes that exist only in uncommitted local files will 404 in production.
 Deployment follows `main`, not your working tree.
 
