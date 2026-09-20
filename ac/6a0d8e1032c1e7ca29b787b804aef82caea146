@@ -1,0 +1,75 @@
+finance-api/app/api/v1/channels.py
+  s_b39d1450b9ea5a::t_05753b5264d327 1-54
+finance-api/app/schemas/news.py
+  s_b39d1450b9ea5a::t_d59795f9bd1c0d 21,26-29
+  s_b39d1450b9ea5a::t_fea3b30ec4e330 1-2,15-16,24-25,30
+finance-api/app/services/consensus_service.py
+  s_ce45ee380dfc28::t_6e15f270e534fd 432,434-439
+  s_ce45ee380dfc28::t_2d59f26f84a4b1 467
+  s_ce45ee380dfc28::t_756249106bc57b 1-431,433,440-441,444,446-466,468-505
+  s_ce45ee380dfc28::t_e967511f3e5d80 442-443,445
+finance-api/app/api/v1/inference.py
+  s_b39d1450b9ea5a::t_05753b5264d327 4,38-50
+  s_b31dbce074170f::t_024c48d2b5e55d 51-52
+finance-api/app/services/inference_service.py
+  s_ce45ee380dfc28::t_25244a5f33bba5 78-82,89,91
+  s_b39d1450b9ea5a::t_f0dedcfc841464 38-43
+  s_b39d1450b9ea5a::t_f2314b1c6677fd 1
+  s_b39d1450b9ea5a::t_cad7623eb89ed2 8-9,13,54-77,83-88,90,92-170
+  s_b31dbce074170f::t_adc96bdb5cc4d9 14
+finance-api/app/schemas/consensus.py
+  s_ce45ee380dfc28::t_a4d539e441664b 1-116
+finance-api/app/schemas/channels.py
+  s_b39d1450b9ea5a::t_fea3b30ec4e330 1-36
+finance-api/app/services/expert_weights.py
+  s_ce45ee380dfc28::t_21bcb45fa4be55 1-38
+finance-api/app/api/v1/consensus.py
+  s_ce45ee380dfc28::t_e8cbf777097ae0 1-63
+finance-api/app/main.py
+  s_ce45ee380dfc28::t_06c1d783aaa6fd 71
+finance-api/app/schemas/inference.py
+  s_b39d1450b9ea5a::t_f945aa4884e357 46-60
+finance-api/app/api/v1/router.py
+  s_b39d1450b9ea5a::t_05753b5264d327 3,19
+  s_ce45ee380dfc28::t_78f17e5080a158 4,18
+finance-api/tests/test_api/test_tracker_phase2.py
+  s_b39d1450b9ea5a::t_45ae17a581b28e 1-7,9-159,161-184,186-199,201-217,222-227
+  s_b39d1450b9ea5a::t_63d171a035da33 8,160,185,200,218-221
+finance-api/app/services/topic_mapping.py
+  s_ce45ee380dfc28::t_ac3f45c009ced6 1-21,23-45,48-56,60-62,66-67
+  s_b39d1450b9ea5a::t_f945aa4884e357 22,46-47,57-59,63-65
+finance-api/app/services/tracker_service.py
+  s_b39d1450b9ea5a::t_e4286cbb98ffaf 8,16,23,80-223,290-335
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ac6a0d8e1032c1e7ca29b787b804aef82caea146",
+  "prompts": {},
+  "sessions": {
+    "s_b31dbce074170f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "092c0b79-573c-492f-b5c4-db46218428a7",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_b39d1450b9ea5a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e3f79-11b0-7012-a5d2-80f3b71ac257",
+        "model": "gpt-5.5"
+      },
+      "human_author": null
+    },
+    "s_ce45ee380dfc28": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7b6cae65-8f3a-414a-9ce1-ff361021255d",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": null
+    }
+  }
+}
