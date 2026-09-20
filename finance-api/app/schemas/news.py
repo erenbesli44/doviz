@@ -1,3 +1,5 @@
+from typing import Any
+
 from pydantic import BaseModel, model_validator
 
 
@@ -10,14 +12,22 @@ class NewsChannel(BaseModel):
     channel_url: str | None = None
     bio: str | None = None
     avatar_url: str | None = None
+    subscriber_count: int | None = None
+    channel_metadata: dict[str, Any] | None = None
 
     @model_validator(mode="before")
     @classmethod
     def _extract_avatar_from_metadata(cls, values: object) -> object:
-        if isinstance(values, dict) and not values.get("avatar_url"):
+        if isinstance(values, dict):
             metadata = values.get("channel_metadata") or {}
             if isinstance(metadata, dict):
-                values = {**values, "avatar_url": metadata.get("avatar_url")}
+                values = {
+                    **values,
+                    "avatar_url": values.get("avatar_url") or metadata.get("avatar_url"),
+                    "subscriber_count": (
+                        values.get("subscriber_count") or metadata.get("subscriber_count")
+                    ),
+                }
         return values
 
 

@@ -2,7 +2,6 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-
 Direction = Literal["up", "down", "sideways", "mixed"]
 TopicStatus = Literal["new", "updated", "carried_over", "error"]
 
@@ -44,3 +43,18 @@ class TopicHistoryEntry(BaseModel):
     direction: Direction
     confidence: float
     changed_from_prev: bool
+
+
+class TopicOpinion(BaseModel):
+    video_id: int
+    channel_id: int
+    channel_name: str
+    channel_avatar_url: str | None = None
+    person_name: str | None = None
+    sentiment: str
+    confidence: float
+    summary: str
+    key_levels: list[str] = []
+    published_at: str
+    video_url: str
+    start_time_seconds: int | None = None

@@ -68,6 +68,7 @@ async def lifespan(app: FastAPI):
         verify=verify,
     )
     app.state.cache = MemoryCache()
+    app.state.consensus_cache = MemoryCache()
     app.state.btc_realtime = None  # populated by FinnhubWSClient
 
     # Market-closed fallback layer
