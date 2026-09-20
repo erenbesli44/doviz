@@ -1,4 +1,23 @@
 @import "tailwindcss";
+@import "./styles/tokens.css";
+
+@theme {
+  /* ── New semantic tokens wired into Tailwind v4 ── */
+  --color-bg:           var(--bg);
+  --color-surface:      var(--surface);
+  --color-surface-2:    var(--surface-2);
+  --color-border:       var(--border);
+  --color-text:         var(--text);
+  --color-text-muted:   var(--text-muted);
+  --color-text-subtle:  var(--text-subtle);
+  --color-bull:         var(--bull);
+  --color-bull-bg:      var(--bull-bg);
+  --color-bear:         var(--bear);
+  --color-bear-bg:      var(--bear-bg);
+  --color-neutral-sent: var(--neutral);
+  --color-neutral-bg:   var(--neutral-bg);
+  --color-accent:       var(--accent);
+}
 
 @theme {
   --color-primary: #004fdb;
@@ -56,6 +75,8 @@
   --color-outline-variant: #c1c6d7;
 
   --font-sans: "Inter", system-ui, sans-serif;
+  /* Editorial headline face — used only on story/section headlines; body copy, nav and metadata stay sans-serif. */
+  --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
 
   --radius: 0.25rem;
   --radius-lg: 0.5rem;
@@ -68,8 +89,8 @@
 body {
   margin: 0;
   font-family: "Inter", system-ui, sans-serif;
-  background-color: #faf9fe;
-  color: #1a1b1f;
+  background-color: var(--bg);
+  color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;

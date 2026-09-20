@@ -1,9 +1,9 @@
 export const SITE = {
   name: 'Döviz Veri',
   url: 'https://dovizveri.com',
-  defaultTitle: 'Canlı Döviz, Altın, Endeks, Emtia ve Kripto Verileri | Döviz Veri',
+  defaultTitle: 'Piyasa Haberleri ve Uzman Özetleri | Döviz Veri',
   defaultDescription:
-    'Türkiye odaklı canlı döviz kurları, altın fiyatları, kapalıçarşı verileri, endeks, emtia ve kripto piyasalarını anlık takip edin.',
+    "YouTube'daki finans kanallarından derlenen güncel piyasa haberleri, tam özetleri ve konu bazlı uzman görüşleri — döviz, altın, endeks, emtia ve kripto piyasaları için.",
 } as const;
 
 export interface SeoSymbol {

@@ -1,0 +1,2178 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Döviz Veri — Redesign Mockup</title>
+<style>
+  /* ============ Tokens ============ */
+  :root {
+    --bg: #FBFBFA;
+    --surface: #FFFFFF;
+    --surface-2: #F4F4F2;
+    --border: #E6E5E0;
+    --text: #15171A;
+    --text-muted: #5B5F66;
+    --text-subtle: #6B6F76;
+    --bull: #15703D;
+    --bull-bg: #E4F4EA;
+    --bear: #C0392B;
+    --bear-bg: #FBE6E2;
+    --neutral: #4B5563;
+    --neutral-bg: #EDEEEF;
+    --accent: #1F3A8A;
+    --focus-ring: #1F3A8A;
+
+    --radius-chip: 4px;
+    --radius-card: 8px;
+    --radius-hero: 12px;
+
+    --shadow-card: 0 1px 0 0 var(--border);
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+
+    --font: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* ============ Base ============ */
+  *,
+  *::before,
+  *::after { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  a:hover { text-decoration: underline; }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  button {
+    font: inherit;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: inherit;
+  }
+
+  /* ============ Layout ============ */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--accent);
+    color: white;
+    padding: 8px 12px;
+    z-index: 1000;
+  }
+  .skip-link:focus { left: 8px; top: 8px; }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-5);
+  }
+
+  /* ============ Header ============ */
+  .site-header {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    height: 56px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text);
+    flex-shrink: 0;
+  }
+  .brand__mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: white;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .nav {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+  }
+  .nav__link {
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .nav__link:hover { background: var(--surface-2); text-decoration: none; color: var(--text); }
+  .nav__link--active { color: var(--text); background: var(--surface-2); }
+  .search {
+    width: 280px;
+    position: relative;
+  }
+  .search input {
+    width: 100%;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0 12px 0 32px;
+    font: inherit;
+    font-size: 14px;
+    background: var(--surface);
+    color: var(--text);
+  }
+  .search svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-subtle);
+  }
+  .header-meta {
+    font-size: 12px;
+    color: var(--text-subtle);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bull);
+    box-shadow: 0 0 0 3px var(--bull-bg);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+
+  /* ============ Page intro ============ */
+  .page-intro {
+    padding: var(--space-6) 0 var(--space-5);
+    border-bottom: 1px solid var(--border);
+  }
+  .page-intro h1 {
+    margin: 0 0 var(--space-2);
+    font-size: 26px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .page-intro p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* ============ Home grid ============ */
+  .home-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr 280px;
+    gap: var(--space-6);
+    padding: var(--space-5) 0 var(--space-7);
+  }
+  @media (max-width: 1024px) {
+    .home-grid { grid-template-columns: 1fr; }
+    .home-grid > aside { order: 2; }
+    .home-grid > main { order: 1; }
+  }
+
+  .col-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    margin: 0 0 var(--space-3);
+  }
+
+  /* Quick consensus left rail */
+  .quick-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .quick-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 10px 8px;
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 14px;
+  }
+  .quick-item:hover { background: var(--surface-2); text-decoration: none; }
+  .quick-item__name { font-weight: 500; }
+  .quick-item__mini {
+    width: 64px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--neutral-bg);
+    overflow: hidden;
+    display: flex;
+  }
+  .quick-item__mini span { height: 100%; }
+
+  /* Hero asset */
+  .hero {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-hero);
+    background: var(--surface);
+    padding: var(--space-5);
+    margin-bottom: var(--space-5);
+  }
+  .hero__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .hero__title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .hero__ticker {
+    color: var(--text-subtle);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .hero__price {
+    font-size: 20px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .hero__price small {
+    font-size: 13px;
+    font-weight: 500;
+    margin-left: 8px;
+    color: var(--bear);
+  }
+  .hero__consensus {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--space-4) var(--space-5);
+    margin: var(--space-4) 0 var(--space-3);
+  }
+  .hero__summary {
+    margin: 0 0 var(--space-4);
+    font-size: 16px;
+    color: var(--text);
+    max-width: 60ch;
+  }
+  .hero__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    font-size: 13px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-3);
+  }
+  .hero__meta a { font-weight: 500; }
+
+  /* Direction badge */
+  .dir-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1;
+  }
+  .dir-badge--up { background: var(--bull-bg); color: var(--bull); }
+  .dir-badge--down { background: var(--bear-bg); color: var(--bear); }
+  .dir-badge--sideways { background: var(--neutral-bg); color: var(--neutral); }
+  .dir-badge--mixed {
+    background: var(--surface-2);
+    color: var(--text-muted);
+    border: 1px dashed var(--border);
+  }
+  .dir-badge svg { width: 16px; height: 16px; }
+  .confidence {
+    color: var(--text-subtle);
+    font-size: 13px;
+    font-weight: 500;
+    margin-left: var(--space-2);
+  }
+
+  /* ============ ConfidenceDots ============ */
+  .conf-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+    cursor: help;
+  }
+  .conf-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: transparent;
+  }
+  .conf-dot--on {
+    background: var(--text);
+    border-color: var(--text);
+  }
+  .conf-label {
+    color: var(--text-subtle);
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ============ ProAvatar ============ */
+  .pro-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .pro-avatar--lg { width: 56px; height: 56px; }
+
+  /* ============ Mobile preview frames ============ */
+  .mobile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(390px, 1fr));
+    gap: var(--space-5);
+    padding: var(--space-5) 0 var(--space-7);
+    justify-items: center;
+  }
+  .phone {
+    width: 390px;
+    height: 780px;
+    border: 12px solid #1A1B1F;
+    border-radius: 40px;
+    background: var(--bg);
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .phone__notch {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 22px;
+    background: #1A1B1F;
+    border-radius: 0 0 14px 14px;
+    z-index: 10;
+  }
+  .phone__viewport {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 22px;
+  }
+  .phone__caption {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 12px;
+    text-align: center;
+    font-weight: 500;
+  }
+  /* Mobile-style components inside phone viewport */
+  .m-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .m-header .brand { font-size: 16px; }
+  .m-header__icon {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    color: var(--text-muted);
+    border-radius: 50%;
+  }
+  .m-content { padding: 16px; padding-bottom: 80px; }
+  .m-hero {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .m-hero__title {
+    margin: 0 0 8px;
+    font-size: 22px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .m-hero__price {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .m-tile {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    padding: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .m-tile__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .m-bottom-nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: 64px;
+  }
+  .m-bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .m-bottom-nav a.active { color: var(--accent); }
+  .m-bottom-nav svg { width: 20px; height: 20px; }
+  .m-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    margin: 16px 0 8px;
+  }
+  .m-opinion {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .m-opinion__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .m-opinion__head .name { font-weight: 600; font-size: 14px; display: block; }
+  .m-opinion__head .meta { font-size: 12px; color: var(--text-subtle); }
+  .m-thumb {
+    aspect-ratio: 16 / 9;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-top: 10px;
+    display: grid;
+    place-items: center;
+    color: var(--text-subtle);
+    position: relative;
+  }
+
+  /* Consensus bar */
+  .cbar {
+    display: flex;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    background: var(--neutral-bg);
+  }
+  .cbar > span {
+    height: 100%;
+    transition: width 240ms ease-out;
+  }
+  .cbar__bull { background: var(--bull); }
+  .cbar__neutral { background: var(--neutral); }
+  .cbar__bear { background: var(--bear); }
+
+  .cbar-legend {
+    display: flex;
+    gap: var(--space-4);
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .cbar-legend span::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .legend-bull::before { background: var(--bull); }
+  .legend-neutral::before { background: var(--neutral); }
+  .legend-bear::before { background: var(--bear); }
+
+  /* Asset tiles grid */
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+  @media (max-width: 640px) {
+    .tiles { grid-template-columns: 1fr; }
+  }
+  .tile {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    color: var(--text);
+    transition: border-color 120ms ease-out, transform 120ms ease-out;
+  }
+  .tile:hover {
+    border-color: var(--text-subtle);
+    text-decoration: none;
+  }
+  .tile__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .tile__name {
+    font-weight: 600;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tile__price {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .tile__price--down { color: var(--bear); }
+  .tile__price--up { color: var(--bull); }
+  .tile__meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-subtle);
+  }
+
+  /* Changed-stance right rail */
+  .changed {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .changed__item {
+    padding: var(--space-3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--neutral);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: var(--text);
+  }
+  .changed__item:hover { border-color: var(--text-subtle); text-decoration: none; }
+  .changed__item--up { border-left-color: var(--bull); }
+  .changed__item--down { border-left-color: var(--bear); }
+  .changed__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .changed__arrow {
+    color: var(--text-subtle);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .changed__arrow .from { color: var(--text-subtle); }
+  .changed__arrow .to-up { color: var(--bull); font-weight: 600; }
+  .changed__arrow .to-down { color: var(--bear); font-weight: 600; }
+  .changed__note { font-size: 12px; color: var(--text-muted); }
+
+  /* ============ Asset detail page ============ */
+  .crumbs {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: var(--space-4) 0 var(--space-2);
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .crumbs a { color: var(--text-muted); }
+  .crumbs span { color: var(--text-subtle); }
+
+  .asset-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .asset-head h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+  .asset-head .ticker {
+    font-size: 14px;
+    color: var(--text-subtle);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .asset-head .live-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  .live-price__num {
+    font-size: 22px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .live-price__delta {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .live-price__delta--down { color: var(--bear); }
+  .live-price__delta--up { color: var(--bull); }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: var(--space-6);
+    padding: var(--space-5) 0 var(--space-7);
+  }
+  @media (max-width: 1024px) { .detail-grid { grid-template-columns: 1fr; } }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    margin: var(--space-6) 0 var(--space-3);
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  /* Consensus card on detail */
+  .consensus-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    padding: var(--space-5);
+  }
+  .consensus-card__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+    flex-wrap: wrap;
+  }
+  .consensus-card__summary {
+    margin: 0 0 var(--space-4);
+    font-size: 16px;
+    color: var(--text);
+    max-width: 65ch;
+  }
+  .consensus-card__meta {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-3);
+    font-size: 13px;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  /* Key levels chips */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: var(--radius-chip);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+  }
+  .chip strong { font-weight: 600; }
+  .chip__count {
+    color: var(--text-subtle);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  /* Opinion list */
+  .opinion-channel {
+    margin-bottom: var(--space-5);
+  }
+  .opinion-channel__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+  .channel-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .channel-avatar--lg { width: 56px; height: 56px; font-size: 18px; }
+  .opinion-channel__name {
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .opinion-channel__meta {
+    font-size: 12px;
+    color: var(--text-subtle);
+  }
+
+  .opinion {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    padding: var(--space-4);
+    margin-bottom: var(--space-3);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-4);
+  }
+  .opinion__body { display: flex; flex-direction: column; gap: var(--space-2); }
+  .opinion__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .sentiment-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: var(--radius-chip);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .sentiment-chip--bull { background: var(--bull-bg); color: var(--bull); }
+  .sentiment-chip--bear { background: var(--bear-bg); color: var(--bear); }
+  .sentiment-chip--neutral { background: var(--neutral-bg); color: var(--neutral); }
+  .opinion__when {
+    font-size: 12px;
+    color: var(--text-subtle);
+  }
+  .opinion__text {
+    margin: 0;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .opinion__levels { margin-top: 4px; }
+  .opinion__source {
+    width: 140px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .video-thumb {
+    aspect-ratio: 16 / 9;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    color: var(--text-subtle);
+    position: relative;
+    overflow: hidden;
+  }
+  .video-thumb__play {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    display: grid;
+    place-items: center;
+  }
+  .video-thumb__time {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    background: rgba(0,0,0,0.75);
+    color: white;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .opinion__source-link {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Sidebar widgets on detail */
+  .sidebar-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    padding: var(--space-4);
+    margin-bottom: var(--space-3);
+  }
+  .sidebar-card h3 {
+    margin: 0 0 var(--space-3);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-subtle);
+  }
+
+  /* History chart placeholder */
+  .history-chart {
+    height: 160px;
+    position: relative;
+    margin-top: var(--space-2);
+  }
+
+  /* ============ Pro profile ============ */
+  .pro-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-5) 0 var(--space-4);
+    border-bottom: 1px solid var(--border);
+  }
+  .pro-head__info h1 {
+    margin: 0 0 4px;
+    font-size: 26px;
+    font-weight: 600;
+  }
+  .pro-head__info p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .stance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--space-3);
+  }
+  .stance-table th, .stance-table td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .stance-table th {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .stance-table tr:hover td { background: var(--surface-2); }
+  .stance-table td:first-child { font-weight: 600; }
+  .timeline-spark {
+    height: 24px;
+    width: 120px;
+  }
+
+  /* ============ Empty state ============ */
+  .empty {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-card);
+    padding: var(--space-5);
+    text-align: center;
+    color: var(--text-muted);
+  }
+  .empty h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    color: var(--text);
+    font-weight: 600;
+  }
+  .empty p { margin: 0; font-size: 14px; }
+
+  /* ============ Footer ============ */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: var(--space-5) 0;
+    color: var(--text-subtle);
+    font-size: 13px;
+  }
+  footer .container {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  /* ============ Utility ============ */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+  }
+  .view { display: none; }
+  .view--active { display: block; }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">İçeriğe geç</a>
+
+<!-- ============ Header ============ -->
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="#/" class="brand" aria-label="Döviz Veri ana sayfa">
+      <span class="brand__mark">D</span>
+      Döviz Veri
+    </a>
+    <nav class="nav" aria-label="Ana menü">
+      <a href="#/" class="nav__link" data-nav="home">Bugün</a>
+      <a href="#/piyasa/bitcoin" class="nav__link" data-nav="asset">Piyasa</a>
+      <a href="#/uzmanlar/erkan-kork" class="nav__link" data-nav="pros">Uzmanlar</a>
+      <a href="#" class="nav__link">Haberler</a>
+      <a href="#/mobil" class="nav__link" data-nav="mobile" title="Mobil görünümü önizle">📱 Mobil</a>
+    </nav>
+    <label class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
+      </svg>
+      <input type="search" placeholder="Varlık veya uzman ara…" aria-label="Ara" />
+    </label>
+    <div class="header-meta" aria-live="polite">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span>Son güncelleme · 14:32</span>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- =========================================================== -->
+<!--                        HOME VIEW                            -->
+<!-- =========================================================== -->
+<section class="view view--active" id="view-home">
+  <div class="container">
+    <div class="page-intro">
+      <h1>Bugünün piyasa görüşü</h1>
+      <p>Türkiye'nin önde gelen finans yorumcuları bugün hangi varlık hakkında ne düşünüyor — 5 saniyede gör.</p>
+    </div>
+
+    <div class="home-grid">
+      <!-- Left: quick consensus rail -->
+      <aside aria-label="Hızlı konsensüs">
+        <p class="col-label">Hızlı görüş</p>
+        <div class="quick-list">
+          <a href="#/piyasa/bitcoin" class="quick-item">
+            <span class="quick-item__name">Bitcoin</span>
+            <span class="quick-item__mini" aria-label="Yükseliş 72%, nötr 18%, düşüş 10%">
+              <span style="width:72%;background:var(--bull)"></span>
+              <span style="width:18%;background:var(--neutral)"></span>
+              <span style="width:10%;background:var(--bear)"></span>
+            </span>
+          </a>
+          <a href="#" class="quick-item">
+            <span class="quick-item__name">Altın gr</span>
+            <span class="quick-item__mini" aria-label="Yükseliş 41%, nötr 47%, düşüş 12%">
+              <span style="width:41%;background:var(--bull)"></span>
+              <span style="width:47%;background:var(--neutral)"></span>
+              <span style="width:12%;background:var(--bear)"></span>
+            </span>
+          </a>
+          <a href="#" class="quick-item">
+            <span class="quick-item__name">USD/TRY</span>
+            <span class="quick-item__mini" aria-label="Yükseliş 18%, nötr 22%, düşüş 60%">
+              <span style="width:18%;background:var(--bull)"></span>
+              <span style="width:22%;background:var(--neutral)"></span>
+              <span style="width:60%;background:var(--bear)"></span>
+            </span>
+          </a>
+          <a href="#" class="quick-item">
+            <span class="quick-item__name">BIST 100</span>
+            <span class="quick-item__mini" aria-label="Yükseliş 58%, nötr 30%, düşüş 12%">
+              <span style="width:58%;background:var(--bull)"></span>
+              <span style="width:30%;background:var(--neutral)"></span>
+              <span style="width:12%;background:var(--bear)"></span>
+            </span>
+          </a>
+          <a href="#" class="quick-item">
+            <span class="quick-item__name">NASDAQ 100</span>
+            <span class="quick-item__mini" aria-label="Yükseliş 49%, nötr 38%, düşüş 13%">
+              <span style="width:49%;background:var(--bull)"></span>
+              <span style="width:38%;background:var(--neutral)"></span>
+              <span style="width:13%;background:var(--bear)"></span>
+            </span>
+          </a>
+          <a href="#" class="quick-item">
+            <span class="quick-item__name">S&amp;P 500</span>
+            <span class="quick-item__mini" aria-label="Yükseliş 44%, nötr 44%, düşüş 12%">
+              <span style="width:44%;background:var(--bull)"></span>
+              <span style="width:44%;background:var(--neutral)"></span>
+              <span style="width:12%;background:var(--bear)"></span>
+            </span>
+          </a>
+          <a href="#" class="quick-item">
+            <span class="quick-item__name">Brent petrol</span>
+            <span class="quick-item__mini" aria-label="Yükseliş 22%, nötr 30%, düşüş 48%">
+              <span style="width:22%;background:var(--bull)"></span>
+              <span style="width:30%;background:var(--neutral)"></span>
+              <span style="width:48%;background:var(--bear)"></span>
+            </span>
+          </a>
+          <a href="#" class="quick-item">
+            <span class="quick-item__name">Gümüş</span>
+            <span class="quick-item__mini" aria-label="Yükseliş 35%, nötr 50%, düşüş 15%">
+              <span style="width:35%;background:var(--bull)"></span>
+              <span style="width:50%;background:var(--neutral)"></span>
+              <span style="width:15%;background:var(--bear)"></span>
+            </span>
+          </a>
+        </div>
+      </aside>
+
+      <!-- Center: hero + tiles -->
+      <main>
+        <!-- HERO ASSET -->
+        <article class="hero" aria-labelledby="hero-asset-title">
+          <div class="hero__head">
+            <h2 id="hero-asset-title" class="hero__title">
+              Bitcoin
+              <span class="hero__ticker">BTC/USD</span>
+            </h2>
+            <div class="hero__price" aria-label="Güncel fiyat 67,420 dolar, son 24 saatte yüzde 1.2 düşüş">
+              67,420 <span style="font-size:13px;color:var(--text-subtle);font-weight:500">USD</span>
+              <small>▼ 1.20%</small>
+            </div>
+          </div>
+
+          <div class="hero__consensus">
+            <div>
+              <span class="dir-badge dir-badge--up" aria-label="Konsensüs yönü: yukarı">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12l7-7 7 7M12 5v14"/></svg>
+                Yukarı
+              </span>
+              <span class="conf-dots" role="img" aria-label="Güven: yüksek (3/3)" title="Güven %78"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span></span><span class="conf-label">Yüksek</span>
+            </div>
+            <div>
+              <div class="cbar" role="img" aria-label="12 uzman görüşü: yüzde 72 yükseliş, yüzde 18 nötr, yüzde 10 düşüş.">
+                <span class="cbar__bull" style="width:72%"></span>
+                <span class="cbar__neutral" style="width:18%"></span>
+                <span class="cbar__bear" style="width:10%"></span>
+              </div>
+              <div class="cbar-legend">
+                <span class="legend-bull">Yükseliş %72</span>
+                <span class="legend-neutral">Nötr %18</span>
+                <span class="legend-bear">Düşüş %10</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="hero__summary">
+            "Çoğu analist 70.000 USD seviyesinin test edileceğini bekliyor; halving sonrası
+            momentum güçlü, ancak ABD'de faiz toplantısı kısa vadede dalgalanmaya yol açabilir."
+          </p>
+
+          <div class="hero__meta">
+            <span>12 uzman görüşü · son 7 gün</span>
+            <span>Anahtar seviye: <strong>70.000</strong> · 65.500</span>
+            <a href="#/piyasa/bitcoin">Tüm görüşleri gör →</a>
+          </div>
+        </article>
+
+        <!-- OTHER ASSETS -->
+        <p class="col-label">Diğer varlıklar</p>
+        <div class="tiles">
+
+          <a href="#" class="tile">
+            <div class="tile__head">
+              <div class="tile__name">USD/TRY</div>
+              <div class="tile__price tile__price--down">32,18 ▼ 0,40%</div>
+            </div>
+            <div>
+              <div class="cbar" role="img" aria-label="9 uzman görüşü: yüzde 18 yükseliş, yüzde 22 nötr, yüzde 60 düşüş.">
+                <span class="cbar__bull" style="width:18%"></span>
+                <span class="cbar__neutral" style="width:22%"></span>
+                <span class="cbar__bear" style="width:60%"></span>
+              </div>
+              <div class="cbar-legend">
+                <span class="legend-bull">%18</span>
+                <span class="legend-neutral">%22</span>
+                <span class="legend-bear">%60</span>
+              </div>
+            </div>
+            <div class="tile__meta">
+              <span><span class="dir-badge dir-badge--down" style="padding:3px 8px;font-size:12px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11" aria-hidden="true"><path d="M19 12l-7 7-7-7M12 19V5"/></svg>
+                Aşağı</span> <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="Güven %66"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span></span><span class="conf-label">Orta</span></span>
+              <span>9 görüş</span>
+            </div>
+          </a>
+
+          <a href="#" class="tile">
+            <div class="tile__head">
+              <div class="tile__name">Altın · gram TL</div>
+              <div class="tile__price">3.418 — 0,05%</div>
+            </div>
+            <div>
+              <div class="cbar" role="img" aria-label="7 uzman görüşü: yüzde 41 yükseliş, yüzde 47 nötr, yüzde 12 düşüş.">
+                <span class="cbar__bull" style="width:41%"></span>
+                <span class="cbar__neutral" style="width:47%"></span>
+                <span class="cbar__bear" style="width:12%"></span>
+              </div>
+              <div class="cbar-legend">
+                <span class="legend-bull">%41</span>
+                <span class="legend-neutral">%47</span>
+                <span class="legend-bear">%12</span>
+              </div>
+            </div>
+            <div class="tile__meta">
+              <span><span class="dir-badge dir-badge--sideways" style="padding:3px 8px;font-size:12px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11" aria-hidden="true"><path d="M5 12h14M19 12l-3-3M19 12l-3 3"/></svg>
+                Yatay</span> <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="Güven %54"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span></span><span class="conf-label">Orta</span></span>
+              <span>7 görüş</span>
+            </div>
+          </a>
+
+          <a href="#" class="tile">
+            <div class="tile__head">
+              <div class="tile__name">BIST 100</div>
+              <div class="tile__price tile__price--up">10.842 ▲ 0,85%</div>
+            </div>
+            <div>
+              <div class="cbar" role="img" aria-label="11 uzman görüşü: yüzde 58 yükseliş, yüzde 30 nötr, yüzde 12 düşüş.">
+                <span class="cbar__bull" style="width:58%"></span>
+                <span class="cbar__neutral" style="width:30%"></span>
+                <span class="cbar__bear" style="width:12%"></span>
+              </div>
+              <div class="cbar-legend">
+                <span class="legend-bull">%58</span>
+                <span class="legend-neutral">%30</span>
+                <span class="legend-bear">%12</span>
+              </div>
+            </div>
+            <div class="tile__meta">
+              <span><span class="dir-badge dir-badge--up" style="padding:3px 8px;font-size:12px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11" aria-hidden="true"><path d="M5 12l7-7 7 7M12 5v14"/></svg>
+                Yukarı</span> <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="Güven %62"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span></span><span class="conf-label">Orta</span></span>
+              <span>11 görüş</span>
+            </div>
+          </a>
+
+          <a href="#" class="tile">
+            <div class="tile__head">
+              <div class="tile__name">NASDAQ 100</div>
+              <div class="tile__price tile__price--up">18.624 ▲ 0,32%</div>
+            </div>
+            <div>
+              <div class="cbar" role="img" aria-label="8 uzman görüşü, görüşler bölünmüş: yüzde 49 yükseliş, yüzde 38 nötr, yüzde 13 düşüş.">
+                <span class="cbar__bull" style="width:49%"></span>
+                <span class="cbar__neutral" style="width:38%"></span>
+                <span class="cbar__bear" style="width:13%"></span>
+              </div>
+              <div class="cbar-legend">
+                <span class="legend-bull">%49</span>
+                <span class="legend-neutral">%38</span>
+                <span class="legend-bear">%13</span>
+              </div>
+            </div>
+            <div class="tile__meta">
+              <span><span class="dir-badge dir-badge--mixed" style="padding:3px 8px;font-size:12px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11" aria-hidden="true"><path d="M7 4v16M17 4v16M3 8h8M13 16h8"/></svg>
+                Karışık</span> <span class="conf-dots" role="img" aria-label="Güven: düşük (1/3)" title="Güven %44"><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span><span class="conf-dot"></span></span><span class="conf-label">Düşük</span></span>
+              <span>8 görüş</span>
+            </div>
+          </a>
+
+          <a href="#" class="tile">
+            <div class="tile__head">
+              <div class="tile__name">EUR/USD</div>
+              <div class="tile__price tile__price--up">1,0892 ▲ 0,18%</div>
+            </div>
+            <div>
+              <div class="cbar" role="img" aria-label="5 uzman görüşü: yüzde 35 yükseliş, yüzde 50 nötr, yüzde 15 düşüş.">
+                <span class="cbar__bull" style="width:35%"></span>
+                <span class="cbar__neutral" style="width:50%"></span>
+                <span class="cbar__bear" style="width:15%"></span>
+              </div>
+              <div class="cbar-legend">
+                <span class="legend-bull">%35</span>
+                <span class="legend-neutral">%50</span>
+                <span class="legend-bear">%15</span>
+              </div>
+            </div>
+            <div class="tile__meta">
+              <span><span class="dir-badge dir-badge--sideways" style="padding:3px 8px;font-size:12px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11" aria-hidden="true"><path d="M5 12h14M19 12l-3-3M19 12l-3 3"/></svg>
+                Yatay</span> <span class="conf-dots" role="img" aria-label="Güven: düşük (1/3)" title="Güven %48"><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span><span class="conf-dot"></span></span><span class="conf-label">Düşük</span></span>
+              <span>5 görüş</span>
+            </div>
+          </a>
+
+          <a href="#" class="tile">
+            <div class="tile__head">
+              <div class="tile__name">Brent petrol</div>
+              <div class="tile__price tile__price--down">82,40 ▼ 1,10%</div>
+            </div>
+            <div>
+              <div class="cbar" role="img" aria-label="6 uzman görüşü: yüzde 22 yükseliş, yüzde 30 nötr, yüzde 48 düşüş.">
+                <span class="cbar__bull" style="width:22%"></span>
+                <span class="cbar__neutral" style="width:30%"></span>
+                <span class="cbar__bear" style="width:48%"></span>
+              </div>
+              <div class="cbar-legend">
+                <span class="legend-bull">%22</span>
+                <span class="legend-neutral">%30</span>
+                <span class="legend-bear">%48</span>
+              </div>
+            </div>
+            <div class="tile__meta">
+              <span><span class="dir-badge dir-badge--down" style="padding:3px 8px;font-size:12px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11" aria-hidden="true"><path d="M19 12l-7 7-7-7M12 19V5"/></svg>
+                Aşağı</span> <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="Güven %58"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span></span><span class="conf-label">Orta</span></span>
+              <span>6 görüş</span>
+            </div>
+          </a>
+
+        </div>
+      </main>
+
+      <!-- Right: changed stances -->
+      <aside aria-label="Bugün değişen görüşler">
+        <p class="col-label">Bugün değişen görüşler</p>
+        <div class="changed">
+          <a href="#" class="changed__item changed__item--up">
+            <div class="changed__title">
+              BIST 100
+              <span class="changed__arrow">
+                <span class="from">Nötr</span>
+                <span>→</span>
+                <span class="to-up">Yukarı ▲</span>
+              </span>
+            </div>
+            <div class="changed__note">3 yeni analizden sonra konsensüs yükselişe döndü.</div>
+          </a>
+
+          <a href="#" class="changed__item changed__item--down">
+            <div class="changed__title">
+              Brent petrol
+              <span class="changed__arrow">
+                <span class="from">Yatay</span>
+                <span>→</span>
+                <span class="to-down">Aşağı ▼</span>
+              </span>
+            </div>
+            <div class="changed__note">OPEC kararı sonrası 4 analist görüşünü düşürdü.</div>
+          </a>
+
+          <a href="#" class="changed__item">
+            <div class="changed__title">
+              Altın gr
+              <span class="changed__arrow">
+                <span>Güven %42 → %54</span>
+              </span>
+            </div>
+            <div class="changed__note">Yatay görüş aynı, ancak güven artıyor.</div>
+          </a>
+
+          <a href="#" class="changed__item changed__item--up">
+            <div class="changed__title">
+              Bitcoin
+              <span class="changed__arrow">
+                <span class="from">Yukarı</span>
+                <span>→</span>
+                <span class="to-up">Yukarı ▲▲</span>
+              </span>
+            </div>
+            <div class="changed__note">Yön aynı, konsensüs daha güçlü (%72 vs %58).</div>
+          </a>
+        </div>
+
+        <p class="col-label" style="margin-top:var(--space-5)">Yeni analizler</p>
+        <a href="#" style="display:flex;gap:10px;align-items:flex-start;padding:10px 8px;border-radius:6px;color:var(--text);font-size:13px;">
+          <div class="channel-avatar" aria-hidden="true">FA</div>
+          <div>
+            <strong style="display:block">Haftanın piyasa analizi</strong>
+            <span style="color:var(--text-subtle);font-size:12px">Finans Akademisi · 35 dk önce</span>
+          </div>
+        </a>
+        <a href="#" style="display:flex;gap:10px;align-items:flex-start;padding:10px 8px;border-radius:6px;color:var(--text);font-size:13px;">
+          <div class="channel-avatar" aria-hidden="true">EK</div>
+          <div>
+            <strong style="display:block">Dolar/TL nereye?</strong>
+            <span style="color:var(--text-subtle);font-size:12px">Erkan Kork · 2 sa önce</span>
+          </div>
+        </a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================== -->
+<!--                  ASSET DETAIL VIEW                          -->
+<!-- =========================================================== -->
+<section class="view" id="view-asset">
+  <div class="container">
+    <nav class="crumbs" aria-label="Sayfa konumu">
+      <a href="#/">Bugün</a><span>›</span>
+      <a href="#">Piyasa</a><span>›</span>
+      <a href="#">Kripto</a><span>›</span>
+      <span>Bitcoin</span>
+    </nav>
+
+    <header class="asset-head">
+      <h1>Bitcoin <span class="ticker">BTC/USD</span></h1>
+      <div class="live-price">
+        <span class="live-price__num">67,420 <span style="font-size:13px;color:var(--text-subtle);font-weight:500">USD</span></span>
+        <span class="live-price__delta live-price__delta--down">▼ 818 (1,20%) son 24 saat</span>
+      </div>
+    </header>
+
+    <div class="detail-grid">
+      <main>
+        <h2 class="section-title">Piyasa konsensüsü</h2>
+        <section class="consensus-card" aria-labelledby="consensus-title">
+          <div class="consensus-card__head">
+            <span class="dir-badge dir-badge--up" aria-label="Konsensüs yönü yukarı">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12l7-7 7 7M12 5v14"/></svg>
+              Yukarı
+            </span>
+            <span class="conf-dots" role="img" aria-label="Güven: yüksek (3/3)" title="Güven %78"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span></span><span class="conf-label">Yüksek</span>
+            <span style="color:var(--text-subtle);font-size:13px;margin-left:auto">Son 7 gün · 12 uzman görüşü</span>
+          </div>
+          <div>
+            <div class="cbar" role="img" aria-label="Yüzde 72 yükseliş, yüzde 18 nötr, yüzde 10 düşüş">
+              <span class="cbar__bull" style="width:72%"></span>
+              <span class="cbar__neutral" style="width:18%"></span>
+              <span class="cbar__bear" style="width:10%"></span>
+            </div>
+            <div class="cbar-legend">
+              <span class="legend-bull">Yükseliş %72 · 9 görüş</span>
+              <span class="legend-neutral">Nötr %18 · 2 görüş</span>
+              <span class="legend-bear">Düşüş %10 · 1 görüş</span>
+            </div>
+          </div>
+          <p id="consensus-title" class="consensus-card__summary" style="margin-top:var(--space-4)">
+            "Çoğu analist 70.000 USD seviyesinin test edileceğini bekliyor. Halving sonrası
+            momentum güçlü; ancak ABD Federal Reserve'in faiz toplantısı kısa vadede oynaklığa
+            yol açabilir. Düşüş görüşü destekleyenler 62.000 desteğine işaret ediyor."
+          </p>
+          <div class="consensus-card__meta">
+            <span>Önceki konsensüs: <strong>Yukarı (güven orta)</strong> → <span style="color:var(--bull)">güven yükseldi</span></span>
+            <span>Son güncelleme: bugün 14:32</span>
+          </div>
+        </section>
+
+        <h2 class="section-title">Anahtar seviyeler</h2>
+        <div class="chips" aria-label="Analistlerin bahsettiği fiyat seviyeleri">
+          <span class="chip"><strong>70.000</strong> USD <span class="chip__count">· 7 görüş</span></span>
+          <span class="chip"><strong>65.500</strong> USD <span class="chip__count">· 5 görüş</span></span>
+          <span class="chip"><strong>62.000</strong> USD <span class="chip__count">· 3 görüş</span></span>
+          <span class="chip"><strong>75.000</strong> USD <span class="chip__count">· 2 görüş</span></span>
+        </div>
+
+        <h2 class="section-title">Uzman görüşleri</h2>
+
+        <div class="opinion-channel">
+          <div class="opinion-channel__head">
+            <div class="channel-avatar" aria-hidden="true">FA</div>
+            <div>
+              <div class="opinion-channel__name">Finans Akademisi</div>
+              <div class="opinion-channel__meta">3 görüş · son 5 gün</div>
+            </div>
+          </div>
+
+          <article class="opinion">
+            <div class="opinion__body">
+              <div class="opinion__head">
+                <span class="sentiment-chip sentiment-chip--bull">▲ Yükseliş</span>
+                <a href="#/uzmanlar/erkan-kork" style="font-weight:500;font-size:13px">Erkan Kork</a>
+                <span class="opinion__when">2 gün önce</span>
+                <span class="conf-dots" role="img" aria-label="Güven: yüksek (3/3)" title="Güven %85"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span></span><span class="conf-label">Yüksek</span>
+              </div>
+              <p class="opinion__text">
+                "Bitcoin'de yükseliş trendi güçlü. 70.000 USD direnci kırılırsa 75.000'e
+                doğru hareket bekliyorum. Halving etkisi piyasaya henüz tam yansımadı."
+              </p>
+              <div class="opinion__levels chips">
+                <span class="chip"><strong>70.000</strong></span>
+                <span class="chip"><strong>75.000</strong></span>
+              </div>
+            </div>
+            <a href="#" class="opinion__source" aria-label="Kaynak videoyu 12:35'ten itibaren YouTube'da aç">
+              <div class="video-thumb">
+                <div class="video-thumb__play"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div>
+                <span class="video-thumb__time">12:35</span>
+              </div>
+              <span class="opinion__source-link">Videoda 12:35'te → </span>
+            </a>
+          </article>
+
+          <article class="opinion">
+            <div class="opinion__body">
+              <div class="opinion__head">
+                <span class="sentiment-chip sentiment-chip--neutral">→ Nötr</span>
+                <a href="#" style="font-weight:500;font-size:13px">Selin Demir</a>
+                <span class="opinion__when">4 gün önce</span>
+                <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="Güven %60"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span></span><span class="conf-label">Orta</span>
+              </div>
+              <p class="opinion__text">
+                "65.000–70.000 bandında konsolidasyon olası. Fed kararı netleşmeden
+                yön tahmininden kaçınıyorum."
+              </p>
+              <div class="opinion__levels chips">
+                <span class="chip"><strong>65.000</strong></span>
+                <span class="chip"><strong>70.000</strong></span>
+              </div>
+            </div>
+            <a href="#" class="opinion__source">
+              <div class="video-thumb">
+                <div class="video-thumb__play"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div>
+                <span class="video-thumb__time">08:12</span>
+              </div>
+              <span class="opinion__source-link">Videoda 08:12'de → </span>
+            </a>
+          </article>
+        </div>
+
+        <div class="opinion-channel">
+          <div class="opinion-channel__head">
+            <div class="channel-avatar" aria-hidden="true">KP</div>
+            <div>
+              <div class="opinion-channel__name">Kripto Para Türk</div>
+              <div class="opinion-channel__meta">2 görüş · son 7 gün</div>
+            </div>
+          </div>
+
+          <article class="opinion">
+            <div class="opinion__body">
+              <div class="opinion__head">
+                <span class="sentiment-chip sentiment-chip--bear">▼ Düşüş</span>
+                <a href="#" style="font-weight:500;font-size:13px">Murat Aksoy</a>
+                <span class="opinion__when">1 gün önce</span>
+                <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="Güven %55"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span></span><span class="conf-label">Orta</span>
+              </div>
+              <p class="opinion__text">
+                "Kısa vadede 62.000 desteği test edilebilir. Açık pozisyon hacmi
+                düşüyor; momentum zayıflıyor."
+              </p>
+              <div class="opinion__levels chips">
+                <span class="chip"><strong>62.000</strong></span>
+              </div>
+            </div>
+            <a href="#" class="opinion__source">
+              <div class="video-thumb">
+                <div class="video-thumb__play"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div>
+                <span class="video-thumb__time">04:48</span>
+              </div>
+              <span class="opinion__source-link">Videoda 04:48'de → </span>
+            </a>
+          </article>
+        </div>
+
+        <button style="background:none;color:var(--accent);font-weight:500;padding:10px 0;font-size:14px;">
+          Daha fazla görüş yükle (9 görüş daha)
+        </button>
+      </main>
+
+      <aside>
+        <div class="sidebar-card">
+          <h3>Görüş geçmişi · 30 gün</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin:0 0 8px">
+            Konsensüs yönü ve güven düzeyi
+          </p>
+          <svg class="history-chart" viewBox="0 0 280 160" aria-label="Son 30 günde konsensüs ağırlıklı olarak yükseliş, son hafta güven orta düzeyden yükseğe çıktı">
+            <!-- grid -->
+            <line x1="0" y1="40" x2="280" y2="40" stroke="var(--border)" stroke-dasharray="2 4"/>
+            <line x1="0" y1="80" x2="280" y2="80" stroke="var(--border)"/>
+            <line x1="0" y1="120" x2="280" y2="120" stroke="var(--border)" stroke-dasharray="2 4"/>
+            <!-- area path: bull above midline -->
+            <path d="M0,90 L20,82 L40,72 L60,75 L80,68 L100,72 L120,60 L140,55 L160,62 L180,48 L200,42 L220,38 L240,36 L260,30 L280,28
+                     L280,80 L0,80 Z" fill="var(--bull-bg)"/>
+            <path d="M0,90 L20,82 L40,72 L60,75 L80,68 L100,72 L120,60 L140,55 L160,62 L180,48 L200,42 L220,38 L240,36 L260,30 L280,28"
+                  fill="none" stroke="var(--bull)" stroke-width="2"/>
+            <!-- labels -->
+            <text x="0" y="14" font-size="10" fill="var(--text-subtle)">Yükseliş</text>
+            <text x="0" y="84" font-size="10" fill="var(--text-subtle)">Nötr</text>
+            <text x="0" y="156" font-size="10" fill="var(--text-subtle)">Düşüş</text>
+          </svg>
+          <table class="sr-only">
+            <caption>Konsensüs geçmişi son 30 gün</caption>
+            <thead><tr><th>Tarih</th><th>Yön</th><th>Güven</th></tr></thead>
+            <tbody>
+              <tr><td>19 May</td><td>Yukarı</td><td>78%</td></tr>
+              <tr><td>12 May</td><td>Yukarı</td><td>58%</td></tr>
+              <tr><td>5 May</td><td>Nötr</td><td>50%</td></tr>
+              <tr><td>28 Nis</td><td>Nötr</td><td>45%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Görüş veren uzmanlar</h3>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:14px;">
+            <a href="#/uzmanlar/erkan-kork" style="display:flex;align-items:center;gap:10px;color:var(--text);">
+              <span class="channel-avatar" aria-hidden="true">EK</span>
+              <span><strong style="display:block">Erkan Kork</strong>
+              <span style="color:var(--text-subtle);font-size:12px">Yükseliş · <span class="conf-dots" role="img" aria-label="Güven: yüksek (3/3)" title="Güven %85" style="margin-left:0"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span></span> <span style="margin-left:4px">güven yüksek</span></span></span>
+            </a>
+            <a href="#" style="display:flex;align-items:center;gap:10px;color:var(--text);">
+              <span class="channel-avatar" aria-hidden="true">SD</span>
+              <span><strong style="display:block">Selin Demir</strong>
+              <span style="color:var(--text-subtle);font-size:12px">Nötr · <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="Güven %60" style="margin-left:0"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span></span> <span style="margin-left:4px">güven orta</span></span></span>
+            </a>
+            <a href="#" style="display:flex;align-items:center;gap:10px;color:var(--text);">
+              <span class="channel-avatar" aria-hidden="true">MA</span>
+              <span><strong style="display:block">Murat Aksoy</strong>
+              <span style="color:var(--text-subtle);font-size:12px">Düşüş · <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="Güven %55" style="margin-left:0"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span></span> <span style="margin-left:4px">güven orta</span></span></span>
+            </a>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Canlı fiyat</h3>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);margin-bottom:6px;">
+            <span>24 saat aralık</span>
+            <span style="font-variant-numeric:tabular-nums;color:var(--text)">66.840 — 68.120</span>
+          </div>
+          <svg viewBox="0 0 280 60" style="width:100%;height:60px" aria-label="Son 24 saat fiyat grafiği">
+            <path d="M0,40 L20,38 L40,42 L60,35 L80,30 L100,32 L120,28 L140,20 L160,25 L180,18 L200,22 L220,30 L240,28 L260,32 L280,38"
+                  fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+          </svg>
+          <div style="font-size:11px;color:var(--text-subtle);margin-top:6px">Kaynak: Finnhub, CoinGecko</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================== -->
+<!--                  PRO PROFILE VIEW                           -->
+<!-- =========================================================== -->
+<section class="view" id="view-pro">
+  <div class="container">
+    <nav class="crumbs" aria-label="Sayfa konumu">
+      <a href="#/">Bugün</a><span>›</span>
+      <a href="#">Uzmanlar</a><span>›</span>
+      <span>Erkan Kork</span>
+    </nav>
+
+    <header class="pro-head">
+      <div class="channel-avatar channel-avatar--lg" aria-hidden="true">EK</div>
+      <div class="pro-head__info">
+        <h1>Erkan Kork</h1>
+        <p>Finans Akademisi · YouTube · 247k abone · 12 izlenen analiz</p>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px;">
+        <a href="#" style="padding:8px 14px;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;font-weight:500;">YouTube kanalı →</a>
+      </div>
+    </header>
+
+    <h2 class="section-title">Mevcut görüşler</h2>
+    <table class="stance-table" aria-label="Erkan Kork'un takip edilen varlıklardaki güncel görüşleri">
+      <thead>
+        <tr>
+          <th>Varlık</th>
+          <th>Görüş</th>
+          <th>Güven</th>
+          <th>Son güncelleme</th>
+          <th>Analiz sayısı</th>
+          <th>Görüş geçmişi (30g)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="#/piyasa/bitcoin">Bitcoin</a></td>
+          <td><span class="sentiment-chip sentiment-chip--bull">▲ Yükseliş</span></td>
+          <td><span class="conf-dots" role="img" aria-label="Güven: yüksek (3/3)" title="Güven %85" style="margin-left:0"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span></span> <span style="color:var(--text-muted);font-size:13px;margin-left:6px">yüksek</span></td>
+          <td>2 gün önce</td>
+          <td>4</td>
+          <td>
+            <svg class="timeline-spark" viewBox="0 0 120 24" aria-label="Sürekli yükseliş">
+              <rect x="0" y="4" width="14" height="16" fill="var(--bull-bg)"/>
+              <rect x="16" y="4" width="14" height="16" fill="var(--bull-bg)"/>
+              <rect x="32" y="8" width="14" height="12" fill="var(--bull-bg)"/>
+              <rect x="48" y="4" width="14" height="16" fill="var(--bull)"/>
+              <rect x="64" y="4" width="14" height="16" fill="var(--bull)"/>
+              <rect x="80" y="4" width="14" height="16" fill="var(--bull)"/>
+              <rect x="96" y="4" width="14" height="16" fill="var(--bull)"/>
+            </svg>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="#">Altın · gr</a></td>
+          <td><span class="sentiment-chip sentiment-chip--neutral">→ Nötr</span></td>
+          <td><span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="Güven %62" style="margin-left:0"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span></span> <span style="color:var(--text-muted);font-size:13px;margin-left:6px">orta</span></td>
+          <td>5 gün önce</td>
+          <td>2</td>
+          <td>
+            <svg class="timeline-spark" viewBox="0 0 120 24" aria-label="Yükselişten nötre">
+              <rect x="0" y="4" width="14" height="16" fill="var(--bull-bg)"/>
+              <rect x="16" y="4" width="14" height="16" fill="var(--bull-bg)"/>
+              <rect x="32" y="8" width="14" height="12" fill="var(--neutral-bg)"/>
+              <rect x="48" y="8" width="14" height="12" fill="var(--neutral)"/>
+              <rect x="64" y="8" width="14" height="12" fill="var(--neutral)"/>
+              <rect x="80" y="8" width="14" height="12" fill="var(--neutral)"/>
+              <rect x="96" y="8" width="14" height="12" fill="var(--neutral)"/>
+            </svg>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="#">USD/TRY</a></td>
+          <td><span class="sentiment-chip sentiment-chip--bear">▼ Düşüş</span></td>
+          <td><span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="Güven %72" style="margin-left:0"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span></span> <span style="color:var(--text-muted);font-size:13px;margin-left:6px">orta</span></td>
+          <td>1 gün önce</td>
+          <td>3</td>
+          <td>
+            <svg class="timeline-spark" viewBox="0 0 120 24" aria-label="Düşüş yönünde tutarlı">
+              <rect x="0" y="8" width="14" height="12" fill="var(--neutral-bg)"/>
+              <rect x="16" y="4" width="14" height="16" fill="var(--bear-bg)"/>
+              <rect x="32" y="4" width="14" height="16" fill="var(--bear-bg)"/>
+              <rect x="48" y="4" width="14" height="16" fill="var(--bear)"/>
+              <rect x="64" y="4" width="14" height="16" fill="var(--bear)"/>
+              <rect x="80" y="4" width="14" height="16" fill="var(--bear)"/>
+              <rect x="96" y="4" width="14" height="16" fill="var(--bear)"/>
+            </svg>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="#">BIST 100</a></td>
+          <td><span class="sentiment-chip sentiment-chip--bull">▲ Yükseliş</span></td>
+          <td><span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="Güven %68" style="margin-left:0"><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span></span> <span style="color:var(--text-muted);font-size:13px;margin-left:6px">orta</span></td>
+          <td>3 gün önce</td>
+          <td>3</td>
+          <td>
+            <svg class="timeline-spark" viewBox="0 0 120 24" aria-label="Nötrden yükselişe dönüş">
+              <rect x="0" y="8" width="14" height="12" fill="var(--neutral-bg)"/>
+              <rect x="16" y="8" width="14" height="12" fill="var(--neutral-bg)"/>
+              <rect x="32" y="8" width="14" height="12" fill="var(--neutral)"/>
+              <rect x="48" y="4" width="14" height="16" fill="var(--bull-bg)"/>
+              <rect x="64" y="4" width="14" height="16" fill="var(--bull)"/>
+              <rect x="80" y="4" width="14" height="16" fill="var(--bull)"/>
+              <rect x="96" y="4" width="14" height="16" fill="var(--bull)"/>
+            </svg>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">Bu uzman hakkında</h2>
+    <div class="sidebar-card" style="max-width:720px">
+      <p style="margin:0;color:var(--text-muted);font-size:14px;line-height:1.6;">
+        Erkan Kork, Finans Akademisi YouTube kanalında haftalık teknik analiz ve makro
+        ekonomi yorumları paylaşıyor. Bu profil, kanalda yayınlanan videoların otomatik
+        transkripsiyonundan çıkarılan görüşleri özetler. Görüşler kanal sahibinin
+        kendi yorumlarıdır; yatırım tavsiyesi değildir.
+      </p>
+      <p style="margin:12px 0 0;font-size:12px;color:var(--text-subtle);">
+        <a href="#">Metodoloji →</a>  ·  <a href="#">Yasal uyarı →</a>
+      </p>
+    </div>
+
+    <h2 class="section-title">Boş durum örneği</h2>
+    <div class="empty">
+      <h3>Bu uzmanın bu varlık hakkında henüz görüşü yok</h3>
+      <p>Erkan Kork'un Brent petrol hakkında izlenen bir analizi bulunmuyor.<br>Yeni analiz yayınlandığında otomatik olarak burada görünecek.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================== -->
+<!--                  MOBILE PREVIEW VIEW                        -->
+<!-- =========================================================== -->
+<section class="view" id="view-mobile">
+  <div class="container">
+    <div class="page-intro">
+      <h1>Mobil önizleme</h1>
+      <p>Mobile-first karar gereği aşağıdaki üç ekran 390 px genişlikte (iPhone) gösterilir. Çerçeveler içinde gezilebilir. Phase 2'de gerçek mobil görünüm CSS'i bu çerçevelerle birebir eşleşecek.</p>
+    </div>
+
+    <div class="mobile-grid">
+
+      <!-- Phone 1: Mobile Home -->
+      <div>
+        <div class="phone" aria-label="Mobil ana sayfa">
+          <div class="phone__notch" aria-hidden="true"></div>
+          <div class="phone__viewport">
+            <header class="m-header">
+              <span class="brand"><span class="brand__mark">D</span>Döviz Veri</span>
+              <button class="m-header__icon" aria-label="Ara">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              </button>
+            </header>
+            <div class="m-content">
+              <h2 style="margin:0 0 4px;font-size:20px;font-weight:600;letter-spacing:-0.01em;">Bugünün piyasa görüşü</h2>
+              <p style="margin:0 0 16px;color:var(--text-muted);font-size:13px;">12 varlık · son güncelleme 14:32</p>
+
+              <!-- Mobile hero -->
+              <article class="m-hero">
+                <h3 class="m-hero__title">Bitcoin <span style="color:var(--text-subtle);font-size:12px;font-weight:500">BTC/USD</span></h3>
+                <div class="m-hero__price">67,420 USD <span style="color:var(--bear)">▼ 1,2%</span></div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+                  <span class="dir-badge dir-badge--up" style="padding:6px 10px;font-size:13px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13" aria-hidden="true"><path d="M5 12l7-7 7 7M12 5v14"/></svg>
+                    Yukarı
+                  </span>
+                  <span class="conf-dots" role="img" aria-label="Güven: yüksek (3/3)" title="Güven %78" style="margin-left:0">
+                    <span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span>
+                  </span>
+                  <span class="conf-label" style="margin-left:0">Yüksek</span>
+                </div>
+                <div class="cbar" style="height:12px" role="img" aria-label="Yüzde 72 yükseliş, yüzde 18 nötr, yüzde 10 düşüş">
+                  <span class="cbar__bull" style="width:72%"></span>
+                  <span class="cbar__neutral" style="width:18%"></span>
+                  <span class="cbar__bear" style="width:10%"></span>
+                </div>
+                <div class="cbar-legend">
+                  <span class="legend-bull">%72</span>
+                  <span class="legend-neutral">%18</span>
+                  <span class="legend-bear">%10</span>
+                </div>
+                <p style="margin:12px 0 0;font-size:14px;line-height:1.5;color:var(--text);">12 uzman · "70k test edilebilir"</p>
+              </article>
+
+              <p class="m-section-label">Diğer varlıklar</p>
+
+              <a href="#" class="m-tile" style="color:var(--text);text-decoration:none;">
+                <div class="m-tile__head">
+                  <span>USD/TRY</span>
+                  <span style="color:var(--bear);font-size:13px;font-weight:500;">32,18 ▼0,4%</span>
+                </div>
+                <div class="cbar" style="height:8px" role="img" aria-label="Yüzde 18 yükseliş, yüzde 22 nötr, yüzde 60 düşüş">
+                  <span class="cbar__bull" style="width:18%"></span>
+                  <span class="cbar__neutral" style="width:22%"></span>
+                  <span class="cbar__bear" style="width:60%"></span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span class="dir-badge dir-badge--down" style="padding:2px 8px;font-size:11px;">▼ Aşağı</span>
+                    <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="%66" style="margin-left:0">
+                      <span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span>
+                    </span>
+                  </span>
+                  <span>9 görüş</span>
+                </div>
+              </a>
+
+              <a href="#" class="m-tile" style="color:var(--text);text-decoration:none;">
+                <div class="m-tile__head">
+                  <span>BIST 100</span>
+                  <span style="color:var(--bull);font-size:13px;font-weight:500;">10.842 ▲0,9%</span>
+                </div>
+                <div class="cbar" style="height:8px" role="img" aria-label="Yüzde 58 yükseliş, yüzde 30 nötr, yüzde 12 düşüş">
+                  <span class="cbar__bull" style="width:58%"></span>
+                  <span class="cbar__neutral" style="width:30%"></span>
+                  <span class="cbar__bear" style="width:12%"></span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span class="dir-badge dir-badge--up" style="padding:2px 8px;font-size:11px;">▲ Yukarı</span>
+                    <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="%62" style="margin-left:0">
+                      <span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span>
+                    </span>
+                  </span>
+                  <span>11 görüş</span>
+                </div>
+              </a>
+
+              <a href="#" class="m-tile" style="color:var(--text);text-decoration:none;">
+                <div class="m-tile__head">
+                  <span>Altın · gr TL</span>
+                  <span style="color:var(--text-muted);font-size:13px;font-weight:500;">3.418</span>
+                </div>
+                <div class="cbar" style="height:8px" role="img" aria-label="Yüzde 41 yükseliş, yüzde 47 nötr, yüzde 12 düşüş">
+                  <span class="cbar__bull" style="width:41%"></span>
+                  <span class="cbar__neutral" style="width:47%"></span>
+                  <span class="cbar__bear" style="width:12%"></span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span class="dir-badge dir-badge--sideways" style="padding:2px 8px;font-size:11px;">→ Yatay</span>
+                    <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="%54" style="margin-left:0">
+                      <span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span>
+                    </span>
+                  </span>
+                  <span>7 görüş</span>
+                </div>
+              </a>
+            </div>
+          </div>
+          <nav class="m-bottom-nav" aria-label="Mobil menü">
+            <a href="#" class="active" aria-current="page">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/></svg>
+              Bugün
+            </a>
+            <a href="#">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18M7 14l3-3 4 4 5-7"/></svg>
+              Piyasa
+            </a>
+            <a href="#">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+              Uzmanlar
+            </a>
+            <a href="#">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+              Haberler
+            </a>
+          </nav>
+        </div>
+        <p class="phone__caption">1 · Ana sayfa — konsensüs öncelikli, 390 px</p>
+      </div>
+
+      <!-- Phone 2: Mobile Asset Detail -->
+      <div>
+        <div class="phone" aria-label="Mobil varlık detayı">
+          <div class="phone__notch" aria-hidden="true"></div>
+          <div class="phone__viewport">
+            <header class="m-header">
+              <button class="m-header__icon" aria-label="Geri">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <span style="font-size:13px;font-weight:600;">Bitcoin</span>
+              <button class="m-header__icon" aria-label="Paylaş">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+              </button>
+            </header>
+            <div class="m-content">
+              <div style="margin-bottom:12px;">
+                <h2 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-0.01em;">Bitcoin <span style="color:var(--text-subtle);font-size:13px;font-weight:500">BTC/USD</span></h2>
+                <div style="display:flex;justify-content:space-between;margin-top:4px;font-variant-numeric:tabular-nums;">
+                  <span style="font-size:18px;font-weight:600">67,420 USD</span>
+                  <span style="color:var(--bear);font-size:14px;font-weight:500">▼ 1,20% · 24s</span>
+                </div>
+              </div>
+
+              <article class="m-hero">
+                <p class="m-section-label" style="margin-top:0">Piyasa konsensüsü</p>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+                  <span class="dir-badge dir-badge--up" style="padding:6px 10px;font-size:13px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13" aria-hidden="true"><path d="M5 12l7-7 7 7M12 5v14"/></svg>
+                    Yukarı
+                  </span>
+                  <span class="conf-dots" role="img" aria-label="Güven: yüksek (3/3)" title="Güven %78" style="margin-left:0">
+                    <span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span>
+                  </span>
+                  <span class="conf-label" style="margin-left:0">Yüksek</span>
+                </div>
+                <div class="cbar" style="height:12px" role="img" aria-label="Yüzde 72 yükseliş, yüzde 18 nötr, yüzde 10 düşüş">
+                  <span class="cbar__bull" style="width:72%"></span>
+                  <span class="cbar__neutral" style="width:18%"></span>
+                  <span class="cbar__bear" style="width:10%"></span>
+                </div>
+                <div class="cbar-legend">
+                  <span class="legend-bull">%72 · 9</span>
+                  <span class="legend-neutral">%18 · 2</span>
+                  <span class="legend-bear">%10 · 1</span>
+                </div>
+                <p style="margin:12px 0 0;font-size:14px;line-height:1.5">"Çoğu analist 70.000 USD seviyesinin test edileceğini bekliyor."</p>
+              </article>
+
+              <p class="m-section-label">Anahtar seviyeler</p>
+              <div class="chips">
+                <span class="chip"><strong>70.000</strong> <span class="chip__count">7</span></span>
+                <span class="chip"><strong>65.500</strong> <span class="chip__count">5</span></span>
+                <span class="chip"><strong>62.000</strong> <span class="chip__count">3</span></span>
+              </div>
+
+              <p class="m-section-label">Uzman görüşleri (3)</p>
+
+              <article class="m-opinion">
+                <div class="m-opinion__head">
+                  <span class="pro-avatar" style="background:linear-gradient(135deg,#1F3A8A,#4338CA);display:grid;place-items:center;color:white;font-weight:600;font-size:12px;" aria-hidden="true">EK</span>
+                  <div>
+                    <span class="name">Erkan Kork</span>
+                    <span class="meta">Finans Akademisi · 2 gün önce</span>
+                  </div>
+                  <span class="sentiment-chip sentiment-chip--bull" style="margin-left:auto">▲ Yükseliş</span>
+                </div>
+                <p style="margin:0;font-size:14px;line-height:1.5;">"Bitcoin'de yükseliş trendi güçlü. 70.000 direnci kırılırsa 75.000'e doğru hareket bekliyorum."</p>
+                <div class="m-thumb">
+                  <div style="width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.7);color:white;display:grid;place-items:center;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <span style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,0.75);color:white;padding:2px 6px;border-radius:3px;font-size:11px;font-weight:600;">12:35</span>
+                </div>
+              </article>
+
+              <article class="m-opinion">
+                <div class="m-opinion__head">
+                  <span class="pro-avatar" style="background:linear-gradient(135deg,#6B7280,#9CA3AF);display:grid;place-items:center;color:white;font-weight:600;font-size:12px;" aria-hidden="true">SD</span>
+                  <div>
+                    <span class="name">Selin Demir</span>
+                    <span class="meta">Finans Akademisi · 4 gün önce</span>
+                  </div>
+                  <span class="sentiment-chip sentiment-chip--neutral" style="margin-left:auto">→ Nötr</span>
+                </div>
+                <p style="margin:0;font-size:14px;line-height:1.5;">"65–70k bandında konsolidasyon olası. Fed kararı netleşmeden yön tahmininden kaçınıyorum."</p>
+              </article>
+
+              <button style="width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--accent);font-weight:600;font-size:14px;margin-top:8px;">
+                Daha fazla görüş (9 görüş)
+              </button>
+            </div>
+          </div>
+          <nav class="m-bottom-nav" aria-label="Mobil menü">
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/></svg>Bugün</a>
+            <a href="#" class="active" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18M7 14l3-3 4 4 5-7"/></svg>Piyasa</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>Uzmanlar</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Haberler</a>
+          </nav>
+        </div>
+        <p class="phone__caption">2 · Varlık detayı — konsensüs üstte, görüşler altta</p>
+      </div>
+
+      <!-- Phone 3: Mobile Pro Profile -->
+      <div>
+        <div class="phone" aria-label="Mobil uzman profili">
+          <div class="phone__notch" aria-hidden="true"></div>
+          <div class="phone__viewport">
+            <header class="m-header">
+              <button class="m-header__icon" aria-label="Geri">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <span style="font-size:13px;font-weight:600;">Erkan Kork</span>
+              <span class="m-header__icon" aria-hidden="true"></span>
+            </header>
+            <div class="m-content">
+              <div style="display:flex;align-items:center;gap:12px;padding:8px 0 16px;border-bottom:1px solid var(--border);">
+                <span class="pro-avatar pro-avatar--lg" style="background:linear-gradient(135deg,#1F3A8A,#4338CA);display:grid;place-items:center;color:white;font-weight:600;font-size:18px;" aria-hidden="true">EK</span>
+                <div>
+                  <h2 style="margin:0;font-size:18px;font-weight:600;">Erkan Kork</h2>
+                  <p style="margin:2px 0 0;font-size:12px;color:var(--text-muted);">Finans Akademisi · 247k abone</p>
+                  <p style="margin:2px 0 0;font-size:12px;color:var(--text-subtle);">12 izlenen analiz</p>
+                </div>
+              </div>
+
+              <p class="m-section-label">Mevcut görüşler</p>
+
+              <!-- Stance card list (table-as-cards on mobile) -->
+              <a href="#" class="m-tile" style="color:var(--text);text-decoration:none;">
+                <div class="m-tile__head">
+                  <span>Bitcoin</span>
+                  <span class="sentiment-chip sentiment-chip--bull">▲ Yükseliş</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);align-items:center;">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span class="conf-dots" role="img" aria-label="Güven: yüksek (3/3)" title="%85" style="margin-left:0">
+                      <span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span>
+                    </span>
+                    <span>yüksek</span>
+                  </span>
+                  <span>4 analiz · 2 gün önce</span>
+                </div>
+              </a>
+
+              <a href="#" class="m-tile" style="color:var(--text);text-decoration:none;">
+                <div class="m-tile__head">
+                  <span>USD/TRY</span>
+                  <span class="sentiment-chip sentiment-chip--bear">▼ Düşüş</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);align-items:center;">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="%72" style="margin-left:0">
+                      <span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span>
+                    </span>
+                    <span>orta</span>
+                  </span>
+                  <span>3 analiz · 1 gün önce</span>
+                </div>
+              </a>
+
+              <a href="#" class="m-tile" style="color:var(--text);text-decoration:none;">
+                <div class="m-tile__head">
+                  <span>BIST 100</span>
+                  <span class="sentiment-chip sentiment-chip--bull">▲ Yükseliş</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);align-items:center;">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="%68" style="margin-left:0">
+                      <span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span>
+                    </span>
+                    <span>orta</span>
+                  </span>
+                  <span>3 analiz · 3 gün önce</span>
+                </div>
+              </a>
+
+              <a href="#" class="m-tile" style="color:var(--text);text-decoration:none;">
+                <div class="m-tile__head">
+                  <span>Altın · gr</span>
+                  <span class="sentiment-chip sentiment-chip--neutral">→ Nötr</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);align-items:center;">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span class="conf-dots" role="img" aria-label="Güven: orta (2/3)" title="%62" style="margin-left:0">
+                      <span class="conf-dot conf-dot--on"></span><span class="conf-dot conf-dot--on"></span><span class="conf-dot"></span>
+                    </span>
+                    <span>orta</span>
+                  </span>
+                  <span>2 analiz · 5 gün önce</span>
+                </div>
+              </a>
+            </div>
+          </div>
+          <nav class="m-bottom-nav" aria-label="Mobil menü">
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/></svg>Bugün</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18M7 14l3-3 4 4 5-7"/></svg>Piyasa</a>
+            <a href="#" class="active" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>Uzmanlar</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Haberler</a>
+          </nav>
+        </div>
+        <p class="phone__caption">3 · Uzman profili — tablo yerine kart listesi</p>
+      </div>
+
+    </div>
+
+    <div style="border-top:1px solid var(--border);padding:var(--space-5) 0 0;color:var(--text-muted);font-size:14px;max-width:720px;">
+      <p style="margin:0 0 8px"><strong style="color:var(--text)">Mobile-first notu:</strong> Bu üç çerçeve Phase 2'de CSS'in başlangıç (320–767 px) seviyesini oluşturur. Tablet (≥768 px) ve masaüstü (≥1024 px) bunun üzerine eklenecek. Üst menüdeki Bugün / Piyasa / Uzmanlar görünümleri zaten 1024 px altında tek kolona çöker — pencereyi daraltarak doğrulayabilirsin.</p>
+      <p style="margin:0"><strong style="color:var(--text)">Avatar notu:</strong> Yukarıdaki avatar daireleri (EK/SD) tracker'da henüz `person.avatar_url` olmadığı için fallback (gradient + baş harfler) gösterir. Phase 2'de `youtube_channel.channel_metadata.avatar` JSON alanından gerçek kanal fotoğrafı çekilecek; uzun vadede tracker'da `person.avatar_url` alanı eklenmesi önerilir.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <span>© 2026 Döviz Veri · Yatırım tavsiyesi değildir</span>
+    <span>
+      <a href="#">Metodoloji</a> · <a href="#">Veri kaynakları</a> · <a href="#">İletişim</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  // ============ Simple hash router ============
+  const ROUTES = {
+    '#/':                       { view: 'view-home',   nav: 'home' },
+    '#/piyasa/bitcoin':         { view: 'view-asset',  nav: 'asset' },
+    '#/uzmanlar/erkan-kork':    { view: 'view-pro',    nav: 'pros' },
+    '#/mobil':                  { view: 'view-mobile', nav: 'mobile' },
+  };
+
+  function route() {
+    const hash = window.location.hash || '#/';
+    const def = ROUTES[hash] || ROUTES['#/'];
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('view--active'));
+    const el = document.getElementById(def.view);
+    if (el) el.classList.add('view--active');
+    document.querySelectorAll('[data-nav]').forEach(a => {
+      a.classList.toggle('nav__link--active', a.dataset.nav === def.nav);
+    });
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+  route();
+</script>
+</body>
+</html>

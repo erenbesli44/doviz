@@ -1,15 +1,16 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AppLayout from './components/layout/AppLayout';
-import Markets from './pages/Markets';
-import Currency from './pages/Currency';
-import Gold from './pages/Gold';
-import Indexes from './pages/Indexes';
-import Commodities from './pages/Commodities';
-import Crypto from './pages/Crypto';
-import Kapalicarsi from './pages/Kapalicarsi';
-import USMarkets from './pages/USMarkets';
+import DesignSystem from './pages/DesignSystem';
+
+// ── New pages ──────────────────────────────────────────────────────────────
+import Home from './pages/Home';
 import SymbolDirectory from './pages/SymbolDirectory';
 import SymbolDetail from './pages/SymbolDetail';
+import Uzmanlar from './pages/Uzmanlar';
+import UzmanlarProfile from './pages/UzmanlarProfile';
+import Konular from './pages/Konular';
+
+// ── Kept pages ─────────────────────────────────────────────────────────────
 import Methodology from './pages/Methodology';
 import DataSources from './pages/DataSources';
 import About from './pages/About';
@@ -18,7 +19,6 @@ import LegalNotice from './pages/LegalNotice';
 import Glossary from './pages/Glossary';
 import NewsDetail from './pages/NewsDetail';
 import Haberler from './pages/Haberler';
-import Insights from './pages/Insights';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -26,32 +26,44 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<AppLayout />}>
-          <Route index      element={<Markets />}     />
-          <Route path="doviz"     element={<Currency />}    />
-          <Route path="doviz-kurlari" element={<Currency />} />
-          <Route path="altin"     element={<Gold />}        />
-          <Route path="altin-fiyatlari" element={<Gold />} />
-          <Route path="kapalicarsi" element={<Kapalicarsi />} />
-          <Route path="endeksler" element={<Indexes />}     />
-          <Route path="endeks" element={<Indexes />} />
-          <Route path="amerika-borsasi" element={<USMarkets />} />
-          <Route path="emtialar"  element={<Commodities />} />
-          <Route path="emtia-fiyatlari" element={<Commodities />} />
-          <Route path="kripto"  element={<Crypto />} />
-          <Route path="kripto-paralar" element={<Crypto />} />
+          {/* ── Primary routes ───────────────────────────── */}
+          <Route index element={<Home />} />
           <Route path="piyasa" element={<SymbolDirectory />} />
           <Route path="piyasa/:slug" element={<SymbolDetail />} />
-          <Route path="metodoloji" element={<Methodology />} />
-          <Route path="veri-kaynaklari" element={<DataSources />} />
-          <Route path="hakkimizda" element={<About />} />
-          <Route path="iletisim" element={<Contact />} />
-          <Route path="yasal-uyari" element={<LegalNotice />} />
-          <Route path="sozluk" element={<Glossary />} />
+          <Route path="uzmanlar" element={<Uzmanlar />} />
+          <Route path="uzmanlar/:slug" element={<UzmanlarProfile />} />
+          <Route path="konular" element={<Konular />} />
           <Route path="haberler" element={<Haberler />} />
           <Route path="haberler/:videoId" element={<NewsDetail />} />
-          <Route path="analiz" element={<Insights />} />
+
+          {/* ── Retired category pages → /piyasa with filter ─ */}
+          <Route path="doviz"               element={<Navigate to="/piyasa?kategori=fx"        replace />} />
+          <Route path="doviz-kurlari"       element={<Navigate to="/piyasa?kategori=fx"        replace />} />
+          <Route path="altin"               element={<Navigate to="/piyasa?kategori=gold"      replace />} />
+          <Route path="altin-fiyatlari"     element={<Navigate to="/piyasa?kategori=gold"      replace />} />
+          <Route path="kapalicarsi"         element={<Navigate to="/piyasa?kategori=gold"      replace />} />
+          <Route path="endeksler"           element={<Navigate to="/piyasa?kategori=index"     replace />} />
+          <Route path="endeks"              element={<Navigate to="/piyasa?kategori=index"     replace />} />
+          <Route path="amerika-borsasi"     element={<Navigate to="/piyasa?kategori=index"     replace />} />
+          <Route path="emtialar"            element={<Navigate to="/piyasa?kategori=commodity" replace />} />
+          <Route path="emtia-fiyatlari"     element={<Navigate to="/piyasa?kategori=commodity" replace />} />
+          <Route path="kripto"              element={<Navigate to="/piyasa?kategori=crypto"    replace />} />
+          <Route path="kripto-paralar"      element={<Navigate to="/piyasa?kategori=crypto"    replace />} />
+          <Route path="analiz"              element={<Navigate to="/"                          replace />} />
+
+          {/* ── Static / content pages ───────────────────── */}
+          <Route path="metodoloji"      element={<Methodology />} />
+          <Route path="veri-kaynaklari" element={<DataSources />} />
+          <Route path="hakkimizda"      element={<About />} />
+          <Route path="iletisim"        element={<Contact />} />
+          <Route path="yasal-uyari"     element={<LegalNotice />} />
+          <Route path="sozluk"          element={<Glossary />} />
+
           <Route path="*" element={<NotFound />} />
         </Route>
+
+        {/* Dev-only: design system preview — no AppLayout */}
+        <Route path="_/design-system" element={<DesignSystem />} />
       </Routes>
     </BrowserRouter>
   );

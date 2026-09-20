@@ -1,0 +1,147 @@
+/*
+ * Design tokens — Döviz Veri redesign (Phase 2)
+ * Source of truth: .redesign/01-design-spec.md §6, §10
+ *
+ * Conventions
+ *  - Variables live on :root so they're reachable via var() anywhere.
+ *  - Dark-mode block flips bg/text only; sentiment colors shift one stop lighter.
+ *  - Material palette tokens in index.css are kept as-is until each old
+ *    component is replaced; delete them as migration completes.
+ */
+
+:root {
+  /* ─── Backgrounds ─────────────────────────────────── */
+  --bg:               #FBFBFA;   /* near-white, warm */
+  --surface:          #FFFFFF;
+  --surface-2:        #F4F4F2;
+  --border:           #E6E5E0;
+
+  /* ─── Text ────────────────────────────────────────── */
+  --text:             #15171A;   /* 16.8:1 on --bg */
+  --text-muted:       #5B5F66;   /* 6.2:1  on --bg */
+  --text-subtle:      #6B6F76;   /* 4.87:1 on --bg, body minimum */
+
+  /* ─── Sentiment ───────────────────────────────────── */
+  --bull:             #15703D;   /* 6.15:1 on white, 5.39:1 on --bull-bg */
+  --bull-bg:          #E4F4EA;
+  --bear:             #C0392B;   /* 5.44:1 on white, 4.54:1 on --bear-bg */
+  --bear-bg:          #FBE6E2;
+  --neutral:          #4B5563;   /* 7.3:1  on --bg,  6.51:1 on --neutral-bg */
+  --neutral-bg:       #EDEEEF;
+
+  /* ─── Accent & interaction ────────────────────────── */
+  --accent:           #1F3A8A;   /* editorial navy, 9.4:1 */
+  --focus-ring:       #1F3A8A;
+
+  /* ─── Typography (px values, applied via CSS classes) */
+  --font-display-size:  34px;
+  --font-display-lh:    40px;
+  --font-display-weight: 600;
+
+  --font-h1-size:    26px;
+  --font-h1-lh:      32px;
+  --font-h1-weight:  600;
+
+  --font-h2-size:    20px;
+  --font-h2-lh:      28px;
+  --font-h2-weight:  600;
+
+  --font-body-size:  16px;
+  --font-body-lh:    24px;
+  --font-body-weight: 400;
+
+  --font-small-size: 14px;
+  --font-small-lh:   20px;
+  --font-small-weight: 400;
+
+  --font-micro-size: 12px;
+  --font-micro-lh:   16px;
+  --font-micro-weight: 500;
+
+  /* ─── Spacing (8-pt grid with 4-pt half-steps) ────── */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* ─── Border radius ───────────────────────────────── */
+  --r-chip:  4px;
+  --r-card:  8px;
+  --r-hero: 12px;
+
+  /* ─── Motion ──────────────────────────────────────── */
+  --t-hover: 120ms ease-out;  /* hover / focus state changes */
+  --t-bar:   240ms ease-out;  /* consensus bar segment width */
+
+  /* ─── Breakpoints (reference only; use in @media) ─── */
+  /* mobile:  320–767px  (default, no media query needed) */
+  /* tablet:  min-width 768px                             */
+  /* desktop: min-width 1024px                            */
+}
+
+/* ─── Dark mode ─────────────────────────────────────────
+   Flip backgrounds + text. Sentiment shifts one stop
+   lighter to stay AA-compliant on dark backgrounds.      */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:           #111214;
+    --surface:      #1C1D20;
+    --surface-2:    #25262A;
+    --border:       #2E3036;
+
+    --text:         #F0F1F3;
+    --text-muted:   #9EA3AB;
+    --text-subtle:  #7B8089;
+
+    /* Sentiment: one stop lighter for dark bg AA compliance */
+    --bull:         #27AE60;
+    --bull-bg:      #0D2B1A;
+    --bear:         #E74C3C;
+    --bear-bg:      #2D110E;
+    --neutral:      #9CA3AF;
+    --neutral-bg:   #1F2023;
+
+    --accent:       #6B8FD8;   /* lightened navy for dark bg */
+    --focus-ring:   #6B8FD8;
+  }
+}
+
+/* ─── Utility classes for type scale ─────────────────── */
+.t-display { font-size: var(--font-display-size); line-height: var(--font-display-lh); font-weight: var(--font-display-weight); }
+.t-h1      { font-size: var(--font-h1-size);      line-height: var(--font-h1-lh);      font-weight: var(--font-h1-weight); }
+.t-h2      { font-size: var(--font-h2-size);      line-height: var(--font-h2-lh);      font-weight: var(--font-h2-weight); }
+.t-body    { font-size: var(--font-body-size);    line-height: var(--font-body-lh);    font-weight: var(--font-body-weight); }
+.t-small   { font-size: var(--font-small-size);   line-height: var(--font-small-lh);   font-weight: var(--font-small-weight); }
+.t-micro   { font-size: var(--font-micro-size);   line-height: var(--font-micro-lh);   font-weight: var(--font-micro-weight); }
+
+/* ─── Focus ring utility ──────────────────────────────── */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ─── ConfidenceDots base styles ─────────────────────── */
+.conf-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.conf-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--border);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.conf-dot--on {
+  background-color: var(--text);
+  border-color: var(--text);
+}

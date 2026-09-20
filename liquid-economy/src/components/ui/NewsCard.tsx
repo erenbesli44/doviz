@@ -25,21 +25,21 @@ function formatRelative(iso: string | null): string {
 
 function ChannelAvatarBanner({ avatarUrl, name }: { avatarUrl?: string | null; name: string }) {
   return (
-    <div className="absolute inset-0 flex items-center justify-center gap-3 bg-[var(--color-surface-container)]">
+    <div className="absolute inset-0 flex items-center justify-center gap-3 bg-surface-2">
       {avatarUrl ? (
         <img
           src={avatarUrl}
           alt=""
-          className="w-11 h-11 rounded-full object-cover shrink-0 ring-2 ring-[var(--color-outline-variant)]/30"
+          className="w-11 h-11 rounded-full object-cover shrink-0 ring-2 ring-border"
         />
       ) : (
-        <div className="w-11 h-11 rounded-full bg-[var(--color-primary)]/15 flex items-center justify-center shrink-0">
-          <span className="text-lg font-bold text-[var(--color-primary)]">
+        <div className="w-11 h-11 rounded-full bg-accent/15 flex items-center justify-center shrink-0">
+          <span className="text-lg font-bold text-accent">
             {name.charAt(0).toUpperCase()}
           </span>
         </div>
       )}
-      <span className="text-sm font-semibold text-[var(--color-on-surface)] truncate max-w-[55%]">
+      <span className="text-sm font-semibold text-text truncate max-w-[55%]">
         {name}
       </span>
     </div>
@@ -73,10 +73,10 @@ export default function NewsCard({ story, featured = false }: Props) {
     return (
       <Link
         to={`/haberler/${video.id}`}
-        className="group flex flex-row min-h-[240px] bg-[var(--color-surface-container-lowest)] rounded-2xl border border-[var(--color-outline-variant)]/25 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] overflow-hidden"
+        className="group flex flex-col sm:flex-row sm:min-h-[240px] bg-surface rounded-2xl border border-border hover:shadow-sm transition-all focus-ring overflow-hidden"
       >
         {isYouTube && (
-          <div className="relative w-2/5 shrink-0 min-h-[240px]">
+          <div className="relative w-full h-48 sm:w-2/5 sm:h-auto shrink-0 sm:min-h-[240px]">
             {!showChannelBanner ? (
               <img
                 src={imgSrc!}
@@ -89,33 +89,37 @@ export default function NewsCard({ story, featured = false }: Props) {
             )}
           </div>
         )}
-        <div className="flex flex-col flex-1 p-7">
+        <div className="flex flex-col flex-1 p-5 sm:p-7">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--color-primary)]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-accent">
               {channel?.name ?? 'Haber'}
             </span>
-            <span className="text-[10px] text-[var(--color-on-surface-variant)]/70">
+            <span className="text-[10px] text-text-muted">
               {formatRelative(video.published_at ?? video.created_at)}
             </span>
           </div>
-          <h2 className="text-xl font-bold leading-snug text-[var(--color-on-surface)] line-clamp-3 group-hover:text-[var(--color-primary)] transition-colors">
+          <h2 className="font-serif text-2xl font-semibold leading-snug text-text line-clamp-3 group-hover:text-accent transition-colors">
             {video.title}
           </h2>
-          {topHighlights.length > 0 && (
+          {summary.long_summary ? (
+            <p className="mt-4 text-sm text-text-muted leading-relaxed line-clamp-4 flex-1">
+              {summary.long_summary}
+            </p>
+          ) : topHighlights.length > 0 && (
             <ul className="mt-4 space-y-2 flex-1">
               {topHighlights.map((h, i) => (
                 <li
                   key={i}
-                  className="text-sm text-[var(--color-on-surface-variant)] leading-relaxed pl-4 relative line-clamp-2"
+                  className="text-sm text-text-muted leading-relaxed pl-4 relative line-clamp-2"
                 >
-                  <span className="absolute left-0 top-[0.5em] w-1.5 h-1.5 rounded-full bg-[var(--color-primary)]/70" />
+                  <span className="absolute left-0 top-[0.5em] w-1.5 h-1.5 rounded-full bg-accent/70" />
                   {h}
                 </li>
               ))}
             </ul>
           )}
-          <span className="mt-5 inline-flex items-center gap-1 text-[12px] font-semibold text-[var(--color-primary)] opacity-80 group-hover:opacity-100">
-            Özeti oku
+          <span className="mt-5 inline-flex items-center gap-1 text-[12px] font-semibold text-accent opacity-80 group-hover:opacity-100">
+            Tam özeti oku
             <span className="material-symbols-outlined text-[14px] leading-none">arrow_forward</span>
           </span>
         </div>
@@ -126,7 +130,7 @@ export default function NewsCard({ story, featured = false }: Props) {
   return (
     <Link
       to={`/haberler/${video.id}`}
-      className="group flex flex-col h-full bg-[var(--color-surface-container-lowest)] rounded-2xl border border-[var(--color-outline-variant)]/25 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] overflow-hidden"
+      className="group flex flex-col h-full bg-surface rounded-2xl border border-border hover:shadow-sm transition-all focus-ring overflow-hidden"
     >
       {isYouTube && (
         <div className="relative w-full h-24 shrink-0">
@@ -148,33 +152,37 @@ export default function NewsCard({ story, featured = false }: Props) {
 
       <div className="flex flex-col flex-1 p-5">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--color-primary)]">
+          <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-accent">
             {channel?.name ?? 'Haber'}
           </span>
-          <span className="text-[10px] text-[var(--color-on-surface-variant)]/70">
+          <span className="text-[10px] text-text-muted">
             {formatRelative(video.published_at ?? video.created_at)}
           </span>
         </div>
 
-        <h3 className="text-base font-bold leading-snug text-[var(--color-on-surface)] line-clamp-3 group-hover:text-[var(--color-primary)] transition-colors">
+        <h3 className="font-serif text-lg font-semibold leading-snug text-text line-clamp-3 group-hover:text-accent transition-colors">
           {video.title}
         </h3>
 
-        {topHighlights.length > 0 && (
+        {summary.short_summary ? (
+          <p className="mt-4 text-xs text-text-muted leading-relaxed line-clamp-3 flex-1">
+            {summary.short_summary}
+          </p>
+        ) : topHighlights.length > 0 && (
           <ul className="mt-4 space-y-1.5 flex-1">
             {topHighlights.map((h, i) => (
               <li
                 key={i}
-                className="text-xs text-[var(--color-on-surface-variant)] leading-relaxed pl-3 relative line-clamp-2"
+                className="text-xs text-text-muted leading-relaxed pl-3 relative line-clamp-2"
               >
-                <span className="absolute left-0 top-[0.45em] w-1 h-1 rounded-full bg-[var(--color-primary)]/70" />
+                <span className="absolute left-0 top-[0.45em] w-1 h-1 rounded-full bg-accent/70" />
                 {h}
               </li>
             ))}
           </ul>
         )}
 
-        <span className="mt-4 inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-primary)] opacity-80 group-hover:opacity-100">
+        <span className="mt-4 inline-flex items-center gap-1 text-[11px] font-semibold text-accent opacity-80 group-hover:opacity-100">
           Özeti oku
           <span className="material-symbols-outlined text-[14px] leading-none">arrow_forward</span>
         </span>

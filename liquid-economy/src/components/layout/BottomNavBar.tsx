@@ -1,30 +1,44 @@
 import { NavLink } from 'react-router-dom';
 
-const tabs = [
-  { to: '/',          label: 'Piyasalar', icon: 'equalizer'  },
-  { to: '/doviz',     label: 'Döviz',     icon: 'payments'   },
-  { to: '/altin',     label: 'Altın',     icon: 'monetization_on' },
-  { to: '/endeksler', label: 'Endeksler', icon: 'show_chart' },
-  { to: '/emtialar',  label: 'Emtialar',  icon: 'toll'       },
-  { to: '/haberler',  label: 'Haberler',  icon: 'newspaper'  },
+const TABS = [
+  { to: '/',         label: 'Gündem',   icon: 'today'      },
+  { to: '/konular',  label: 'Konular',  icon: 'topic'      },
+  { to: '/piyasa',   label: 'Piyasa',   icon: 'show_chart' },
+  { to: '/haberler', label: 'Haberler', icon: 'newspaper'  },
 ];
 
 export default function BottomNavBar() {
   return (
-    <nav className="fixed bottom-0 left-0 w-full z-50 md:hidden flex justify-around items-center px-4 pb-7 pt-3 bg-white border-t border-[var(--color-outline-variant)]/40">
-      {tabs.map(({ to, label, icon }) => (
+    <nav
+      className="fixed bottom-0 left-0 w-full z-50 md:hidden liquid-glass"
+      style={{
+        display: 'flex', justifyContent: 'space-around', alignItems: 'center',
+        paddingTop: 10, paddingBottom: 'max(20px, env(safe-area-inset-bottom))',
+        height: 56,
+        background: 'var(--surface)',
+        borderTop: '1px solid var(--border)',
+      }}
+    >
+      {TABS.map(({ to, label, icon }) => (
         <NavLink
           key={to}
           to={to}
           end={to === '/'}
-          className={({ isActive }) =>
-            isActive
-              ? 'flex flex-col items-center justify-center text-[var(--color-primary)] font-semibold'
-              : 'flex flex-col items-center justify-center text-slate-500 opacity-80'
-          }
+          style={({ isActive }) => ({
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+            color: isActive ? 'var(--accent)' : 'var(--text-muted)',
+            textDecoration: 'none', minWidth: 44, padding: '0 4px',
+            transition: 'color var(--t-hover)',
+          })}
         >
-          <span className="material-symbols-outlined">{icon}</span>
-          <span className="font-['Inter'] text-[11px] font-medium leading-none mt-1">{label}</span>
+          <span
+            className="material-symbols-outlined"
+            style={{ fontSize: 22, lineHeight: 1 }}
+            aria-hidden="true"
+          >
+            {icon}
+          </span>
+          <span style={{ fontSize: 11, fontWeight: 600, lineHeight: 1 }}>{label}</span>
         </NavLink>
       ))}
     </nav>
