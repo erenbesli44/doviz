@@ -1,0 +1,200 @@
+liquid-economy/index.html
+  s_b31dbce074170f::t_24c86b3ced9879 10,14,17,23
+  s_b31dbce074170f::t_04c1360da2b7c6 26
+liquid-economy/src/pages/Uzmanlar.tsx
+  s_ce45ee380dfc28::t_28501db0a81491 12
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 1-11,13-108
+liquid-economy/src/index.css
+  s_b31dbce074170f::t_0409b1d3716b6b 78-79
+  s_b31dbce074170f::t_749fc76b8cb3da 2-20,92-93
+liquid-economy/src/lib/directionConfig.ts
+  s_b31dbce074170f::t_6394aa0c92a592 1-48
+liquid-economy/src/hooks/useChannels.ts
+  s_ce45ee380dfc28::t_0d5f14aa8f0361 6-57
+  s_ce45ee380dfc28::t_10b9a85a224d73 3-5
+  s_ce45ee380dfc28::t_3b6052f806e91b 58
+  s_130f2a7e1a7ff3::t_f8caaac14065e8 1-2
+liquid-economy/src/hooks/usePersonTimeline.ts
+  s_ce45ee380dfc28::t_73d4475bebc07c 7-54
+  s_ce45ee380dfc28::t_2ccd904b318c64 4-6
+  s_ce45ee380dfc28::t_cbc2b935bfed07 55
+  s_130f2a7e1a7ff3::t_b1bf7fda37aa13 1-3
+liquid-economy/src/seo/site.ts
+  s_b31dbce074170f::t_449ba09db69b7b 4,6
+liquid-economy/src/components/consensus/ConsensusLabel.tsx
+  s_ce45ee380dfc28::t_eba1ea8ad78890 1-73
+liquid-economy/src/lib/inferenceClient.ts
+  s_ce45ee380dfc28::t_6abd6ec8a3affb 3-4
+  s_ce45ee380dfc28::t_e65a3b90df3b8f 48-55,68
+  s_ce45ee380dfc28::t_96a5ccef70c4da 2,5-9,37-43,47,56-67
+liquid-economy/src/components/ui/InferenceTopicCard.tsx
+  s_b31dbce074170f::t_da8fd9aa30a7e8 2,6,13-16,29,40,50,55,64,67,71,79,84,94,106,111,115,120,122-123,129,133,138,141,144-146,153,167-168,171,173-174,177,179-181
+  s_b31dbce074170f::t_556862fe41c315 3-4
+liquid-economy/src/hooks/useAssetConsensusList.ts
+  s_ce45ee380dfc28::t_21d20e368b2d6e 1-59
+liquid-economy/src/pages/UzmanlarProfile.tsx
+  s_ce45ee380dfc28::t_214a7ff7f6b1f1 17
+  s_ce45ee380dfc28::t_08b02a78cedcda 27
+  s_ce45ee380dfc28::t_3e9b2935bb6281 20-23
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 1-16,18-19,24-26,28-79,81-149
+  s_ce45ee380dfc28::t_6b56a98f5583f5 80
+liquid-economy/src/components/layout/TopNavBar.tsx
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 1-2,6,9-11,15-27,29-33,35-36,39-41,45-55,62-95
+  s_b31dbce074170f::t_4e88c5e87ad30d 7-8
+.redesign/MISSING_ENDPOINTS.md
+  s_ce45ee380dfc28::t_df5ebbe7cd3919 1-27
+INFRASTRUCTURE.md
+  s_f739e04a4f2a4a::t_b5d8d0e50dfb13 1-258
+liquid-economy/src/pages/SymbolDetail.tsx
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 1-9,11-13,15-19,21-23,25-41,43-101,103-105,107-109,114-120,123-127,133-138,140,148-152,154,158,163,165-171,173-178,182,186-187,196-197,255,257-267,269-292,295-297,299,320-322,324-325,327-338
+  s_b31dbce074170f::t_024c48d2b5e55d 293-294,323
+  s_ce45ee380dfc28::t_f401c279d524d7 42
+  s_ce45ee380dfc28::t_4db6de3852eefd 106,110-113,121,131,144-145,153,155-157,159-161,179-181,183-185,188-195,198-254,256,268,298,300-319
+  s_ce45ee380dfc28::t_9020f27d5defae 14,20,24
+  s_b31dbce074170f::t_ba1f76b36c4b97 128-130,132
+liquid-economy/src/components/consensus/AssetTile.tsx
+  s_ce45ee380dfc28::t_d92e20befe3af9 41
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 1-40,42-224
+liquid-economy/src/App.tsx
+  s_b31dbce074170f::t_024c48d2b5e55d 66
+  s_b31dbce074170f::t_cf2f8e9891e85a 11
+  s_b31dbce074170f::t_240abdaf40429b 35
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 1,3-6,9-10,12-13,29-30,33-34,38-61,64-65
+liquid-economy/src/components/consensus/ConsensusCard.tsx
+  s_ce45ee380dfc28::t_a196fe95370a35 1-135
+liquid-economy/src/pages/Haberler.tsx
+  s_b31dbce074170f::t_c7397420c6f001 14,31-32,38,40-41,44,56,62,79
+  s_b31dbce074170f::t_d12052a36b7727 37
+liquid-economy/src/data/consensus-types.ts
+  s_ce45ee380dfc28::t_5ed04e1226af77 3,5-96
+  s_ce45ee380dfc28::t_348db8f078dc5e 1-2,4,97-142
+liquid-economy/src/components/layout/BottomNavBar.tsx
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 3,6-7,12-22,27-32,34-41
+  s_b31dbce074170f::t_ea3ae434ce200b 4-5
+liquid-economy/src/components/consensus/OpinionCard.tsx
+  s_ce45ee380dfc28::t_0fe8677e4ee074 24-27
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 1-16,18-23,28-106
+  s_ce45ee380dfc28::t_c2337761be5862 17
+liquid-economy/src/components/layout/SiteFooter.tsx
+  s_b31dbce074170f::t_1be3b821d69f51 4-8,19-20,28
+liquid-economy/src/pages/Konular.tsx
+  s_b31dbce074170f::t_06eb9c997b36ec 42
+  s_b31dbce074170f::t_cca219f879cfa2 1-41,43-82
+liquid-economy/src/components/ui/NewsCard.tsx
+  s_b31dbce074170f::t_a6c5de7aacc02e 163
+  s_b31dbce074170f::t_d542a44db29323 76,79,92
+  s_b31dbce074170f::t_3b20c48543f4bf 94,97,104-108,113,115,121-122,133,155,158,167-171,176,178,185
+  s_b31dbce074170f::t_6297825306f225 101
+  s_b31dbce074170f::t_c4b392c5168296 28,33,36-37,42
+liquid-economy/src/pages/NewsDetail.tsx
+  s_b31dbce074170f::t_fc9289924862c0 3
+  s_b31dbce074170f::t_fa06a1a53c6383 86-87,112-115,120-126,130
+  s_b31dbce074170f::t_170042d02ef25c 151
+  s_b31dbce074170f::t_91aaf4addfcac5 24,29-31,36,54,56,74,76,88-91,101-102,106,116,119,135-136,144-150,152-158,160-161,166-167,175-193,198,204
+  s_b31dbce074170f::t_00977e0d49ca9d 139
+liquid-economy/src/hooks/useAssetConsensus.ts
+  s_ce45ee380dfc28::t_fb93e6108b0407 1-51
+.gitignore
+  s_b31dbce074170f::t_215c023bc0d0c4 53
+liquid-economy/src/components/consensus/index.ts
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 18-23
+  s_130f2a7e1a7ff3::t_65df01cfc91093 15-17
+  s_130f2a7e1a7ff3::t_85f6fcca8212c8 1-14
+liquid-economy/src/hooks/usePersonOverview.ts
+  s_ce45ee380dfc28::t_fc7bb6a15edede 7-51
+  s_ce45ee380dfc28::t_6deca3982c4111 4-6
+  s_ce45ee380dfc28::t_606f69ef76fa1a 52
+  s_130f2a7e1a7ff3::t_922457a4617bd4 1-3
+liquid-economy/src/components/layout/AppLayout.tsx
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 12,15-24,27
+liquid-economy/src/pages/Home.tsx
+  s_b31dbce074170f::t_70ed78522018f1 4-7,9-10,13-15,17-22,24-26,31-43,45-46,48-68,74-75,78-85,87,89-90,94-125,127-132,137-148
+  s_b31dbce074170f::t_b2497d6f217654 86
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 1-3,8,11-12,23,27-30,44,47,69-73,76-77,88,91-93,126,133-136,149-150
+  s_b31dbce074170f::t_d00e6572905f55 16
+liquid-economy/src/hooks/useTopicOpinions.ts
+  s_ce45ee380dfc28::t_c9528d9e0a21c5 5-51
+  s_ce45ee380dfc28::t_1ed951a2ebdac7 2-4
+  s_ce45ee380dfc28::t_123386c1b9a04f 52
+  s_130f2a7e1a7ff3::t_7d51bd0f336dd0 1
+liquid-economy/src/lib/consensusLabels.ts
+  s_ce45ee380dfc28::t_13e5257c0b0875 1-35
+liquid-economy/src/pages/SymbolDirectory.tsx
+  s_ce45ee380dfc28::t_2b92b8002f88da 13
+  s_ce45ee380dfc28::t_45d53e93646b18 99
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 1-12,14-93,96-98,100-109,112-134,136-137,140-163
+liquid-economy/src/components/consensus/EmptyState.tsx
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 1-52
+liquid-economy/src/data/assetMap.ts
+  s_130f2a7e1a7ff3::t_aa31824e259fe4 1-53
+.redesign/01-design-spec.md
+  s_130f2a7e1a7ff3::t_6d81dfd5d61014 1-289
+.redesign/02-mockup.html
+  s_130f2a7e1a7ff3::t_67684a4a920113 1-2178
+.redesign/03-review-notes.md
+  s_130f2a7e1a7ff3::t_284db24de549ce 1-89
+.redesign/04-implementation-guide.md
+  s_130f2a7e1a7ff3::t_7b70b5f93aedf5 1-232
+liquid-economy/src/components/consensus/ConfidenceDots.tsx
+  s_130f2a7e1a7ff3::t_391abb297df185 1-47
+liquid-economy/src/components/consensus/ConsensusBar.tsx
+  s_130f2a7e1a7ff3::t_06a357058e1d9f 1-81
+liquid-economy/src/components/consensus/DirectionBadge.tsx
+  s_130f2a7e1a7ff3::t_9b5e714fd2e3c0 1-73
+liquid-economy/src/components/consensus/KeyLevelChip.tsx
+  s_130f2a7e1a7ff3::t_8198061851d40a 1-49
+liquid-economy/src/components/consensus/ProAvatar.tsx
+  s_130f2a7e1a7ff3::t_5f275f3ba77fb0 1-103
+liquid-economy/src/components/consensus/SentimentChip.tsx
+  s_130f2a7e1a7ff3::t_139bb25b0f0018 1-46
+liquid-economy/src/hooks/useConsensusDashboard.ts
+  s_130f2a7e1a7ff3::t_6b188311d867c2 1-87
+liquid-economy/src/hooks/useTopicHistory.ts
+  s_130f2a7e1a7ff3::t_6edec73fe6ca31 1-55
+liquid-economy/src/hooks/useTopicSources.ts
+  s_130f2a7e1a7ff3::t_dfa493f9a8aa72 1-85
+liquid-economy/src/pages/DesignSystem.tsx
+  s_130f2a7e1a7ff3::t_ff151b0cc7124c 1-238
+liquid-economy/src/styles/tokens.css
+  s_130f2a7e1a7ff3::t_7d060c1c8f7340 1-147
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "2686c27f854f06855b3478356764eff2c1012586",
+  "prompts": {},
+  "sessions": {
+    "s_130f2a7e1a7ff3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01200054-86c9-4ad6-b8df-ba1b42cb9652",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": null
+    },
+    "s_b31dbce074170f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "092c0b79-573c-492f-b5c4-db46218428a7",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_ce45ee380dfc28": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7b6cae65-8f3a-414a-9ce1-ff361021255d",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": null
+    },
+    "s_f739e04a4f2a4a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "31d9485e-5d02-49c5-b2e9-8767f5b89896",
+        "model": "claude-opus-5"
+      },
+      "human_author": null
+    }
+  }
+}
