@@ -1,0 +1,100 @@
+liquid-economy/src/pages/Konular.tsx
+  s_b31dbce074170f::t_f38a054c2991eb 4-5,7,13-15,17-22,25,32-33,36-37,39,46-50,53-55,59,62-63,66-91,93
+liquid-economy/src/pages/Haberler.tsx
+  s_b31dbce074170f::t_177d7b1abeb444 1-8,10-11,13-14,19-28,33-34,40,44,47-50,52-56,59-61,65,68-72,74-80,82-87
+  s_b31dbce074170f::t_39bf1cfc8e3dd4 16-17,36-37,81,88,90-91
+liquid-economy/src/pages/SymbolDirectory.tsx
+  s_b31dbce074170f::t_73f9b3166a205f 4-6,13-17,23,25-28,31-37,39-41,43-46,48-50,52-57,66,68,70,73-101,104-108,111-124
+liquid-economy/src/hooks/useLatestNews.ts
+  s_b31dbce074170f::t_93b89812686100 16,30,39-42,52
+  s_b31dbce074170f::t_a1b41c15050740 7-11,13-15,19-25,34
+liquid-economy/src/components/news/StoryThumb.tsx
+  s_b31dbce074170f::t_5563547a077371 1-61
+liquid-economy/src/pages/UzmanlarProfile.tsx
+  s_b31dbce074170f::t_1aac642adea490 95,97-98,102,105,109,120-121,126-129
+liquid-economy/src/pages/NotFound.tsx
+  s_b31dbce074170f::t_467d6e859eb935 7,14-22
+liquid-economy/src/components/layout/AppLayout.tsx
+  s_b31dbce074170f::t_36d096393bca05 6,13,16-18,20-22
+liquid-economy/src/data/assetMap.ts
+  s_b31dbce074170f::t_b4696f7bed9a18 2,4-6,10-11,14-21,24-40,42,44-45,49-52,54
+liquid-economy/src/components/layout/ScrollManager.tsx
+  s_b31dbce074170f::t_40a1250cae24b8 1-18,31-41,43,45-46,48-49,51-54
+  s_b31dbce074170f::t_dd6d579123ce6b 19-30,42,44,47,50
+liquid-economy/src/components/layout/PageHeader.tsx
+  s_b31dbce074170f::t_b07451e0b5efb1 1-2,5-10,13,15-18,20-21,23-25
+liquid-economy/src/components/ui/FocusChart.tsx
+  s_b31dbce074170f::t_aa3a83c4d9fa38 283
+liquid-economy/src/components/topics/DirectionTag.tsx
+  s_b31dbce074170f::t_ba8881315b2a34 1-23
+liquid-economy/src/pages/NewsDetail.tsx
+  s_b31dbce074170f::t_3c285a36e121d3 1-10,13,15-17,19-31,33-42,50-72,76-83,89-90,93-94,98-103,105-106,109,114,117-118,120-146,148,150-201,203-219,221,224,226-234
+liquid-economy/src/pages/Home.tsx
+  s_b31dbce074170f::t_8f3600a1eaead5 2,4-8,14-16,19-20,22,24,26-32,35-56,58,60-68,75-79,82,89-90,93-94,97-99,103,107,118-120,122-132,135,137-138,140-141,143
+  s_b31dbce074170f::t_e2835bebd8e689 106,108-110,112-117
+liquid-economy/src/components/topics/TopicSection.tsx
+  s_b31dbce074170f::t_656ba69e953b7e 1-45,51-152
+  s_b31dbce074170f::t_677e88d193d245 46-50
+liquid-economy/src/lib/directionConfig.ts
+  s_b31dbce074170f::t_f42f38dc05e6f2 2,4-9,11-16
+liquid-economy/src/index.css
+  s_b31dbce074170f::t_7099c013fcfc6b 106
+  s_b31dbce074170f::t_4a1c5c7eada4d4 5,10,14-16,23-38,44-45,48-50,57,60-73,76-84,86-105,107-115,117-122,124-138,141-152
+liquid-economy/src/pages/Search.tsx
+  s_b31dbce074170f::t_cc1739c360c246 1-7,9-20,22,45-73,75-143
+  s_b31dbce074170f::t_3578c8c974b334 8,23-44,74
+  s_b31dbce074170f::t_39bf1cfc8e3dd4 21
+liquid-economy/src/components/consensus/EmptyState.tsx
+  s_b31dbce074170f::t_07bb4267954ed8 1,9-12,15-20
+liquid-economy/src/pages/SymbolDetail.tsx
+  s_b31dbce074170f::t_1aac642adea490 95-97,123,133-134,148,150-152,165
+liquid-economy/src/components/ui/Icon.tsx
+  s_b31dbce074170f::t_e1a8949dd77d7b 1-58
+liquid-economy/index.html
+  s_b31dbce074170f::t_49a99dd80cdc10 7-9,28
+liquid-economy/src/components/layout/LiveDataBadge.tsx
+  s_b31dbce074170f::t_7c825eaa5849cb 4-6,8
+liquid-economy/src/components/layout/ContentPage.tsx
+  s_b31dbce074170f::t_ecbe6b32a033fd 10,13,15
+liquid-economy/src/components/layout/SiteFooter.tsx
+  s_b31dbce074170f::t_08e0b19039d268 2,4,6,9-13,21,23-31,33-50,52-56
+liquid-economy/src/styles/tokens.css
+  s_b31dbce074170f::t_a6f12617a1a9f2 2,4-6,10-53,56-57,59,65-86,90,98-103,106,109-110,112-113,115
+liquid-economy/src/components/ui/Logo.tsx
+  s_b31dbce074170f::t_145b895df684ea 16-18
+  s_b31dbce074170f::t_a674130fdff0ee 5,23-24,27,29,34-35,42-43
+liquid-economy/src/components/news/Story.tsx
+  s_b31dbce074170f::t_ff5189a71cd89f 1-96
+INFRASTRUCTURE.md
+  s_b31dbce074170f::t_484fbe388ac89c 198-217
+liquid-economy/src/lib/newsFormat.ts
+  s_b31dbce074170f::t_c6b9d6faa6245f 1-116
+liquid-economy/src/pages/Uzmanlar.tsx
+  s_b31dbce074170f::t_1aac642adea490 12-13,28,73-82,85,93,97,101
+liquid-economy/public/manifest.webmanifest
+  s_b31dbce074170f::t_49a99dd80cdc10 7-8
+liquid-economy/src/components/layout/BottomNavBar.tsx
+  s_b31dbce074170f::t_345df85be4acad 2,4-9,15-17,19-29,31-35
+liquid-economy/src/seo/schema.ts
+  s_b31dbce074170f::t_b012f4073724bf 16-41
+liquid-economy/src/components/layout/TopNavBar.tsx
+  s_b31dbce074170f::t_9694402a6253a0 2,4,7-11,21-25,29-30,32-37,43-49,54,56,58-69,71-74,76,78-87,89
+liquid-economy/src/App.tsx
+  s_b31dbce074170f::t_56e528a018f9e4 12,39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "cd8e4f103b590c944357c21baee64b0dba5f7cb8",
+  "prompts": {},
+  "sessions": {
+    "s_b31dbce074170f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "092c0b79-573c-492f-b5c4-db46218428a7",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
