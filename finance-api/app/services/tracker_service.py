@@ -17,9 +17,13 @@ from .topic_mapping import to_public_topic_key, to_tracker_topic_slug
 
 logger = logging.getLogger(__name__)
 
-# Over-fetch candidates so we can skip any whose summary isn't generated yet
-# (tracker returns 404 for those).
-CANDIDATE_POOL = 30
+# Summaries are looked up newest-first in batches until `limit` stories are found
+# (tracker returns 404 for videos whose summary isn't generated yet). A run of
+# recent videos without summaries — e.g. while the tracker's LLM quota is
+# exhausted — must not empty the feed, so keep paging past them, up to
+# MAX_SUMMARY_LOOKUPS to bound the upstream fan-out.
+SUMMARY_BATCH = 30
+MAX_SUMMARY_LOOKUPS = 300
 VALID_SENTIMENTS = {"bullish", "bearish", "neutral"}
 
 
@@ -244,21 +248,22 @@ class TrackerService:
             (v for bucket in per_channel for v in bucket),
             key=self._video_sort_key,
             reverse=True,
-        )[:CANDIDATE_POOL]
-
-        summaries = await asyncio.gather(
-            *(self._get_summary(v.id) for v in candidates),
-            return_exceptions=False,
-        )
+        )[:MAX_SUMMARY_LOOKUPS]
 
         stories: list[NewsStory] = []
-        for video, summary in zip(candidates, summaries, strict=True):
-            if summary is None:
-                continue
-            channel = channel_by_id.get(video.channel_id) if video.channel_id else None
-            stories.append(NewsStory(video=video, channel=channel, summary=summary))
-            if len(stories) >= limit:
-                break
+        for start in range(0, len(candidates), SUMMARY_BATCH):
+            batch = candidates[start : start + SUMMARY_BATCH]
+            summaries = await asyncio.gather(
+                *(self._get_summary(v.id) for v in batch),
+                return_exceptions=False,
+            )
+            for video, summary in zip(batch, summaries, strict=True):
+                if summary is None:
+                    continue
+                channel = channel_by_id.get(video.channel_id) if video.channel_id else None
+                stories.append(NewsStory(video=video, channel=channel, summary=summary))
+                if len(stories) >= limit:
+                    return LatestNewsResponse(stories=stories)
 
         return LatestNewsResponse(stories=stories)
 
