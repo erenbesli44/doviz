@@ -1,0 +1,22 @@
+finance-api/tests/test_api/test_news_latest.py
+  s_f739e04a4f2a4a::t_54fa219f39537f 1-85
+finance-api/app/services/tracker_service.py
+  s_f739e04a4f2a4a::t_b7c0be710df95b 20-26
+  s_f739e04a4f2a4a::t_7f4dee75501282 251,254-266
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6b66b399eaefe3f92b69c0c21d8486ecdf3ee8e2",
+  "prompts": {},
+  "sessions": {
+    "s_f739e04a4f2a4a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "31d9485e-5d02-49c5-b2e9-8767f5b89896",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
