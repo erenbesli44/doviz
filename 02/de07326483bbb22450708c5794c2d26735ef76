@@ -1,0 +1,21 @@
+finance-api/tests/conftest.py
+  s_0d88b1d0b3446b::t_fd73075d1ea3c7 4,14-20,87
+finance-api/tests/test_api/test_auth.py
+  s_0d88b1d0b3446b::t_3a0a0f22490f3a 1-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "02de07326483bbb22450708c5794c2d26735ef76",
+  "prompts": {},
+  "sessions": {
+    "s_0d88b1d0b3446b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7925eaf9-edca-452b-b539-0f53e48d2072",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
