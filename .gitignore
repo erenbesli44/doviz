@@ -50,4 +50,7 @@ Thumbs.db
 .vscode/*
 !.vscode/mcp.json
 !.vscode/extensions.json
-.claude/
+# Claude Code: share agent definitions + launch config, keep local settings private
+.claude/*
+!.claude/agents/
+!.claude/launch.json
