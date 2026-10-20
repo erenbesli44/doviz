@@ -21,7 +21,7 @@ Run from the repo root unless noted. `uv` is at `~/.local/bin/uv`; Node 22.
 ```bash
 # Backend
 cd finance-api && uv sync --frozen --extra dev          # one-time / after lock changes
-cd finance-api && uv run --frozen pytest -q             # unit tests (excludes -m live/e2e)
+cd finance-api && uv run --frozen pytest -q             # unit tests (excludes -m live/e2e); hermetic, no .env needed
 cd finance-api && uv run --frozen ruff check .          # lint (177 findings at baseline)
 cd finance-api && uv run --frozen pytest -m live -q     # hits real providers; needs finance-api/.env keys
 # Frontend
@@ -35,8 +35,7 @@ Dev servers: use the `.claude/launch.json` configs (`finance-api` → :8000, `li
 Production probes (GET only): `https://dovizveri.com/healthz`, `https://api.dovizveri.com/v1/health`, `https://dovizveri.com/api/v1/news/latest?limit=3`.
 
 ### Baseline state at 2026-10-20 (do not "rediscover" these; see `docs/agent-runs/open-items.md`)
-- Pending: branch `agent/hermetic-tests` (OI-001) makes the suite hermetic → after merge the backend baseline becomes **21 passed / 1 failed (OI-002)** with no `.env`; update this section then.
-- Backend: `pytest` → 9 passed / 11 failed. All 11 are HTTP 401 from the API-key middleware: the `client` fixture builds the app from the local `.env` secret while tests send none or `test-secret` (OI-001). With `API_SECRET_KEY=test-secret` exported, 14 pass / 6 fail (5 quote tests send no header; 1 `person_name` assertion drift, OI-002).
+- Backend: `pytest` → **21 passed / 1 failed**, no `.env` needed (suite made hermetic 2026-10-20, OI-001 done). The one failure is `test_topic_opinions_returns_flat_structured_opinions` (`person_name` test/code drift, OI-002, awaiting owner decision).
 - Backend: `ruff check` → 177 findings, 71 auto-fixable.
 - Frontend: `eslint` → 5 errors (`react-hooks/set-state-in-effect` in 4 hooks) + 1 warning; `build` OK, main bundle 678 kB (>500 kB warning).
 - No CI workflows exist (`.github/workflows/` absent). No uptime monitoring (INFRASTRUCTURE.md §7).
