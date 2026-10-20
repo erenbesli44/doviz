@@ -1,6 +1,7 @@
 """
 Test fixtures shared across all test modules.
 """
+import os
 from datetime import UTC, datetime
 from unittest.mock import AsyncMock, MagicMock
 
@@ -10,6 +11,13 @@ from fastapi.testclient import TestClient
 
 from app.cache.memory import MemoryCache
 from app.config import Settings
+
+# `app.main` builds the app at import time (`app = create_app()`), and `create_app()`
+# reads `Settings()` from the environment / local `.env`. Set the secret before that
+# import so the suite is hermetic: it neither needs a `.env` nor depends on whatever
+# key a developer has exported. Real env vars take precedence over `.env` values.
+os.environ["API_SECRET_KEY"] = "test-secret"
+
 from app.main import create_app
 from app.providers.base import RawQuote
 from app.providers.registry import ProviderRegistry
@@ -76,4 +84,4 @@ def client(quote_service, cache, settings) -> TestClient:
     from app.dependencies import get_quote_service
     app.dependency_overrides[get_quote_service] = lambda: quote_service
 
-    return TestClient(app)
+    return TestClient(app, headers={"X-API-Key": "test-secret"})
