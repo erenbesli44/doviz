@@ -1,0 +1,19 @@
+docs/agent-runs/open-items.md
+  s_763ea42ec8a818::t_35e1347729444a 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ef99a78f127fb2afe551898996e31b0de4a98642",
+  "prompts": {},
+  "sessions": {
+    "s_763ea42ec8a818": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3cd22121-fef5-479b-b705-2e1e49e378d6",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
