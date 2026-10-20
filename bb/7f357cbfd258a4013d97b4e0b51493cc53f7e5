@@ -1,0 +1,23 @@
+CLAUDE.md
+  s_0d88b1d0b3446b::t_678d1351f4b76f 24,38
+docs/agent-runs/2026-10-20-trial.md
+  s_0d88b1d0b3446b::t_2e9aed349cc4ce 52-53
+docs/agent-runs/open-items.md
+  s_0d88b1d0b3446b::t_761cc1e4e77a38 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bb7f357cbfd258a4013d97b4e0b51493cc53f7e5",
+  "prompts": {},
+  "sessions": {
+    "s_0d88b1d0b3446b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7925eaf9-edca-452b-b539-0f53e48d2072",
+        "model": "unknown"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
