@@ -76,6 +76,7 @@ The main session is the **Lead**. Specialists are defined in `.claude/agents/` a
 ### Autonomy boundaries
 - **May do without asking**: small, evidence-backed bug fixes and clearly scoped maintenance (test hygiene, lint fixes, dependency bumps without breaking changes, docs), on a branch, with QA + review evidence.
 - **Must get the owner's decision first**: new product direction, breaking API/UI change, schema or data migration, production deployment, anything touching secrets/infra (Coolify, Hetzner, nginx, Dockerfiles), pushing to GitHub, adding paid services.
+- **Exception for scheduled cloud routines** (see `docs/scheduled-tasks.md`): they run in an isolated cloud checkout, so their only delivery channel is git. A routine may commit to a branch named `agent/<YYYY-MM-DD>-<daily|weekly>`, push it, and open a PR to `main`. It never pushes to `main` and never merges; the merge decision stays with the owner.
 - Never change agent rules, `CLAUDE.md` rule sections, or tests merely to make a check pass. If a test is wrong, record it as an open item for the owner.
 - Never duplicate work: search `open-items.md` first; update the existing record (status, evidence, date) instead of creating a new one.
 - Summarise every cycle in `docs/agent-runs/YYYY-MM-DD-<daily|weekly|trial>.md` using the template in `docs/agent-runs/README.md`, and update `open-items.md` in the same commit.
