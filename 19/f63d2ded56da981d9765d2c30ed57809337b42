@@ -1,0 +1,21 @@
+CLAUDE.md
+  s_0d88b1d0b3446b::t_ac0a1c12d33327 79
+docs/scheduled-tasks.md
+  s_0d88b1d0b3446b::t_eacc783b302f35 3,11,24,35,50,60-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "19f63d2ded56da981d9765d2c30ed57809337b42",
+  "prompts": {},
+  "sessions": {
+    "s_0d88b1d0b3446b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7925eaf9-edca-452b-b539-0f53e48d2072",
+        "model": "unknown"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
