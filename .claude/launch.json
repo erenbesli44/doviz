@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "finance-api",
-      "runtimeExecutable": "uv",
+      "runtimeExecutable": "/Users/tcebesli/.local/bin/uv",
       "runtimeArgs": ["run", "--directory", "finance-api", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"],
       "port": 8000
     },

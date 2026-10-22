@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import Icon, { type IconName } from '../ui/Icon';
 
 const TABS: { to: string; label: string; icon: IconName }[] = [
-  { to: '/',         label: 'Gündem',   icon: 'home'   },
+  { to: '/',         label: 'Beklenti', icon: 'home'   },
   { to: '/haberler', label: 'Haberler', icon: 'news'   },
   { to: '/konular',  label: 'Konular',  icon: 'topics' },
   { to: '/uzmanlar', label: 'Uzmanlar', icon: 'users'  },

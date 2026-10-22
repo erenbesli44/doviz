@@ -4,7 +4,7 @@ import Logo from '../ui/Logo';
 import Icon from '../ui/Icon';
 
 const NAV_LINKS = [
-  { to: '/',         label: 'Gündem',   end: true  },
+  { to: '/',         label: 'Beklentiler', end: true },
   { to: '/haberler', label: 'Haberler', end: false },
   { to: '/konular',  label: 'Konular',  end: false },
   { to: '/uzmanlar', label: 'Uzmanlar', end: false },
