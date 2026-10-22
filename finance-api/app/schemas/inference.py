@@ -58,3 +58,7 @@ class TopicOpinion(BaseModel):
     published_at: str
     video_url: str
     start_time_seconds: int | None = None
+    outlook: Literal["up", "down", "flat", "none"] | None = None
+    outlook_explicit: bool | None = None
+    outlook_horizon: str | None = None
+    outlook_quote: str | None = None

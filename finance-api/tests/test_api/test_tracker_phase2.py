@@ -175,6 +175,10 @@ def test_topic_opinions_returns_flat_structured_opinions(client: TestClient):
             "published_at": "2026-05-18T14:00:00Z",
             "video_url": "https://youtube.com/watch?v=abc123",
             "start_time_seconds": 752,
+            "outlook": None,
+            "outlook_explicit": None,
+            "outlook_horizon": None,
+            "outlook_quote": None,
         }
     ]
 
@@ -225,3 +229,20 @@ def test_channel_timeline_returns_oldest_to_newest_points(client: TestClient):
     assert [item["video_id"] for item in body] == [1000, 1001]
     assert body[0]["date"] == "2026-05-17"
     assert body[1]["sentiment"] == "bullish"
+
+
+def test_outlook_fields_pass_through_and_normalise():
+    from app.services.outlook import outlook_fields
+
+    entry = {"outlook": "UP", "outlook_explicit": True, "outlook_quote": "80 lira"}
+    assert outlook_fields({**entry, "outlook_horizon": ""}) == {
+        "outlook": "up",
+        "outlook_explicit": True,
+        "outlook_horizon": None,
+        "outlook_quote": "80 lira",
+    }
+    # unclassified or invalid → all None
+    assert outlook_fields({}) == {
+        "outlook": None, "outlook_explicit": None, "outlook_horizon": None, "outlook_quote": None,
+    }
+    assert outlook_fields({"outlook": "sideways", "outlook_explicit": True})["outlook"] is None

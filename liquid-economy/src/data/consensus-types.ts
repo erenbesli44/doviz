@@ -108,6 +108,10 @@ export interface TopicOpinion {
   published_at: string;
   video_url: string;
   start_time_seconds: number | null;
+  outlook?: 'up' | 'down' | 'flat' | 'none' | null;
+  outlook_explicit?: boolean | null;
+  outlook_horizon?: string | null;
+  outlook_quote?: string | null;
 }
 
 export interface ChannelOverview {
@@ -139,4 +143,8 @@ export interface PersonTimelinePoint {
   confidence: number;
   video_id: number;
   summary: string;
+  outlook?: 'up' | 'down' | 'flat' | 'none' | null;
+  outlook_explicit?: boolean | null;
+  outlook_horizon?: string | null;
+  outlook_quote?: string | null;
 }

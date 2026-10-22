@@ -1,28 +1,28 @@
 /**
  * ViewRow — one person's view on one instrument.
  *
- *   [avatar] Name                      ↓ Düşüş · 9 Eki
+ *   [avatar] Name            ↑ Yükseliş bekliyor · 9 Eki · yıl sonuna kadar
  *            "short excerpt of what they said"      Videoda izle 8:46
- *            Önceki görüş: ↑ Yükseliş · 22 Eyl  · Değişti
+ *            Önceki görüş: ↓ Düşüş · 22 Eyl · Görüşünü değiştirdi
  */
 
 import { Link } from 'react-router-dom';
 import { ProAvatar } from '../consensus/ProAvatar';
-import { SentimentChip } from '../consensus/SentimentChip';
-import { formatClock, formatDate, videoMomentUrl } from '../../lib/views';
-import type { Sentiment } from '../../data/consensus-types';
+import { DirectionChip } from './DirectionChip';
+import { formatClock, formatDate, videoMomentUrl, type Direction } from '../../lib/views';
 
 export interface ViewRowProps {
   person: string;
   avatarUrl?: string | null;
   personHref?: string;
-  sentiment: Sentiment;
+  direction: Direction;
   date: string;
+  horizon?: string | null;
   quote?: string;
   videoUrl?: string;
   startSec?: number | null;
   storyHref?: string;
-  previous?: { sentiment: Sentiment; date: string } | null;
+  previous?: { direction: Direction; date: string } | null;
   changed?: boolean;
   compact?: boolean;
 }
@@ -45,7 +45,7 @@ export function ViewRow(p: ViewRowProps) {
       <li className="flex items-center gap-3 border-b border-border py-2.5 last:border-b-0">
         <ProAvatar channelAvatarUrl={p.avatarUrl ?? undefined} name={p.person} size="sm" />
         <span className="min-w-0 flex-1 truncate text-[14px]">{name}</span>
-        <SentimentChip sentiment={p.sentiment} />
+        <DirectionChip direction={p.direction} short />
         <span className="w-14 text-right text-[12px] text-text-muted">{formatDate(p.date)}</span>
       </li>
     );
@@ -58,8 +58,9 @@ export function ViewRow(p: ViewRowProps) {
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[15px]">
           {name}
-          <SentimentChip sentiment={p.sentiment} />
+          <DirectionChip direction={p.direction} />
           <span className="text-[13px] text-text-muted">{formatDate(p.date)}</span>
+          {p.horizon && <span className="text-[13px] text-text-muted">· {p.horizon}</span>}
         </div>
         {p.quote && (
           <p className="mt-1.5 mb-0 font-serif text-[16px] leading-6 text-text">“{p.quote}”</p>
@@ -76,7 +77,7 @@ export function ViewRow(p: ViewRowProps) {
               Önceki görüş:
               {p.previous ? (
                 <>
-                  <SentimentChip sentiment={p.previous.sentiment} />
+                  <DirectionChip direction={p.previous.direction} short />
                   <span>{formatDate(p.previous.date)}</span>
                   <ChangeTag changed={!!p.changed} />
                 </>

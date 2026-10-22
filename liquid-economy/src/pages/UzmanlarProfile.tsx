@@ -11,11 +11,11 @@ import { useChannels } from '../hooks/useChannels';
 import { usePersonOverview } from '../hooks/usePersonOverview';
 import { usePersonTimeline } from '../hooks/usePersonTimeline';
 import { ProAvatar } from '../components/consensus/ProAvatar';
-import { SentimentChip } from '../components/consensus/SentimentChip';
+import { DirectionChip } from '../components/views/DirectionChip';
 import { EmptyState } from '../components/consensus/EmptyState';
 import { ChangeTag } from '../components/views/ViewRow';
 import SeoHead from '../components/seo/SeoHead';
-import { INSTRUMENT_KEYS, excerpt, formatDate, instrumentHistory, instrumentLabel } from '../lib/views';
+import { INSTRUMENT_KEYS, excerpt, formatDate, instrumentHistory, instrumentLabel, quoteOf } from '../lib/views';
 
 function InstrumentRow({ channelSlug, topicKey }: { channelSlug: string; topicKey: string }) {
   const { status, points } = usePersonTimeline(channelSlug, topicKey);
@@ -30,11 +30,12 @@ function InstrumentRow({ channelSlug, topicKey }: { channelSlug: string; topicKe
     <li className="border-b border-border py-4 last:border-b-0">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         <Link to={`/piyasa/${topicKey}`} className="headline-link w-28 text-[15px] font-semibold text-text">{label}</Link>
-        <SentimentChip sentiment={h.current.sentiment} />
-        <span className="text-[13px] text-text-muted">{formatDate(h.current.date)}</span>
+        <DirectionChip direction={h.current.direction} />
+        <span className="text-[13px] text-text-muted">{formatDate(h.current.item.date)}</span>
+        {h.current.item.outlook_horizon && <span className="text-[13px] text-text-muted">· {h.current.item.outlook_horizon}</span>}
         {h.previous ? (
           <span className="inline-flex items-center gap-2 text-[13px] text-text-muted">
-            · önce <SentimentChip sentiment={h.previous.sentiment} /> {formatDate(h.previous.date)} · <ChangeTag changed={h.changed} />
+            · önce <DirectionChip direction={h.previous.direction} short /> {formatDate(h.previous.item.date)} · <ChangeTag changed={h.changed} />
           </span>
         ) : (
           <span className="text-[13px] text-text-subtle">· ilk görüşü</span>
@@ -48,17 +49,17 @@ function InstrumentRow({ channelSlug, topicKey }: { channelSlug: string; topicKe
           {open ? 'Gizle' : `Geçmiş (${h.points.length})`}
         </button>
       </div>
-      <p className="mt-1.5 mb-0 font-serif text-[16px] leading-6 text-text">“{excerpt(h.current.summary)}”</p>
+      <p className="mt-1.5 mb-0 font-serif text-[16px] leading-6 text-text">“{quoteOf(h.current.item)}”</p>
       {open && (
         <ol className="mt-3 mb-0 list-none border-l-2 border-border p-0 pl-4">
-          {h.points.map((pt) => (
+          {h.points.map(({ item: pt, direction }) => (
             <li key={pt.video_id} className="py-2">
               <div className="flex flex-wrap items-center gap-x-3 text-[13px]">
-                <SentimentChip sentiment={pt.sentiment} />
+                <DirectionChip direction={direction} short />
                 <span className="text-text-muted">{formatDate(pt.date)}</span>
                 <Link to={`/haberler/${pt.video_id}`} className="link no-underline hover:underline">Özeti oku</Link>
               </div>
-              <p className="mt-1 mb-0 text-[14px] leading-5 text-text-muted">{excerpt(pt.summary, 160)}</p>
+              <p className="mt-1 mb-0 text-[14px] leading-5 text-text-muted">{pt.outlook_quote ? `“${pt.outlook_quote}”` : excerpt(pt.summary, 160)}</p>
             </li>
           ))}
         </ol>

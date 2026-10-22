@@ -43,7 +43,7 @@ export default function Home() {
         <p className="m-0 text-[13px] text-text-muted first-letter:uppercase">{today}</p>
       </header>
       <p className="mt-0 mb-8 max-w-[62ch] text-[15px] leading-6 text-text-muted">
-        Finans yorumcularının son {DAYS} günde açıkça belirttiği beklentiler. Net görüş belirtmeyenler listelenmez.
+        Finans yorumcularının son {DAYS} günde açıkça söylediği beklenti: fiyat bundan sonra yükselir mi, düşer mi, yatay mı gider? Net bir yön söylemeyenler listelenmez.
       </p>
 
       <div className="grid gap-x-10 gap-y-10 md:grid-cols-2">
@@ -60,6 +60,7 @@ export default function Home() {
                 {status === 'success' && list.length > 0 && (
                   <span className="text-[12px] text-text-muted">
                     <span className="text-bull">↑ {t.up}</span> · <span className="text-bear">↓ {t.down}</span>
+                    {t.flat > 0 && <> · <span className="text-neutral-sent">→ {t.flat}</span></>}
                   </span>
                 )}
               </div>
@@ -83,8 +84,8 @@ export default function Home() {
                         person={v.person}
                         avatarUrl={v.avatarUrl}
                         personHref={slugOf(v.channelName) ? `/uzmanlar/${slugOf(v.channelName)}` : undefined}
-                        sentiment={v.current.sentiment}
-                        date={v.current.published_at}
+                        direction={v.current.direction}
+                        date={v.current.item.published_at}
                       />
                     ))}
                   </ul>

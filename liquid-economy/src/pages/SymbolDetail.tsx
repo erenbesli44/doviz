@@ -16,7 +16,7 @@ import { EmptyState } from '../components/consensus/EmptyState';
 import SeoHead from '../components/seo/SeoHead';
 import { assetFromSlug } from '../data/assetMap';
 import { formatPrice } from '../lib/adapters';
-import { INSTRUMENTS, excerpt, instrumentLabel, personViews, tally } from '../lib/views';
+import { INSTRUMENTS, instrumentLabel, personViews, quoteOf, tally } from '../lib/views';
 
 const DAYS = 365;
 
@@ -66,7 +66,8 @@ export default function SymbolDetail() {
           {meta && <LivePrice symbol={meta.symbol} />}
           {status === 'success' && list.length > 0 && (
             <p className="m-0 text-[14px] text-text-muted">
-              {list.length} kişi · <span className="text-bull">↑ {t.up} yükseliş</span> · <span className="text-bear">↓ {t.down} düşüş</span> · son 12 ay
+              {list.length} kişi · <span className="text-bull">↑ {t.up} yükseliş</span> · <span className="text-bear">↓ {t.down} düşüş</span>
+              {t.flat > 0 && <> · <span className="text-neutral-sent">→ {t.flat} yatay</span></>} · son 12 ay
             </p>
           )}
         </div>
@@ -94,13 +95,14 @@ export default function SymbolDetail() {
               person={v.person}
               avatarUrl={v.avatarUrl}
               personHref={slugOf(v.channelName) ? `/uzmanlar/${slugOf(v.channelName)}` : undefined}
-              sentiment={v.current.sentiment}
-              date={v.current.published_at}
-              quote={excerpt(v.current.summary)}
-              videoUrl={v.current.video_url}
-              startSec={v.current.start_time_seconds}
-              storyHref={`/haberler/${v.current.video_id}`}
-              previous={v.previous ? { sentiment: v.previous.sentiment, date: v.previous.published_at } : null}
+              direction={v.current.direction}
+              date={v.current.item.published_at}
+              horizon={v.current.item.outlook_horizon}
+              quote={quoteOf(v.current.item)}
+              videoUrl={v.current.item.video_url}
+              startSec={v.current.item.start_time_seconds}
+              storyHref={`/haberler/${v.current.item.video_id}`}
+              previous={v.previous ? { direction: v.previous.direction, date: v.previous.item.published_at } : null}
               changed={v.changed}
             />
           ))}
@@ -108,7 +110,7 @@ export default function SymbolDetail() {
       )}
 
       <p className="mt-10 text-[12px] leading-5 text-text-subtle">
-        Her satır konuşmacının kendi videosundaki ifadesine dayanır; net yön belirtmeyenler listelenmez. Yatırım danışmanlığı kapsamında değildir.
+        Her satır konuşmacının videoda söylediği ileriye dönük beklentiye dayanır; geçmiş fiyat hareketini aktaranlar ve net yön söylemeyenler listelenmez. Yatırım danışmanlığı kapsamında değildir.
         Yanlış mı aktardık? <Link to="/iletisim" className="link">Bildirin</Link>.
       </p>
     </div>

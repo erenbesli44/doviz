@@ -13,6 +13,7 @@ from ..schemas.news import (
     NewsSummary,
     NewsVideo,
 )
+from .outlook import outlook_fields
 from .topic_mapping import to_public_topic_key, to_tracker_topic_slug
 
 logger = logging.getLogger(__name__)
@@ -190,6 +191,7 @@ class TrackerService:
                 confidence=float(entry.get("confidence") or 0.0),
                 video_id=int(entry["video_id"]),
                 summary=str(entry.get("summary") or ""),
+                **outlook_fields(entry),
             )
             for entry in entries
         ]

@@ -1,15 +1,15 @@
 /**
  * "Kim ne bekliyor" helpers — shared by the home, instrument and person pages.
  *
- * Until the tracker ships the `explicit` flag (OI-017), a directional
- * sentiment (bullish / bearish) stands in for "explicitly stated view" and
- * neutral stands in for "no clear view". Swap `isDirectional` for the flag
- * when it lands; nothing else needs to change.
+ * A view is the speaker's forward-looking price direction for the instrument
+ * (tracker `outlook`), shown only when it is their stated main scenario
+ * (`outlook_explicit`). Mentions the tracker has not classified yet fall back
+ * to the old sentiment label until the backfill covers them (OI-017).
  */
 
 import type { TopicOpinion, PersonTimelinePoint } from '../data/consensus-types';
 
-export type Direction = 'bullish' | 'bearish';
+export type Direction = 'up' | 'down' | 'flat';
 
 export interface Instrument {
   key: string;   // topic_key used by /inference and /channels endpoints
@@ -32,8 +32,21 @@ export function instrumentLabel(key: string): string {
   return INSTRUMENTS.find((i) => i.key === key)?.label ?? key;
 }
 
-export function isDirectional(s: string): s is Direction {
-  return s === 'bullish' || s === 'bearish';
+const LEGACY: Record<string, Direction> = { bullish: 'up', bearish: 'down' };
+
+type Classified = Pick<TopicOpinion, 'sentiment' | 'outlook' | 'outlook_explicit'>;
+
+/** The direction to show, or null when the speaker gave no clear forward-looking view. */
+export function directionOf(o: Classified): Direction | null {
+  if (o.outlook != null) {
+    return o.outlook_explicit && o.outlook !== 'none' ? o.outlook : null;
+  }
+  return LEGACY[o.sentiment] ?? null;
+}
+
+/** Speaker's own words when the tracker extracted them, else a summary excerpt. */
+export function quoteOf(o: { outlook_quote?: string | null; summary: string }): string {
+  return o.outlook_quote?.trim() || excerpt(o.summary);
 }
 
 export function personOf(o: TopicOpinion): string {
@@ -81,61 +94,70 @@ export function formatClock(sec: number | null): string | null {
 
 // ── Per-person current vs previous view ─────────────────────────────────────
 
+export interface DatedView<T> { item: T; direction: Direction }
+
 export interface PersonView {
   person: string;
   avatarUrl: string | null;
   channelName: string;
-  current: TopicOpinion;
-  previous: TopicOpinion | null;
+  current: DatedView<TopicOpinion>;
+  previous: DatedView<TopicOpinion> | null;
   changed: boolean;
 }
 
 const byDateDesc = <T extends { published_at: string }>(a: T, b: T) =>
   (b.published_at || '').localeCompare(a.published_at || '');
 
-/** One entry per person: their latest directional view and the one before it. */
+/** One entry per person: their latest clear view and the one before it. */
 export function personViews(opinions: TopicOpinion[]): PersonView[] {
-  const sorted = opinions.filter((o) => isDirectional(o.sentiment)).sort(byDateDesc);
-  const map = new Map<string, TopicOpinion[]>();
-  for (const o of sorted) {
+  const map = new Map<string, DatedView<TopicOpinion>[]>();
+  for (const o of [...opinions].sort(byDateDesc)) {
+    const direction = directionOf(o);
+    if (!direction) continue;
     const k = personOf(o);
-    map.set(k, [...(map.get(k) ?? []), o]);
+    map.set(k, [...(map.get(k) ?? []), { item: o, direction }]);
   }
   return Array.from(map.entries())
     .map(([person, list]) => {
       const [current, previous = null] = list;
       return {
         person,
-        avatarUrl: current.channel_avatar_url,
-        channelName: current.channel_name,
+        avatarUrl: current.item.channel_avatar_url,
+        channelName: current.item.channel_name,
         current,
         previous,
-        changed: previous !== null && previous.sentiment !== current.sentiment,
+        changed: previous !== null && previous.direction !== current.direction,
       };
     })
-    .sort((a, b) => byDateDesc(a.current, b.current));
+    .sort((a, b) => byDateDesc(a.current.item, b.current.item));
 }
 
-export function tally(views: PersonView[]): { up: number; down: number } {
-  return views.reduce(
-    (acc, v) => (v.current.sentiment === 'bullish' ? { ...acc, up: acc.up + 1 } : { ...acc, down: acc.down + 1 }),
-    { up: 0, down: 0 },
-  );
+export function tally(views: PersonView[]): Record<Direction, number> {
+  const t: Record<Direction, number> = { up: 0, down: 0, flat: 0 };
+  for (const v of views) t[v.current.direction] += 1;
+  return t;
 }
 
 // ── Person page: per-instrument history from timeline points ────────────────
 
 export interface InstrumentHistory {
-  current: PersonTimelinePoint | null;
-  previous: PersonTimelinePoint | null;
+  current: DatedView<PersonTimelinePoint> | null;
+  previous: DatedView<PersonTimelinePoint> | null;
   changed: boolean;
-  points: PersonTimelinePoint[]; // directional only, newest first
+  points: DatedView<PersonTimelinePoint>[]; // clear views only, newest first
 }
 
 export function instrumentHistory(points: PersonTimelinePoint[]): InstrumentHistory {
-  const dir = points
-    .filter((p) => isDirectional(p.sentiment))
-    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const dir: DatedView<PersonTimelinePoint>[] = [];
+  for (const p of [...points].sort((a, b) => (b.date || '').localeCompare(a.date || ''))) {
+    const direction = directionOf(p);
+    if (direction) dir.push({ item: p, direction });
+  }
   const [current = null, previous = null] = dir;
-  return { current, previous, changed: previous !== null && current !== null && previous.sentiment !== current.sentiment, points: dir };
+  return {
+    current,
+    previous,
+    changed: previous !== null && current !== null && previous.direction !== current.direction,
+    points: dir,
+  };
 }

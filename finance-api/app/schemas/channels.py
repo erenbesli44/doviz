@@ -34,3 +34,7 @@ class PersonTimelinePoint(BaseModel):
     confidence: float
     video_id: int
     summary: str
+    outlook: Literal["up", "down", "flat", "none"] | None = None
+    outlook_explicit: bool | None = None
+    outlook_horizon: str | None = None
+    outlook_quote: str | None = None

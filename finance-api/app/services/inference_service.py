@@ -6,6 +6,7 @@ import httpx
 
 from ..config import Settings
 from ..schemas.inference import InferenceLatestResponse, TopicHistoryEntry, TopicOpinion
+from .outlook import outlook_fields
 from .topic_mapping import to_tracker_topic_slug
 
 logger = logging.getLogger(__name__)
@@ -96,6 +97,7 @@ class InferenceService:
                         published_at=str(entry.get("published_at") or ""),
                         video_url=str(entry.get("video_url") or ""),
                         start_time_seconds=starts_by_video.get(video_id),
+                        **outlook_fields(entry),
                     )
                 )
 
