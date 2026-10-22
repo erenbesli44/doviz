@@ -1,0 +1,58 @@
+liquid-economy/src/pages/UzmanlarProfile.tsx
+  s_87c794085cb1de::t_65c2aafcb645d4 14,18,33-35,38,52,55,58,62
+docs/agent-runs/open-items.md
+  s_2998d96b5bdfc2::t_05e58af91f3a06 22
+  s_87c794085cb1de::t_42fa46ca8e39ad 21
+liquid-economy/src/pages/Home.tsx
+  s_87c794085cb1de::t_65c2aafcb645d4 46,63,87-88
+liquid-economy/src/pages/SymbolDetail.tsx
+  s_87c794085cb1de::t_65c2aafcb645d4 19,69-70,98-105,113
+liquid-economy/src/components/views/ViewRow.tsx
+  s_87c794085cb1de::t_65c2aafcb645d4 4,6,11-12,18,20,25,48,61,63,80
+finance-api/app/services/tracker_service.py
+  s_87c794085cb1de::t_c82d32dc34fa1a 194
+  s_87c794085cb1de::t_3f23ef03fad486 16
+finance-api/app/services/inference_service.py
+  s_87c794085cb1de::t_c82d32dc34fa1a 100
+  s_87c794085cb1de::t_3f23ef03fad486 9
+finance-api/app/schemas/inference.py
+  s_87c794085cb1de::t_c82d32dc34fa1a 61-64
+finance-api/app/services/outlook.py
+  s_87c794085cb1de::t_c82d32dc34fa1a 1-21
+liquid-economy/src/components/views/DirectionChip.tsx
+  s_87c794085cb1de::t_0bfefe9509acd3 1-22
+finance-api/app/schemas/channels.py
+  s_87c794085cb1de::t_c82d32dc34fa1a 37-40
+finance-api/tests/test_api/test_tracker_phase2.py
+  s_87c794085cb1de::t_3f23ef03fad486 232-236,244-248
+  s_87c794085cb1de::t_8d6d9a83e6e030 178-181,239-242
+  s_87c794085cb1de::t_6cc9617b8500af 237-238,243
+liquid-economy/src/data/consensus-types.ts
+  s_87c794085cb1de::t_0bfefe9509acd3 111-114,146-149
+liquid-economy/src/lib/views.ts
+  s_87c794085cb1de::t_0bfefe9509acd3 4-7,12,35-49,97-98,103-104,111,113-116,118,125-126,129,132,135-138,144-145,147,151-155,157-162
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c02ec967b48da9e72462502fbb8b871a4d1e0a53",
+  "prompts": {},
+  "sessions": {
+    "s_2998d96b5bdfc2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "565a1a1b-5fe0-475d-9755-116ecd8ac8c4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_87c794085cb1de": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7986e89d-27a9-4c09-aa2d-8f15b14376c1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
