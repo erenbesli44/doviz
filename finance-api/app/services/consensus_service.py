@@ -43,6 +43,7 @@ from ..schemas.consensus import (
     ImportantExpert,
 )
 from . import expert_weights
+from .attribution import is_multi_guest, load_known_persons, single_known_guest
 from .topic_mapping import Asset, ASSET_BY_PUBLIC_KEY, all_assets, resolve_public_key
 
 logger = logging.getLogger(__name__)
@@ -137,16 +138,29 @@ class ConsensusService:
         )
         data = await self._get(path)
         groups = data.get("channel_opinions") or []
+        known_persons = (
+            await load_known_persons(self._get)
+            if any(is_multi_guest(g.get("channel_slug")) for g in groups)
+            else {}
+        )
         flat: list[dict[str, Any]] = []
         for group in groups:
             channel_slug = (group.get("channel_slug") or "").lower() or None
             channel_name = str(group.get("channel_name") or "")
+            multi_guest = is_multi_guest(channel_slug)
             for entry in group.get("entries") or []:
+                person_name = None
+                if multi_guest:
+                    # OI-018: keep only videos with one named, known guest.
+                    person_name = single_known_guest(entry.get("video_title"), known_persons)
+                    if person_name is None:
+                        continue
                 flat.append(
                     {
                         "channel_id": group.get("channel_id"),
                         "channel_slug": channel_slug,
                         "channel_name": channel_name,
+                        "person_name": person_name,
                         "video_id": entry.get("video_id"),
                         "video_url": entry.get("video_url"),
                         "published_at": entry.get("published_at"),
@@ -354,7 +368,7 @@ def _contrarian(enriched: list[dict[str, Any]], majority: str) -> ContrarianView
     return ContrarianView(
         direction=opposite,
         summary=_shorten(top["summary"]),
-        expert_name=top["channel_name"] or None,
+        expert_name=top.get("person_name") or top["channel_name"] or None,
     )
 
 
@@ -392,7 +406,7 @@ def _important_experts(enriched: list[dict[str, Any]], limit: int = 5) -> list[I
     )[:limit]
     return [
         ImportantExpert(
-            expert_name=op["channel_name"] or "Bilinmiyor",
+            expert_name=op.get("person_name") or op["channel_name"] or "Bilinmiyor",
             channel_slug=op["channel_slug"],
             direction=(
                 op["sentiment"] if op["sentiment"] in {"bullish", "bearish"} else "neutral"

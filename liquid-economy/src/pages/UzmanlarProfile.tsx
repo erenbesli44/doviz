@@ -70,13 +70,27 @@ function InstrumentRow({ channelSlug, topicKey }: { channelSlug: string; topicKe
 
 export default function UzmanlarProfile() {
   const { slug = '' } = useParams<{ slug: string }>();
-  const { channels } = useChannels();
+  const { status: channelsStatus, channels } = useChannels();
   const { stances, status } = usePersonOverview(slug);
   const channel = channels.find((c) => c.slug === slug);
   const name = channel?.name ?? slug;
 
   const covered = INSTRUMENT_KEYS.filter((k) => stances.some((s) => s.topic_key === k));
   const silent = INSTRUMENT_KEYS.filter((k) => !covered.includes(k)).map(instrumentLabel);
+
+  // Not an expert: unknown slug, or a multi-guest channel removed from the list (OI-018).
+  if (channelsStatus === 'success' && !channel) {
+    return (
+      <div className="lg:max-w-[760px]">
+        <SeoHead path={`/uzmanlar/${slug}`} title="Uzman bulunamadı | Döviz Veri" description="Bu adres bir uzman sayfasına ait değil." />
+        <Link to="/uzmanlar" className="text-[13px] font-semibold text-text-muted no-underline hover:underline underline-offset-4">← Uzmanlar</Link>
+        <EmptyState
+          title="Uzman bulunamadı"
+          body="Bu adres bir uzmana ait değil. Farklı konukları ağırlayan kanallardaki görüşler, konuşan kişinin kendi sayfasında gösterilir."
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="lg:max-w-[760px]">

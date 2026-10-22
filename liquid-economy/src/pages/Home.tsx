@@ -14,7 +14,7 @@ import { ViewRow } from '../components/views/ViewRow';
 import { StoryRow, StoryRowSkeleton } from '../components/news/Story';
 import Icon from '../components/ui/Icon';
 import SeoHead from '../components/seo/SeoHead';
-import { INSTRUMENTS, INSTRUMENT_KEYS, personViews, tally } from '../lib/views';
+import { INSTRUMENTS, INSTRUMENT_KEYS, personViews, profileHref, tally } from '../lib/views';
 
 const DAYS = 60;
 const ROWS = 5;
@@ -24,7 +24,6 @@ export default function Home() {
   const views = useInstrumentViews(INSTRUMENT_KEYS, DAYS);
   const { status: newsStatus, stories } = useLatestNews(NEWS_ROWS);
   const { channels } = useChannels();
-  const slugOf = (channelName: string) => channels.find((c) => c.name === channelName)?.slug;
 
   const today = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' });
 
@@ -83,7 +82,7 @@ export default function Home() {
                         compact
                         person={v.person}
                         avatarUrl={v.avatarUrl}
-                        personHref={slugOf(v.channelName) ? `/uzmanlar/${slugOf(v.channelName)}` : undefined}
+                        personHref={profileHref(channels, v)}
                         direction={v.current.direction}
                         date={v.current.item.published_at}
                       />

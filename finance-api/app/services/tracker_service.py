@@ -13,6 +13,7 @@ from ..schemas.news import (
     NewsSummary,
     NewsVideo,
 )
+from .attribution import is_multi_guest
 from .outlook import outlook_fields
 from .topic_mapping import to_public_topic_key, to_tracker_topic_slug
 
@@ -83,6 +84,9 @@ class TrackerService:
             return None
 
     async def _channel_by_slug(self, slug: str) -> NewsChannel | None:
+        # OI-018: multi-guest channels are sources, not experts — no profile page.
+        if is_multi_guest(slug):
+            return None
         channels = await self._list_channels()
         for channel in channels:
             if channel.slug == slug:
@@ -108,7 +112,8 @@ class TrackerService:
         )
 
     async def list_channels_overview(self) -> list[ChannelOverview]:
-        channels = await self._list_channels()
+        # OI-018: multi-guest channels are not listed as experts.
+        channels = [c for c in await self._list_channels() if not is_multi_guest(c.slug)]
         overview_results = await asyncio.gather(
             *(self._safe_channel_topics_overview(c.id) for c in channels)
         )

@@ -16,7 +16,7 @@ import { EmptyState } from '../components/consensus/EmptyState';
 import SeoHead from '../components/seo/SeoHead';
 import { assetFromSlug } from '../data/assetMap';
 import { formatPrice } from '../lib/adapters';
-import { INSTRUMENTS, instrumentLabel, personViews, quoteOf, tally } from '../lib/views';
+import { INSTRUMENTS, instrumentLabel, personViews, profileHref, quoteOf, tally } from '../lib/views';
 
 const DAYS = 365;
 
@@ -43,7 +43,6 @@ export default function SymbolDetail() {
   const keys = useMemo(() => [slug], [slug]);
   const { status, opinions } = useInstrumentViews(keys, DAYS)[slug];
   const { channels } = useChannels();
-  const slugOf = (channelName: string) => channels.find((c) => c.name === channelName)?.slug;
 
   const list = personViews(opinions);
   const t = tally(list);
@@ -94,7 +93,7 @@ export default function SymbolDetail() {
               key={v.person}
               person={v.person}
               avatarUrl={v.avatarUrl}
-              personHref={slugOf(v.channelName) ? `/uzmanlar/${slugOf(v.channelName)}` : undefined}
+              personHref={profileHref(channels, v)}
               direction={v.current.direction}
               date={v.current.item.published_at}
               horizon={v.current.item.outlook_horizon}

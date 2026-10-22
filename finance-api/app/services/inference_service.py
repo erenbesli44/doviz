@@ -6,6 +6,7 @@ import httpx
 
 from ..config import Settings
 from ..schemas.inference import InferenceLatestResponse, TopicHistoryEntry, TopicOpinion
+from .attribution import is_multi_guest, load_known_persons, single_known_guest
 from .outlook import outlook_fields
 from .topic_mapping import to_tracker_topic_slug
 
@@ -71,8 +72,15 @@ class InferenceService:
             [int(group["channel_id"]) for group in groups],
         )
 
+        known_persons = (
+            await load_known_persons(self._get)
+            if any(is_multi_guest(g.get("channel_slug")) for g in groups)
+            else {}
+        )
+
         opinions: list[TopicOpinion] = []
         for group in groups:
+            multi_guest = is_multi_guest(group.get("channel_slug"))
             channel_id = int(group["channel_id"])
             channel = channels.get(channel_id, {})
             starts_by_video = start_times_by_channel.get(channel_id, {})
@@ -82,6 +90,12 @@ class InferenceService:
             # back to channel_name — most pros are 1:1 with their channel.
             person_name = str(group.get("person_name") or channel_name) or None
             for entry in group.get("entries") or []:
+                speaker = person_name
+                if multi_guest:
+                    # OI-018: keep only videos with one named, known guest.
+                    speaker = single_known_guest(entry.get("video_title"), known_persons)
+                    if speaker is None:
+                        continue
                 video_id = int(entry["video_id"])
                 opinions.append(
                     TopicOpinion(
@@ -89,7 +103,7 @@ class InferenceService:
                         channel_id=channel_id,
                         channel_name=channel_name,
                         channel_avatar_url=channel.get("avatar_url"),
-                        person_name=person_name,
+                        person_name=speaker,
                         sentiment=_normalize_sentiment(entry.get("sentiment")),
                         confidence=float(entry.get("confidence") or 0.0),
                         summary=str(entry.get("summary") or ""),

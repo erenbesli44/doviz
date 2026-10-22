@@ -53,6 +53,26 @@ export function personOf(o: TopicOpinion): string {
   return o.person_name || o.channel_name;
 }
 
+/** Turkish-aware key so "ATİLLA YEŞİLADA" (his channel) and "Atilla Yeşilada" (a guest spot) match. */
+export function personKey(name: string): string {
+  return name.toLocaleLowerCase('tr-TR').replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * Profile link for a view: the expert page whose name matches the speaker,
+ * else the speaker's channel. Guest spots on multi-guest channels (OI-018)
+ * resolve to the guest's own page this way.
+ */
+export function profileHref(
+  channels: { name: string; slug: string }[],
+  view: { person: string; channelName: string },
+): string | undefined {
+  const match =
+    channels.find((c) => personKey(c.name) === personKey(view.person)) ??
+    channels.find((c) => c.name === view.channelName);
+  return match ? `/uzmanlar/${match.slug}` : undefined;
+}
+
 /** Drop the "Topic: " prefix ingestion adds to every summary. */
 export function cleanSummary(s: string): string {
   const i = s.indexOf(':');
@@ -114,14 +134,14 @@ export function personViews(opinions: TopicOpinion[]): PersonView[] {
   for (const o of [...opinions].sort(byDateDesc)) {
     const direction = directionOf(o);
     if (!direction) continue;
-    const k = personOf(o);
+    const k = personKey(personOf(o));
     map.set(k, [...(map.get(k) ?? []), { item: o, direction }]);
   }
-  return Array.from(map.entries())
-    .map(([person, list]) => {
+  return Array.from(map.values())
+    .map((list) => {
       const [current, previous = null] = list;
       return {
-        person,
+        person: personOf(current.item),
         avatarUrl: current.item.channel_avatar_url,
         channelName: current.item.channel_name,
         current,
