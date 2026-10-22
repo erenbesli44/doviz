@@ -12,7 +12,7 @@ Two deployable services in one repo, plus infra docs:
 | `docs/scheduled-tasks.md` | Prompts + cron for the daily technical check and weekly product analysis | — |
 | `.redesign/`, `stitch-designs/` | Superseded design history. Not the current plan. | — |
 
-Product direction (2026-09-20): news-first reading site. Details in `docs/product.md`.
+Product direction (2026-10-22): per instrument, show what named YouTube commentators explicitly expect and how it compares with their earlier view ("kim ne bekliyor"); the news layer is the evidence. Supersedes the 2026-09-20 news-first direction. Details in `docs/product.md` §3; Phase 1 is OI-017.
 
 ## Verified commands (checked 2026-10-20)
 
