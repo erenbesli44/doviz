@@ -1,6 +1,6 @@
 # Scheduled task instructions
 
-Two recurring Claude Code **cloud routines** drive the workflow in `CLAUDE.md` (registered 2026-10-21 via `/schedule`; manage them at https://claude.ai/code/routines). Each runs as the **Lead** in an isolated cloud checkout of `erenbesli44/doviz` with the prompt below. Because the checkout is ephemeral, each run delivers its results as a branch `agent/<date>-<type>` plus a PR to `main` (the one push exception in `CLAUDE.md`). Routines never deploy or touch secrets. The cloud sandbox may block outbound network: probe failures that look like DNS/connect errors on every host are reported as `MISSING DATA (sandbox network)`, not as an outage.
+Two recurring Claude Code **cloud routines**, both daily, drive the workflow in `CLAUDE.md` (registered 2026-10-21 via `/schedule`; manage them at https://claude.ai/code/routines). Each runs as the **Lead** in an isolated cloud checkout of `erenbesli44/doviz` with the prompt below. Because the checkout is ephemeral, each run delivers its results as a branch `agent/<date>-<daily|product>` plus a PR to `main` (the one push exception in `CLAUDE.md`). Routines never deploy or touch secrets. The cloud sandbox may block outbound network: probe failures that look like DNS/connect errors on every host are reported as `MISSING DATA (sandbox network)`, not as an outage.
 
 Prerequisites for the runner environment: the repo checked out at `main`, `uv` and Node 22 available, outbound HTTPS to `dovizveri.com`/`api.dovizveri.com` (for probes) and to npm/PyPI (for installs). No `.env` is required once `agent/hermetic-tests` is merged (OI-001). A GitHub remote is needed only if the owner later allows the Lead to push branches/open PRs.
 
@@ -30,29 +30,42 @@ Rules: never change tests or agent rules just to pass; never print secret values
 
 ---
 
-## Task 2 — Weekly product analysis
-- **Name**: `doviz-weekly-product-analysis`
-- **Schedule**: Monday 07:00 Europe/Istanbul = `0 4 * * 1` UTC.
-- **Scope**: the full 12-step cycle with both analysts.
+## Task 2 — Daily product analysis (with Google Analytics)
+- **Name**: `doviz-daily-product-analysis` (routine `trig_015RjKNbJJwC9ZEMuYLCiagu`, renamed from `doviz-weekly-product-analysis` and moved from weekly to daily on 2026-10-23 at the owner's request).
+- **Schedule**: every day 07:00 Europe/Istanbul = `0 4 * * *` UTC, 30 minutes after the daily technical check.
+- **Scope**: product-analyst + critic (+ at most one implementation). Reliability is covered by Task 1, so it is not re-run here.
+- **Google Analytics**: `scripts/ga_report.py` reads GA4 property `531225194` through the GA4 Data API (read-only) and prints markdown tables: totals, pages by path, channels, landing pages, devices, countries/cities, events and a 14-day daily series, each against the previous period.
+
+**GA prerequisites (owner, one-time)** — until these are done every run records `MISSING DATA: GA4 metrics …`:
+1. In Google Cloud, create a project (or reuse one), enable the **Google Analytics Data API**, create a service account and a JSON key. No paid service is involved.
+2. In GA → Admin → Property access management for property `531225194`, add the service account e-mail with the **Viewer** role.
+3. In the cloud environment the routine uses (**Default**, `env_018rtWrDmr1k8DUtRZ8SJrXj`, at claude.ai/code → environment settings), add an environment variable `GA_SERVICE_ACCOUNT_JSON` holding the whole key JSON, and make sure network access allows `analyticsdata.googleapis.com` and `oauth2.googleapis.com`.
+4. Optional, recommended: in GA → Admin → Data streams → Define internal traffic, filter your own IP so your visits do not dominate the numbers.
+
+Local run (same output): `GOOGLE_APPLICATION_CREDENTIALS=/path/key.json uv run --script scripts/ga_report.py --days 7`.
 
 **Prompt**
 ```
-You are the Lead for the dovizveri.com maintenance and product-improvement workflow. Read CLAUDE.md fully and follow its "Multi-agent maintenance workflow" section and docs/product.md.
+You are the Lead for the dovizveri.com product-improvement workflow, running as a scheduled cloud routine in a fresh checkout of erenbesli44/doviz (branch main). Read CLAUDE.md fully and follow its "Multi-agent maintenance workflow" section, plus docs/product.md and docs/scheduled-tasks.md (Task 2). The specialist roles are in .claude/agents/ and can be spawned with the Agent tool using subagent_type = product-analyst | critic-reviewer | developer | qa-verifier.
 
-Run the WEEKLY cycle:
-1. Read docs/agent-runs/open-items.md, the most recent *-weekly.md (or *-trial.md) and the last five *-daily.md records. Items with status `selected`/`in-progress`/`review` carry over; do not propose duplicates.
-2. Spawn `product-analyst` and `reliability-analyst` in parallel with briefs (scope, what was measured last week, which open items are owner-blocked). Ask the product analyst to re-measure every number in docs/product.md §5 and to report deltas.
-3. Collect every MISSING DATA line verbatim; never estimate user demand without a source.
-4. Merge to at most 3 proposals, each with problem, evidence, baseline, expected outcome, effort, risk, how to measure, acceptance criteria.
-5. Spawn `critic-reviewer` Mode A. Respect a "pick nothing" recommendation.
-6. Select at most one implementation item. Anything that is a new product direction, breaking change, schema migration, deploy, infra or secret change is recorded as `needs-owner`, not implemented.
-7. If selected: developer in a worktree on `agent/<slug>`; then `qa-verifier` and `critic-reviewer` Mode B; max two fix rounds. Never push, never deploy.
-8. Write docs/agent-runs/YYYY-MM-DD-weekly.md (template in docs/agent-runs/README.md) including the post-release measurement plan; update open-items.md and, if numbers changed, docs/product.md §5. Commit on branch `agent/YYYY-MM-DD-weekly`, push, open a PR to main with `gh pr create` (title `agent: weekly analysis YYYY-MM-DD`, body = your summary, ending with `🤖 Generated with [Claude Code](https://claude.com/claude-code)`). Never push to main.
-9. Finish with a ≤15-line summary: metric deltas vs last week, proposals + critic verdicts, what was selected and why, the branch to review, and every NEEDS OWNER DECISION / MISSING DATA line verbatim.
-Rules: never claim success for anything not yet measured on production; never change tests or agent rules just to pass; never print secret values.
+Setup: `cd finance-api && uv sync --frozen --extra dev` and `cd liquid-economy && npm ci --ignore-scripts`. No .env is needed; the backend test suite is hermetic.
+
+Run the DAILY PRODUCT cycle:
+1. Read docs/agent-runs/open-items.md, the three most recent *-product.md records (or the latest *-weekly.md / *-trial.md if none exist) and the most recent *-daily.md. Items with status selected/in-progress/review carry over; do not propose duplicates.
+2. Google Analytics: run `uv run --script scripts/ga_report.py --days 7` from the repo root and keep its full markdown output. It compares the last 7 days with the 7 days before and adds a 14-day daily series. If it prints a `MISSING DATA:` line, copy that line verbatim and continue without GA. Never print, echo or log the GA_SERVICE_ACCOUNT_JSON value.
+3. Spawn `product-analyst` with a brief: scope, what the last product record measured, which open items are owner-blocked, and the full GA output from step 2 pasted in. Ask it to (a) re-measure every number in docs/product.md section 5 and report deltas, (b) read GA by page path against the "kim ne bekliyor" goals in docs/product.md section 3 (instrument pages /piyasa/*, person pages /uzmanlar/*, home, story pages /haberler/*), traffic channels and landing pages. Traffic is very small: with fewer than 100 sessions in the window, treat GA as directional, never base a proposal on a day-to-day change, and say so. GA has no internal-traffic filter, so visits from the owner may dominate; note it. If every outbound probe to dovizveri.com fails with DNS or connection errors, the sandbox has no network: record `MISSING DATA (sandbox network)` for live measurements instead of reporting an outage.
+4. Collect every MISSING DATA line verbatim; never estimate user demand without a source.
+5. Merge to at most 3 proposals, each with problem, evidence, baseline, expected outcome, effort, risk, how to measure (name the GA metric and page path when GA can measure it), acceptance criteria. Zero proposals is fine on a quiet day.
+6. If there is at least one proposal, spawn `critic-reviewer` in Mode A. Respect a "pick nothing" recommendation.
+7. Select at most one implementation item. Anything that is a new product direction, breaking change, schema migration, deploy, infra or secret change is recorded as needs-owner, not implemented.
+8. If selected: `developer` implements it on this checkout on a branch `agent/<slug>`; then `qa-verifier` and `critic-reviewer` Mode B; max two fix rounds. Never deploy, never call Coolify/Hetzner, never create .env files, never print secret values.
+9. Write docs/agent-runs/YYYY-MM-DD-product.md (today's UTC date; template in docs/agent-runs/README.md) with a "Google Analytics" section containing the GA tables (or the MISSING DATA line) and the post-release measurement plan; update open-items.md and, if numbers changed, docs/product.md section 5. Commit everything on branch `agent/YYYY-MM-DD-product` (merge any implementation branch into it), push, and open a PR to main with `gh pr create` — title `agent: product analysis YYYY-MM-DD`, body = your summary below, ending with the line `🤖 Generated with [Claude Code](https://claude.com/claude-code)`. Commit messages end with `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`. Never push to main, never merge the PR. If push or gh fails, say so in the final message and include the run record text inline.
+10. Finish with a summary of at most 15 lines: GA headline (active users, sessions, views, top 3 pages, with deltas), other metric deltas vs the previous product record, proposals + critic verdicts, what was selected and why, the PR link, and every NEEDS OWNER DECISION / MISSING DATA line verbatim.
+
+Rules: never claim success for anything not yet measured on production; never change tests, CLAUDE.md rule sections or .claude/agents/* just to make a check pass; never print secret values.
 ```
 
-**Expected outputs**: `docs/agent-runs/<date>-weekly.md`, updated `open-items.md` and `docs/product.md` §5, optionally one branch with evidence.
+**Expected outputs**: `docs/agent-runs/<date>-product.md` with a Google Analytics section, updated `open-items.md` and `docs/product.md` §5, optionally one branch with evidence.
 
 ---
 
@@ -64,4 +77,4 @@ Rules: never claim success for anything not yet measured on production; never ch
 
 ## Cost guardrails
 - Daily run without regression: 1 analyst ≈ 80–120k subagent tokens. With an implementation: + developer/QA/reviewer ≈ 250k.
-- Weekly run: 2 analysts + critic ≈ 300k; with implementation ≈ 550k. Review the schedule if runs routinely select nothing for two weeks (reduce to weekly only).
+- Daily product run: product-analyst + critic ≈ 150–200k; with implementation ≈ 450k. Two daily routines together cost roughly 7× the old weekly product run. Review the schedule if product runs select nothing for two weeks in a row (move back to weekly).

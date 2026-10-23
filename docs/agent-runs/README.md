@@ -1,10 +1,10 @@
 # Agent run records
 
-One file per cycle: `YYYY-MM-DD-<daily|weekly|trial>.md`. `open-items.md` is the single registry of known problems and decisions; update it in the same commit as the run record. Never create a second record for the same problem — update the existing item's status and evidence.
+One file per cycle: `YYYY-MM-DD-<daily|product|weekly|trial>.md`. `open-items.md` is the single registry of known problems and decisions; update it in the same commit as the run record. Never create a second record for the same problem — update the existing item's status and evidence.
 
 ## Run record template
 ```
-# <daily|weekly|trial> run — YYYY-MM-DD
+# <daily|product|weekly|trial> run — YYYY-MM-DD
 Lead: <session/model>   Agents used: <list>   Duration: <approx>
 
 ## 1. Inputs read

@@ -13,7 +13,7 @@ Background and critique of this direction: `docs/research/2026-10-22-influencer-
 ## 2. Audience
 - **[ASSUMPTION]** Turkish retail investors and followers of finance YouTubers who want to know, in a minute, who expects what for an instrument and whether that person has been consistent.
 - **[ASSUMPTION]** Mobile-heavy traffic (the UI has a dedicated bottom nav bar and mobile-first ordering was requested in commit history).
-- No analytics export, survey, or interview data is available to agents. GA4 is wired (`liquid-economy/.env.production`, `src/lib/analytics.ts`) but agents have no access to its reports.
+- GA4 is wired (`liquid-economy/.env.production`, `src/lib/analytics.ts`; property `531225194`). Agents read it through `scripts/ga_report.py` once the owner adds a read-only service account (`docs/scheduled-tasks.md` Task 2). First look on 2026-10-23 (GA home, last 7 days): about 9 active users, 21 sessions (12 organic search, 9 direct), mostly Istanbul; traffic is too small for more than directional conclusions. No survey or interview data exists.
 
 ## 3. Goals (decided by the owner on 2026-10-22; supersedes the 2026-09-20 news-first goals)
 1. **Explicit views per instrument.** For each instrument, list each commentator's explicitly stated expected direction (yükseliş / düşüş / yatay) in the plainest possible form: person, direction, a short verbatim quote, date, horizon if stated, link to the video moment. A commentator who only speaks in generalities about an instrument does **not** appear in that instrument's view section. Hedged or conditional remarks ("yükselirse şaşırmam", "her şey olabilir") are not explicit views.

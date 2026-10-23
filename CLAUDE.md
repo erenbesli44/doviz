@@ -9,7 +9,7 @@ Two deployable services in one repo, plus infra docs:
 | `INFRASTRUCTURE.md` | Hetzner + Coolify topology, health probes, deploy procedure, known issues | — |
 | `docs/product.md` | Product goals, audience, constraints (assumptions tagged) | — |
 | `docs/agent-runs/` | Records of every maintenance/improvement cycle + `open-items.md` registry | — |
-| `docs/scheduled-tasks.md` | Prompts + cron for the daily technical check and weekly product analysis | — |
+| `docs/scheduled-tasks.md` | Prompts + cron for the daily technical check and the daily product analysis (with Google Analytics) | — |
 | `.redesign/`, `stitch-designs/` | Superseded design history. Not the current plan. | — |
 
 Product direction (2026-10-22): per instrument, show what named YouTube commentators explicitly expect and how it compares with their earlier view ("kim ne bekliyor"); the news layer is the evidence. Supersedes the 2026-09-20 news-first direction. Details in `docs/product.md` §3; Phase 1 is OI-017.
@@ -59,7 +59,7 @@ The main session is the **Lead**. Specialists are defined in `.claude/agents/` a
 | developer | `.claude/agents/developer.md` | yes, on `agent/<slug>` branch in a worktree | implement the one selected item |
 | qa-verifier | `.claude/agents/qa-verifier.md` | no | reproduce on main, verify on branch, PASS/FAIL per criterion |
 
-### Cycle (Lead runs it; daily = steps 1–2 with reliability only, weekly = full)
+### Cycle (Lead runs it; daily tech check = steps 1–2 with reliability only; daily product = full cycle with product-analyst + GA, see `docs/scheduled-tasks.md`)
 1. Read `docs/agent-runs/open-items.md` and the last two run records. Never reopen a closed or rejected item without new evidence.
 2. Spawn the analyst(s) in parallel with a brief. Daily: reliability-analyst. Weekly: both.
 3. Surface every `MISSING DATA` line to the owner verbatim. Do not fabricate user needs.
@@ -76,10 +76,10 @@ The main session is the **Lead**. Specialists are defined in `.claude/agents/` a
 ### Autonomy boundaries
 - **May do without asking**: small, evidence-backed bug fixes and clearly scoped maintenance (test hygiene, lint fixes, dependency bumps without breaking changes, docs), on a branch, with QA + review evidence.
 - **Must get the owner's decision first**: new product direction, breaking API/UI change, schema or data migration, production deployment, anything touching secrets/infra (Coolify, Hetzner, nginx, Dockerfiles), pushing to GitHub, adding paid services.
-- **Exception for scheduled cloud routines** (see `docs/scheduled-tasks.md`): they run in an isolated cloud checkout, so their only delivery channel is git. A routine may commit to a branch named `agent/<YYYY-MM-DD>-<daily|weekly>`, push it, and open a PR to `main`. It never pushes to `main` and never merges; the merge decision stays with the owner.
+- **Exception for scheduled cloud routines** (see `docs/scheduled-tasks.md`): they run in an isolated cloud checkout, so their only delivery channel is git. A routine may commit to a branch named `agent/<YYYY-MM-DD>-<daily|product|weekly>`, push it, and open a PR to `main`. It never pushes to `main` and never merges; the merge decision stays with the owner.
 - Never change agent rules, `CLAUDE.md` rule sections, or tests merely to make a check pass. If a test is wrong, record it as an open item for the owner.
 - Never duplicate work: search `open-items.md` first; update the existing record (status, evidence, date) instead of creating a new one.
-- Summarise every cycle in `docs/agent-runs/YYYY-MM-DD-<daily|weekly|trial>.md` using the template in `docs/agent-runs/README.md`, and update `open-items.md` in the same commit.
+- Summarise every cycle in `docs/agent-runs/YYYY-MM-DD-<daily|product|weekly|trial>.md` using the template in `docs/agent-runs/README.md`, and update `open-items.md` in the same commit.
 
 ### Commit attribution for agent work
 End commit messages with `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>`; end PR descriptions with `🤖 Generated with [Claude Code](https://claude.com/claude-code)`.
