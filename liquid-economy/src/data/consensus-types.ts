@@ -116,6 +116,8 @@ export interface TopicOpinion {
 
 export interface ChannelOverview {
   id: number;
+  /** "person": a guest without a channel of their own (OI-018). */
+  kind?: 'channel' | 'person';
   name: string;
   slug: string;
   avatar_url: string | null;

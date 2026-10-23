@@ -7,6 +7,8 @@ Sentiment = Literal["bullish", "bearish", "neutral"]
 
 class ChannelOverview(BaseModel):
     id: int
+    # "channel": a YouTube channel; "person": a guest without a channel of their own (OI-018)
+    kind: Literal["channel", "person"] = "channel"
     name: str
     slug: str
     avatar_url: str | None = None

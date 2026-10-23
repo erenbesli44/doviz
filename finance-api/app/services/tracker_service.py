@@ -96,6 +96,25 @@ class TrackerService:
     async def _get_channel_topics_overview(self, channel_id: int) -> dict[str, Any]:
         return await self._get(f"/channels/{channel_id}/topics/overview")
 
+    async def _person_appearances(self) -> list[dict[str, Any]]:
+        """Persons with attributed views (OI-018). Fails closed: no person pages."""
+        try:
+            data = await self._get("/persons/appearances")
+        except Exception as exc:
+            logger.warning("tracker person appearances failed: %s", exc)
+            return []
+        return data if isinstance(data, list) else []
+
+    async def _expert_path(self, slug: str) -> str | None:
+        """Tracker path for an expert page: the person when one owns this slug
+        (their own channel plus guest appearances), else the channel."""
+        for person in await self._person_appearances():
+            own = person.get("own_channel_slug")
+            if person.get("slug") == slug and own in (None, slug):
+                return f"/persons/{int(person['id'])}"
+        channel = await self._channel_by_slug(slug)
+        return f"/channels/{channel.id}" if channel else None
+
     async def _get_topic_by_key(self, topic_key: str) -> dict[str, Any]:
         tracker_topic = to_tracker_topic_slug(topic_key)
         data = await self._get(f"/topics/{tracker_topic}/opinions?limit=1&days=365")
@@ -107,13 +126,21 @@ class TrackerService:
         topic_id: int,
         limit: int = 100,
     ) -> dict[str, Any]:
-        return await self._get(
-            f"/channels/{channel_id}/topics/{topic_id}/timeline?limit={limit}"
-        )
+        return await self._get_topic_timeline(f"/channels/{channel_id}", topic_id, limit)
+
+    async def _get_topic_timeline(
+        self,
+        owner_path: str,
+        topic_id: int,
+        limit: int = 100,
+    ) -> dict[str, Any]:
+        return await self._get(f"{owner_path}/topics/{topic_id}/timeline?limit={limit}")
 
     async def list_channels_overview(self) -> list[ChannelOverview]:
-        # OI-018: multi-guest channels are not listed as experts.
-        channels = [c for c in await self._list_channels() if not is_multi_guest(c.slug)]
+        # OI-018: multi-guest channels are not listed as experts; their guests are.
+        all_channels = await self._list_channels()
+        channels = [c for c in all_channels if not is_multi_guest(c.slug)]
+        guests = await self._guest_experts(all_channels)
         overview_results = await asyncio.gather(
             *(self._safe_channel_topics_overview(c.id) for c in channels)
         )
@@ -149,16 +176,56 @@ class TrackerService:
                     video_count=len(videos),
                 )
             )
-        return response
+        return response + guests
+
+    async def _guest_experts(self, all_channels: list[NewsChannel]) -> list[ChannelOverview]:
+        """People without a channel of their own who appear as guests (OI-018)."""
+        names = {c.slug: c.name for c in all_channels}
+        people = [
+            p for p in await self._person_appearances()
+            if not p.get("own_channel_slug") and p.get("slug") not in names
+        ]
+        overviews = await asyncio.gather(
+            *(self._safe_topics_overview(f"/persons/{int(p['id'])}") for p in people)
+        )
+        rows: list[ChannelOverview] = []
+        for person, overview in zip(people, overviews, strict=True):
+            topics = overview.get("topics") or []
+            top_topic = _top_topic(topics)
+            recent_topic = _most_recent_topic(topics)
+            shows = ", ".join(names.get(slug, slug) for slug in person.get("channel_slugs") or [])
+            rows.append(
+                ChannelOverview(
+                    id=-int(person["id"]),  # negative: never collides with a channel id
+                    kind="person",
+                    name=str(person["name"]),
+                    slug=str(person["slug"]),
+                    bio=f"Konuk olarak katıldığı programlar: {shows}." if shows else None,
+                    top_topic_key=_topic_key(top_topic),
+                    top_topic_label=_topic_label(top_topic),
+                    recent_sentiment=_sentiment_or_none(
+                        recent_topic.get("latest_sentiment") if recent_topic else None
+                    ),
+                    video_count=int(person.get("mention_count") or 0),
+                )
+            )
+        return rows
+
+    async def _safe_topics_overview(self, owner_path: str) -> dict[str, Any]:
+        try:
+            return await self._get(f"{owner_path}/topics/overview")
+        except Exception as exc:
+            logger.warning("tracker overview failed for %s: %s", owner_path, exc)
+            return {"topics": []}
 
     async def channel_overview(self, slug: str) -> list[PersonTopicStance]:
-        channel = await self._channel_by_slug(slug)
-        if channel is None:
+        owner_path = await self._expert_path(slug)
+        if owner_path is None:
             raise TrackerNotFoundError(f"/channels/{slug}")
 
-        overview = await self._get_channel_topics_overview(channel.id)
+        overview = await self._get(f"{owner_path}/topics/overview")
         topics = overview.get("topics") or []
-        confidence_by_topic = await self._latest_confidence_by_topic(channel.id, topics)
+        confidence_by_topic = await self._latest_confidence_by_topic(owner_path, topics)
 
         response: list[PersonTopicStance] = []
         for item in topics:
@@ -181,12 +248,12 @@ class TrackerService:
         slug: str,
         topic_key: str,
     ) -> list[PersonTimelinePoint]:
-        channel = await self._channel_by_slug(slug)
-        if channel is None:
+        owner_path = await self._expert_path(slug)
+        if owner_path is None:
             raise TrackerNotFoundError(f"/channels/{slug}")
 
         topic = await self._get_topic_by_key(topic_key)
-        data = await self._get_channel_topic_timeline(channel.id, int(topic["id"]))
+        data = await self._get_topic_timeline(owner_path, int(topic["id"]))
         entries = list(data.get("entries") or [])
         entries.reverse()
         return [
@@ -210,19 +277,19 @@ class TrackerService:
 
     async def _latest_confidence_by_topic(
         self,
-        channel_id: int,
+        owner_path: str,
         topics: list[dict[str, Any]],
     ) -> dict[int, float]:
         async def load(topic_id: int) -> tuple[int, float]:
             try:
-                data = await self._get_channel_topic_timeline(channel_id, topic_id, limit=1)
+                data = await self._get_topic_timeline(owner_path, topic_id, limit=1)
                 entries = data.get("entries") or []
                 if entries:
                     return topic_id, float(entries[0].get("confidence") or 0.0)
             except Exception as exc:
                 logger.warning(
-                    "tracker latest confidence failed for channel=%s topic=%s: %s",
-                    channel_id,
+                    "tracker latest confidence failed for %s topic=%s: %s",
+                    owner_path,
                     topic_id,
                     exc,
                 )

@@ -1,59 +1,25 @@
-"""Interim guest attribution for multi-guest channels (OI-018).
+"""Multi-guest channels (OI-018).
 
 Mesele Ekonomi, Integral Forextv and NCM Investment TR host different guests,
-so a view in their videos belongs to the guest, not the channel. Until the
-tracker records participants per video, a view from these channels is kept
-only when the title names exactly one guest and that guest is a person the
-tracker knows. That guest becomes the speaker; everything else is dropped.
+so they are sources, not experts. The tracker attributes each of their views to
+the participant who said it (`person_name` on the opinion entry, set only once
+the video's participants were detected). A view from these channels without a
+speaker is never shown.
 """
 
-import re
-from collections.abc import Awaitable, Callable
-from typing import Any
-
 MULTI_GUEST_CHANNEL_SLUGS = frozenset({"mesele-ekonomi", "integral-forextv", "ncm-investment-tr"})
-
-_NAME_SEPARATORS = re.compile(r"\s*(?:&|,|\+|\bve\b)\s*")
 
 
 def is_multi_guest(channel_slug: str | None) -> bool:
     return (channel_slug or "").lower() in MULTI_GUEST_CHANNEL_SLUGS
 
 
-def normalize_name(name: str) -> str:
-    """Turkish-aware casefold: 'ATİLLA YEŞİLADA' == 'Atilla Yeşilada'."""
-    lowered = name.replace("I", "ı").replace("İ", "i").lower()
-    return " ".join(lowered.split())
+def speaker_of(group: dict, entry: dict) -> str | None:
+    """Who said this view: the tracker's speaker, else (single-host channels) the channel.
 
-
-def title_participants(title: str | None) -> list[str]:
-    """Names after the last '|' in a title like 'Konu | Ad Soyad & Ad Soyad'."""
-    if not title or "|" not in title:
-        return []
-    tail = title.rsplit("|", 1)[1]
-    return [part.strip() for part in _NAME_SEPARATORS.split(tail) if part.strip()]
-
-
-def single_known_guest(title: str | None, known: dict[str, str]) -> str | None:
-    """The one guest named in the title, if the tracker knows them; else None."""
-    names = title_participants(title)
-    if len(names) != 1:
-        return None
-    return known.get(normalize_name(names[0]))
-
-
-async def load_known_persons(get: Callable[[str], Awaitable[Any]]) -> dict[str, str]:
-    """Map normalized name -> display name from tracker GET /persons/.
-
-    Fails closed: on any error no guest is known, so multi-guest views are hidden.
+    Returns None for an unattributed view on a multi-guest channel: drop it.
     """
-    try:
-        data = await get("/persons/")
-    except Exception:
-        return {}
-    known: dict[str, str] = {}
-    for item in data if isinstance(data, list) else []:
-        name = str((item or {}).get("name") or "").strip()
-        if name:
-            known[normalize_name(name)] = name
-    return known
+    person = str(entry.get("person_name") or "").strip() or None
+    if group.get("multi_guest") or is_multi_guest(group.get("channel_slug")):
+        return person
+    return person or str(group.get("person_name") or group.get("channel_name") or "") or None

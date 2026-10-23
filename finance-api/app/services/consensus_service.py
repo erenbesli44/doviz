@@ -43,7 +43,7 @@ from ..schemas.consensus import (
     ImportantExpert,
 )
 from . import expert_weights
-from .attribution import is_multi_guest, load_known_persons, single_known_guest
+from .attribution import is_multi_guest, speaker_of
 from .topic_mapping import Asset, ASSET_BY_PUBLIC_KEY, all_assets, resolve_public_key
 
 logger = logging.getLogger(__name__)
@@ -138,23 +138,16 @@ class ConsensusService:
         )
         data = await self._get(path)
         groups = data.get("channel_opinions") or []
-        known_persons = (
-            await load_known_persons(self._get)
-            if any(is_multi_guest(g.get("channel_slug")) for g in groups)
-            else {}
-        )
         flat: list[dict[str, Any]] = []
         for group in groups:
             channel_slug = (group.get("channel_slug") or "").lower() or None
             channel_name = str(group.get("channel_name") or "")
-            multi_guest = is_multi_guest(channel_slug)
+            multi_guest = group.get("multi_guest") or is_multi_guest(channel_slug)
             for entry in group.get("entries") or []:
-                person_name = None
-                if multi_guest:
-                    # OI-018: keep only videos with one named, known guest.
-                    person_name = single_known_guest(entry.get("video_title"), known_persons)
-                    if person_name is None:
-                        continue
+                # OI-018: views on multi-guest channels count only with a named speaker.
+                person_name = speaker_of(group, entry) if multi_guest else None
+                if multi_guest and person_name is None:
+                    continue
                 flat.append(
                     {
                         "channel_id": group.get("channel_id"),

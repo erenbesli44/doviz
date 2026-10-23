@@ -130,7 +130,7 @@ export default function UzmanlarProfile() {
       )}
 
       <p className="mt-10 text-[12px] leading-5 text-text-subtle">
-        Görüşler konuşmacının kendi videolarından derlenmiştir. Yatırım danışmanlığı kapsamında değildir.
+        Görüşler, kişinin kendi kanalındaki ve konuk olduğu programlardaki videolardan derlenmiştir. Yatırım danışmanlığı kapsamında değildir.
         Yanlış mı aktardık? <Link to="/iletisim" className="link">Bildirin</Link>.
       </p>
     </div>

@@ -6,7 +6,7 @@ import httpx
 
 from ..config import Settings
 from ..schemas.inference import InferenceLatestResponse, TopicHistoryEntry, TopicOpinion
-from .attribution import is_multi_guest, load_known_persons, single_known_guest
+from .attribution import speaker_of
 from .outlook import outlook_fields
 from .topic_mapping import to_tracker_topic_slug
 
@@ -72,30 +72,18 @@ class InferenceService:
             [int(group["channel_id"]) for group in groups],
         )
 
-        known_persons = (
-            await load_known_persons(self._get)
-            if any(is_multi_guest(g.get("channel_slug")) for g in groups)
-            else {}
-        )
-
         opinions: list[TopicOpinion] = []
         for group in groups:
-            multi_guest = is_multi_guest(group.get("channel_slug"))
             channel_id = int(group["channel_id"])
             channel = channels.get(channel_id, {})
             starts_by_video = start_times_by_channel.get(channel_id, {})
             channel_name = str(group.get("channel_name") or "")
-            # tracker /topics/{slug}/opinions doesn't return person_id and the
-            # Person.primary_channel_id link is unpopulated upstream, so fall
-            # back to channel_name — most pros are 1:1 with their channel.
-            person_name = str(group.get("person_name") or channel_name) or None
             for entry in group.get("entries") or []:
-                speaker = person_name
-                if multi_guest:
-                    # OI-018: keep only videos with one named, known guest.
-                    speaker = single_known_guest(entry.get("video_title"), known_persons)
-                    if speaker is None:
-                        continue
+                # The tracker names the speaker per view; single-host channels
+                # fall back to the channel. Unattributed multi-guest views: skip.
+                speaker = speaker_of(group, entry)
+                if speaker is None:
+                    continue
                 video_id = int(entry["video_id"])
                 opinions.append(
                     TopicOpinion(

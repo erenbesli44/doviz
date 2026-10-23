@@ -1,7 +1,8 @@
 /**
  * Uzmanlar — /uzmanlar
  *
- * Channel directory. Each card shows avatar, name, bio, top topic, recent stance.
+ * Expert directory: single-host channels plus guests who appear on multi-guest
+ * channels (OI-018). Each card shows avatar, name, bio, top topic, recent stance.
  */
 
 import { Link } from 'react-router-dom';
@@ -38,11 +39,13 @@ function ChannelCard({ ch }: { ch: ChannelOverview }) {
           <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {ch.name}
           </div>
-          {ch.subscriber_count && (
+          {ch.kind === 'person' ? (
+            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Konuk yorumcu</div>
+          ) : ch.subscriber_count ? (
             <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
               {ch.subscriber_count.toLocaleString('tr-TR')} abone
             </div>
-          )}
+          ) : null}
         </div>
         {ch.recent_sentiment && <SentimentChip sentiment={ch.recent_sentiment} />}
       </div>
@@ -60,7 +63,7 @@ function ChannelCard({ ch }: { ch: ChannelOverview }) {
         {ch.top_topic_label && (
           <span>En çok: <strong style={{ color: 'var(--text)' }}>{ch.top_topic_label}</strong></span>
         )}
-        <span>{ch.video_count} video</span>
+        <span>{ch.video_count} {ch.kind === 'person' ? 'görüş' : 'video'}</span>
       </div>
     </Link>
   );
