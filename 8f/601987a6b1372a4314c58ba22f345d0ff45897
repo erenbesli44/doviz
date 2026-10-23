@@ -1,0 +1,19 @@
+.gitignore
+  s_2998d96b5bdfc2::t_df15b52ffc932d 57-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8f601987a6b1372a4314c58ba22f345d0ff45897",
+  "prompts": {},
+  "sessions": {
+    "s_2998d96b5bdfc2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "565a1a1b-5fe0-475d-9755-116ecd8ac8c4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
