@@ -1,0 +1,40 @@
+liquid-economy/src/data/consensus-types.ts
+  s_2998d96b5bdfc2::t_ab4579148f325b 119-120
+finance-api/tests/test_api/test_guest_attribution.py
+  s_2998d96b5bdfc2::t_c34e5d8caedd32 1,10,15,18,29-30,35-43,49-53,61-72,75-77,82,94-100,103,109,111,113-114,118,121,123-124,127,130,132-143,146-153
+  s_2998d96b5bdfc2::t_237844e54edefb 144-145,154-155
+finance-api/app/services/attribution.py
+  s_2998d96b5bdfc2::t_f688828c9e4866 1,4-7,17-18,20,22-25
+finance-api/app/schemas/channels.py
+  s_2998d96b5bdfc2::t_89650c90ab1b4f 10-11
+finance-api/app/services/inference_service.py
+  s_2998d96b5bdfc2::t_f688828c9e4866 9,82-86
+liquid-economy/src/pages/Uzmanlar.tsx
+  s_2998d96b5bdfc2::t_5bdbe66d53f8e5 66
+  s_2998d96b5bdfc2::t_ab4579148f325b 4-5,42-44,48
+finance-api/app/services/tracker_service.py
+  s_2998d96b5bdfc2::t_89650c90ab1b4f 140-143,179-219
+  s_2998d96b5bdfc2::t_225133289c6f5d 99-117,129-137,222-223,226,228,251-252,256,280,285,291-292
+finance-api/app/services/consensus_service.py
+  s_2998d96b5bdfc2::t_f688828c9e4866 46,145,147-150
+liquid-economy/src/pages/UzmanlarProfile.tsx
+  s_2998d96b5bdfc2::t_ab4579148f325b 133
+docs/agent-runs/open-items.md
+  s_2998d96b5bdfc2::t_d1feba9b6ae504 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "179a1d726a98c84269ee7523f2e6a2b9eabaa86f",
+  "prompts": {},
+  "sessions": {
+    "s_2998d96b5bdfc2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "565a1a1b-5fe0-475d-9755-116ecd8ac8c4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
