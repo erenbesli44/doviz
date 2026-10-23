@@ -1,0 +1,19 @@
+docs/agent-runs/open-items.md
+  s_2998d96b5bdfc2::t_05cc8ec4954248 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8eaacd4f1befe5fc6603b0e06ecb9a5ebee69864",
+  "prompts": {},
+  "sessions": {
+    "s_2998d96b5bdfc2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "565a1a1b-5fe0-475d-9755-116ecd8ac8c4",
+        "model": "unknown"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
