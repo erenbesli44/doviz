@@ -11,6 +11,8 @@ import { useInstrumentViews } from '../hooks/useInstrumentViews';
 import { useLatestNews } from '../hooks/useLatestNews';
 import { useChannels } from '../hooks/useChannels';
 import { ViewRow } from '../components/views/ViewRow';
+import { LatestVideoInsights } from '../components/views/LatestVideoInsights';
+import { latestVideoInsights } from '../lib/latestInsights';
 import { StoryRow, StoryRowSkeleton } from '../components/news/Story';
 import Icon from '../components/ui/Icon';
 import SeoHead from '../components/seo/SeoHead';
@@ -19,11 +21,19 @@ import { INSTRUMENTS, INSTRUMENT_KEYS, personViews, profileHref, tally } from '.
 const DAYS = 60;
 const ROWS = 5;
 const NEWS_ROWS = 6;
+const NEWS_SCAN = 20; // newest videos scanned for the lead section
 
 export default function Home() {
   const views = useInstrumentViews(INSTRUMENT_KEYS, DAYS);
-  const { status: newsStatus, stories } = useLatestNews(NEWS_ROWS);
+  const { status: newsStatus, stories: scanned } = useLatestNews(NEWS_SCAN);
+  const stories = scanned.slice(0, NEWS_ROWS);
   const { channels } = useChannels();
+
+  const viewsLoading = INSTRUMENT_KEYS.some((k) => views[k].status === 'loading');
+  const lead = latestVideoInsights(
+    scanned,
+    Object.fromEntries(INSTRUMENT_KEYS.map((k) => [k, views[k].opinions])),
+  );
 
   const today = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' });
 
@@ -44,6 +54,10 @@ export default function Home() {
       <p className="mt-0 mb-8 max-w-[62ch] text-[15px] leading-6 text-text-muted">
         Finans yorumcularının son {DAYS} günde açıkça söylediği beklenti: fiyat bundan sonra yükselir mi, düşer mi, yatay mı gider? Net bir yön söylemeyenler listelenmez.
       </p>
+
+      <LatestVideoInsights items={lead} loading={newsStatus === 'loading' || viewsLoading} />
+
+      <div className="section-head mb-6"><h2>Araçlara göre</h2></div>
 
       <div className="grid gap-x-10 gap-y-10 md:grid-cols-2">
         {INSTRUMENTS.map((inst) => {
