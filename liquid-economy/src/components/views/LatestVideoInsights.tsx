@@ -68,6 +68,7 @@ export function LatestVideoInsights({ items, loading }: { items: VideoInsights[]
                       {opinion.video_url && (
                         <a
                           href={videoMomentUrl(opinion.video_url, opinion.start_time_seconds)}
+                          data-person={person}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="link text-[12px] no-underline hover:underline"

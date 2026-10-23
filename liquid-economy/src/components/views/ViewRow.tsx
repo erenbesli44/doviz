@@ -67,7 +67,7 @@ export function ViewRow(p: ViewRowProps) {
         )}
         <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
           {p.videoUrl && (
-            <a href={videoMomentUrl(p.videoUrl, p.startSec ?? null)} target="_blank" rel="noopener noreferrer" className="link no-underline hover:underline">
+            <a href={videoMomentUrl(p.videoUrl, p.startSec ?? null)} data-person={p.person} target="_blank" rel="noopener noreferrer" className="link no-underline hover:underline">
               Videoda izle{clock ? ` ${clock}` : ''}
             </a>
           )}
