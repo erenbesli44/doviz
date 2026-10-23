@@ -1,0 +1,26 @@
+liquid-economy/src/pages/Home.tsx
+  s_87c794085cb1de::t_0cd5d351075978 24,28-29,32-37,58-60
+  s_87c794085cb1de::t_ae803964d729fc 14-15
+  s_87c794085cb1de::t_8d5a50bb44734f 61
+liquid-economy/src/lib/latestInsights.ts
+  s_87c794085cb1de::t_ae803964d729fc 1-57
+liquid-economy/src/components/views/LatestVideoInsights.tsx
+  s_87c794085cb1de::t_ae803964d729fc 12-13
+  s_87c794085cb1de::t_0cd5d351075978 1-11,14-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4768559ac826e68f089e71a339159034b872eb57",
+  "prompts": {},
+  "sessions": {
+    "s_87c794085cb1de": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7986e89d-27a9-4c09-aa2d-8f15b14376c1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
