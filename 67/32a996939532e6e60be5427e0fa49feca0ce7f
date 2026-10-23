@@ -1,0 +1,33 @@
+CLAUDE.md
+  s_2998d96b5bdfc2::t_113ed9163c978c 12,62,79,82
+docs/scheduled-tasks.md
+  s_2998d96b5bdfc2::t_113ed9163c978c 3,33-45,49-65,68,80
+scripts/ga_report.py
+  s_2998d96b5bdfc2::t_186bd95cc39104 156
+  s_2998d96b5bdfc2::t_989ffe66aa38d6 1,3-155,157-163
+  s_2998d96b5bdfc2::t_eaa93fd293ba0d 2
+.claude/agents/product-analyst.md
+  s_2998d96b5bdfc2::t_113ed9163c978c 3,28,35
+docs/agent-runs/README.md
+  s_2998d96b5bdfc2::t_113ed9163c978c 3,7
+docs/product.md
+  s_2998d96b5bdfc2::t_113ed9163c978c 16
+docs/agent-runs/open-items.md
+  s_2998d96b5bdfc2::t_b52ed49e053b60 23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6732a996939532e6e60be5427e0fa49feca0ce7f",
+  "prompts": {},
+  "sessions": {
+    "s_2998d96b5bdfc2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "565a1a1b-5fe0-475d-9755-116ecd8ac8c4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
