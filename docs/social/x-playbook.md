@@ -31,7 +31,27 @@ standards). Profile, formats and templates: `x-account-kit.md`, `launch-posts.md
 | Evergreen explainer | ~15% | "Görüşleri nasıl sayıyoruz?", "Açık beklenti ne demek?" — reusable library (Kitces) |
 | News → which views it supports | ~20% | Only from reliable sources, linked |
 
-Cadence: **1–3 posts per day**, never more than 4. Quality over volume; skip a day rather than
+### 3.1 Commentator posts carry the full view ("Görüşün tamamı") — from 2026-10-24
+Every post about one person's view (view change, new view) shows the same full view the site shows
+under "Görüşün tamamı" (`ViewDetails.tsx`), not only the one-sentence quote:
+1. **Main post** (≤ 280): name + instrument + direction, the verbatim `outlook_quote` in quote marks
+   (date), "▶ Videoda m:ss" link, site link. Unchanged.
+2. **Reply under the main post (same thread)** — the full view:
+   - Opens with `Görüşün tamamı (özet):` then `cleanSummary(summary)` — the opinion's `summary` with
+     the leading "Konu:" prefix (≤ 40 chars before the first colon) removed. It is an AI summary, so
+     **never put it in quote marks** and never call it a quote.
+   - If `outlook_horizon` exists, end with `Vade: <horizon>.` Add up to 6 `key_levels` only when they
+     are real price levels or dates (skip ages, durations like "1 ay", "%" without context).
+   - Last line: `Videonun tüm özeti 👉 https://dovizveri.com/haberler/<video_id>?utm_source=x&utm_medium=social&utm_campaign=full_view`
+   - Split at sentence ends into ≤ 280-char parts (1–3 replies). Never cut a sentence; if it would
+     need more than 3 parts, drop the last sentences and keep the link.
+3. **Card**: the right-hand panel shows "Görüşün tamamı" with the first sentences of the same summary
+   (see `design/README.md`), so readers who only see the image still get the full view.
+4. The summary text must equal the site's text that day. If `summary` is empty or about a different
+   instrument, post no reply and say so in the run log.
+
+Cadence: **1–3 posts per day**, never more than 4. A post's "Görüşün tamamı" replies count as part
+of that post, not as extra posts. Quality over volume; skip a day rather than
 post filler. Post times are a hypothesis (09:30 and 18:00 TR); re-check after 4 weeks of data.
 
 ## 4. Natural growth (no aggressive tactics)

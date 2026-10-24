@@ -32,9 +32,15 @@ to the owner and, only after the owner approves in chat, executes it in the brow
 1. **Posts (1–3)**, each with: final text (≤ 280 X chars; URL = 23, emoji = 2; show the count),
    UTM link `?utm_source=x&utm_medium=social&utm_campaign=<format>`, the exact data rows it
    relies on (person, outlook, date, video link), and a card spec.
+   - **Commentator posts also get the "Görüşün tamamı" reply thread** (playbook §3.1): write each
+     reply part with its char count, built from that row's `summary` (leading "Konu:" prefix
+     removed), `outlook_horizon`, real `key_levels`, and the `/haberler/<video_id>` link. Never in
+     quote marks, never shortened mid-sentence. Check the text matches the site's "Görüşün tamamı".
 2. **Card brief**: for each post that needs an image, a data block for the `social-designer`
-   agent: format (outlook / weekly / view-change), headline, the people rows (name, outlook,
-   date, "Değişti: old → new"), price line, footer path. You don't design or render cards.
+   agent: format (outlook / weekly / view-change / commentator), headline, the people rows (name,
+   outlook, date, "Değişti: old → new"), price line, footer path; for commentator cards also the
+   cleaned summary, horizon and `video_id` for the "Görüşün tamamı" panel. You don't design or
+   render cards.
 3. **Replies (≤ 5)**: for each, the target post URL (only from accounts in the playbook categories,
    found via the commentators' public links or the Lead's brief), our reply text with one sourced
    fact + link, and why it adds value. Skip if nothing genuinely adds value.

@@ -25,6 +25,7 @@ Light theme only for images (X shows them on both themes; the light card has a c
 | Outlook card | 1200×675 | `card-outlook.html` | headline left, people list right, max 6 rows |
 | Weekly card | 1200×675 | (to design) | one row per instrument: bar + counts |
 | View-change card | 1200×675 | (to design) | one person, old → new, quote ≤ 140 chars |
+| Commentator card (v2, from 2026-10-24) | 1200×675 | layout of `make_cards.py` `commentator` | left: topic, name, source, direction pill, verbatim quote, "dd Ekim videosu, dakika m:ss"; **right panel = "Görüşün tamamı"**: label `GÖRÜŞÜN TAMAMI · ÖZET`, the first sentences of `cleanSummary(summary)` (no quote marks, ≥ 16 px, cut only at a sentence end, ≤ ~420 chars), then `Vade: …` if present, then "Devamı gönderinin altında · dovizveri.com/haberler/<video_id>" in accent. No peer counts while OI-020 is not live |
 | Avatar | 400×400 | `avatar-a.html` (**live** since 2026-10-24; `avatar-b.html` = unused option) | navy "DV" monogram; must read at 48 px |
 | Banner | 1500×500 | `banner-b.html` (**live** since 2026-10-24; `banner-a.html` = unused option) | "Kim ne bekliyor?" + dovizveri.com; keep x 0–420, y 300–500 clear (avatar overlap) |
 

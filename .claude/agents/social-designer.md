@@ -30,6 +30,8 @@ before anything is uploaded.
 
 ## Self-check before handing over (all must pass; report each)
 - Numbers, names, arrows and dates on the image **exactly** match the post text and data block.
+- Commentator cards: the right panel is "Görüşün tamamı · özet" (README, Commentator card v2) —
+  summary text copied exactly from the brief, cut only at a sentence end, no quote marks.
 - Header, date, footer and "Yatırım tavsiyesi değildir." present; no overflow, clipping, or
   orphan words in the headline; rows aligned; max 6 people.
 - Legible at 500 px wide: text ≥ 14 px at 1200 px; headline ≥ 40 px; contrast ≥ 4.5:1.
