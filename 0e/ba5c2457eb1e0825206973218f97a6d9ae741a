@@ -1,0 +1,19 @@
+docs/social/x-account-kit.md
+  s_7bdf4a372c101f::t_d4a899268c042f 1-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0eba5c2457eb1e0825206973218f97a6d9ae741a",
+  "prompts": {},
+  "sessions": {
+    "s_7bdf4a372c101f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "224b99ac-a052-4c97-b2e1-2e97df8b43e6",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
