@@ -1,0 +1,27 @@
+docs/social/design/README.md
+  s_fc9fdad21a8601::t_726f48222430b6 28-29
+docs/social/design/avatar-a.html
+  s_fc9fdad21a8601::t_0d85edf17aaeec 1-21
+docs/social/design/avatar-b.html
+  s_fc9fdad21a8601::t_a585d955aca2f1 1-25
+docs/social/design/banner-a.html
+  s_fc9fdad21a8601::t_fa90636aeb13dc 1-53
+docs/social/design/banner-b.html
+  s_fc9fdad21a8601::t_dfb0fbea57ecbf 1-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "867aa1c6d95becbf798ba3f709881f049a9aeabc",
+  "prompts": {},
+  "sessions": {
+    "s_fc9fdad21a8601": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "18e459a6-0424-4758-b101-4728a3b613ae",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
