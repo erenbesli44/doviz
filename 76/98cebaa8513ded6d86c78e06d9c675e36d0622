@@ -1,0 +1,19 @@
+liquid-economy/src/components/views/Verdict.tsx
+  s_382ec84e9b3741::t_e385342b7a3642 43-46,49-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7698cebaa8513ded6d86c78e06d9c675e36d0622",
+  "prompts": {},
+  "sessions": {
+    "s_382ec84e9b3741": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dc142ff7-c49d-4408-8e6b-88c1c32362fd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
