@@ -9,6 +9,7 @@
 import { Link } from 'react-router-dom';
 import { ProAvatar } from '../consensus/ProAvatar';
 import { DirectionChip } from './DirectionChip';
+import { ViewDetails } from './ViewDetails';
 import { formatClock, formatDate, instrumentLabel, quoteOf, videoMomentUrl } from '../../lib/views';
 import { VIDEOS, type VideoInsights } from '../../lib/latestInsights';
 
@@ -76,6 +77,15 @@ export function LatestVideoInsights({ items, loading }: { items: VideoInsights[]
                           Videoda izle{clock ? ` ${clock}` : ''}
                         </a>
                       )}
+                      <ViewDetails
+                        compact
+                        hideVideoLink={!!opinion.video_url}
+                        summary={opinion.summary}
+                        keyLevels={opinion.key_levels}
+                        videoUrl={opinion.video_url}
+                        startSec={opinion.start_time_seconds}
+                        storyHref={`/haberler/${story.video.id}`}
+                      />
                     </li>
                   );
                 })}

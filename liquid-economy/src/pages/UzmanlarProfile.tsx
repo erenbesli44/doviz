@@ -14,6 +14,7 @@ import { ProAvatar } from '../components/consensus/ProAvatar';
 import { DirectionChip } from '../components/views/DirectionChip';
 import { EmptyState } from '../components/consensus/EmptyState';
 import { ChangeTag } from '../components/views/ViewRow';
+import { ViewDetails } from '../components/views/ViewDetails';
 import SeoHead from '../components/seo/SeoHead';
 import { INSTRUMENT_KEYS, excerpt, formatDate, instrumentHistory, instrumentLabel, quoteOf } from '../lib/views';
 
@@ -50,6 +51,11 @@ function InstrumentRow({ channelSlug, topicKey }: { channelSlug: string; topicKe
         </button>
       </div>
       <p className="mt-1.5 mb-0 font-serif text-[16px] leading-6 text-text">“{quoteOf(h.current.item)}”</p>
+      <ViewDetails
+        summary={h.current.item.summary}
+        horizon={h.current.item.outlook_horizon}
+        storyHref={`/haberler/${h.current.item.video_id}`}
+      />
       {open && (
         <ol className="mt-3 mb-0 list-none border-l-2 border-border p-0 pl-4">
           {h.points.map(({ item: pt, direction }) => (

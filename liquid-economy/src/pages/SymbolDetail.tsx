@@ -102,6 +102,14 @@ export default function SymbolDetail() {
               startSec={v.current.item.start_time_seconds}
               storyHref={`/haberler/${v.current.item.video_id}`}
               previous={v.previous ? { direction: v.previous.direction, date: v.previous.item.published_at } : null}
+              details={{
+                summary: v.current.item.summary,
+                keyLevels: v.current.item.key_levels,
+                horizon: v.current.item.outlook_horizon,
+                videoUrl: v.current.item.video_url,
+                startSec: v.current.item.start_time_seconds,
+                storyHref: `/haberler/${v.current.item.video_id}`,
+              }}
               changed={v.changed}
             />
           ))}

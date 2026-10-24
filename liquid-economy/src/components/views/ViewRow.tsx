@@ -9,6 +9,7 @@
 import { Link } from 'react-router-dom';
 import { ProAvatar } from '../consensus/ProAvatar';
 import { DirectionChip } from './DirectionChip';
+import { ViewDetails, type ViewDetailsProps } from './ViewDetails';
 import { formatClock, formatDate, videoMomentUrl, type Direction } from '../../lib/views';
 
 export interface ViewRowProps {
@@ -25,6 +26,7 @@ export interface ViewRowProps {
   previous?: { direction: Direction; date: string } | null;
   changed?: boolean;
   compact?: boolean;
+  details?: ViewDetailsProps;
 }
 
 export function ChangeTag({ changed }: { changed: boolean }) {
@@ -71,7 +73,7 @@ export function ViewRow(p: ViewRowProps) {
               Videoda izle{clock ? ` ${clock}` : ''}
             </a>
           )}
-          {p.storyHref && <Link to={p.storyHref} className="link no-underline hover:underline">Özeti oku</Link>}
+          {p.storyHref && !p.details && <Link to={p.storyHref} className="link no-underline hover:underline">Özeti oku</Link>}
           {p.previous !== undefined && (
             <span className="inline-flex flex-wrap items-center gap-2 text-text-muted">
               Önceki görüş:
@@ -87,6 +89,7 @@ export function ViewRow(p: ViewRowProps) {
             </span>
           )}
         </div>
+        {p.details && <ViewDetails {...p.details} hideVideoLink={!!p.videoUrl} />}
       </div>
     </li>
   );
