@@ -100,6 +100,14 @@ export function formatDate(iso: string): string {
   return d.toLocaleDateString('tr-TR', sameYear ? { day: 'numeric', month: 'short' } : { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+/** "12 gün önce" / "3 ay önce"; empty for an unparseable date. */
+export function ageLabel(iso: string): string {
+  const t = new Date(iso).getTime();
+  if (Number.isNaN(t)) return '';
+  const days = Math.max(0, Math.floor((Date.now() - t) / 86_400_000));
+  return days < 60 ? `${days} gün önce` : `${Math.floor(days / 30)} ay önce`;
+}
+
 export function videoMomentUrl(url: string, startSec: number | null): string {
   if (!startSec || startSec <= 0) return url;
   return `${url}${url.includes('?') ? '&' : '?'}t=${Math.floor(startSec)}s`;

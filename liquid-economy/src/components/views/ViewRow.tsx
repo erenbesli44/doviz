@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { ProAvatar } from '../consensus/ProAvatar';
 import { DirectionChip } from './DirectionChip';
 import { ViewDetails, type ViewDetailsProps } from './ViewDetails';
-import { formatClock, formatDate, videoMomentUrl, type Direction } from '../../lib/views';
+import { ageLabel, formatClock, formatDate, videoMomentUrl, type Direction } from '../../lib/views';
 
 export interface ViewRowProps {
   person: string;
@@ -27,6 +27,8 @@ export interface ViewRowProps {
   changed?: boolean;
   compact?: boolean;
   details?: ViewDetailsProps;
+  /** Outside the counting window: grey past-tense chips, age, muted quote. */
+  past?: boolean;
 }
 
 export function ChangeTag({ changed }: { changed: boolean }) {
@@ -60,12 +62,14 @@ export function ViewRow(p: ViewRowProps) {
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[15px]">
           {name}
-          <DirectionChip direction={p.direction} />
-          <span className="text-[13px] text-text-muted">{formatDate(p.date)}</span>
+          <DirectionChip direction={p.direction} past={p.past} />
+          <span className="text-[13px] text-text-muted">
+            {formatDate(p.date)}{p.past && ageLabel(p.date) && ` · ${ageLabel(p.date)}`}
+          </span>
           {p.horizon && <span className="text-[13px] text-text-muted">· {p.horizon}</span>}
         </div>
         {p.quote && (
-          <p className="mt-1.5 mb-0 font-serif text-[16px] leading-6 text-text">“{p.quote}”</p>
+          <p className={`mt-1.5 mb-0 font-serif text-[16px] leading-6 ${p.past ? 'text-text-muted' : 'text-text'}`}>“{p.quote}”</p>
         )}
         <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
           {p.videoUrl && (
@@ -79,7 +83,7 @@ export function ViewRow(p: ViewRowProps) {
               Önceki görüş:
               {p.previous ? (
                 <>
-                  <DirectionChip direction={p.previous.direction} short />
+                  <DirectionChip direction={p.previous.direction} short past={p.past} />
                   <span>{formatDate(p.previous.date)}</span>
                   <ChangeTag changed={!!p.changed} />
                 </>

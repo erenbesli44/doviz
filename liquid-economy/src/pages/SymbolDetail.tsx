@@ -44,7 +44,7 @@ function VerdictLine({ views }: { views: PersonView[] }) {
   );
 }
 
-function ViewList({ views, channels }: { views: PersonView[]; channels: { name: string; slug: string }[] }) {
+function ViewList({ views, channels, past = false }: { views: PersonView[]; channels: { name: string; slug: string }[]; past?: boolean }) {
   if (views.length === 0) return null;
   return (
     <ul className="m-0 list-none p-0">
@@ -71,6 +71,7 @@ function ViewList({ views, channels }: { views: PersonView[]; channels: { name: 
             storyHref: `/haberler/${v.current.item.video_id}`,
           }}
           changed={v.changed}
+          past={past}
         />
       ))}
     </ul>
@@ -159,7 +160,15 @@ export default function SymbolDetail() {
           <p className="mt-2 mb-0 text-[13px] text-text-muted">
             Son {VIEW_WINDOW_DAYS} günde yeni görüş bildirmeyenler; yukarıdaki sayıya katılmaz.
           </p>
-          <ViewList views={older} channels={channels} />
+          {/* Collapsed by default so out-of-window views are never skimmed as current ones. */}
+          <details className="group/older mt-3">
+            <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-[14px] font-semibold text-accent select-none hover:underline underline-offset-4 [&::-webkit-details-marker]:hidden">
+              <span aria-hidden="true" className="inline-block transition-transform group-open/older:rotate-90">›</span>
+              <span className="group-open/older:hidden">{older.length} eski görüşü göster</span>
+              <span className="hidden group-open/older:inline">Eski görüşleri gizle</span>
+            </summary>
+            <ViewList views={older} channels={channels} past />
+          </details>
         </section>
       )}
 
