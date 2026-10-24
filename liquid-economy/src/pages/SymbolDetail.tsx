@@ -17,27 +17,21 @@ import { EmptyState } from '../components/consensus/EmptyState';
 import SeoHead from '../components/seo/SeoHead';
 import { assetFromSlug } from '../data/assetMap';
 import { formatPrice } from '../lib/adapters';
+import { VerdictText } from '../components/views/Verdict';
 import {
-  DIRECTION_ARROW, EXPECTATION_WORD, INSTRUMENTS, VIEW_WINDOW_DAYS, instrumentLabel, inWindow, numeralSuffix,
-  personViews, profileHref, quoteOf, tally, verdictOf, type Direction, type PersonView,
+  INSTRUMENTS, VIEW_WINDOW_DAYS, instrumentLabel, inWindow,
+  personViews, profileHref, quoteOf, tally, type PersonView,
 } from '../lib/views';
 
 const DAYS = 365; // history, so the previous view and older views can be shown
 
-const TONE: Record<Direction, string> = { up: 'text-bull', down: 'text-bear', flat: 'text-neutral-sent' };
-
 function VerdictLine({ views }: { views: PersonView[] }) {
-  const v = verdictOf(views);
-  if (!v) return null;
+  if (views.length === 0) return null;
   const changed = views.filter((x) => x.changed).length;
   return (
     <>
       <p className="mt-4 mb-0 font-serif text-[22px] leading-snug font-semibold tracking-tight text-text md:text-[26px]">
-        {v.kind === 'majority' && (
-          <>{v.total} yorumcudan <span className={TONE[v.direction]}>{DIRECTION_ARROW[v.direction]} {v.count}{numeralSuffix(v.count)} {EXPECTATION_WORD[v.direction]}</span> bekliyor</>
-        )}
-        {v.kind === 'split' && <>Görüşler <span className="text-neutral-sent">bölünmüş</span></>}
-        {v.kind === 'few' && <>Son {VIEW_WINDOW_DAYS} günde yalnızca {v.total} yorumcu net görüş bildirdi</>}
+        <VerdictText views={views} />
       </p>
       {changed > 0 && <p className="mt-1 mb-0 text-[14px] text-text-muted">{changed} yorumcu görüşünü değiştirdi.</p>}
     </>
