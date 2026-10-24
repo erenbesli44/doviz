@@ -69,6 +69,21 @@ Rules: never claim success for anything not yet measured on production; never ch
 
 ---
 
+## Task 3 — Daily X plan (growth plan, local desktop task)
+
+- **Task ID:** `x-usdtry-monday-draft`, desktop app scheduled task. Weekdays at 08:30 local time; it runs only while the app is open.
+- **Prompt:** the prompt itself lives in `~/.claude/scheduled-tasks/x-usdtry-monday-draft/SKILL.md`, not in this repo.
+- **What it does:** applies `docs/social/growth-plan-2026-10.md` §0 from 2026-10-27 to 2026-11-23.
+  1. Checks the gates: whether OI-020 is live (the bundle no longer contains "son 12 ay"), the week number, and the posts-per-day limit.
+  2. Spawns `social-manager` to write the run file and `social-designer` to make the cards. Every card carries the disclaimer and alt text.
+  3. Shows the owner the drafts and waits for approval of each item.
+  4. Executes only the approved actions in the built-in browser.
+  5. Commits `docs/social/` to main, without pushing.
+  6. On Fridays, adds the weekly checkpoint. On or after 2026-11-23, writes the 4-week review.
+- **It never:** publishes without approval, deletes legacy posts, or handles credentials.
+
+---
+
 ## Owner checklist after each run
 1. Read the PR; answer any `NEEDS OWNER DECISION` / `MISSING DATA` lines by editing `open-items.md` or `docs/product.md` (that is how answers reach the next run).
 2. Review the diff on the PR; merge it (squash or rebase) or close it with a comment explaining why — the next run reads closed PRs' records only if merged, so record rejections in `open-items.md`.
