@@ -1,0 +1,21 @@
+docs/agent-runs/2026-10-24-product.md
+  s_fc9fdad21a8601::t_39f5855e5334b0 94-109
+docs/agent-runs/open-items.md
+  s_fc9fdad21a8601::t_76f939b7461624 24-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d66020d97d9f27e8bfed7112dee48c926e8eef4e",
+  "prompts": {},
+  "sessions": {
+    "s_fc9fdad21a8601": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "18e459a6-0424-4758-b101-4728a3b613ae",
+        "model": "unknown"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
