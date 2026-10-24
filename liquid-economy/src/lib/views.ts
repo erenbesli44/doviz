@@ -102,7 +102,7 @@ export function formatDate(iso: string): string {
 
 /** "bugün" / "12 gün önce" / "3 ay önce" / "1 yıl önce"; empty for an unparseable date. */
 export function ageLabel(iso: string): string {
-  const t = new Date(iso).getTime();
+  const t = localTime(iso);
   if (Number.isNaN(t)) return '';
   const days = Math.max(0, Math.floor((Date.now() - t) / DAY_MS));
   if (days === 0) return 'bugün';
@@ -181,9 +181,17 @@ export const VIEW_WINDOW_DAYS = 30;
 
 const DAY_MS = 86_400_000;
 
-// Dates have no zone and are read as local time, like every date shown on the site.
+/**
+ * Timestamps have no zone and JS reads them as local time; a date-only string
+ * ("2026-09-19", person timelines) would be read as UTC midnight, so read it
+ * as local midnight too and both pages agree at the window edge.
+ */
+function localTime(iso: string): number {
+  return new Date(/^\d{4}-\d{2}-\d{2}$/.test(iso) ? `${iso}T00:00:00` : iso).getTime();
+}
+
 export function isRecent(iso: string): boolean {
-  const t = new Date(iso).getTime();
+  const t = localTime(iso);
   return !Number.isNaN(t) && Date.now() - t < VIEW_WINDOW_DAYS * DAY_MS;
 }
 
