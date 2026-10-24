@@ -40,13 +40,16 @@ export function PersonBar({ views }: { views: PersonView[] }) {
   );
 }
 
-/** "↓ düşüş → ↑ yükseliş" — a change of view, arrow + word on both sides. */
+/**
+ * "düşüş → yükseliş" — a change of view. The words carry the direction (colour
+ * only supports them); no direction arrows, or "yatay" would read "→ yatay → …".
+ */
 export function ChangeText({ from, to }: { from: Direction; to: Direction }) {
   return (
-    <span className="whitespace-nowrap">
-      <span className={TONE[from]}>{DIRECTION_ARROW[from]} {COUNT_WORD[from]}</span>
-      <span className="text-text-muted"> → </span>
-      <span className={TONE[to]}>{DIRECTION_ARROW[to]} {COUNT_WORD[to]}</span>
+    <span className="whitespace-nowrap font-semibold">
+      <span className={TONE[from]}>{COUNT_WORD[from]}</span>
+      <span className="font-normal text-text-muted"> → </span>
+      <span className={TONE[to]}>{COUNT_WORD[to]}</span>
     </span>
   );
 }
