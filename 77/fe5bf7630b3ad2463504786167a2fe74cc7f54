@@ -1,0 +1,39 @@
+CLAUDE.md
+  s_fc9fdad21a8601::t_72b0e77e3ca89c 62
+docs/social/design/render.sh
+  s_fc9fdad21a8601::t_6ea277b44338e7 1-20
+.claude/agents/social-manager.md
+  s_fc9fdad21a8601::t_1ab6d6e5b063ac 34-36
+.claude/agents/social-designer.md
+  s_fc9fdad21a8601::t_19e79665db528d 37
+  s_7bdf4a372c101f::t_470913e0fa3e3c 1-36,38-54
+docs/social/design/README.md
+  s_fc9fdad21a8601::t_87311f6d40744d 1-42,44
+  s_fc9fdad21a8601::t_725251ba79ab84 43
+docs/social/design/card-outlook.html
+  s_fc9fdad21a8601::t_d2ab73261f9909 1-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "77fe5bf7630b3ad2463504786167a2fe74cc7f54",
+  "prompts": {},
+  "sessions": {
+    "s_7bdf4a372c101f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "224b99ac-a052-4c97-b2e1-2e97df8b43e6",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_fc9fdad21a8601": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "18e459a6-0424-4758-b101-4728a3b613ae",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
