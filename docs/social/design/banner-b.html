@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  /* Banner B (accent): centred-right type on navy, legend of the three directions.
+     Safe zones: no text in x 0-420 / y 300-500; all text inside y 60-440. */
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1500px; height: 500px; }
+  body { background: #1F3A8A; color: #FAFAF7; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; }
+  .copy { position: absolute; left: 480px; top: 70px; width: 940px; }
+  .brand { font-size: 20px; font-weight: 700; letter-spacing: .1em; color: #FAFAF7; opacity: .85; }
+  h1 { font-family: "Source Serif 4", Georgia, serif; font-weight: 600; font-size: 92px; line-height: 1.02;
+       letter-spacing: -.015em; margin-top: 12px; }
+  .sub { margin-top: 18px; font-size: 25px; line-height: 1.4; color: #DCE2F2; }
+  .foot { position: absolute; left: 480px; top: 356px; width: 940px; display: flex; align-items: center;
+          justify-content: space-between; padding-top: 22px; border-top: 1px solid rgba(250,250,247,.28); }
+  .url { font-size: 28px; font-weight: 600; }
+  .legend { display: flex; gap: 12px; }
+  .pill { font-size: 19px; font-weight: 600; padding: 7px 15px; border-radius: 999px; white-space: nowrap; }
+  .up { color: #15703D; background: #E4F4EA; }
+  .flat { color: #4B5563; background: #ECEDEE; }
+  .down { color: #B83227; background: #FBE6E2; }
+</style>
+</head>
+<body>
+  <div class="copy">
+    <div class="brand">DÖVİZ VERİ</div>
+    <h1>Kim ne bekliyor?</h1>
+    <p class="sub">YouTube yorumcularının dolar, altın, borsa beklentileri — kaynağıyla.</p>
+  </div>
+  <div class="foot">
+    <span class="url">dovizveri.com</span>
+    <span class="legend"><span class="pill up">↑ Yükseliş</span><span class="pill flat">→ Yatay</span><span class="pill down">↓ Düşüş</span></span>
+  </div>
+</body>
+</html>

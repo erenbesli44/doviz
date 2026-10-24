@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  /* Banner A (light): headline block right of the avatar zone; schematic "people list" panel.
+     Safe zones: no text in x 0-420 / y 300-500; all text inside y 60-440. */
+  :root { --bg:#FAFAF7; --surface:#FFFFFF; --border:#E3E1DA; --text:#16181B; --muted:#555A62;
+          --accent:#1F3A8A; --bull:#15703D; --bull-bg:#E4F4EA; --bear:#B83227; --bear-bg:#FBE6E2;
+          --neutral:#4B5563; --neutral-bg:#ECEDEE; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1500px; height: 500px; }
+  body { background: var(--bg); color: var(--text); font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; }
+  .topline { position: absolute; left: 0; right: 0; top: 0; height: 8px; background: var(--accent); }
+  .copy { position: absolute; left: 80px; top: 78px; width: 760px; }
+  .brand { font-size: 20px; font-weight: 700; color: var(--accent); letter-spacing: .1em; }
+  h1 { font-family: "Source Serif 4", Georgia, serif; font-weight: 600; font-size: 84px; line-height: 1.04;
+       letter-spacing: -.015em; margin-top: 14px; }
+  .sub { margin-top: 18px; font-size: 24px; line-height: 1.4; color: var(--muted); width: 700px; }
+  .url { position: absolute; left: 480px; top: 372px; font-size: 26px; font-weight: 600; color: var(--accent); }
+  .url::before { content: ""; display: inline-block; width: 36px; height: 3px; background: var(--accent);
+                 vertical-align: middle; margin-right: 14px; transform: translateY(-2px); }
+  ul { position: absolute; left: 960px; top: 70px; width: 460px; height: 360px; list-style: none; padding: 0;
+       background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+       display: flex; flex-direction: column; }
+  li { flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 0 26px;
+       border-top: 1px solid var(--border); }
+  li:first-child { border-top: 0; }
+  .ph { display: flex; flex-direction: column; gap: 9px; }
+  .ph i { display: block; height: 12px; border-radius: 6px; background: #E3E1DA; }
+  .ph i + i { height: 9px; background: #EEECE6; }
+  .pill { font-size: 19px; font-weight: 600; padding: 7px 15px; border-radius: 999px; white-space: nowrap; }
+  .up { color: var(--bull); background: var(--bull-bg); }
+  .flat { color: var(--neutral); background: var(--neutral-bg); }
+  .down { color: var(--bear); background: var(--bear-bg); }
+</style>
+</head>
+<body>
+  <div class="topline"></div>
+  <div class="copy">
+    <div class="brand">DÖVİZ VERİ</div>
+    <h1>Kim ne bekliyor?</h1>
+    <p class="sub">YouTube yorumcularının dolar, altın, borsa beklentileri — kaynağıyla.</p>
+  </div>
+  <div class="url">dovizveri.com</div>
+  <ul>
+    <li><span class="ph"><i style="width:170px"></i><i style="width:110px"></i></span><span class="pill up">↑ Yükseliş</span></li>
+    <li><span class="ph"><i style="width:140px"></i><i style="width:90px"></i></span><span class="pill flat">→ Yatay</span></li>
+    <li><span class="ph"><i style="width:190px"></i><i style="width:120px"></i></span><span class="pill down">↓ Düşüş</span></li>
+  </ul>
+</body>
+</html>

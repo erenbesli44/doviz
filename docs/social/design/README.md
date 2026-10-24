@@ -25,8 +25,8 @@ Light theme only for images (X shows them on both themes; the light card has a c
 | Outlook card | 1200×675 | `card-outlook.html` | headline left, people list right, max 6 rows |
 | Weekly card | 1200×675 | (to design) | one row per instrument: bar + counts |
 | View-change card | 1200×675 | (to design) | one person, old → new, quote ≤ 140 chars |
-| Avatar | 400×400 | (to design) | monogram/mark on accent; must read at 48 px |
-| Banner | 1500×500 | (to design) | "Kim ne bekliyor?" + dovizveri.com; keep the left 400 px of the lower half clear (avatar overlap) |
+| Avatar | 400×400 | `avatar-a.html` (**live** since 2026-10-24; `avatar-b.html` = unused option) | navy "DV" monogram; must read at 48 px |
+| Banner | 1500×500 | `banner-b.html` (**live** since 2026-10-24; `banner-a.html` = unused option) | "Kim ne bekliyor?" + dovizveri.com; keep x 0–420, y 300–500 clear (avatar overlap) |
 
 ## Fixed rules
 - Header: `DÖVİZ VERİ · Kim ne bekliyor?` left, date (`24 Ekim 2026`) right.
