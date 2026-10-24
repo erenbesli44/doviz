@@ -1,0 +1,19 @@
+liquid-economy/src/pages/SymbolDetail.tsx
+  s_382ec84e9b3741::t_cf1716f9fb7622 104-105,122,138,158
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9f8ea6e4a02783305963ae178619544b32f9203c",
+  "prompts": {},
+  "sessions": {
+    "s_382ec84e9b3741": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dc142ff7-c49d-4408-8e6b-88c1c32362fd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
