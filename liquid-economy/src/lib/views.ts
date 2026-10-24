@@ -181,10 +181,14 @@ export const VIEW_WINDOW_DAYS = 30;
 
 const DAY_MS = 86_400_000;
 
-// `published_at` has no zone and is read as local time, like every date shown on the site.
-export function inWindow(view: PersonView): boolean {
-  const t = new Date(view.current.item.published_at).getTime();
+// Dates have no zone and are read as local time, like every date shown on the site.
+export function isRecent(iso: string): boolean {
+  const t = new Date(iso).getTime();
   return !Number.isNaN(t) && Date.now() - t < VIEW_WINDOW_DAYS * DAY_MS;
+}
+
+export function inWindow(view: PersonView): boolean {
+  return isRecent(view.current.item.published_at);
 }
 
 // ── Verdict headline ("7 yorumcudan 5'i yükseliş bekliyor") ─────────────────

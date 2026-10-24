@@ -3,6 +3,8 @@
  *
  * One commentator: for each instrument, their current clearly stated view,
  * the view before it, and whether it changed. "Geçmiş" opens the full list.
+ * A latest view older than the counting window is shown as past (grey,
+ * "…bekliyordu", age), the same way the instrument page shows it.
  */
 
 import { useState } from 'react';
@@ -16,7 +18,7 @@ import { EmptyState } from '../components/consensus/EmptyState';
 import { ChangeTag } from '../components/views/ViewRow';
 import { ViewDetails } from '../components/views/ViewDetails';
 import SeoHead from '../components/seo/SeoHead';
-import { INSTRUMENT_KEYS, excerpt, formatDate, instrumentHistory, instrumentLabel, quoteOf } from '../lib/views';
+import { INSTRUMENT_KEYS, ageLabel, excerpt, formatDate, instrumentHistory, instrumentLabel, isRecent, quoteOf } from '../lib/views';
 
 function InstrumentRow({ channelSlug, topicKey }: { channelSlug: string; topicKey: string }) {
   const { status, points } = usePersonTimeline(channelSlug, topicKey);
@@ -26,17 +28,21 @@ function InstrumentRow({ channelSlug, topicKey }: { channelSlug: string; topicKe
 
   if (status === 'loading') return <li className="border-b border-border py-4"><div className="skeleton h-6 w-2/3" /></li>;
   if (!h.current) return null;
+  const past = !isRecent(h.current.item.date);
+  const age = past ? ageLabel(h.current.item.date) : '';
 
   return (
     <li className="border-b border-border py-4 last:border-b-0">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         <Link to={`/piyasa/${topicKey}`} className="headline-link w-28 text-[15px] font-semibold text-text">{label}</Link>
-        <DirectionChip direction={h.current.direction} />
-        <span className="text-[13px] text-text-muted">{formatDate(h.current.item.date)}</span>
+        <DirectionChip direction={h.current.direction} past={past} />
+        <span className="text-[13px] text-text-muted">
+          {formatDate(h.current.item.date)}{age && ` · ${age}`}
+        </span>
         {h.current.item.outlook_horizon && <span className="text-[13px] text-text-muted">· {h.current.item.outlook_horizon}</span>}
         {h.previous ? (
           <span className="inline-flex items-center gap-2 text-[13px] text-text-muted">
-            · önce <DirectionChip direction={h.previous.direction} short /> {formatDate(h.previous.item.date)} · <ChangeTag changed={h.changed} />
+            · önce <DirectionChip direction={h.previous.direction} short past={past} /> {formatDate(h.previous.item.date)} · <ChangeTag changed={h.changed} past={past} />
           </span>
         ) : (
           <span className="text-[13px] text-text-subtle">· ilk görüşü</span>
@@ -50,7 +56,7 @@ function InstrumentRow({ channelSlug, topicKey }: { channelSlug: string; topicKe
           {open ? 'Gizle' : `Geçmiş (${h.points.length})`}
         </button>
       </div>
-      <p className="mt-1.5 mb-0 font-serif text-[16px] leading-6 text-text">“{quoteOf(h.current.item)}”</p>
+      <p className={`mt-1.5 mb-0 font-serif text-[16px] leading-6 ${past ? 'text-text-muted' : 'text-text'}`}>“{quoteOf(h.current.item)}”</p>
       <ViewDetails
         summary={h.current.item.summary}
         horizon={h.current.item.outlook_horizon}
