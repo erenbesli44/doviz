@@ -1,0 +1,26 @@
+liquid-economy/src/components/views/PriceLine.tsx
+  s_382ec84e9b3741::t_9520545e836fd6 9,14-16
+  s_382ec84e9b3741::t_15536331c94c05 23
+liquid-economy/src/pages/Home.tsx
+  s_382ec84e9b3741::t_8e0afdb8abf9ba 113-115
+  s_382ec84e9b3741::t_42bf7894025861 109
+liquid-economy/src/hooks/useSSEQuotes.ts
+  s_382ec84e9b3741::t_da39bb6397b6ff 5
+  s_382ec84e9b3741::t_2f538950ace244 23-52,54,57-58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0c3de62934b4e69b6d49b93dde1bc5558f44c1a1",
+  "prompts": {},
+  "sessions": {
+    "s_382ec84e9b3741": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dc142ff7-c49d-4408-8e6b-88c1c32362fd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
