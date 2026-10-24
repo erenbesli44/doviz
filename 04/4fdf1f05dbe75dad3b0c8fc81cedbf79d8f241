@@ -1,0 +1,27 @@
+liquid-economy/src/pages/UzmanlarProfile.tsx
+  s_382ec84e9b3741::t_d1ed57784da4c4 32
+  s_382ec84e9b3741::t_6364c2a67509e8 21
+  s_382ec84e9b3741::t_3582a61fc58f24 31,38-39,41,45
+  s_382ec84e9b3741::t_6c4234fe1e6118 40
+  s_382ec84e9b3741::t_11e9fe6184ddb0 6-7
+  s_382ec84e9b3741::t_16fd0063c68f4f 59
+liquid-economy/src/lib/views.ts
+  s_382ec84e9b3741::t_1aa968c6ec4a6d 184-186,190-191
+  s_382ec84e9b3741::t_1b5218ed2b90a9 192-193
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "044fdf1f05dbe75dad3b0c8fc81cedbf79d8f241",
+  "prompts": {},
+  "sessions": {
+    "s_382ec84e9b3741": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dc142ff7-c49d-4408-8e6b-88c1c32362fd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
