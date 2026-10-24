@@ -17,10 +17,10 @@ import { EmptyState } from '../components/consensus/EmptyState';
 import SeoHead from '../components/seo/SeoHead';
 import { assetFromSlug } from '../data/assetMap';
 import { PriceLine } from '../components/views/PriceLine';
-import { VerdictText } from '../components/views/Verdict';
+import { PersonBar, TallyLine, VerdictText } from '../components/views/Verdict';
 import {
   INSTRUMENTS, VIEW_WINDOW_DAYS, instrumentLabel, inWindow,
-  personViews, profileHref, quoteOf, tally, type PersonView,
+  personViews, profileHref, quoteOf, type PersonView,
 } from '../lib/views';
 
 const DAYS = 365; // history, so the previous view and older views can be shown
@@ -91,34 +91,41 @@ export default function SymbolDetail() {
   const all = personViews(opinions);
   const list = all.filter((v) => inWindow(v));
   const older = all.filter((v) => !inWindow(v));
-  const t = tally(list);
   const known = INSTRUMENTS.some((i) => i.key === slug);
 
   return (
-    <div className="lg:max-w-[760px]">
+    <div className="lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start lg:gap-12">
       <SeoHead
         path={`/piyasa/${slug}`}
         title={`${label}: Kim Ne Bekliyor? | Döviz Veri`}
         description={`${label} için finans yorumcularının açıkça belirttiği beklentiler, ne dedikleri ve önceki görüşleri.`}
       />
-      <Link to="/" className="text-[13px] font-semibold text-text-muted no-underline hover:underline underline-offset-4">← Kim ne bekliyor</Link>
 
-      <header className="mt-3 mb-6 border-b border-border pb-5">
-        <h1 className="m-0 font-serif text-[30px] leading-tight font-semibold tracking-tight text-text md:text-[38px]">
+      {/* Verdict panel: stays in view on wide screens while the list scrolls. */}
+      <header className="mb-6 border-b border-border pb-5 lg:sticky lg:top-20 lg:mb-0 lg:border-b-0 lg:pb-0">
+        <Link to="/" className="text-[13px] font-semibold text-text-muted no-underline hover:underline underline-offset-4">← Kim ne bekliyor</Link>
+        <h1 className="mt-3 mb-0 font-serif text-[30px] leading-tight font-semibold tracking-tight text-text md:text-[38px]">
           {label}: kim ne bekliyor?
         </h1>
         {status === 'success' && <VerdictLine views={list} />}
-        <div className="mt-2 flex flex-wrap items-baseline gap-x-5 gap-y-1">
+        {status === 'success' && list.length > 0 && (
+          <div className="mt-4">
+            <PersonBar views={list} />
+            <TallyLine views={list} />
+          </div>
+        )}
+        <div className="mt-3 space-y-1">
           {meta && <LivePrice symbol={meta.symbol} />}
           {status === 'success' && list.length > 0 && (
-            <p className="m-0 text-[14px] text-text-muted">
-              {list.length} kişi · <span className="text-bull">↑ {t.up} yükseliş</span> · <span className="text-bear">↓ {t.down} düşüş</span>
-              {t.flat > 0 && <> · <span className="text-neutral-sent">→ {t.flat} yatay</span></>} · son {VIEW_WINDOW_DAYS} gün
+            <p className="m-0 text-[13px] leading-5 text-text-muted">
+              {list.length} kişi · son {VIEW_WINDOW_DAYS} gün · kişi başına en son görüş.
+              {older.length > 0 && <> 12 ayda {all.length} kişi görüş bildirdi; daha eskiler sayılmaz.</>}
             </p>
           )}
         </div>
       </header>
 
+      <div className="min-w-0">
       {!known && status !== 'loading' && (
         <EmptyState title="Bu sayfa yok" body="Takip edilen araçlar ana sayfada listelenir." cta={{ label: 'Ana sayfaya dön', href: '/' }} />
       )}
@@ -136,7 +143,11 @@ export default function SymbolDetail() {
         <p className="py-3 text-[15px] text-text-muted">Son {VIEW_WINDOW_DAYS} günde {label} için net yön belirten olmadı.</p>
       )}
 
-      {status === 'success' && <ViewList views={list} channels={channels} />}
+      {status === 'success' && list.length > 0 && (
+        <div className="rounded-[var(--r-hero)] border border-border bg-surface px-4 md:px-5">
+          <ViewList views={list} channels={channels} />
+        </div>
+      )}
 
       {status === 'success' && older.length > 0 && (
         <section aria-labelledby="eski-gorusler" className="mt-10">
@@ -162,6 +173,7 @@ export default function SymbolDetail() {
         Her satır konuşmacının videoda söylediği ileriye dönük beklentiye dayanır; geçmiş fiyat hareketini aktaranlar ve net yön söylemeyenler listelenmez. Yatırım danışmanlığı kapsamında değildir.
         Yanlış mı aktardık? <Link to="/iletisim" className="link">Bildirin</Link>.
       </p>
+      </div>
     </div>
   );
 }
