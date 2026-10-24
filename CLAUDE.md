@@ -59,6 +59,7 @@ The main session is the **Lead**. Specialists are defined in `.claude/agents/` a
 | developer | `.claude/agents/developer.md` | yes, on `agent/<slug>` branch in a worktree | implement the one selected item |
 | qa-verifier | `.claude/agents/qa-verifier.md` | no | reproduce on main, verify on branch, PASS/FAIL per criterion |
 | social-manager | `.claude/agents/social-manager.md` | no (writes `docs/social/runs/` only) | daily @dovizveri X plan: post drafts, cards, replies, follows, metrics; owner approves every public action (`docs/social/x-playbook.md`) |
+| social-designer | `.claude/agents/social-designer.md` | no (writes `docs/social/design/` + scratchpad) | @dovizveri visual system: card templates, avatar, banner; renders and self-checks each card (`docs/social/design/README.md`) |
 
 ### Cycle (Lead runs it; daily tech check = steps 1–2 with reliability only; daily product = full cycle with product-analyst + GA, see `docs/scheduled-tasks.md`)
 1. Read `docs/agent-runs/open-items.md` and the last two run records. Never reopen a closed or rejected item without new evidence.

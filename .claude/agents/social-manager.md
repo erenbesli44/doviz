@@ -31,9 +31,9 @@ to the owner and, only after the owner approves in chat, executes it in the brow
 1. **Posts (1–3)**, each with: final text (≤ 280 X chars; URL = 23, emoji = 2; show the count),
    UTM link `?utm_source=x&utm_medium=social&utm_campaign=<format>`, the exact data rows it
    relies on (person, outlook, date, video link), and a card spec.
-2. **Card**: for outlook posts, write a filled copy of the last card HTML to the scratchpad path
-   the Lead gives you (1200×675, site tokens from `liquid-economy/src/styles/tokens.css`, Inter +
-   Source Serif 4, date top-right, "Yatırım tavsiyesi değildir." bottom-right). Do not render it.
+2. **Card brief**: for each post that needs an image, a data block for the `social-designer`
+   agent: format (outlook / weekly / view-change), headline, the people rows (name, outlook,
+   date, "Değişti: old → new"), price line, footer path. You don't design or render cards.
 3. **Replies (≤ 5)**: for each, the target post URL (only from accounts in the playbook categories,
    found via the commentators' public links or the Lead's brief), our reply text with one sourced
    fact + link, and why it adds value. Skip if nothing genuinely adds value.
