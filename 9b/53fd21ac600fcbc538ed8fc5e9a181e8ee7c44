@@ -1,0 +1,29 @@
+liquid-economy/src/components/views/ViewRow.tsx
+  s_87c794085cb1de::t_ae737fcecc9e68 12,29,76,92
+liquid-economy/src/components/views/LatestVideoInsights.tsx
+  s_87c794085cb1de::t_ae737fcecc9e68 12,80-88
+liquid-economy/src/pages/UzmanlarProfile.tsx
+  s_87c794085cb1de::t_ae737fcecc9e68 17,54-58
+liquid-economy/src/pages/SymbolDetail.tsx
+  s_87c794085cb1de::t_ae737fcecc9e68 105-112
+liquid-economy/src/components/views/ViewDetails.tsx
+  s_87c794085cb1de::t_50a1dd3f0acbaf 1-20,23-26,28-52,54-64,66-75
+  s_87c794085cb1de::t_ae737fcecc9e68 21-22,27,65
+  s_87c794085cb1de::t_1cf6ab9fdbbecd 53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9b53fd21ac600fcbc538ed8fc5e9a181e8ee7c44",
+  "prompts": {},
+  "sessions": {
+    "s_87c794085cb1de": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7986e89d-27a9-4c09-aa2d-8f15b14376c1",
+        "model": "unknown"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
