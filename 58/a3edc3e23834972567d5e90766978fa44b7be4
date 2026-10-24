@@ -1,0 +1,27 @@
+liquid-economy/src/components/views/DirectionChip.tsx
+  s_382ec84e9b3741::t_8f96a67d92a8dc 11
+liquid-economy/src/lib/views.ts
+  s_382ec84e9b3741::t_5c223c11ca361d 103,107-111
+liquid-economy/src/components/views/ViewRow.tsx
+  s_382ec84e9b3741::t_d5b37756570d7a 52
+  s_382ec84e9b3741::t_113d147b8fb4d1 34,36
+  s_382ec84e9b3741::t_d148adb17ec791 59
+  s_382ec84e9b3741::t_847f4491b6186a 89
+  s_382ec84e9b3741::t_31707c9ff44752 68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "58a3edc3e23834972567d5e90766978fa44b7be4",
+  "prompts": {},
+  "sessions": {
+    "s_382ec84e9b3741": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dc142ff7-c49d-4408-8e6b-88c1c32362fd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
