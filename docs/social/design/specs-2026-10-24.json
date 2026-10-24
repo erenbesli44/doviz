@@ -1,0 +1,50 @@
+[
+  {"kind": "outlook", "id": "altin", "slug": "altin", "date": "24 Ekim 2026",
+   "title_html": "Altın: görüşler <em class=\"flat\">üçe bölünmüş</em>",
+   "sub": "20–23 Ekim videolarında açıkça söylenen beklentiler. 3 yorumcu görüşünü değiştirdi.",
+   "counts": {"up": 2, "flat": 2, "down": 2},
+   "price_html": "Gram: <b>6.406,09 TRY</b> · Ons: <b>4.010 USD</b> · gecikmeli",
+   "rows": [
+     {"name": "Emrah Lafçı", "dir": "up", "was": "down", "date": "23 Eki"},
+     {"name": "Tunç Şatıroğlu", "dir": "up", "date": "20 Eki"},
+     {"name": "Taner Genek", "dir": "flat", "date": "22 Eki"},
+     {"name": "Atilla Yeşilada", "dir": "flat", "date": "20 Eki"},
+     {"name": "Selçuk Geçer", "dir": "down", "was": "up", "date": "22 Eki"},
+     {"name": "İslam Memiş", "dir": "down", "was": "up", "date": "22 Eki"}
+   ]},
+  {"kind": "outlook", "id": "bist", "slug": "bist", "date": "24 Ekim 2026",
+   "title_html": "BIST 100: 6 yorumcudan <em class=\"down\">5'i düşüş</em> bekliyor",
+   "sub": "20–22 Ekim videolarında açıkça söylenen beklentiler. 3 yorumcu görüşünü değiştirdi.",
+   "counts": {"up": 1, "down": 5},
+   "price_html": "Endeks: <b>11.116,99</b> · −%0,92 · gecikmeli",
+   "rows": [
+     {"name": "Taner Genek", "dir": "up", "was": "flat", "date": "22 Eki"},
+     {"name": "İslam Memiş", "dir": "down", "was": "flat", "date": "22 Eki"},
+     {"name": "Atilla Yeşilada", "dir": "down", "was": "up", "date": "21 Eki"},
+     {"name": "Erkan Öz", "dir": "down", "date": "20 Eki"},
+     {"name": "Selçuk Geçer", "dir": "down", "date": "20 Eki"},
+     {"name": "Emrah Lafçı", "dir": "down", "date": "20 Eki"}
+   ]},
+  {"kind": "outlook", "id": "abd", "slug": "us-markets", "date": "24 Ekim 2026",
+   "title_html": "ABD borsaları: 5 yorumcudan <em class=\"up\">4'ü yükseliş</em> bekliyor",
+   "sub": "20–22 Ekim videolarında açıkça söylenen beklentiler. 2 yorumcu görüşünü değiştirdi.",
+   "counts": {"up": 4, "down": 1},
+   "price_html": "S&amp;P 500: <b>7.627,18</b> · −%0,47 · gecikmeli",
+   "rows": [
+     {"name": "Tunç Şatıroğlu", "dir": "up", "was": "down", "date": "22 Eki"},
+     {"name": "Emrah Lafçı", "dir": "up", "was": "down", "date": "20 Eki"},
+     {"name": "Cuma Cevik", "dir": "up", "date": "20 Eki"},
+     {"name": "Erkan Öz", "dir": "up", "date": "20 Eki"},
+     {"name": "Atilla Yeşilada", "dir": "down", "date": "20 Eki"}
+   ]},
+  {"kind": "commentator", "id": "c-selcuk-altin", "slug": "altin", "date": "24 Ekim 2026",
+   "topic": "Altın", "name": "Selçuk Geçer", "dir": "down", "was": "up", "was_date": "20 Eki",
+   "quote": "Dolayısıyla altın yakın zamanda ters köşe yapabilir.",
+   "video_date": "22 Ekim", "ts": "12:06", "horizon": "yakın vade",
+   "peers_line": "6 yorumcu, görüşler üçe bölünmüş", "counts": {"up": 2, "flat": 2, "down": 2}},
+  {"kind": "commentator", "id": "c-atilla-bist", "slug": "bist", "date": "24 Ekim 2026",
+   "topic": "BIST 100", "name": "Atilla Yeşilada", "dir": "down", "was": "up", "was_date": "20 Eki",
+   "quote": "O yüzden de borsa konusunda iyimser olamıyorum.",
+   "video_date": "21 Ekim", "ts": "1:41", "horizon": "önümüzdeki 6 ay",
+   "peers_line": "6 yorumcudan 5'i düşüş bekliyor", "counts": {"up": 1, "down": 5}}
+]
