@@ -1,0 +1,25 @@
+docs/social/x-playbook.md
+  s_fc9fdad21a8601::t_f55751fe9e5adf 1-70
+docs/social/runs/2026-10-24.md
+  s_fc9fdad21a8601::t_8b7d5b5ee3725b 1-40
+CLAUDE.md
+  s_fc9fdad21a8601::t_b52524630fd391 61
+.claude/agents/social-manager.md
+  s_fc9fdad21a8601::t_ac3b07da0d1e8f 1-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "518d13a14241b041eb244ce3baa597209799b5bc",
+  "prompts": {},
+  "sessions": {
+    "s_fc9fdad21a8601": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "18e459a6-0424-4758-b101-4728a3b613ae",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
