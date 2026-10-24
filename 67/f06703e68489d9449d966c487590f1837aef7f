@@ -1,0 +1,31 @@
+docs/agent-runs/2026-10-24-product.md
+  s_382ec84e9b3741::t_7b39d1425730b6 1-72
+  s_382ec84e9b3741::t_9bbc82ed34d514 73-75
+  s_87c794085cb1de::t_53982d33d3ed3d 76-92
+docs/agent-runs/open-items.md
+  s_87c794085cb1de::t_2fc926a86c72a6 24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "67f06703e68489d9449d966c487590f1837aef7f",
+  "prompts": {},
+  "sessions": {
+    "s_382ec84e9b3741": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dc142ff7-c49d-4408-8e6b-88c1c32362fd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_87c794085cb1de": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7986e89d-27a9-4c09-aa2d-8f15b14376c1",
+        "model": "unknown"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
