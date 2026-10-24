@@ -101,8 +101,8 @@ export default function SymbolDetail() {
         description={`${label} için finans yorumcularının açıkça belirttiği beklentiler, ne dedikleri ve önceki görüşleri.`}
       />
 
-      {/* Verdict panel: stays in view on wide screens while the list scrolls. */}
-      <header className="mb-6 border-b border-border pb-5 lg:sticky lg:top-20 lg:mb-0 lg:border-b-0 lg:pb-0">
+      {/* Verdict panel: stays in view on wide, tall-enough screens while the list scrolls. */}
+      <header className="mb-6 border-b border-border pb-5 lg:[@media(min-height:600px)]:sticky lg:[@media(min-height:600px)]:top-20 lg:mb-0 lg:border-b-0 lg:pb-0">
         <Link to="/" className="text-[13px] font-semibold text-text-muted no-underline hover:underline underline-offset-4">← Kim ne bekliyor</Link>
         <h1 className="mt-3 mb-0 font-serif text-[30px] leading-tight font-semibold tracking-tight text-text md:text-[38px]">
           {label}: kim ne bekliyor?
@@ -119,7 +119,7 @@ export default function SymbolDetail() {
           {status === 'success' && list.length > 0 && (
             <p className="m-0 text-[13px] leading-5 text-text-muted">
               {list.length} kişi · son {VIEW_WINDOW_DAYS} gün · kişi başına en son görüş.
-              {older.length > 0 && <> 12 ayda {all.length} kişi görüş bildirdi; daha eskiler sayılmaz.</>}
+              {older.length > 0 && <> Son 12 ayda {all.length} kişi görüş bildirdi; daha eskiler sayılmaz.</>}
             </p>
           )}
         </div>
@@ -135,7 +135,7 @@ export default function SymbolDetail() {
           {Array.from({ length: 4 }).map((_, i) => <div key={i} className="skeleton h-20" />)}
         </div>
       )}
-      {status === 'error' && <p role="alert" className="py-6 text-[15px] text-text-muted">Görüşler şu anda yüklenemedi.</p>}
+      {status === 'error' && known && <p role="alert" className="py-6 text-[15px] text-text-muted">Görüşler şu anda yüklenemedi.</p>}
       {status === 'success' && known && all.length === 0 && (
         <EmptyState title="Net görüş yok" body={`Son 12 ayda ${label} için açıkça yön belirten bir yorumcu bulunmuyor.`} cta={{ label: 'Haberlere git', href: '/haberler' }} />
       )}
@@ -155,7 +155,7 @@ export default function SymbolDetail() {
             <h2 id="eski-gorusler">Daha eski görüşler</h2>
           </div>
           <p className="mt-2 mb-0 text-[13px] text-text-muted">
-            Son {VIEW_WINDOW_DAYS} günde yeni görüş bildirmeyenler; yukarıdaki sayıya katılmaz.
+            Son {VIEW_WINDOW_DAYS} günde yeni görüş bildirmeyenler; sayıma katılmaz.
           </p>
           {/* Collapsed by default so out-of-window views are never skimmed as current ones. */}
           <details className="group/older mt-3">
