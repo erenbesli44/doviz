@@ -16,9 +16,8 @@ import { latestVideoInsights } from '../lib/latestInsights';
 import { StoryRow, StoryRowSkeleton } from '../components/news/Story';
 import Icon from '../components/ui/Icon';
 import SeoHead from '../components/seo/SeoHead';
-import { INSTRUMENTS, INSTRUMENT_KEYS, personViews, profileHref, tally } from '../lib/views';
+import { INSTRUMENTS, INSTRUMENT_KEYS, VIEW_WINDOW_DAYS as DAYS, inWindow, personViews, profileHref, tally } from '../lib/views';
 
-const DAYS = 60;
 const ROWS = 5;
 const NEWS_ROWS = 6;
 const NEWS_SCAN = 20; // newest videos scanned for the lead section
@@ -62,7 +61,7 @@ export default function Home() {
       <div className="grid gap-x-10 gap-y-10 md:grid-cols-2">
         {INSTRUMENTS.map((inst) => {
           const { status, opinions } = views[inst.key];
-          const list = personViews(opinions);
+          const list = personViews(opinions).filter((v) => inWindow(v));
           const t = tally(list);
           return (
             <section key={inst.key} aria-labelledby={`h-${inst.key}`}>

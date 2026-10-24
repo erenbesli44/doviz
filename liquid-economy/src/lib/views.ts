@@ -158,6 +158,55 @@ export function tally(views: PersonView[]): Record<Direction, number> {
   return t;
 }
 
+// ── Counting window ─────────────────────────────────────────────────────────
+
+/**
+ * One window for every surface (home, instrument page, X cards): a person is
+ * counted when their latest clear view was published in the last N days.
+ * Filtered here on `published_at` because the API's `days` parameter is not a
+ * publish-date window (days=30 also returns views from August).
+ */
+export const VIEW_WINDOW_DAYS = 30;
+
+const DAY_MS = 86_400_000;
+
+// `published_at` has no zone and is read as local time, like every date shown on the site.
+export function inWindow(view: PersonView): boolean {
+  const t = new Date(view.current.item.published_at).getTime();
+  return !Number.isNaN(t) && Date.now() - t < VIEW_WINDOW_DAYS * DAY_MS;
+}
+
+// ── Verdict headline ("7 yorumcudan 5'i yükseliş bekliyor") ─────────────────
+
+/** Noun after "bekliyor": "yatay bekliyor" is not Turkish, "yatay seyir bekliyor" is. */
+export const EXPECTATION_WORD: Record<Direction, string> = { up: 'yükseliş', down: 'düşüş', flat: 'yatay seyir' };
+export const DIRECTION_ARROW: Record<Direction, string> = { up: '↑', down: '↓', flat: '→' };
+
+// Suffix after a numeral follows its last spoken word: 5'i (beş), 6'sı (altı), 40'ı (kırk).
+const UNIT_SUFFIX = ['', "'i", "'si", "'ü", "'ü", "'i", "'sı", "'si", "'i", "'u"];
+const TENS_SUFFIX = ['', "'u", "'si", "'u", "'ı", "'si", "'ı", "'i", "'i", "'ı"];
+
+export function numeralSuffix(n: number): string {
+  if (n % 10) return UNIT_SUFFIX[n % 10];
+  if (n % 100) return TENS_SUFFIX[(n % 100) / 10];
+  return n % 1000 ? "'ü" : "'i"; // yüz, bin
+}
+
+export type Verdict =
+  | { kind: 'majority'; total: number; count: number; direction: Direction }
+  | { kind: 'split'; total: number }
+  | { kind: 'few'; total: number };
+
+/** A majority claim needs at least 3 people and more than half of them on one side. */
+export function verdictOf(views: PersonView[]): Verdict | null {
+  const total = views.length;
+  if (total === 0) return null;
+  if (total < 3) return { kind: 'few', total };
+  const [direction, count] = (Object.entries(tally(views)) as [Direction, number][])
+    .sort((a, b) => b[1] - a[1])[0];
+  return count * 2 > total ? { kind: 'majority', total, count, direction } : { kind: 'split', total };
+}
+
 // ── Person page: per-instrument history from timeline points ────────────────
 
 export interface InstrumentHistory {

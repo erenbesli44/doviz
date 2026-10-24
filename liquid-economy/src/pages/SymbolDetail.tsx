@@ -1,9 +1,10 @@
 /**
  * SymbolDetail — /piyasa/:slug  (slug = topic_key: dolar-tl, bist, altin, …)
  *
- * "Dolar/TL: kim ne bekliyor?" — one row per commentator with their latest
- * clearly stated view, what they said, a link to the video moment, and the
- * view they held before it. No aggregate score, no chart.
+ * "Dolar/TL: kim ne bekliyor?" — a one-line verdict over the shared counting
+ * window, then one row per commentator with their latest clearly stated view,
+ * what they said, a link to the video moment, and the view they held before
+ * it. Views older than the window are listed below and not counted.
  */
 
 import { useMemo } from 'react';
@@ -16,9 +17,65 @@ import { EmptyState } from '../components/consensus/EmptyState';
 import SeoHead from '../components/seo/SeoHead';
 import { assetFromSlug } from '../data/assetMap';
 import { formatPrice } from '../lib/adapters';
-import { INSTRUMENTS, instrumentLabel, personViews, profileHref, quoteOf, tally } from '../lib/views';
+import {
+  DIRECTION_ARROW, EXPECTATION_WORD, INSTRUMENTS, VIEW_WINDOW_DAYS, instrumentLabel, inWindow, numeralSuffix,
+  personViews, profileHref, quoteOf, tally, verdictOf, type Direction, type PersonView,
+} from '../lib/views';
 
-const DAYS = 365;
+const DAYS = 365; // history, so the previous view and older views can be shown
+
+const TONE: Record<Direction, string> = { up: 'text-bull', down: 'text-bear', flat: 'text-neutral-sent' };
+
+function VerdictLine({ views }: { views: PersonView[] }) {
+  const v = verdictOf(views);
+  if (!v) return null;
+  const changed = views.filter((x) => x.changed).length;
+  return (
+    <>
+      <p className="mt-4 mb-0 font-serif text-[22px] leading-snug font-semibold tracking-tight text-text md:text-[26px]">
+        {v.kind === 'majority' && (
+          <>{v.total} yorumcudan <span className={TONE[v.direction]}>{DIRECTION_ARROW[v.direction]} {v.count}{numeralSuffix(v.count)} {EXPECTATION_WORD[v.direction]}</span> bekliyor</>
+        )}
+        {v.kind === 'split' && <>Görüşler <span className="text-neutral-sent">bölünmüş</span></>}
+        {v.kind === 'few' && <>Son {VIEW_WINDOW_DAYS} günde yalnızca {v.total} yorumcu net görüş bildirdi</>}
+      </p>
+      {changed > 0 && <p className="mt-1 mb-0 text-[14px] text-text-muted">{changed} yorumcu görüşünü değiştirdi.</p>}
+    </>
+  );
+}
+
+function ViewList({ views, channels }: { views: PersonView[]; channels: { name: string; slug: string }[] }) {
+  if (views.length === 0) return null;
+  return (
+    <ul className="m-0 list-none p-0">
+      {views.map((v) => (
+        <ViewRow
+          key={v.person}
+          person={v.person}
+          avatarUrl={v.avatarUrl}
+          personHref={profileHref(channels, v)}
+          direction={v.current.direction}
+          date={v.current.item.published_at}
+          horizon={v.current.item.outlook_horizon}
+          quote={quoteOf(v.current.item)}
+          videoUrl={v.current.item.video_url}
+          startSec={v.current.item.start_time_seconds}
+          storyHref={`/haberler/${v.current.item.video_id}`}
+          previous={v.previous ? { direction: v.previous.direction, date: v.previous.item.published_at } : null}
+          details={{
+            summary: v.current.item.summary,
+            keyLevels: v.current.item.key_levels,
+            horizon: v.current.item.outlook_horizon,
+            videoUrl: v.current.item.video_url,
+            startSec: v.current.item.start_time_seconds,
+            storyHref: `/haberler/${v.current.item.video_id}`,
+          }}
+          changed={v.changed}
+        />
+      ))}
+    </ul>
+  );
+}
 
 function LivePrice({ symbol }: { symbol: string }) {
   const symbols = useMemo(() => [symbol], [symbol]);
@@ -44,7 +101,9 @@ export default function SymbolDetail() {
   const { status, opinions } = useInstrumentViews(keys, DAYS)[slug];
   const { channels } = useChannels();
 
-  const list = personViews(opinions);
+  const all = personViews(opinions);
+  const list = all.filter((v) => inWindow(v));
+  const older = all.filter((v) => !inWindow(v));
   const t = tally(list);
   const known = INSTRUMENTS.some((i) => i.key === slug);
 
@@ -61,12 +120,13 @@ export default function SymbolDetail() {
         <h1 className="m-0 font-serif text-[30px] leading-tight font-semibold tracking-tight text-text md:text-[38px]">
           {label}: kim ne bekliyor?
         </h1>
+        {status === 'success' && <VerdictLine views={list} />}
         <div className="mt-2 flex flex-wrap items-baseline gap-x-5 gap-y-1">
           {meta && <LivePrice symbol={meta.symbol} />}
           {status === 'success' && list.length > 0 && (
             <p className="m-0 text-[14px] text-text-muted">
               {list.length} kişi · <span className="text-bull">↑ {t.up} yükseliş</span> · <span className="text-bear">↓ {t.down} düşüş</span>
-              {t.flat > 0 && <> · <span className="text-neutral-sent">→ {t.flat} yatay</span></>} · son 12 ay
+              {t.flat > 0 && <> · <span className="text-neutral-sent">→ {t.flat} yatay</span></>} · son {VIEW_WINDOW_DAYS} gün
             </p>
           )}
         </div>
@@ -82,38 +142,25 @@ export default function SymbolDetail() {
         </div>
       )}
       {status === 'error' && <p role="alert" className="py-6 text-[15px] text-text-muted">Görüşler şu anda yüklenemedi.</p>}
-      {status === 'success' && known && list.length === 0 && (
+      {status === 'success' && known && all.length === 0 && (
         <EmptyState title="Net görüş yok" body={`Son 12 ayda ${label} için açıkça yön belirten bir yorumcu bulunmuyor.`} cta={{ label: 'Haberlere git', href: '/haberler' }} />
       )}
+      {status === 'success' && list.length === 0 && older.length > 0 && (
+        <p className="py-3 text-[15px] text-text-muted">Son {VIEW_WINDOW_DAYS} günde {label} için net yön belirten olmadı.</p>
+      )}
 
-      {status === 'success' && list.length > 0 && (
-        <ul className="m-0 list-none p-0">
-          {list.map((v) => (
-            <ViewRow
-              key={v.person}
-              person={v.person}
-              avatarUrl={v.avatarUrl}
-              personHref={profileHref(channels, v)}
-              direction={v.current.direction}
-              date={v.current.item.published_at}
-              horizon={v.current.item.outlook_horizon}
-              quote={quoteOf(v.current.item)}
-              videoUrl={v.current.item.video_url}
-              startSec={v.current.item.start_time_seconds}
-              storyHref={`/haberler/${v.current.item.video_id}`}
-              previous={v.previous ? { direction: v.previous.direction, date: v.previous.item.published_at } : null}
-              details={{
-                summary: v.current.item.summary,
-                keyLevels: v.current.item.key_levels,
-                horizon: v.current.item.outlook_horizon,
-                videoUrl: v.current.item.video_url,
-                startSec: v.current.item.start_time_seconds,
-                storyHref: `/haberler/${v.current.item.video_id}`,
-              }}
-              changed={v.changed}
-            />
-          ))}
-        </ul>
+      {status === 'success' && <ViewList views={list} channels={channels} />}
+
+      {status === 'success' && older.length > 0 && (
+        <section aria-labelledby="eski-gorusler" className="mt-10">
+          <div className="section-head">
+            <h2 id="eski-gorusler">Daha eski görüşler</h2>
+          </div>
+          <p className="mt-2 mb-0 text-[13px] text-text-muted">
+            Son {VIEW_WINDOW_DAYS} günde yeni görüş bildirmeyenler; yukarıdaki sayıya katılmaz.
+          </p>
+          <ViewList views={older} channels={channels} />
+        </section>
       )}
 
       <p className="mt-10 text-[12px] leading-5 text-text-subtle">

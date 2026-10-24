@@ -20,8 +20,9 @@ to the owner and, only after the owner approves in chat, executes it in the brow
 - Source of truth: the rendered page `https://dovizveri.com/piyasa/<key>`
   (keys: dolar-tl, altin, bist, bitcoin, us-markets, gumus, petrol-enerji).
 - Detail: `https://dovizveri.com/api/v1/inference/topics/<key>/opinions?limit=50`.
-  Count only rows with `outlook_explicit == true` and `outlook in {bullish, bearish, neutral}`
-  (yükseliş / düşüş / yatay), newest row per person, within the last 7 days.
+  Count only rows with `outlook_explicit == true` and `outlook in {up, down, flat}`
+  (yükseliş / düşüş / yatay), newest row per person, `published_at` within the last 30 days —
+  the site's window (`VIEW_WINDOW_DAYS` in `liquid-economy/src/lib/views.ts`); change both together.
   **Never** use `sentiment` or `/api/v1/consensus` — legacy, disagrees with the site.
 - Exclude and list as data issues: quotes containing stale prices, summaries written as quotes
   ("Speaker…", third person), duplicate names differing by case/diacritics, channel names
