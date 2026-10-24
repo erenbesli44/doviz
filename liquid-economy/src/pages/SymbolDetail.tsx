@@ -16,7 +16,7 @@ import { ViewRow } from '../components/views/ViewRow';
 import { EmptyState } from '../components/consensus/EmptyState';
 import SeoHead from '../components/seo/SeoHead';
 import { assetFromSlug } from '../data/assetMap';
-import { formatPrice } from '../lib/adapters';
+import { PriceLine } from '../components/views/PriceLine';
 import { VerdictText } from '../components/views/Verdict';
 import {
   INSTRUMENTS, VIEW_WINDOW_DAYS, instrumentLabel, inWindow,
@@ -77,15 +77,7 @@ function LivePrice({ symbol }: { symbol: string }) {
   const { quotes } = useSSEQuotes(symbols);
   const q = quotes[symbol];
   if (!q) return null;
-  const up = q.data.change_pct >= 0;
-  return (
-    <p className="m-0 text-[15px] text-text-muted">
-      <span className="font-semibold text-text">{formatPrice(q.data.price, q.data.symbol, q.data.currency)}</span>
-      {' '}{q.data.currency}{' '}
-      <span className={up ? 'text-bull' : 'text-bear'}>{up ? '↑' : '↓'} %{Math.abs(q.data.change_pct).toFixed(2)}</span>
-      {!q.meta.is_live && <span className="text-text-subtle"> · gecikmeli</span>}
-    </p>
-  );
+  return <p className="m-0"><PriceLine quote={q} /></p>;
 }
 
 export default function SymbolDetail() {

@@ -7,7 +7,6 @@
  * views and the news sit underneath as the evidence layer.
  */
 
-import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useInstrumentViews } from '../hooks/useInstrumentViews';
 import { useLatestNews } from '../hooks/useLatestNews';
@@ -19,12 +18,13 @@ import { latestVideoInsights } from '../lib/latestInsights';
 import { StoryRow, StoryRowSkeleton } from '../components/news/Story';
 import Icon from '../components/ui/Icon';
 import SeoHead from '../components/seo/SeoHead';
+import { PriceLine } from '../components/views/PriceLine';
 import { assetFromSlug } from '../data/assetMap';
-import { formatPrice } from '../lib/adapters';
 import type { QuoteResponse } from '../data/api-types';
+import type { TopicOpinion } from '../data/consensus-types';
 import {
   INSTRUMENTS, INSTRUMENT_KEYS, VIEW_WINDOW_DAYS as DAYS, formatDate, inWindow, personViews, profileHref,
-  type PersonView,
+  type DatedView, type PersonView,
 } from '../lib/views';
 
 // Full history, like the instrument page: a change of view needs the view before it.
@@ -35,18 +35,10 @@ const NEWS_ROWS = 6;
 const NEWS_SCAN = 20; // newest videos scanned for the lead section
 
 const SYMBOLS = INSTRUMENT_KEYS.map((k) => assetFromSlug(k)?.symbol).filter((s): s is string => !!s);
+const NO_SYMBOLS: string[] = [];
 
-function TilePrice({ quote }: { quote?: QuoteResponse }) {
-  if (!quote) return null;
-  const up = quote.data.change_pct >= 0;
-  return (
-    <span className="text-[13px] text-text-muted">
-      <span className="font-semibold text-text">{formatPrice(quote.data.price, quote.data.symbol, quote.data.currency)}</span>
-      {' '}{quote.data.currency}{' '}
-      <span className={up ? 'text-bull' : 'text-bear'}>{up ? '↑' : '↓'} %{Math.abs(quote.data.change_pct).toFixed(2)}</span>
-    </span>
-  );
-}
+type Changed = PersonView & { previous: DatedView<TopicOpinion> };
+const isChange = (v: PersonView): v is Changed => v.changed && v.previous !== null;
 
 function InstrumentTile({ instKey, label, status, views, quote, channels }: {
   instKey: string;
@@ -56,14 +48,14 @@ function InstrumentTile({ instKey, label, status, views, quote, channels }: {
   quote?: QuoteResponse;
   channels: { name: string; slug: string }[];
 }) {
-  const changes = views.filter((v) => v.changed && v.previous).slice(0, TILE_CHANGES);
+  const changes = views.filter(isChange).slice(0, TILE_CHANGES);
   return (
     <section aria-labelledby={`h-${instKey}`} className="flex flex-col gap-3 rounded-[var(--r-hero)] border border-border bg-surface p-5">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <h3 id={`h-${instKey}`} className="m-0 text-[12px] font-semibold tracking-[0.08em] text-text-muted uppercase">
           <Link to={`/piyasa/${instKey}`} className="no-underline text-text-muted hover:underline underline-offset-4">{label}</Link>
         </h3>
-        <TilePrice quote={quote} />
+        <PriceLine quote={quote} size="sm" />
       </div>
 
       {status === 'loading' && (
@@ -94,7 +86,7 @@ function InstrumentTile({ instKey, label, status, views, quote, channels }: {
                     {href
                       ? <Link to={href} className="headline-link text-text">{v.person}</Link>
                       : <span className="text-text">{v.person}</span>}
-                    <ChangeText from={v.previous!.direction} to={v.current.direction} />
+                    <ChangeText from={v.previous.direction} to={v.current.direction} />
                   </li>
                 );
               })}
@@ -115,10 +107,11 @@ export default function Home() {
   const { status: newsStatus, stories: scanned } = useLatestNews(NEWS_SCAN);
   const stories = scanned.slice(0, NEWS_ROWS);
   const { channels } = useChannels();
-  const symbols = useMemo(() => SYMBOLS, []);
-  const { quotes } = useSSEQuotes(symbols);
-
   const viewsLoading = INSTRUMENT_KEYS.some((k) => views[k].status === 'loading');
+  const viewsFailed = INSTRUMENT_KEYS.some((k) => views[k].status === 'error');
+  // nginx allows 3 connections per IP on the quotes stream, counted together with
+  // API requests: open it only after the 7 opinions requests are done, or it gets 429.
+  const { quotes } = useSSEQuotes(viewsLoading ? NO_SYMBOLS : SYMBOLS);
   const lead = latestVideoInsights(
     scanned,
     Object.fromEntries(INSTRUMENT_KEYS.map((k) => [k, views[k].opinions])),
@@ -128,7 +121,7 @@ export default function Home() {
     INSTRUMENTS.map((inst) => [inst.key, personViews(views[inst.key].opinions).filter((v) => inWindow(v))]),
   );
   const allChanges = INSTRUMENTS
-    .flatMap((inst) => counted[inst.key].filter((v) => v.changed && v.previous).map((v) => ({ inst, v })))
+    .flatMap((inst) => counted[inst.key].filter(isChange).map((v) => ({ inst, v })))
     .sort((a, b) => (b.v.current.item.published_at || '').localeCompare(a.v.current.item.published_at || ''));
 
   const today = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' });
@@ -168,11 +161,21 @@ export default function Home() {
         </div>
       </section>
 
+      {viewsLoading && (
+        <section aria-hidden="true" className="mt-12">
+          <div className="section-head"><h2>Son {DAYS} günde fikrini değiştirenler</h2></div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => <div key={i} className="skeleton h-12" />)}
+          </div>
+        </section>
+      )}
       {!viewsLoading && allChanges.length > 0 && (
         <section aria-labelledby="fikrini-degistirenler" className="mt-12">
           <div className="section-head">
             <h2 id="fikrini-degistirenler">Son {DAYS} günde fikrini değiştirenler</h2>
-            <span className="text-[13px] text-text-muted">{allChanges.length} değişiklik</span>
+            <span className="text-[13px] text-text-muted">
+              {allChanges.length} değişiklik{viewsFailed && ' · bazı araçlar yüklenemedi'}
+            </span>
           </div>
           <ul className="m-0 mt-4 grid list-none gap-3 p-0 sm:grid-cols-2 lg:grid-cols-4">
             {allChanges.slice(0, STRIP_CHANGES).map(({ inst, v }) => {
@@ -185,7 +188,7 @@ export default function Home() {
                     <Link to={`/piyasa/${inst.key}`} className="headline-link text-text">{inst.label}</Link>
                   </p>
                   <p className="m-0 text-[14px]">
-                    <ChangeText from={v.previous!.direction} to={v.current.direction} />
+                    <ChangeText from={v.previous.direction} to={v.current.direction} />
                     <span className="text-text-muted"> · {formatDate(v.current.item.published_at)}</span>
                   </p>
                 </li>

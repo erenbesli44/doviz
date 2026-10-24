@@ -30,7 +30,7 @@ export function VerdictText({ views }: { views: PersonView[] }) {
 export function PersonBar({ views }: { views: PersonView[] }) {
   const t = tally(views);
   if (views.length === 0) return null;
-  const label = ORDER.filter((d) => t[d] > 0).map((d) => `${t[d]} ${COUNT_WORD[d]}`).join(', ');
+  const label = ORDER.filter((d) => t[d] > 0).map((d) => `${t[d]} kişi ${COUNT_WORD[d]}`).join(', ');
   return (
     <div role="img" aria-label={label} className="flex h-2.5 gap-[3px]">
       {ORDER.flatMap((d) => Array.from({ length: t[d] }, (_, i) => (
