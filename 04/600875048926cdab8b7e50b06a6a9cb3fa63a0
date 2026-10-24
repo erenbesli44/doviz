@@ -1,0 +1,35 @@
+liquid-economy/src/components/views/PriceLine.tsx
+  s_382ec84e9b3741::t_f786a6712b7d8e 1-13,16-26
+  s_382ec84e9b3741::t_6a15b2b64cc41e 14-15
+liquid-economy/src/pages/SymbolDetail.tsx
+  s_382ec84e9b3741::t_f37225a4772ab6 80
+  s_382ec84e9b3741::t_79136b18e23b1a 19
+liquid-economy/src/components/views/Verdict.tsx
+  s_382ec84e9b3741::t_ad9ef546632894 33
+liquid-economy/src/pages/Home.tsx
+  s_382ec84e9b3741::t_c718c22b0c25a3 164-171,176-178
+  s_382ec84e9b3741::t_ee14cf5ededfab 51
+  s_382ec84e9b3741::t_83f625ebcd8f71 89
+  s_382ec84e9b3741::t_6b0058fdcd0e02 111-114
+  s_382ec84e9b3741::t_70e3b84f28db2c 124
+  s_382ec84e9b3741::t_eae84b2cbde625 21,24,27
+  s_382ec84e9b3741::t_bcd80045d164b0 191
+  s_382ec84e9b3741::t_259e70be97c279 58
+  s_382ec84e9b3741::t_2fab9533becda3 38,40-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "04600875048926cdab8b7e50b06a6a9cb3fa63a0",
+  "prompts": {},
+  "sessions": {
+    "s_382ec84e9b3741": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dc142ff7-c49d-4408-8e6b-88c1c32362fd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
