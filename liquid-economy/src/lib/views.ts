@@ -100,12 +100,15 @@ export function formatDate(iso: string): string {
   return d.toLocaleDateString('tr-TR', sameYear ? { day: 'numeric', month: 'short' } : { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-/** "12 gün önce" / "3 ay önce"; empty for an unparseable date. */
+/** "bugün" / "12 gün önce" / "3 ay önce" / "1 yıl önce"; empty for an unparseable date. */
 export function ageLabel(iso: string): string {
   const t = new Date(iso).getTime();
   if (Number.isNaN(t)) return '';
-  const days = Math.max(0, Math.floor((Date.now() - t) / 86_400_000));
-  return days < 60 ? `${days} gün önce` : `${Math.floor(days / 30)} ay önce`;
+  const days = Math.max(0, Math.floor((Date.now() - t) / DAY_MS));
+  if (days === 0) return 'bugün';
+  if (days < 60) return `${days} gün önce`;
+  if (days < 365) return `${Math.floor(days / 30)} ay önce`;
+  return `${Math.floor(days / 365)} yıl önce`;
 }
 
 export function videoMomentUrl(url: string, startSec: number | null): string {

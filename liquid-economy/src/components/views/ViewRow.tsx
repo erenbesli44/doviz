@@ -31,9 +31,9 @@ export interface ViewRowProps {
   past?: boolean;
 }
 
-export function ChangeTag({ changed }: { changed: boolean }) {
+export function ChangeTag({ changed, past = false }: { changed: boolean; past?: boolean }) {
   return (
-    <span className={`text-[12px] font-semibold ${changed ? 'text-warn' : 'text-text-subtle'}`}>
+    <span className={`text-[12px] font-semibold ${changed && !past ? 'text-warn' : 'text-text-subtle'}`}>
       {changed ? 'Görüşünü değiştirdi' : 'Aynı görüşte'}
     </span>
   );
@@ -49,13 +49,14 @@ export function ViewRow(p: ViewRowProps) {
       <li className="flex items-center gap-3 border-b border-border py-2.5 last:border-b-0">
         <ProAvatar channelAvatarUrl={p.avatarUrl ?? undefined} name={p.person} size="sm" />
         <span className="min-w-0 flex-1 truncate text-[14px]">{name}</span>
-        <DirectionChip direction={p.direction} short />
+        <DirectionChip direction={p.direction} short past={p.past} />
         <span className="w-14 text-right text-[12px] text-text-muted">{formatDate(p.date)}</span>
       </li>
     );
   }
 
   const clock = formatClock(p.startSec ?? null);
+  const age = p.past ? ageLabel(p.date) : '';
   return (
     <li className="flex gap-3 border-b border-border py-4 last:border-b-0">
       <ProAvatar channelAvatarUrl={p.avatarUrl ?? undefined} name={p.person} size="lg" />
@@ -64,7 +65,7 @@ export function ViewRow(p: ViewRowProps) {
           {name}
           <DirectionChip direction={p.direction} past={p.past} />
           <span className="text-[13px] text-text-muted">
-            {formatDate(p.date)}{p.past && ageLabel(p.date) && ` · ${ageLabel(p.date)}`}
+            {formatDate(p.date)}{age && ` · ${age}`}
           </span>
           {p.horizon && <span className="text-[13px] text-text-muted">· {p.horizon}</span>}
         </div>
@@ -85,7 +86,7 @@ export function ViewRow(p: ViewRowProps) {
                 <>
                   <DirectionChip direction={p.previous.direction} short past={p.past} />
                   <span>{formatDate(p.previous.date)}</span>
-                  <ChangeTag changed={!!p.changed} />
+                  <ChangeTag changed={!!p.changed} past={p.past} />
                 </>
               ) : (
                 <span className="text-text-subtle">ilk görüşü</span>

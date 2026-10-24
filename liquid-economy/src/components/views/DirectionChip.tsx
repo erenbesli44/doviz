@@ -8,7 +8,7 @@ import type { Direction } from '../../lib/views';
 const MAP: Record<Direction, { icon: string; label: string; past: string; short: string; cls: string }> = {
   up:   { icon: '↑', label: 'Yükseliş bekliyor', past: 'Yükseliş bekliyordu', short: 'Yükseliş', cls: 'bg-bull-bg text-bull' },
   down: { icon: '↓', label: 'Düşüş bekliyor',    past: 'Düşüş bekliyordu',    short: 'Düşüş',    cls: 'bg-bear-bg text-bear' },
-  flat: { icon: '→', label: 'Yatay bekliyor',    past: 'Yatay bekliyordu',    short: 'Yatay',    cls: 'bg-neutral-bg text-neutral-sent' },
+  flat: { icon: '→', label: 'Yatay seyir bekliyor', past: 'Yatay seyir bekliyordu', short: 'Yatay', cls: 'bg-neutral-bg text-neutral-sent' },
 };
 
 /** `past`: a view outside the counting window — past tense and grey, so it never reads as current. */
