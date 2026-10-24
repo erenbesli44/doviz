@@ -106,12 +106,13 @@ export default function Home() {
   const views = useInstrumentViews(INSTRUMENT_KEYS, HISTORY_DAYS);
   const { status: newsStatus, stories: scanned } = useLatestNews(NEWS_SCAN);
   const stories = scanned.slice(0, NEWS_ROWS);
-  const { channels } = useChannels();
+  const { status: channelsStatus, channels } = useChannels();
   const viewsLoading = INSTRUMENT_KEYS.some((k) => views[k].status === 'loading');
   const viewsFailed = INSTRUMENT_KEYS.some((k) => views[k].status === 'error');
   // nginx allows 3 connections per IP on the quotes stream, counted together with
-  // API requests: open it only after the 7 opinions requests are done, or it gets 429.
-  const { quotes } = useSSEQuotes(viewsLoading ? NO_SYMBOLS : SYMBOLS);
+  // API requests: open it only once every request on this page is done, or it gets 429.
+  const pageLoading = viewsLoading || newsStatus === 'loading' || channelsStatus === 'loading';
+  const { quotes } = useSSEQuotes(pageLoading ? NO_SYMBOLS : SYMBOLS);
   const lead = latestVideoInsights(
     scanned,
     Object.fromEntries(INSTRUMENT_KEYS.map((k) => [k, views[k].opinions])),

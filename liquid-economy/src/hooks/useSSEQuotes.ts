@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import type { QuoteResponse } from '../data/api-types';
 
 const SSE_BASE = '/api/v1/stream/quotes';
+const RETRY_DELAYS_MS = [3_000, 10_000, 30_000];
 
 type QuoteMap = Record<string, QuoteResponse>;
 
@@ -19,29 +20,42 @@ export function useSSEQuotes(symbols: string[]): SSEQuotesResult {
     if (symbols.length === 0) return;
 
     const url = `${SSE_BASE}?symbols=${encodeURIComponent(symbols.join(','))}`;
-    const es = new EventSource(url);
-    esRef.current = es;
+    let es: EventSource | null = null;
+    let retry: ReturnType<typeof setTimeout> | undefined;
+    let attempt = 0;
 
-    es.addEventListener('init', (e: MessageEvent) => {
-      const data: QuoteResponse[] = JSON.parse(e.data);
-      const map: QuoteMap = {};
-      for (const q of data) map[q.data.symbol] = q;
-      setQuotes(map);
-      setSseAvailable(true);
-    });
+    const connect = () => {
+      es = new EventSource(url);
+      esRef.current = es;
 
-    es.addEventListener('quote', (e: MessageEvent) => {
-      const q: QuoteResponse = JSON.parse(e.data);
-      setQuotes((prev) => ({ ...prev, [q.data.symbol]: q }));
-    });
+      es.addEventListener('init', (e: MessageEvent) => {
+        const data: QuoteResponse[] = JSON.parse(e.data);
+        const map: QuoteMap = {};
+        for (const q of data) map[q.data.symbol] = q;
+        setQuotes(map);
+        setSseAvailable(true);
+        attempt = 0;
+      });
 
-    es.onerror = () => {
-      setSseAvailable(false);
-      es.close();
+      es.addEventListener('quote', (e: MessageEvent) => {
+        const q: QuoteResponse = JSON.parse(e.data);
+        setQuotes((prev) => ({ ...prev, [q.data.symbol]: q }));
+      });
+
+      // nginx answers 429 when this IP already has 3 connections open (API
+      // requests count too) and EventSource does not retry an HTTP error, so
+      // try again a few times, spaced to stay under the 6/min stream limit.
+      es.onerror = () => {
+        setSseAvailable(false);
+        es?.close();
+        if (attempt < RETRY_DELAYS_MS.length) retry = setTimeout(connect, RETRY_DELAYS_MS[attempt++]);
+      };
     };
+    connect();
 
     return () => {
-      es.close();
+      clearTimeout(retry);
+      es?.close();
       esRef.current = null;
     };
   }, [symbols.join(',')]); // eslint-disable-line react-hooks/exhaustive-deps
