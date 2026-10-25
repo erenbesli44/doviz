@@ -1,6 +1,7 @@
 /**
  * One gündem topic on /konular (faiz, enflasyon, …): the tracker's context
- * summary with its analysis date, and the source videos one click away.
+ * summary and the source videos one click away (the analysis date sits in
+ * the part's header).
  * Not an expectation — these topics have no explicit-view data, so no
  * direction and no confidence are shown.
  */
@@ -8,9 +9,16 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { newsApi } from '../../lib/newsClient';
-import { formatDate, personKey } from '../../lib/views';
+import { formatDate } from '../../lib/views';
 import Icon from '../ui/Icon';
 import type { InferenceSource, InferenceTopic } from '../../data/inference-types';
+
+const FOLD: Record<string, string> = { ç: 'c', ğ: 'g', ı: 'i', ö: 'o', ş: 's', ü: 'u' };
+
+/** Case- and diacritic-insensitive, so "Emrah Lafçı" matches the channel "EMRAH LAFCI". */
+function foldName(name: string): string {
+  return name.toLocaleLowerCase('tr-TR').replace(/[çğıöşü]/g, (c) => FOLD[c]).replace(/\s+/g, ' ').trim();
+}
 
 /** Resolves which sources have a readable article, so we never link to a dead end. */
 function SourceList({ sources }: { sources: InferenceSource[] }) {
@@ -37,7 +45,7 @@ function SourceList({ sources }: { sources: InferenceSource[] }) {
             <p className="m-0 text-[14px] font-semibold text-text">
               {who}
               <span className="font-normal text-text-subtle">
-                {src.person_name && personKey(src.person_name) !== personKey(src.channel_name) && ` · ${src.channel_name}`}
+                {src.person_name && foldName(src.person_name) !== foldName(src.channel_name) && ` · ${src.channel_name}`}
                 {src.published_at && ` · ${formatDate(src.published_at)}`}
               </span>
             </p>
@@ -69,13 +77,11 @@ interface Props {
   label: string;
   status: 'loading' | 'success' | 'error';
   topic?: InferenceTopic;
-  generatedAt: string | null;
   highlighted?: boolean;
 }
 
-export default function AgendaSection({ topicKey, label, status, topic, generatedAt, highlighted = false }: Props) {
+export default function AgendaSection({ topicKey, label, status, topic, highlighted = false }: Props) {
   const [open, setOpen] = useState(highlighted);
-  const analysedOn = generatedAt ? formatDate(generatedAt) : null;
 
   return (
     <section
@@ -89,9 +95,6 @@ export default function AgendaSection({ topicKey, label, status, topic, generate
         <h3 id={`konu-baslik-${topicKey}`} className="m-0 font-serif text-[23px] leading-tight font-semibold text-text">
           {label}
         </h3>
-        {status === 'success' && topic && analysedOn && (
-          <p className="mt-2 mb-0 text-[13px] text-text-muted">Son analiz: <span className="font-semibold text-text">{analysedOn}</span></p>
-        )}
       </div>
 
       <div className="mt-4 min-w-0 md:mt-0">
@@ -102,7 +105,7 @@ export default function AgendaSection({ topicKey, label, status, topic, generate
             <div className="skeleton h-4 w-4/5" />
           </div>
         )}
-        {status === 'error' && <p className="m-0 text-[15px] text-text-muted">Gündem özeti şu anda yüklenemedi.</p>}
+        {status === 'error' && <p role="status" className="m-0 text-[15px] text-text-muted">Gündem özeti şu anda yüklenemedi.</p>}
         {status === 'success' && !topic && <p className="m-0 text-[15px] text-text-muted">Bu konu için yayınlanmış özet yok.</p>}
 
         {status === 'success' && topic && (

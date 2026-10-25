@@ -21,10 +21,9 @@ import SeoHead from '../components/seo/SeoHead';
 import { PriceLine } from '../components/views/PriceLine';
 import { assetFromSlug } from '../data/assetMap';
 import type { QuoteResponse } from '../data/api-types';
-import type { TopicOpinion } from '../data/consensus-types';
 import {
-  INSTRUMENTS, INSTRUMENT_KEYS, VIEW_WINDOW_DAYS as DAYS, formatDate, inWindow, personViews, profileHref,
-  type DatedView, type PersonView,
+  INSTRUMENTS, INSTRUMENT_KEYS, VIEW_WINDOW_DAYS as DAYS, formatDate, inWindow, isChange, personViews, profileHref,
+  type PersonView,
 } from '../lib/views';
 
 // Full history, like the instrument page: a change of view needs the view before it.
@@ -37,8 +36,6 @@ const NEWS_SCAN = 20; // newest videos scanned for the lead section
 const SYMBOLS = INSTRUMENT_KEYS.map((k) => assetFromSlug(k)?.symbol).filter((s): s is string => !!s);
 const NO_SYMBOLS: string[] = [];
 
-type Changed = PersonView & { previous: DatedView<TopicOpinion> };
-const isChange = (v: PersonView): v is Changed => v.changed && v.previous !== null;
 
 function InstrumentTile({ instKey, label, status, views, quote, channels }: {
   instKey: string;

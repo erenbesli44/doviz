@@ -19,8 +19,6 @@ export interface ConsensusDashboardResult {
   runDate: string | null;
   generatedAt: string | null;
   topics: InferenceTopic[];
-  /** Topics where changed_from_prev === true — used by "Bugün değişen görüşler" rail */
-  changedTopics: InferenceTopic[];
   /** Look up a single topic by topic_key without re-fetching */
   getTopic: (key: string) => InferenceTopic | undefined;
 }
@@ -73,7 +71,6 @@ export function useConsensusDashboard(): ConsensusDashboardResult {
   }, []);
 
   const topics = data?.topics ?? [];
-  const changedTopics = topics.filter((t) => t.changed_from_prev);
   const topicMap = new Map(topics.map((t) => [t.topic_key, t]));
 
   return {
@@ -81,7 +78,6 @@ export function useConsensusDashboard(): ConsensusDashboardResult {
     runDate: data?.run_date ?? null,
     generatedAt: data?.generated_at ?? null,
     topics,
-    changedTopics,
     getTopic: (key) => topicMap.get(key),
   };
 }

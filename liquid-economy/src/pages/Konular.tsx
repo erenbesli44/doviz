@@ -26,10 +26,9 @@ import AgendaSection from '../components/topics/AgendaSection';
 import PageHeader from '../components/layout/PageHeader';
 import Icon from '../components/ui/Icon';
 import SeoHead from '../components/seo/SeoHead';
-import type { TopicOpinion } from '../data/consensus-types';
 import {
-  INSTRUMENTS, INSTRUMENT_KEYS, VIEW_WINDOW_DAYS as DAYS, inWindow, personViews, profileHref, quoteOf,
-  type DatedView, type PersonView,
+  INSTRUMENTS, INSTRUMENT_KEYS, VIEW_WINDOW_DAYS as DAYS, formatDate, inWindow, isChange, personViews, profileHref, quoteOf,
+  type PersonView,
 } from '../lib/views';
 
 // Same history as home and /piyasa/<key>: a change of view needs the view before it.
@@ -45,8 +44,6 @@ const AGENDA = [
 ];
 
 type Channel = { name: string; slug: string };
-type Changed = PersonView & { previous: DatedView<TopicOpinion> };
-const isChange = (v: PersonView): v is Changed => v.changed && v.previous !== null;
 
 function jumpTo(topicKey: string) {
   document.getElementById(`konu-${topicKey}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -101,7 +98,7 @@ function InstrumentSection({ instKey, label, status, views, channels, highlighte
             {Array.from({ length: 2 }).map((_, i) => <div key={i} className="skeleton h-16" />)}
           </div>
         )}
-        {status === 'error' && <p className="m-0 text-[15px] text-text-muted">Görüşler şu anda yüklenemedi.</p>}
+        {status === 'error' && <p role="status" className="m-0 text-[15px] text-text-muted">Görüşler şu anda yüklenemedi.</p>}
         {status === 'success' && views.length === 0 && (
           <p className="m-0 text-[15px] text-text-muted">Son {DAYS} günde net görüş belirten olmadı.</p>
         )}
@@ -142,7 +139,7 @@ function InstrumentSection({ instKey, label, status, views, channels, highlighte
               </div>
             )}
             <Link to={`/piyasa/${instKey}`} className="mt-4 inline-flex items-center gap-1 text-[14px] font-semibold text-accent no-underline hover:underline underline-offset-4">
-              Tüm görüşler
+              Tüm görüşler<span className="sr-only">: {label}</span>
               <Icon name="arrow-right" size={14} />
             </Link>
           </>
@@ -200,7 +197,7 @@ export default function Konular() {
 
       <PageHeader
         title="Konular"
-        description={`Her araç için yorumcuların son ${DAYS} günde açıkça söylediği beklenti: kim ne bekliyor, kim fikrini değiştirdi. Altta faiz, enflasyon, jeopolitik ve iç siyaset için videolardan derlenen gündem özeti; bu özetler bir yön beklentisi değildir.`}
+        description={`Her araç için yorumcuların son ${DAYS} günde açıkça söylediği beklenti ve altta faiz, enflasyon, jeopolitik ve iç siyaset için gündem özeti.`}
       />
 
       <nav aria-label="Konu dizini" className="mb-2 space-y-2 border-t-2 border-rule pt-4">
@@ -226,7 +223,12 @@ export default function Konular() {
       </section>
 
       <section aria-labelledby="konular-gundem" className="mt-12">
-        <div className="section-head"><h2 id="konular-gundem">Gündem özeti</h2></div>
+        <div className="section-head">
+          <h2 id="konular-gundem">Gündem özeti</h2>
+          {agendaStatus === 'success' && generatedAt && (
+            <span className="text-[13px] text-text-muted">Son analiz: <span className="font-semibold text-text">{formatDate(generatedAt)}</span></span>
+          )}
+        </div>
         <p className="mt-2 mb-0 max-w-[62ch] text-[14px] leading-6 text-text-muted">
           Videolarda bu konularda konuşulanların derlemesi. Kişilerin açık yön beklentisi bu konular için henüz ayrıştırılmıyor.
         </p>
@@ -238,7 +240,6 @@ export default function Konular() {
               label={a.label}
               status={agendaStatus}
               topic={getTopic(a.key)}
-              generatedAt={generatedAt}
               highlighted={a.key === highlight}
             />
           ))}

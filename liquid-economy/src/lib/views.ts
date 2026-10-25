@@ -163,6 +163,11 @@ export function personViews(opinions: TopicOpinion[]): PersonView[] {
     .sort((a, b) => byDateDesc(a.current.item, b.current.item));
 }
 
+/** A person whose latest view differs from the one before it. */
+export type Changed = PersonView & { previous: DatedView<TopicOpinion> };
+
+export const isChange = (v: PersonView): v is Changed => v.changed && v.previous !== null;
+
 export function tally(views: PersonView[]): Record<Direction, number> {
   const t: Record<Direction, number> = { up: 0, down: 0, flat: 0 };
   for (const v of views) t[v.current.direction] += 1;
