@@ -225,7 +225,8 @@ Post style for week 1 (example shape, numbers to be filled from the site):
   investment advice, repeat a text or angle within 7 days, argue with commentators.
 
 ## 5. MISSING DATA
-- MISSING DATA: GA4 sessions/users with `utm_source=x` since 2026-10-24 (owner to read on Fri 31 Oct).
+- ~~MISSING DATA: GA4 sessions/users with `utm_source=x` since 2026-10-24~~ **Closed 2026-10-25.** GA4 over 7 days shows 13 sessions from X (11 from `x / social`, 2 from `t.co / referral`). Logged in `runs/2026-10-24.md`.
+  - Still open: there is no internal-traffic filter, and no key event is defined.
 - MISSING DATA: X account type (Professional?) and category; Location field.
 - MISSING DATA: per-post profile visits and link clicks on X (only views were read); whether account analytics is available without Premium.
 - MISSING DATA: X handles for Barış Soydan and AA Finans (not linked from their own pages).
