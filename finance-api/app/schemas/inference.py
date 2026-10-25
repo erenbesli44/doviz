@@ -10,7 +10,8 @@ class InferenceSource(BaseModel):
     video_id: int
     title: str
     channel_name: str
-    person_name: str | None = None
+    person_name: str | None = None  # speaker of the view (tracker, OI-018)
+    published_at: str | None = None  # publish date, else when the video was added
     weight_used: float
     contribution_note: str
 
