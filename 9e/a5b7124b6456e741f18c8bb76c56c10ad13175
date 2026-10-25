@@ -1,0 +1,21 @@
+docs/social/growth-plan-2026-10.md
+  s_61d47f1aa62b24::t_50525396f10ad5 228-229
+docs/social/runs/2026-10-24.md
+  s_61d47f1aa62b24::t_8ce23a8226685c 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9ea5b7124b6456e741f18c8bb76c56c10ad13175",
+  "prompts": {},
+  "sessions": {
+    "s_61d47f1aa62b24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b75f3865-4c0c-4fa6-a37e-95ce777b6f2a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
