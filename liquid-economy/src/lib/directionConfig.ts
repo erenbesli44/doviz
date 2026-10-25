@@ -8,9 +8,3 @@ export const DIR_CONFIG: Record<Direction, { icon: IconName; label: string; text
   sideways: { icon: 'flat',          label: 'Yatay',    text: 'text-neutral-sent', bg: 'bg-neutral-bg', bar: 'bg-neutral-sent' },
   mixed:    { icon: 'mixed',         label: 'Karışık',  text: 'text-warn',         bg: 'bg-warn-bg',    bar: 'bg-warn' },
 };
-
-export function confidenceBand(confidence: number): 'düşük' | 'orta' | 'yüksek' {
-  if (confidence >= 0.75) return 'yüksek';
-  if (confidence >= 0.5) return 'orta';
-  return 'düşük';
-}

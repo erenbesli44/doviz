@@ -8,6 +8,8 @@ export interface InferenceSource {
   person_name: string | null;
   weight_used: number;
   contribution_note: string;
+  /** Not sent by the tracker yet (OI-026 step 2); shown when present. */
+  published_at?: string | null;
 }
 
 export interface InferenceTopic {
