@@ -112,6 +112,7 @@ export interface TopicOpinion {
   outlook_explicit?: boolean | null;
   outlook_horizon?: string | null;
   outlook_quote?: string | null;
+  outlook_quote_clean?: string | null;
 }
 
 export interface ChannelOverview {
@@ -149,4 +150,5 @@ export interface PersonTimelinePoint {
   outlook_explicit?: boolean | null;
   outlook_horizon?: string | null;
   outlook_quote?: string | null;
+  outlook_quote_clean?: string | null;
 }

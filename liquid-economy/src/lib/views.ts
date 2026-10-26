@@ -45,8 +45,14 @@ export function directionOf(o: Classified): Direction | null {
 }
 
 /** Speaker's own words when the tracker extracted them, else a summary excerpt. */
-export function quoteOf(o: { outlook_quote?: string | null; summary: string }): string {
-  return o.outlook_quote?.trim() || excerpt(o.summary);
+// The readable edit of the speaker's sentence first (fillers removed, same words),
+// then the verbatim transcript quote, then the summary.
+export function quoteOf(o: {
+  outlook_quote?: string | null;
+  outlook_quote_clean?: string | null;
+  summary: string;
+}): string {
+  return o.outlook_quote_clean?.trim() || o.outlook_quote?.trim() || excerpt(o.summary);
 }
 
 export function personOf(o: TopicOpinion): string {

@@ -32,6 +32,9 @@ to the owner and, only after the owner approves in chat, executes it in the brow
 1. **Posts (1–3)**, each with: final text (≤ 280 X chars; URL = 23, emoji = 2; show the count),
    UTM link `?utm_source=x&utm_medium=social&utm_campaign=<format>`, the exact data rows it
    relies on (person, outlook, date, video link), and a card spec.
+   - **Quote**: use `outlook_quote_clean` (readable edit of the speaker's sentence: fillers and
+     repeats removed, same words, numbers untouched); use `outlook_quote` only when it is empty.
+     Never edit the quote yourself beyond trimming it at a sentence end; the site shows the same text.
    - **Commentator posts also get the "Görüşün tamamı" reply thread** (playbook §3.1): write each
      reply part with its char count, built from that row's `summary` (leading "Konu:" prefix
      removed), `outlook_horizon`, real `key_levels`, and the `/haberler/<video_id>` link. Never in

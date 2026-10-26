@@ -63,3 +63,4 @@ class TopicOpinion(BaseModel):
     outlook_explicit: bool | None = None
     outlook_horizon: str | None = None
     outlook_quote: str | None = None
+    outlook_quote_clean: str | None = None

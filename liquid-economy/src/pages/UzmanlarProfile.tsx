@@ -71,7 +71,7 @@ function InstrumentRow({ channelSlug, topicKey }: { channelSlug: string; topicKe
                 <span className="text-text-muted">{formatDate(pt.date)}</span>
                 <Link to={`/haberler/${pt.video_id}`} className="link no-underline hover:underline">Özeti oku</Link>
               </div>
-              <p className="mt-1 mb-0 text-[14px] leading-5 text-text-muted">{pt.outlook_quote ? `“${pt.outlook_quote}”` : excerpt(pt.summary, 160)}</p>
+              <p className="mt-1 mb-0 text-[14px] leading-5 text-text-muted">{pt.outlook_quote_clean || pt.outlook_quote ? `“${quoteOf(pt)}”` : excerpt(pt.summary, 160)}</p>
             </li>
           ))}
         </ol>
