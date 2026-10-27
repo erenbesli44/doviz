@@ -34,7 +34,9 @@ standards). Profile, formats and templates: `x-account-kit.md`, `launch-posts.md
 ### 3.1 Commentator posts carry the full view ("Görüşün tamamı") — from 2026-10-24
 Every post about one person's view (view change, new view) shows the same full view the site shows
 under "Görüşün tamamı" (`ViewDetails.tsx`), not only the one-sentence quote:
-1. **Main post** (≤ 280): name + instrument + direction, the verbatim `outlook_quote` in quote marks
+1. **Main post** (≤ 280): name + instrument + direction, the speaker's sentence in quote marks — `outlook_quote_clean` (the
+   verbatim `outlook_quote` with fillers, repeats and false starts removed, same words; from 2026-10-26),
+   falling back to `outlook_quote` only when the clean field is empty — the same sentence the site shows
    (date), "▶ Videoda m:ss" link, site link. Unchanged.
 2. **Reply under the main post (same thread)** — the full view:
    - Opens with `Görüşün tamamı (özet):` then `cleanSummary(summary)` — the opinion's `summary` with

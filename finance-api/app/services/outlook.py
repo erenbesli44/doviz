@@ -18,4 +18,6 @@ def outlook_fields(entry: dict[str, Any]) -> dict[str, Any]:
         "outlook_explicit": bool(entry.get("outlook_explicit")) if outlook else None,
         "outlook_horizon": entry.get("outlook_horizon") or None,
         "outlook_quote": entry.get("outlook_quote") or None,
+        # Readable edit of the quote (tracker quote_clean); clients prefer it when present.
+        "outlook_quote_clean": entry.get("outlook_quote_clean") or None,
     }

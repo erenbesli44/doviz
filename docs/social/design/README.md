@@ -26,7 +26,7 @@ Light theme only for images (X shows them on both themes; the light card has a c
 | Weekly card | 1200×675 | (to design) | one row per instrument: bar + counts |
 | View-change card | 1200×675 | (to design) | one person, old → new, quote ≤ 140 chars |
 | Commentator card (**v3.1 mobile-first, from 2026-10-27**, owner decision) | 1200×675 | `card-commentator-v3.html` | left: commentator photo (280 px circle, the channel's own YouTube `channel_avatar_url`), name 58 px, "YouTube kanalı"; right: instrument 46 px, direction block 92 px ("↓ Düşüş" + "bekliyor · dd Eki"), and only for a view change one line "Önceki: ↑ Yükseliş · dd Eki" 46 px; navy bottom bar "dovizveri.com" + "Yatırım tavsiyesi değildir." 38 px. **No quote, video minute, summary or source line on the card** — they are in the post text, replies and alt text. Why: the card is shown ~295 px wide in the phone feed (~25 %), so text < ~34 px is unreadable. Comparison: `v3-trial/README.md` |
-| Commentator card (v2, 2026-10-24 → 26) | 1200×675 | layout of `make_cards.py` `commentator` | superseded by v3: right "Görüşün tamamı" panel was unreadable at phone width |
+| Commentator card (v2, 2026-10-24 → 26) | 1200×675 | layout of `make_cards.py` `commentator` | superseded by v3: right "Görüşün tamamı" panel was unreadable at phone width. v2 showed the quote (`outlook_quote_clean`, else `outlook_quote` — same as the post) on the left and the summary panel on the right |
 | Avatar | 400×400 | `avatar-a.html` (**live** since 2026-10-24; `avatar-b.html` = unused option) | navy "DV" monogram; must read at 48 px |
 | Banner | 1500×500 | `banner-b.html` (**live** since 2026-10-24; `banner-a.html` = unused option) | "Kim ne bekliyor?" + dovizveri.com; keep x 0–420, y 300–500 clear (avatar overlap) |
 

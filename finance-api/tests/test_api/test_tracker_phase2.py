@@ -179,6 +179,7 @@ def test_topic_opinions_returns_flat_structured_opinions(client: TestClient):
             "outlook_explicit": None,
             "outlook_horizon": None,
             "outlook_quote": None,
+            "outlook_quote_clean": None,
         }
     ]
 
@@ -234,15 +235,22 @@ def test_channel_timeline_returns_oldest_to_newest_points(client: TestClient):
 def test_outlook_fields_pass_through_and_normalise():
     from app.services.outlook import outlook_fields
 
-    entry = {"outlook": "UP", "outlook_explicit": True, "outlook_quote": "80 lira"}
+    entry = {
+        "outlook": "UP",
+        "outlook_explicit": True,
+        "outlook_quote": "yani 80 lira falan",
+        "outlook_quote_clean": "80 lira",
+    }
     assert outlook_fields({**entry, "outlook_horizon": ""}) == {
         "outlook": "up",
         "outlook_explicit": True,
         "outlook_horizon": None,
-        "outlook_quote": "80 lira",
+        "outlook_quote": "yani 80 lira falan",
+        "outlook_quote_clean": "80 lira",
     }
     # unclassified or invalid → all None
     assert outlook_fields({}) == {
         "outlook": None, "outlook_explicit": None, "outlook_horizon": None, "outlook_quote": None,
+        "outlook_quote_clean": None,
     }
     assert outlook_fields({"outlook": "sideways", "outlook_explicit": True})["outlook"] is None
