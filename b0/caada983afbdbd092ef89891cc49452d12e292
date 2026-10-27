@@ -1,0 +1,34 @@
+docs/social/growth-plan-2026-10.md
+  s_345697fba9b334::t_3abd6ef1f389fb 205-206,231
+docs/social/x-playbook.md
+  s_3e6f9cdfbccd88::t_9504fd374eec60 27-29,36,63-78,84-85,89-102,149-150
+  s_345697fba9b334::t_3abd6ef1f389fb 24-26,62,83,86-88,103-122,144-145
+.claude/agents/social-manager.md
+  s_3e6f9cdfbccd88::t_b97d957ba8c175 43-53,65-71,86-88,91
+  s_345697fba9b334::t_3abd6ef1f389fb 42
+  s_345697fba9b334::t_c79f20deab924a 92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b0caada983afbdbd092ef89891cc49452d12e292",
+  "prompts": {},
+  "sessions": {
+    "s_345697fba9b334": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4ee61287-21f2-4d5c-9b93-2a127b785fd4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_3e6f9cdfbccd88": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "89ee580c-f84b-4918-9419-9b9b615328c1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
