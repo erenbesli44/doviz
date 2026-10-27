@@ -1,0 +1,30 @@
+docs/social/design/README.md
+  s_a6e43708e901cc::t_4fb50858628c12 28-29,39-44
+docs/social/design/v3-trial/README.md
+  s_a6e43708e901cc::t_4fb50858628c12 1,7-9
+  s_a6e43708e901cc::t_9d4a3f4423c1ed 2-6,11-22,25-45
+  s_a6e43708e901cc::t_a72449213f118b 10
+  s_a6e43708e901cc::t_0778c764be0af1 23-24
+docs/social/design/card-commentator-v3.html
+  s_a6e43708e901cc::t_14119cb36b7234 1-39
+docs/social/x-playbook.md
+  s_a6e43708e901cc::t_4fb50858628c12 48-49
+.claude/agents/social-designer.md
+  s_a6e43708e901cc::t_372c21ae2039a3 33-36,47-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4e993be8377f942c33e69f13a89bf604d8b67321",
+  "prompts": {},
+  "sessions": {
+    "s_a6e43708e901cc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81497812-5e8e-4eae-a8b9-1ef67bd7d2ed",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
