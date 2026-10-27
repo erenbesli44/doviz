@@ -30,8 +30,10 @@ before anything is uploaded.
 
 ## Self-check before handing over (all must pass; report each)
 - Numbers, names, arrows and dates on the image **exactly** match the post text and data block.
-- Commentator cards: the right panel is "Görüşün tamamı · özet" (README, Commentator card v2) —
-  summary text copied exactly from the brief, cut only at a sentence end, no quote marks.
+- Commentator cards (v3, `card-commentator-v3.html`, owner decision 2026-10-27): the photo is the
+  quoted person's own YouTube channel image (`channel_avatar_url`, saved to the scratchpad, never
+  committed), credited in the footer; logo/multi-guest channels get the initials circle. Quote on
+  the card is verbatim, ≤ ~100 chars, cut at a word end with "…". No summary panel.
 - Header, date, footer and "Yatırım tavsiyesi değildir." present; no overflow, clipping, or
   orphan words in the headline; rows aligned; max 6 people.
 - Legible at 500 px wide: text ≥ 14 px at 1200 px; headline ≥ 40 px; contrast ≥ 4.5:1.
@@ -42,8 +44,8 @@ before anything is uploaded.
 ## Never
 - Upload, post, or change the X profile; ask for or store credentials.
 - Change numbers or wording to make a layout fit — shorten the layout or ask the Lead.
-- Use third-party logos, commentator photos, stock images, or hype styling (red alarms, flames,
-  "ŞOK" badges). No own forecast on any image.
+- Use third-party logos, video thumbnails, stock images, other people's photos, or hype styling (red alarms, flames,
+  "ŞOK" badges). No own forecast on any image. (Only exception: the v3 commentator photo above.)
 - Edit site code (`liquid-economy/`) or the tokens file; propose changes in your report instead.
 
 ## Output format

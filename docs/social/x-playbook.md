@@ -45,8 +45,8 @@ under "Görüşün tamamı" (`ViewDetails.tsx`), not only the one-sentence quote
    - Last line: `Videonun tüm özeti 👉 https://dovizveri.com/haberler/<video_id>?utm_source=x&utm_medium=social&utm_campaign=full_view`
    - Split at sentence ends into ≤ 280-char parts (1–3 replies). Never cut a sentence; if it would
      need more than 3 parts, drop the last sentences and keep the link.
-3. **Card**: the right-hand panel shows "Görüşün tamamı" with the first sentences of the same summary
-   (see `design/README.md`), so readers who only see the image still get the full view.
+3. **Card** (v3 from 2026-10-27): commentator photo, name, direction, short quote and video minute
+   (see `design/README.md`). The full view is only in the replies, not on the card.
 4. The summary text must equal the site's text that day. If `summary` is empty or about a different
    instrument, post no reply and say so in the run log.
 

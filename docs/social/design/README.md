@@ -25,7 +25,8 @@ Light theme only for images (X shows them on both themes; the light card has a c
 | Outlook card | 1200×675 | `card-outlook.html` | headline left, people list right, max 6 rows |
 | Weekly card | 1200×675 | (to design) | one row per instrument: bar + counts |
 | View-change card | 1200×675 | (to design) | one person, old → new, quote ≤ 140 chars |
-| Commentator card (v2, from 2026-10-24) | 1200×675 | layout of `make_cards.py` `commentator` | left: topic, name, source, direction pill, verbatim quote, "dd Ekim videosu, dakika m:ss"; **right panel = "Görüşün tamamı"**: label `GÖRÜŞÜN TAMAMI · ÖZET`, the first sentences of `cleanSummary(summary)` (no quote marks, ≥ 16 px, cut only at a sentence end, ≤ ~420 chars), then `Vade: …` if present, then "Devamı gönderinin altında · dovizveri.com/haberler/<video_id>" in accent. No peer counts while OI-020 is not live |
+| Commentator card (**v3, from 2026-10-27**, owner decision) | 1200×675 | `card-commentator-v3.html` | left: commentator photo (200 px circle, the channel's own YouTube `channel_avatar_url`) + name + "YouTube · dd Eki"; right: topic, big direction pill, one line "önceki görüş: ↑ … (dd Eki)" when the view changed, verbatim quote ≤ ~100 chars (cut at a word end with "…"; full quote stays in the post text), "▶ Videoda m:ss · vade: …". **No summary panel** (the full view is in the "Görüşün tamamı" replies). Footer credits the photo. Rationale and phone-size comparison: `v3-trial/README.md` |
+| Commentator card (v2, 2026-10-24 → 26) | 1200×675 | layout of `make_cards.py` `commentator` | superseded by v3: right "Görüşün tamamı" panel was unreadable at phone width |
 | Avatar | 400×400 | `avatar-a.html` (**live** since 2026-10-24; `avatar-b.html` = unused option) | navy "DV" monogram; must read at 48 px |
 | Banner | 1500×500 | `banner-b.html` (**live** since 2026-10-24; `banner-a.html` = unused option) | "Kim ne bekliyor?" + dovizveri.com; keep x 0–420, y 300–500 clear (avatar overlap) |
 
@@ -35,7 +36,12 @@ Light theme only for images (X shows them on both themes; the light card has a c
 - Direction is shown by **arrow + word + colour**, never colour alone.
 - Minimum text size 14 px at 1200 px width; headline ≥ 40 px. Contrast ≥ 4.5:1 for text.
 - Numbers on the image must equal the post text and the live site that day.
-- No stock photos, logos of third parties, faces, or commentator photos.
+- No stock photos, logos of third parties, or faces — **except** the commentator card v3 photo (owner
+  decision 2026-10-27): only the channel's own YouTube profile image of the person quoted, small circle,
+  credited in the footer ("profil fotoğrafı: <Name> YouTube kanalı"). Never video thumbnails. If the
+  channel avatar is a company logo or another person (multi-guest channels such as Integral Forextv,
+  Kanal Finans, NCM Investment TR), use the initials circle (`.ini`). Remove a photo on any creator request.
+- Photos are downloaded per card into the scratchpad; never commit commentator photos to the repo.
 - Max 6 people per card; more → say "+N kişi daha" and link.
 
 ## Pipeline
