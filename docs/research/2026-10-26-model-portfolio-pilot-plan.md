@@ -89,6 +89,22 @@ Nothing stores PDF bytes beyond the parse step; `text` is kept for audit, never 
    set `needs_review`; add the two-clause split-verb test; correct the `_loose()` docstring claim. Also: pypdf's plain
    mode splits glyph-positioned words ("h edef", "ağ ırlığını") and stored quotes stay verbatim (criterion C), so
    step 5 needs a display-side cleanup of such splits in served quotes; storage must not be altered.
+   **Found by the step-3 backfill (2026-10-27, 18 documents of 2026):** the deterministic parsers auto-extract about half of
+   the 2026 change notes and correctly park the rest in `needs_review` (no wrong event in the scratch DB). Parser coverage
+   follow-ups, in order of value: (1) İş plural labels `Eklenen Şirketler X.IS & Y.IS` / `Çıkartılan Şirketlerler …` (the
+   broker's own typo) on 15 Jan, 12 Mar, 9 Apr — 8 real events, a small regex extension; (2) Gedik single-change notes
+   `Kocaer Çelik'i (KCAER) ekliyoruz` without the colon (5 May, 7 May) and the 2 Jul prose note "Portföy Yeniden
+   Düzenlenmesi"; (3) per-ticker quote split — İş 22 Jul SOKM `added` carries the AKSEN-removal paragraph because the rule
+   is "first paragraph"; (4) company→ticker map (Garanti Bankası, Aksa Enerji, Medical Park, Emlak GYO) still in code; (5)
+   weight nouns outside the `ağırlı`/`ağrılı` stem (e.g. `payını`) are outside the guard. Operational notes: a backfill run
+   counts toward `max_runs_per_day` for the rest of that UTC day; the backfill marker lives in the run's `error_details`
+   (a `notes` column would be a schema change); per-source `events_flagged` counts consistency flags only, not parser
+   `needs_review`; the Gedik composition snapshot `as_of` is the fetch date (the page carries no date).
+   **Done 2026-10-27 (branch `agent/broker-watch-parsers`):** follow-ups (1), the dated Gedik header part of (2), and (3)
+   for added/removed events (per-ticker paragraphs; a labelled note's ticker without its own paragraph is flagged).
+   Coverage on the 2026 texts: 13/17 change notes auto, 30 events. Still open: Gedik prose notes and (4) the company map;
+   weight-event quotes in labelled notes still take the first paragraph; a Gedik note with both a dated title and a colon
+   header for the same ticker would store the quote-less event first; the YKBNK 15 Jan quote names no company (limit).
 3. **Backfill 2026** — İş feed pages back to Jan 2026 (≈ 11 PDFs), Gedik release list (≈ 10 PDFs), Yapı Kredi
    (14 Sep only). Must reproduce the known events (criterion A). Expect the İş 5 Feb 2026 note (weights given by
    company names, verb "çekiyoruz") to land in `needs_review`.
