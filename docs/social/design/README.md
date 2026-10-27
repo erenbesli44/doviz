@@ -52,3 +52,12 @@ Light theme only for images (X shows them on both themes; the light card has a c
 2. `docs/social/design/render.sh <file.html> <out>` → `<out>.png` (2×, for review) and
    `<out>.webp` (1200×675, for upload; aim ≤ 45 KB, the browser upload path sends it as base64).
 3. Look at the PNG yourself (text overflow, wrapping, alignment) before handing it over.
+4. **Upload (Lead, after owner approval; owner decision 2026-10-27)**: attach the `.webp` in the
+   owner's Chrome with Claude in Chrome's `file_upload` tool (find the composer's file input
+   `input[data-testid=fileInput]` with `find`/`read_page`, pass its ref and the absolute path; never
+   click the input, it opens a native picker). The file must sit in a folder the session can read
+   (session scratchpad or working dir, ≤ 10 MB) and is never committed. Then check the image
+   preview and add the alt text before sending. The built-in browser pane cannot read local files,
+   and the base64/local-server routes were denied on 2026-10-27. First real use is the next approved
+   post; record the result in that day's run file. If it fails, post nothing and ask the owner,
+   since posting without the card needs their OK.

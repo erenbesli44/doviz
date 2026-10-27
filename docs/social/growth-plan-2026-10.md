@@ -54,6 +54,57 @@ The critic checked these claims with GET requests:
   - D11 is merged into OI-020.
   - D4 (nginx prerender, infra), D5 (Premium, paid) and D9 (X API, paid) move to the week-4 review. They are not asked now.
 
+## 0a. Premium review and growth levers (2026-10-27)
+
+The Lead checked the Premium hub while logged in and reviewed the owner's notes on Premium features.
+
+**Corrections to the earlier Premium+ rules (playbook §3.2):**
+1. The account is on **Premium, not Premium+**. Evidence: the timeline shows ads, the hub offers
+   "Upgrade my plan" for ad-free, and Radar and X Pro are shown as locked. So it has the smaller reply
+   boost and no Radar.
+2. Analytics does not close the measurement gap yet. Detailed metrics unlock at **50 followers**.
+3. The planned two-week long-post A/B trial cannot be decided at about 17 views per post, so B
+   (long post) is now the default for operational reasons (playbook §3.1a).
+4. A weekly Article needs a click from a 1-follower account and gets little reach. It becomes one long
+   post until the account has 100 followers.
+
+**What Premium does change:**
+- **Fewer failures:** one long post is one send, and a mistake in it can be edited. This would have
+  prevented the duplicate post (26 Oct) and the half-posted thread risk.
+- **Better replies:** the reply boost makes good replies more visible.
+
+**What it does not change:** no Premium feature gets us followers by itself. With 1 follower and
+about 17 views per post, our posts reach almost nobody. Reach has to come from other people's
+audiences.
+
+**Growth levers, in order of expected impact (hypotheses; measured at the Friday review):**
+1. **Replies are the main engine.** 3 a day now and 5 a day from week 2, under fresh posts by
+   commentators and finance-news accounts, ideally within 30 minutes of the original post (an
+   unverified rule of thumb: early replies sit higher).
+   - **Content:** what the site has and no one else has. For example, that person's tracked earlier
+     view with its date and a `/piyasa/<key>` link, or what other tracked commentators expect on the
+     same instrument.
+   - **Rules:** neutral wording, no direction words in the first replies, and the date must be the
+     real upload date (data issue 10).
+2. **Profile conversion.** Someone who clicks through from a reply sees the pinned post and then 254
+   legacy posts. Two fixes:
+   - D1, deleting the visible hype posts, is now the biggest leak to fix.
+   - D12: the pinned item becomes one long post.
+3. **Timeliness over volume.** Post a view within a day of the video upload. Videos older than about
+   3 days are not posted (owner, 27 Oct). Stay at 1–2 posts a day.
+4. **Corrections reset the 2-a-day gate.** The two date corrections on 27 Oct count. The count of
+   correction-free days restarts on 28 Oct.
+
+**Not now:** Premium+ (D13), Boost or other paid reach (it mixes paid reach into the organic
+measurement), long video, livestream, creator subscriptions.
+
+**New owner decisions:**
+- **D12:** replace the pinned 6-post thread with one long post carrying the same text. Recommended:
+  yes. It takes one approval, and the old thread stays on the profile.
+- **D13:** upgrade to Premium+. Recommended: **no**. Revisit at the 4-week review only if replies
+  bring most of the new followers.
+- **Undo post window (20–60 s):** an account setting, so the owner sets it.
+
 ## 1. Audit
 
 ### 1.1 What is already good (keep)
@@ -202,8 +253,8 @@ Post style for week 1 (example shape, numbers to be filled from the site):
    `sameAs` in Organization JSON-LD, optional share-to-X on `/piyasa/*`. Open as one OI.
 4. **D4 Per-page link previews (dev, larger, touches nginx/prerender → infra)** — Recommend after OI-020
    is live; until then always attach our own card image to posts.
-5. **D5 X Premium / verification (paid)** — **Decided 2026-10-27 by the owner: account is on Premium+.**
-   Usage rules in `x-playbook.md` §3.2.
+5. **D5 X Premium / verification (paid)** — **Decided 2026-10-27 by the owner: the account is subscribed.** The Lead's
+   check the same day shows **Premium** (not Premium+); see §0a. Usage rules in `x-playbook.md` §3.2; upgrade = D13.
 6. **D6 Weekend cadence** — Recommend ≤ 1 post/day Sat–Sun, only Bitcoin or evergreen; no replies duty.
 7. **D7 Mention the commentator on view-change posts** — Recommend yes, one person per post, neutral
    wording ("görüşünü güncelledi"), quote + minute; never on count posts.
@@ -228,7 +279,7 @@ Post style for week 1 (example shape, numbers to be filled from the site):
 - ~~MISSING DATA: GA4 sessions/users with `utm_source=x` since 2026-10-24~~ **Closed 2026-10-25.** GA4 over 7 days shows 13 sessions from X (11 from `x / social`, 2 from `t.co / referral`). Logged in `runs/2026-10-24.md`.
   - Still open: there is no internal-traffic filter, and no key event is defined.
 - MISSING DATA: X account type (Professional?) and category; Location field.
-- MISSING DATA: per-post profile visits and link clicks on X (only views were read). Account analytics: available with Premium+ from 2026-10-27; first read at the Friday review.
+- MISSING DATA: per-post profile visits and link clicks on X (only views were read). Account analytics: Premium has it, but detailed metrics unlock at 50 followers (checked 2026-10-27).
 - MISSING DATA: X handles for Barış Soydan and AA Finans (not linked from their own pages).
 - MISSING DATA: rendered `/piyasa/<key>` counts for week 1 (API pre-check only; production still on the pre-OI-020 build).
 - MISSING DATA: market calendar for weeks 1–2 — BIST hours 28–29 Oct, TÜİK CPI release date, TCMB PPK date, FOMC date (verify on official calendars before any dated post).

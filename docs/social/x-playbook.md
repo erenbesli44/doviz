@@ -21,7 +21,7 @@ standards). Profile, formats and templates: `x-account-kit.md`, `launch-posts.md
 4. Suspicious rows (old prices in the quote, summaries labelled as quotes, duplicate names,
    channels listed as people) are left out and reported as data issues, not posted.
 5. Mistakes: reply under the post with the correction within the day; don't silently delete.
-   With Premium+ (§3.2) a post may be **edited within 1 hour** (≤ 5 edits; original posts and quote
+   With Premium (§3.2) a post may be **edited within 1 hour** (≤ 5 edits; original posts and quote
    posts only — X's help lists replies, threads and pinned posts as not editable, so a format-A main
    post with replies under it may not be editable either) for a typo, a broken or wrong link, or a wrong UTM tag. Never edit the
    person, instrument, direction, quote words, a number or a date: those get the correction reply,
@@ -33,7 +33,7 @@ standards). Profile, formats and templates: `x-account-kit.md`, `launch-posts.md
 |---|---|---|
 | Daily outlook card (one instrument) | ~40% | Card image + 1-line summary + view changes + UTM link |
 | View change ("X görüşünü değiştirdi") | ~25% | Only real changes shown on the site |
-| Weekly Article (Friday) | 1/week | All instruments in one X Article (§3.2); replaces the weekly thread |
+| Weekly roundup (Friday) | 1/week | One long post until 100 followers, then an X Article (§3.2); replaces the weekly thread |
 | Evergreen explainer | ~15% | "Görüşleri nasıl sayıyoruz?", "Açık beklenti ne demek?" — reusable library (Kitces) |
 | News → which views it supports | ~20% | Only from reliable sources, linked |
 
@@ -59,66 +59,97 @@ under "Görüşün tamamı" (`ViewDetails.tsx`), not only the one-sentence quote
 4. The summary text must equal the site's text that day. If `summary` is empty or about a different
    instrument, post no reply and say so in the run log.
 
-### 3.1a Long-post trial (Premium+, from the first approved long post, for two weeks)
-Commentator posts alternate between two formats, post by post (A, B, A, B …), so morning and evening
-slots get both. The run file names the format of every commentator post.
+### 3.1a Long post is the default (Premium; revised 2026-10-27)
+**B is the default format** for commentator posts. The reason is operational, not metric: it is one
+approval and one send instead of 2–4, so there is no half-posted thread and no duplicate (2026-10-26).
+It can be edited within the hour, which replies cannot. Readers also see the full view without opening
+a thread. Use A only when B fails (composer problem, preview missing, "Show more" cuts the header);
+the run file names the format of every commentator post and the reason for any A.
+Why not the A/B trial: at about 17 views per post and 1 follower, two weeks give some 10–20 posts and
+0–2 link clicks per format. Any difference would be noise. Reopen A vs B only when the median is
+≥ 100 views per post.
 - **A — thread (current)**: main post ≤ 280 + 1–3 "Görüşün tamamı" replies, exactly as §3.1.
   Links: `utm_campaign=commentator` and `full_view`.
 - **B — one long post**: the same content in a single post, in this order:
-  1. The first 280 X characters are the complete main post of §3.1 (name, instrument, direction,
-     quote, date, "▶ Videoda m:ss" link, site link), because the timeline shows only about that much
-     before "Show more" and the post must work without expanding it.
+  1. The first 280 X characters, in at most 4 lines, are the complete main post of §3.1 (name,
+     instrument, direction, quote, date, "▶ Videoda m:ss" link, site link). The timeline shows only
+     about that much before "Show more", and fewer characters when there are many line breaks. The
+     post must work without expanding it.
   2. A blank line, then `Görüşün tamamı (özet):` and the same summary text as the A replies (never in
      quote marks), `Vade: …`, real `key_levels`, and the `Videonun tüm özeti 👉` link.
   Links: `utm_campaign=commentator_long` and `full_view_long`. Same card and alt text as A.
 - Both formats: the summary text must equal the site's text that day (§3.1 rule 4).
-- Decision at the second Friday review: compare A and B on median views, link clicks (GA4 sessions by
-  campaign), key events, and corrections needed; keep the format that brings more site visits per
-  post, or keep both if the difference is within noise. Record the result here.
+- Keep the separate UTM campaigns, so the comparison can be made later from GA4 without changing links.
 
 Cadence: **1–3 posts per day**, never more than 4. A post's "Görüşün tamamı" replies count as part
 of that post, not as extra posts. Quality over volume; skip a day rather than
 post filler. Post times are a hypothesis (09:30 and 18:00 TR); re-check after 4 weeks of data.
 
-## 3.2 Premium+ features (account on X Premium+; rules adopted 2026-10-27, tier corrected same day)
-Limits come from X's help center as quoted by third-party pages (the help center itself was not
-readable to the agent); re-check in the composer if something does not behave as written.
-Premium+ adds to Premium: the largest reply boost, no ads, Radar (trend search, preview), higher Grok
-limits and the fullest analytics. It adds **no new post format**: long posts, bold, edit and Articles
-are the same as on Premium.
-- **Long posts** up to 25,000 characters; anyone can read them, only Premium can write them. Used
-  only by the §3.1a trial for now. Long posts cannot be scheduled (we post manually anyway).
+## 3.2 X Premium features (tier checked 2026-10-27: **Premium, not Premium+**)
+Tier evidence, from the Lead's logged-in read of x.com on 2026-10-27:
+- The home timeline shows ads.
+- The Premium hub offers "Go ad free → Upgrade my plan".
+- It lists Radar, X Pro and "Request an inactive handle" under "Upgrade to unlock".
+
+The owner can confirm under Settings → Premium → Manage subscription. Items marked ⁺ apply only if
+the account is upgraded. **Do not upgrade now** (owner decision D13). Premium+ adds the largest reply
+boost, Radar and no ads. None of these is worth the extra cost at 1 follower. Revisit at the 4-week
+review, and only if replies turn out to be the main source of new followers.
+
+What the account has, checked in the Premium hub: long posts up to 25,000 characters, HD/4K and
+longer video, Articles (web only), desktop livestream (Media Studio), Analytics, Boost, Bookmark
+Folders, reply boost, ID verification, profile customization and Grok. Edit and undo limits come from
+third-party copies of X's help center, which the agent cannot read past its bot check. Re-check them
+in the composer.
+
+- **Long posts:** the default for commentator posts (§3.1a). Anyone can read them; only Premium
+  accounts can write them. They cannot be scheduled, which does not matter because we post manually.
 - **Native bold**, header line only: the first line of a commentator post (e.g. **Erkan Öz · Bitcoin ·
   Düşüş bekliyor**) is set in bold with the composer's B button. No bold or italics anywhere else,
   and never Unicode "bold letters" (screen readers spell them out, search misses them). In run files
   the header is marked `**…**`; the Lead applies the formatting in the composer.
-- **Edit within 1 hour**: rules in §2 item 5.
-- **Weekly Article (Friday)** instead of the weekly thread: title `Bu hafta kim ne bekliyor — <dd Ay>`;
-  one heading per instrument; under each, the counts of explicit views by direction as on the site,
-  the week's view changes (person, old → new, date, link), and the week's posts embedded; closing
-  line "Yatırım tavsiyesi değildir." and the site link with `utm_campaign=weekly_article`. Never
-  subscriber-only. Articles are written on desktop x.com only; editing a published Article unpublishes
-  it until it is republished, so check before publishing. Evergreen explainers (§3) may also be
-  Articles; pin the best one to the profile.
-- **Reply ranking boost (largest on Premium+)**: our replies rank higher, which makes the §4 rule
-  "only sourced, value-adding replies" more important, not the limits looser. A boosted bad reply is
-  seen by more people.
-- **Undo post**: owner sets the undo window to 20–60 s (Settings → Premium; an account-settings change,
+- **Edit within 1 hour:** rules in §2 item 5. This is a second reason long posts are the default:
+  replies cannot be edited.
+- **Pinned post:** replace the pinned 6-post thread with one long post that carries the same text
+  (owner decision D12). A profile visitor arriving from one of our replies then reads the whole
+  introduction without opening a thread.
+- **Articles:** they need a click-through to read and get little reach from a 1-follower account.
+  - **Now:** at most one evergreen Article, "Görüşleri nasıl sayıyoruz?", linked from the pinned post.
+  - **Friday "kim ne bekliyor" roundup:** until the account reaches 100 followers it is one long post,
+    not an Article. From 100 followers, the roundup becomes the weekly Article:
+    - Title: `Bu hafta kim ne bekliyor — <dd Ay>`.
+    - One heading per instrument, with the counts of explicit views by direction as on the site and
+      the week's view changes (person, old → new, date, link).
+    - The week's posts embedded.
+    - Closing: "Yatırım tavsiyesi değildir." and the site link with `utm_campaign=weekly_article`.
+  - **Always:** never subscriber-only. Write Articles on desktop x.com only. Editing a published
+    Article unpublishes it until it is republished, so check it before publishing.
+  - **Counts** in the roundup or an Article follow the OI-020 gate like any count-based post.
+- **Reply boost:** smaller than Premium+'s largest boost, but our replies still rank above
+  unverified accounts' replies. Replies are the main growth lever at this size (growth plan §0a).
+  The boost makes the §4 rule "only sourced, value-adding replies" more important; the daily limits
+  stay the same. A boosted bad reply is seen by more people.
+- **Undo post:** owner sets the undo window to 20–60 s (Settings → Premium; an account-settings change,
   owner decision). After pressing Post, check the toast/preview in that window; this is the cheapest
   guard against the duplicate-post failure of 2026-10-26. Reported missing on some Android/X Lite
   builds (June 2026) — check it is there on the device used for posting.
-- **Analytics**: read account-level impressions, profile visits, link clicks and follower change from
-  X analytics every Friday (§5); this closes the growth plan's "account analytics" MISSING DATA line.
-- **Radar** (preview): read-only search for reply candidates and topics (commentator names,
-  "dolar", "altın", "BIST" in Turkish). Results are leads, not facts: the §4 reply still needs a site
-  link and our own data.
-- **Checkmark**: changing the display name, @handle or profile photo can send the checkmark back to
+- **Analytics:** locked. The page says "Detailed engagement metrics become available once you reach
+  50 followers". Until then, the Friday review reads per-post views from the posts themselves and
+  site visits from GA4 `utm_source=x`. Account impressions stay MISSING DATA.
+- **Radar⁺:** not available on Premium. Find reply candidates through X search and the commentator
+  List instead.
+- **Checkmark:** changing the display name, @handle or profile photo can send the checkmark back to
   review and hide it for a while. Batch any such change with the owner, never mid-week before a
   planned post series. Bio and banner changes are not affected.
-- **Grok**: never a source for a number, quote, summary or direction (§2). May be used only for
-  wording ideas the Lead then checks against the site.
-- Not used: long videos, ads revenue / creator subscriptions / subscriber-only posts (all public, no
-  paywall), Grok-generated images, the ad-free setting (no effect on our posts).
+- **Grok:** never a source for a number, quote, summary or direction (§2). Use it only for wording
+  ideas, which the Lead then checks against the site.
+- **Not used:**
+  - **Boost (paid promotion):** a paid service, so it needs the owner's decision. It would also mix
+    paid reach into the organic measurement.
+  - Long videos and desktop livestream: we have no video assets.
+  - Creator subscriptions and subscriber-only posts: everything stays public, with no paywall.
+  - Grok-generated images.
+  - ID verification: owner only. The agent never handles identity documents.
 
 ## 4. Natural growth (no aggressive tactics)
 Allowed, with daily limits:
@@ -142,12 +173,12 @@ repeatedly. These violate X rules and the brand.
 |---|---|---|
 | Followers (start 2026-10-24: 1) | profile | headline growth |
 | Impressions, profile visits, link clicks, engagement rate per post | X post analytics | which formats work |
-| Account impressions, profile visits, follower change (week) | X account analytics (Premium+) | account trend |
+| Account impressions, profile visits, follower change (week) | X account analytics (locked until 50 followers) | account trend |
 | Link clicks to the site | GA4, `utm_source=x` | reach → site (the real goal) |
 | Returning visitors from X | GA4 | real readers, not one-off clicks |
 | Corrections needed | run log | quality guard |
-| A vs B (long-post trial) | X post views + GA4 by `utm_campaign` | §3.1a decision |
-| Weekly Article reads and clicks | Article analytics + GA4 `weekly_article` | keep or drop the format |
+| A vs B (only once median ≥ 100 views) | X post views + GA4 by `utm_campaign` | §3.1a |
+| Weekly roundup clicks | GA4 `weekly_article` | keep or drop the format |
 
 Engagement alone is not success (a heated post can be wrong). Judge formats on clicks + returning
 readers + zero corrections. Initial 4-week target (hypothesis, not a promise): 100 followers,

@@ -39,12 +39,12 @@ to the owner and, only after the owner approves in chat, executes it in the brow
      reply part with its char count, built from that row's `summary` (leading "Konu:" prefix
      removed), `outlook_horizon`, real `key_levels`, and the `/haberler/<video_id>` link. Never in
      quote marks, never shortened mid-sentence. Check the text matches the site's "Görüşün tamamı".
-   - **Long-post trial (playbook §3.1a, Premium+)**: while the trial runs, alternate commentator posts
-     A, B, A, B … (continue from the last format in the previous run file) and write `Format: A` or
-     `Format: B` on each. **A** = main post + reply parts as above. **B** = one long post: the first
-     280 X chars are the complete main post (show that count), then a blank line, `Görüşün tamamı
-     (özet):` and the same summary parts joined (show the total count). B uses
-     `utm_campaign=commentator_long` and `full_view_long`.
+   - **Long post (playbook §3.1a, Premium)**: commentator posts use format **B** by default; write
+     `Format: B` on each, or `Format: A` with the reason when B cannot be used. **A** = main post +
+     reply parts as above. **B** = one long post: the first 280 X chars (at most 4 lines) are the
+     complete main post (show that count), then a blank line, `Görüşün tamamı (özet):` and the same
+     summary parts joined (show the total count). B uses `utm_campaign=commentator_long` and
+     `full_view_long`.
    - **Header line in bold (playbook §3.2)**: mark the first line of every commentator post with
      `**…**` (e.g. `**Erkan Öz · Bitcoin · Düşüş bekliyor**`); the Lead applies native bold in the
      composer. No other bold or italics, never Unicode bold letters. The `**` markers do not count
