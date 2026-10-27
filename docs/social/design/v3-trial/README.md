@@ -7,7 +7,7 @@ easier to read and react to. This folder holds a trial on the 26 Oct Erkan Öz p
 Variants compared (images kept in the session scratchpad, not committed, because they contain the
 commentator's photo): old v2 scaled to phone width (~520 px); **A: channel profile photo** + big
 direction + short quote (WebP 44 KB); **B: YouTube video thumbnail** with ▶ 1:09 badge (WebP 69 KB).
-A is now `../card-commentator-v3.html`. The "Post text" proposals below (site link in the reply) were **not** adopted; they stay the D8 test.
+A was adopted, then refined the same day into **v3.1 mobile-first** (owner decision), now `../card-commentator-v3.html`. The "Post text" proposals below (site link in the reply) were **not** adopted; they stay the D8 test.
 
 ## Findings at phone size
 - v2: the right "Görüşün tamamı" panel and the old → new boxes are unreadable at ~520 px (≈ 7 px text).
@@ -42,4 +42,12 @@ to get less reach. Not recommended as the default.
 - Rights: profile photos and thumbnails belong to the creators. A small, credited profile photo in
   non-commercial commentary is the lower-risk option; thumbnails are higher-risk and off-brand.
   Remove on any creator request. Not legal advice.
-- Likeness can read as endorsement → footer credit + "Yatırım tavsiyesi değildir." stay mandatory.
+- Likeness can read as endorsement → "YouTube kanalı" under the name, credit in the alt text, and "Yatırım tavsiyesi değildir." stay mandatory.
+
+## v3.1 mobile-first (adopted 2026-10-27)
+Measured on the live 26 Oct post in a 375 px phone viewport: the card shows ~340 px wide on the
+post page and ~295 px in the feed (~25 % of 1200 px). v3's topic, "önceki görüş", video minute,
+footer, credit and disclaimer rendered at 5–8 px. v3.1 keeps only photo, name, instrument, a 92 px
+direction block, one "Önceki" line and a navy bar (dovizveri.com + disclaimer); all text ≥ 34 px
+(≈ 8.5 px+ on the phone; main items ≥ 11 px). Quote and video minute moved off the card (they are in
+the post text right above it). WebP 32 KB. 16:9 kept: the only ratio guides agree X shows uncropped.

@@ -30,11 +30,14 @@ before anything is uploaded.
 
 ## Self-check before handing over (all must pass; report each)
 - Numbers, names, arrows and dates on the image **exactly** match the post text and data block.
-- Commentator cards (v3, `card-commentator-v3.html`, owner decision 2026-10-27): the photo is the
-  quoted person's own YouTube channel image (`channel_avatar_url`, saved to the scratchpad, never
-  committed), credited in the footer; logo/multi-guest channels get the initials circle. Quote on
-  the card is verbatim, ≤ ~100 chars, cut at a word end with "…". No summary panel.
-- Header, date, footer and "Yatırım tavsiyesi değildir." present; no overflow, clipping, or
+- Commentator cards (v3.1 mobile-first, `card-commentator-v3.html`, owner decision 2026-10-27): photo
+  = the quoted person's own YouTube channel image (`channel_avatar_url`, saved to the scratchpad, never
+  committed); logo/multi-guest channels get the initials circle. Card carries only photo, name,
+  instrument, direction (+ "Önceki" line for a change) and the bottom bar; no quote, minute or summary.
+  All text ≥ 34 px at 1200 px; render it in a 375 px phone-feed mockup (card ~295 px) and confirm
+  every word is readable there. Alt text includes the verbatim quote and "profil fotoğrafı: <Name> YouTube kanalı".
+- Header, date, footer and "Yatırım tavsiyesi değildir." present (commentator v3.1: bottom bar with
+  dovizveri.com + disclaimer instead of header/footer); no overflow, clipping, or
   orphan words in the headline; rows aligned; max 6 people.
 - Legible at 500 px wide: text ≥ 14 px at 1200 px; headline ≥ 40 px; contrast ≥ 4.5:1.
 - Direction shown with arrow + word + colour (never colour only).
