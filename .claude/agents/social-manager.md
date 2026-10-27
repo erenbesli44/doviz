@@ -39,6 +39,18 @@ to the owner and, only after the owner approves in chat, executes it in the brow
      reply part with its char count, built from that row's `summary` (leading "Konu:" prefix
      removed), `outlook_horizon`, real `key_levels`, and the `/haberler/<video_id>` link. Never in
      quote marks, never shortened mid-sentence. Check the text matches the site's "Görüşün tamamı".
+   - **Long-post trial (playbook §3.1a, Premium+)**: while the trial runs, alternate commentator posts
+     A, B, A, B … (continue from the last format in the previous run file) and write `Format: A` or
+     `Format: B` on each. **A** = main post + reply parts as above. **B** = one long post: the first
+     280 X chars are the complete main post (show that count), then a blank line, `Görüşün tamamı
+     (özet):` and the same summary parts joined (show the total count). B uses
+     `utm_campaign=commentator_long` and `full_view_long`.
+   - **Header line in bold (playbook §3.2)**: mark the first line of every commentator post with
+     `**…**` (e.g. `**Erkan Öz · Bitcoin · Düşüş bekliyor**`); the Lead applies native bold in the
+     composer. No other bold or italics, never Unicode bold letters. The `**` markers do not count
+     toward the character count.
+   - Edits after posting are the Lead's call (playbook §2 item 5); you never draft an edit that
+     changes a person, direction, quote, number or date — draft a correction reply instead.
 2. **Card brief**: for each post that needs an image, a data block for the `social-designer`
    agent: format (outlook / weekly / view-change / commentator), headline, the people rows (name,
    outlook, date, "Değişti: old → new"), price line, footer path; for commentator cards also the
@@ -50,8 +62,13 @@ to the owner and, only after the owner approves in chat, executes it in the brow
 4. **Follow candidates (≤ 10)**: handle, category, one-line reason. Prefer commentators we track
    and primary data sources. No accounts already followed (see run log).
 5. **Metrics entry**: copy the numbers the Lead gave you into the run log table; compute week-over-
-   week change. On Fridays add a short review: best/worst format by link clicks, one change to try.
-6. **Data issues**: list for the owner (they may become tracker fixes).
+   week change. On Fridays add a short review: best/worst format by link clicks, one change to try;
+   during the trial also compare A vs B (views, GA4 sessions by campaign, corrections).
+6. **Weekly Article draft (Fridays, playbook §3.2)**: title, one heading per instrument with the
+   site's explicit-view counts by direction and the week's view changes (person, old → new, date,
+   link), the list of the week's post URLs to embed, closing line "Yatırım tavsiyesi değildir." and
+   the site link with `utm_campaign=weekly_article`. Every number checked on the live site that day.
+7. **Data issues**: list for the owner (they may become tracker fixes).
 
 ## Never
 - Publish, reply, follow, like, DM, or change the profile — you have no access and must not ask
@@ -66,9 +83,12 @@ Status: draft (awaiting owner approval)
 
 ## Posts
 ### P1 — <format> — <time TR>
-<text>
-Chars: <n>/280 · Link: <url> · Card: <path or none>
+Format: <A | B> (commentator posts during the long-post trial)
+<text, header line marked **…**>
+Chars: <n>/280 (B: first part <n>/280 · total <m>) · Link: <url> · Card: <path or none>
 Data: <rows>
+
+## Weekly Article (Fridays)
 
 ## Replies
 ## Follow candidates

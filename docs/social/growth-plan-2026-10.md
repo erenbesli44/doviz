@@ -202,8 +202,8 @@ Post style for week 1 (example shape, numbers to be filled from the site):
    `sameAs` in Organization JSON-LD, optional share-to-X on `/piyasa/*`. Open as one OI.
 4. **D4 Per-page link previews (dev, larger, touches nginx/prerender → infra)** — Recommend after OI-020
    is live; until then always attach our own card image to posts.
-5. **D5 X Premium / verification (paid)** — Recommend not now; revisit at the week-4 review with data.
-   Note: account-level analytics may be Premium-only (verify); per-post views stay visible.
+5. **D5 X Premium / verification (paid)** — **Decided 2026-10-27 by the owner: account is on Premium+.**
+   Usage rules in `x-playbook.md` §3.2.
 6. **D6 Weekend cadence** — Recommend ≤ 1 post/day Sat–Sun, only Bitcoin or evergreen; no replies duty.
 7. **D7 Mention the commentator on view-change posts** — Recommend yes, one person per post, neutral
    wording ("görüşünü güncelledi"), quote + minute; never on count posts.
@@ -228,7 +228,7 @@ Post style for week 1 (example shape, numbers to be filled from the site):
 - ~~MISSING DATA: GA4 sessions/users with `utm_source=x` since 2026-10-24~~ **Closed 2026-10-25.** GA4 over 7 days shows 13 sessions from X (11 from `x / social`, 2 from `t.co / referral`). Logged in `runs/2026-10-24.md`.
   - Still open: there is no internal-traffic filter, and no key event is defined.
 - MISSING DATA: X account type (Professional?) and category; Location field.
-- MISSING DATA: per-post profile visits and link clicks on X (only views were read); whether account analytics is available without Premium.
+- MISSING DATA: per-post profile visits and link clicks on X (only views were read). Account analytics: available with Premium+ from 2026-10-27; first read at the Friday review.
 - MISSING DATA: X handles for Barış Soydan and AA Finans (not linked from their own pages).
 - MISSING DATA: rendered `/piyasa/<key>` counts for week 1 (API pre-check only; production still on the pre-OI-020 build).
 - MISSING DATA: market calendar for weeks 1–2 — BIST hours 28–29 Oct, TÜİK CPI release date, TCMB PPK date, FOMC date (verify on official calendars before any dated post).
