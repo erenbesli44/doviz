@@ -1,0 +1,19 @@
+docs/social/runs/2026-10-28.md
+  s_1875bc198498dd::t_cbf21392affb26 479-494
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9be80c987dc6626015988c1a28c58959560ae424",
+  "prompts": {},
+  "sessions": {
+    "s_1875bc198498dd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e5094c8f-ad7a-43d0-962b-47c32f518140",
+        "model": "unknown"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
