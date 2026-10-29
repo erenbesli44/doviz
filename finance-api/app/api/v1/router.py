@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from .brokers import router as brokers_router
 from .channels import router as channels_router
 from .consensus import router as consensus_router
 from .health import router as health_router
@@ -17,5 +18,6 @@ v1_router.include_router(news_router)
 v1_router.include_router(inference_router)
 v1_router.include_router(consensus_router)
 v1_router.include_router(channels_router)
+v1_router.include_router(brokers_router)
 v1_router.include_router(health_router)
 v1_router.include_router(stream_router)
