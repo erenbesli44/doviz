@@ -1,0 +1,21 @@
+docs/agent-runs/2026-10-26-trial.md
+  s_3e6f9cdfbccd88::t_b8264e9d97236c 74-112
+docs/agent-runs/open-items.md
+  s_3e6f9cdfbccd88::t_52e1728a5e7e65 31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c8097e59e6a91de1baa385a5e43947ec1cbc4fad",
+  "prompts": {},
+  "sessions": {
+    "s_3e6f9cdfbccd88": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "89ee580c-f84b-4918-9419-9b9b615328c1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
