@@ -1,15 +1,21 @@
 """Hermetic tests for the broker model-portfolio proxy (OI-027 step 4)."""
 import copy
+from datetime import date
 
 import httpx
 import pytest
 from fastapi.testclient import TestClient
 
+import app.services.broker_service as broker_service
+from app.cache.memory import MemoryCache
 from app.config import Settings
 from app.dependencies import get_settings
 
 TRACKER_BASE = "http://tracker.test"
 TRACKER_KEY = "tracker-test-key"
+TODAY = date(2026, 10, 29)
+EVENTS_PATH = "/brokers/model-portfolio/events"
+FIXED_QUERY = {"days": "3650", "limit": "500"}
 
 IS_SAHOL_REMOVED = {
     "id": 31,
@@ -43,6 +49,7 @@ YK_VAKBN_REMOVED = {
     "document": {
         "url": "https://www.ykyatirim.com.tr/arastirma/model-portfoy-20260914.pdf",
         "published_at": None,
+        "page_url": "https://www.ykyatirim.com.tr/arastirma",
     },
     "previous": None,
 }
@@ -116,7 +123,8 @@ class Tracker:
 
 
 @pytest.fixture
-def tracker(client: TestClient) -> Tracker:
+def tracker(client: TestClient, monkeypatch) -> Tracker:
+    monkeypatch.setattr(broker_service, "_today", lambda: TODAY)
     handler = Tracker()
     client.app.state.http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
     client.app.dependency_overrides[get_settings] = lambda: Settings(
@@ -126,6 +134,13 @@ def tracker(client: TestClient) -> Tracker:
         tracker_timeout_seconds=5.0,
     )
     return handler
+
+
+def _served(event: dict) -> dict:
+    """Event as served: optional fields absent upstream come back as null."""
+    out = copy.deepcopy(event)
+    out["document"].setdefault("page_url", None)
+    return out
 
 
 # --- happy paths ---------------------------------------------------------
@@ -150,21 +165,60 @@ def test_events_default_params_and_fields(client: TestClient, tracker: Tracker):
     assert response.status_code == 200
     body = response.json()
     assert body["count"] == 2
-    assert body["events"] == [IS_SAHOL_REMOVED, YK_VAKBN_REMOVED]  # order kept: newest first
-    (req,) = tracker.calls("/brokers/model-portfolio/events")
-    assert dict(req.url.params) == {"days": "90", "limit": "100"}
+    # order kept: newest first; page_url passed through
+    assert body["events"] == [_served(IS_SAHOL_REMOVED), _served(YK_VAKBN_REMOVED)]
+    assert body["events"][1]["document"]["page_url"] == "https://www.ykyatirim.com.tr/arastirma"
+    (req,) = tracker.calls(EVENTS_PATH)
+    assert dict(req.url.params) == FIXED_QUERY
     assert req.headers["X-API-Key"] == TRACKER_KEY
 
 
-def test_events_forwards_query_params(client: TestClient, tracker: Tracker):
+def test_events_broker_filter_uses_fixed_upstream_query(client: TestClient, tracker: Tracker):
+    only_is = {"count": 1, "events": [IS_SAHOL_REMOVED]}
+    tracker.routes[EVENTS_PATH] = httpx.Response(200, json=only_is)
+
     response = client.get(
         "/v1/brokers/model-portfolio/events",
         params={"days": 30, "broker": "is-yatirim", "limit": 5},
     )
 
     assert response.status_code == 200
-    (req,) = tracker.calls("/brokers/model-portfolio/events")
-    assert dict(req.url.params) == {"days": "30", "broker": "is-yatirim", "limit": "5"}
+    assert response.json() == {"count": 1, "events": [_served(IS_SAHOL_REMOVED)]}
+    (req,) = tracker.calls(EVENTS_PATH)
+    assert dict(req.url.params) == {**FIXED_QUERY, "broker": "is-yatirim"}
+
+
+@pytest.mark.parametrize(
+    "days,expected",
+    [
+        (1, ["SAHOL"]),  # cutoff 2026-10-28: equal date included
+        (44, ["SAHOL"]),  # cutoff 2026-09-15: VAKBN (09-14) just outside
+        (45, ["SAHOL", "VAKBN"]),  # cutoff 2026-09-14: VAKBN on the edge, included
+    ],
+)
+def test_events_days_window_applied_locally(
+    client: TestClient, tracker: Tracker, days: int, expected: list[str]
+):
+    body = client.get("/v1/brokers/model-portfolio/events", params={"days": days}).json()
+
+    assert [e["ticker"] for e in body["events"]] == expected
+    assert body["count"] == len(expected)
+
+
+def test_events_window_excludes_older_than_one_day(client: TestClient, tracker: Tracker):
+    old = copy.deepcopy(IS_SAHOL_REMOVED) | {"event_date": "2026-10-27"}
+    tracker.routes[EVENTS_PATH] = httpx.Response(200, json={"count": 1, "events": [old]})
+
+    body = client.get("/v1/brokers/model-portfolio/events", params={"days": 1}).json()
+
+    assert body == {"count": 0, "events": []}
+
+
+def test_events_limit_applied_locally_keeping_order(client: TestClient, tracker: Tracker):
+    body = client.get("/v1/brokers/model-portfolio/events", params={"limit": 1}).json()
+
+    assert body["count"] == 1
+    assert [e["ticker"] for e in body["events"]] == ["SAHOL"]
 
 
 def test_broker_portfolio(client: TestClient, tracker: Tracker):
@@ -189,7 +243,16 @@ def test_broker_portfolio_without_composition(client: TestClient, tracker: Track
     response = client.get("/v1/brokers/is-yatirim")
 
     assert response.status_code == 200
-    assert response.json() == payload
+    assert response.json() == payload | {"events": [_served(IS_SAHOL_REMOVED)]}
+
+
+def test_event_without_quote_page_is_served(client: TestClient, tracker: Tracker):
+    event = copy.deepcopy(IS_SAHOL_REMOVED) | {"quote_page": None}
+    tracker.routes[EVENTS_PATH] = httpx.Response(200, json={"count": 1, "events": [event]})
+
+    body = client.get("/v1/brokers/model-portfolio/events").json()
+
+    assert body["events"][0]["quote_page"] is None
 
 
 def test_events_route_not_captured_by_slug(client: TestClient, tracker: Tracker):
@@ -211,12 +274,27 @@ def test_events_cached_within_ttl(client: TestClient, tracker: Tracker):
     assert len(tracker.calls("/brokers/model-portfolio/events")) == 1
 
 
-def test_cache_keyed_by_query(client: TestClient, tracker: Tracker):
-    client.get("/v1/brokers/model-portfolio/events", params={"days": 90})
-    client.get("/v1/brokers/model-portfolio/events", params={"days": 30})
-    client.get("/v1/brokers/model-portfolio/events", params={"days": 30, "broker": "is-yatirim"})
+def test_one_upstream_call_per_scope_whatever_days_and_limit(
+    client: TestClient, tracker: Tracker, cache: MemoryCache
+):
+    for days in (1, 7, 30, 90, 365, 3650):
+        for limit in (1, 10, 100, 500):
+            for broker in (None, "is-yatirim", "gedik-yatirim"):
+                params = {"days": days, "limit": limit} | ({"broker": broker} if broker else {})
+                response = client.get("/v1/brokers/model-portfolio/events", params=params)
+                assert response.status_code == 200
 
-    assert len(tracker.calls("/brokers/model-portfolio/events")) == 3
+    scopes = [r.url.params.get("broker") for r in tracker.calls(EVENTS_PATH)]
+    assert sorted(scopes, key=str) == sorted([None, "is-yatirim", "gedik-yatirim"], key=str)
+    assert len(tracker.calls("/brokers/")) == 1
+    assert sorted(cache._store) == sorted(
+        [
+            "tracker:/brokers/",
+            "tracker:/brokers/model-portfolio/events?days=3650&limit=500",
+            "tracker:/brokers/model-portfolio/events?days=3650&limit=500&broker=is-yatirim",
+            "tracker:/brokers/model-portfolio/events?days=3650&limit=500&broker=gedik-yatirim",
+        ]
+    )
 
 
 def test_list_and_portfolio_cached(client: TestClient, tracker: Tracker):
@@ -258,20 +336,47 @@ def test_errors_are_not_cached(client: TestClient, tracker: Tracker):
 # --- upstream errors -----------------------------------------------------
 
 
-def test_unknown_slug_maps_to_404(client: TestClient, tracker: Tracker):
-    response = client.get("/v1/brokers/olmayan-kurum")
+def test_unknown_slug_is_404_without_upstream_call_or_cache_entry(
+    client: TestClient, tracker: Tracker, cache: MemoryCache
+):
+    for slug in ("olmayan-kurum", "baska-kurum", "olmayan-kurum"):
+        response = client.get(f"/v1/brokers/{slug}")
+        assert response.status_code == 404
+        assert response.json()["detail"] == "broker_not_found"
 
-    assert response.status_code == 404
-    assert response.json()["detail"] == "broker_not_found"
+    assert [r.url.path for r in tracker.requests] == ["/brokers/"]
+    assert list(cache._store) == ["tracker:/brokers/"]
+    assert all("kurum" not in key for key in cache._locks)
 
 
-def test_unknown_broker_filter_maps_to_404(client: TestClient, tracker: Tracker):
-    tracker.routes["/brokers/model-portfolio/events"] = httpx.Response(404, json={"detail": "x"})
-
+def test_unknown_broker_filter_is_404_without_upstream_call(
+    client: TestClient, tracker: Tracker, cache: MemoryCache
+):
     response = client.get("/v1/brokers/model-portfolio/events", params={"broker": "olmayan"})
 
     assert response.status_code == 404
     assert response.json()["detail"] == "broker_not_found"
+    assert tracker.calls(EVENTS_PATH) == []
+    assert list(cache._store) == ["tracker:/brokers/"]
+    assert all("olmayan" not in key for key in cache._locks)
+
+
+def test_known_broker_upstream_404_maps_to_404(client: TestClient, tracker: Tracker):
+    del tracker.routes["/brokers/gedik-yatirim/model-portfolio"]
+
+    response = client.get("/v1/brokers/gedik-yatirim")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "broker_not_found"
+
+
+def test_broker_list_failure_on_slug_route_is_502(client: TestClient, tracker: Tracker):
+    tracker.routes["/brokers/"] = httpx.Response(500)
+
+    response = client.get("/v1/brokers/gedik-yatirim")
+
+    assert response.status_code == 502
+    assert tracker.calls("/brokers/gedik-yatirim/model-portfolio") == []
 
 
 def test_list_upstream_404_is_upstream_error(client: TestClient, tracker: Tracker):
@@ -321,6 +426,7 @@ MALFORMED_EVENTS = {
     "missing_ticker": _bad(lambda e: e.pop("ticker")),
     "bad_date": _bad(lambda e: e.update(event_date="28.10.2026")),
     "quote_too_long": _bad(lambda e: e.update(reason_quote="x" * 301)),
+    "quote_page_zero": _bad(lambda e: e.update(quote_page=0)),
     "missing_document": _bad(lambda e: e.pop("document")),
     "events_not_list": {"count": 1, "events": {"id": 1}},
     "list_instead_of_object": [IS_SAHOL_REMOVED],

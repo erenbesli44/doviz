@@ -38,6 +38,8 @@ class BrokerDocument(BaseModel):
     url: str = Field(pattern=r"^https?://")
     # Kept as a string: the contract allows null but does not pin date vs datetime.
     published_at: str | None = None
+    # Broker's human-readable report page (e.g. Yapı Kredi research page), when known.
+    page_url: str | None = None
 
 
 class PreviousAction(BaseModel):
@@ -52,7 +54,7 @@ class BrokerEvent(BaseModel):
     action: BrokerAction
     event_date: date
     reason_quote: str = Field(min_length=1, max_length=300)
-    quote_page: int = Field(ge=1)
+    quote_page: int | None = Field(default=None, ge=1)
     recommendation: str | None = None
     target_price: float | None = None
     document: BrokerDocument

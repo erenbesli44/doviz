@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, HTTPException, Path, Query
 
 from ...dependencies import CacheDep, HttpClientDep, SettingsDep
@@ -9,6 +11,9 @@ from ...schemas.brokers import (
 )
 from ...services.broker_service import BrokerService
 from ...services.tracker_service import TrackerNotFoundError
+
+# Failures are logged by exception type only: never headers or upstream bodies.
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/brokers", tags=["brokers"])
 
@@ -27,6 +32,7 @@ async def list_brokers(
     try:
         return await _service(client, settings, cache).list_brokers()
     except Exception as exc:
+        logger.warning("broker proxy %s failed: %s", "list", type(exc).__name__)
         # An upstream 404 here means the route is missing, not an unknown broker.
         raise HTTPException(status_code=502, detail="tracker_upstream_error") from exc
 
@@ -47,6 +53,7 @@ async def model_portfolio_events(
     except TrackerNotFoundError as exc:
         raise HTTPException(status_code=404, detail="broker_not_found") from exc
     except Exception as exc:
+        logger.warning("broker proxy %s failed: %s", "events", type(exc).__name__)
         raise HTTPException(status_code=502, detail="tracker_upstream_error") from exc
 
 
@@ -63,4 +70,5 @@ async def broker_portfolio(
     except TrackerNotFoundError as exc:
         raise HTTPException(status_code=404, detail="broker_not_found") from exc
     except Exception as exc:
+        logger.warning("broker proxy %s failed: %s", "portfolio", type(exc).__name__)
         raise HTTPException(status_code=502, detail="tracker_upstream_error") from exc
