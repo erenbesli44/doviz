@@ -1,0 +1,27 @@
+docs/social/design/make_clip.sh
+  s_61d47f1aa62b24::t_4be40616dfb1e6 1-39
+.claude/agents/social-designer.md
+  s_61d47f1aa62b24::t_098a780d8b0262 28-32
+docs/social/x-playbook.md
+  s_61d47f1aa62b24::t_098a780d8b0262 11-12,47-48,55,57,74,77,81-82,85,87-88,91-109,176-230,237-238
+.claude/agents/social-manager.md
+  s_61d47f1aa62b24::t_098a780d8b0262 34-47,53,59-60,67-72,80-81,85-88,107,109-110,113-116
+docs/social/design/README.md
+  s_61d47f1aa62b24::t_a4fd09d9a2c799 49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2eadb6ce582e9b3572f0f5189bf85fe5d26c273e",
+  "prompts": {},
+  "sessions": {
+    "s_61d47f1aa62b24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b75f3865-4c0c-4fa6-a37e-95ce777b6f2a",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
