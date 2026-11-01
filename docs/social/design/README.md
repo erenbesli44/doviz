@@ -46,6 +46,7 @@ Light theme only for images (X shows them on both themes; the light card has a c
   Kanal Finans, NCM Investment TR), use the initials circle (`.ini`). Remove a photo on any creator request.
 - Photos are downloaded per card into the scratchpad; never commit commentator photos to the repo.
 - Max 6 people per card; more → say "+N kişi daha" and link.
+| Video clip (from 2026-11-01, playbook §3.4) | 1280×720 mp4, ≤ 30 s, ≤ 10 MB | `make_clip.sh` | the quoted moment with an 84 px caption bar: name · channel · date · minute, source URL, dovizveri.com, disclaimer. Replaces the card on that post; uploaded like a card (step 4) |
 
 ## Pipeline
 1. Copy the closest template, fill the data, keep the structure.

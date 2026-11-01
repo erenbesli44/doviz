@@ -25,7 +25,11 @@ before anything is uploaded.
 3. **Avatar (400×400) and banner (1500×500)**: design as HTML in `docs/social/design/`, render
    with `render.sh <html> <out> 400 400` / `1500 500`. Provide 2 options max with a one-line
    rationale each. The owner uploads them (or approves the Lead doing it).
-4. **Audit** (on request): review the last 7 days of posted cards (files listed in run logs) for
+4. **Clip** (playbook §3.4): run `docs/social/design/make_clip.sh <video_id> <start> <end>
+   <scratchpad_dir> "<label>"` from the social-manager's clip brief. Read the `-frame.png`, play-check
+   the duration and size in the script output (≤ 30 s, ≤ 10 MB), confirm the caption bar is readable
+   and the picture is not cropped or altered. Report start/end, duration, size and the file path.
+5. **Audit** (on request): review the last 7 days of posted cards (files listed in run logs) for
    drift from the spec; report fixes, don't rewrite history.
 
 ## Self-check before handing over (all must pass; report each)

@@ -31,26 +31,45 @@ to the owner and, only after the owner approves in chat, executes it in the brow
 ## What to produce (write `docs/social/runs/<YYYY-MM-DD>.md`)
 1. **Posts (1–3)**, each with: final text (≤ 280 X chars; URL = 23, emoji = 2; show the count),
    UTM link `?utm_source=x&utm_medium=social&utm_campaign=<format>`, the exact data rows it
-   relies on (person, outlook, date, video link), and a card spec.
+   relies on (person, outlook, date, video link), a card spec and a planned send time.
+   - **Spam-risk rules (playbook §3.3)**, checked on every draft:
+     - **Two links per commentator post** (owner, 2026-10-29): "▶ Videoda m:ss: <YouTube link with
+       &t=Ns>" and the site link with UTM; no other URL. Main-idea posts carry "▶ Video: <YouTube link>" plus the
+       `/haberler/<id>` link; explainers keep one site link. Our own "Görüşün tamamı" replies carry no link.
+     - **At least 2 hours between our own posts**, counting from the last post actually sent (read it
+       from the previous run file's "Executed" section). Write the planned send times so the gap is
+       visible.
+     - **No repeated template sentences**: no fixed sentence word for word in two posts or replies
+       within 7 days, except the bold header, `Görüşün tamamı (özet):`, `Vade:` and "Yatırım
+       tavsiyesi değildir." Compare against the "Opening lines (7d)" list in the last run files and
+       vary openings, link lead-ins and corrections.
+     - **Every post with a site link gets a card** (until D4 per-page previews are live), so X shows
+       our image rather than the generic home-page preview.
    - **Quote**: use `outlook_quote_clean` (readable edit of the speaker's sentence: fillers and
      repeats removed, same words, numbers untouched); use `outlook_quote` only when it is empty.
      Never edit the quote yourself beyond trimming it at a sentence end; the site shows the same text.
    - **Commentator posts also get the "Görüşün tamamı" reply thread** (playbook §3.1): write each
      reply part with its char count, built from that row's `summary` (leading "Konu:" prefix
-     removed), `outlook_horizon`, real `key_levels`, and the `/haberler/<video_id>` link. Never in
+     removed), `outlook_horizon` and real `key_levels`; no link (§3.3). Never in
      quote marks, never shortened mid-sentence. Check the text matches the site's "Görüşün tamamı".
    - **Long post (playbook §3.1a, Premium)**: commentator posts use format **B** by default; write
      `Format: B` on each, or `Format: A` with the reason when B cannot be used. **A** = main post +
      reply parts as above. **B** = one long post: the first 280 X chars (at most 4 lines) are the
      complete main post (show that count), then a blank line, `Görüşün tamamı (özet):` and the same
-     summary parts joined (show the total count). B uses `utm_campaign=commentator_long` and
-     `full_view_long`.
+     summary parts joined (show the total count). B has one link, in the first part, with
+     `utm_campaign=commentator_long`.
    - **Header line in bold (playbook §3.2)**: mark the first line of every commentator post with
      `**…**` (e.g. `**Erkan Öz · Bitcoin · Düşüş bekliyor**`); the Lead applies native bold in the
      composer. No other bold or italics, never Unicode bold letters. The `**` markers do not count
      toward the character count.
    - Edits after posting are the Lead's call (playbook §2 item 5); you never draft an edit that
      changes a person, direction, quote, number or date — draft a correction reply instead.
+1b. **Clip brief (playbook §3.4, optional)**: for a commentator post whose quoted sentence is clearly
+   audible in one stretch, give `video_id`, start and end (`mm:ss`, ≤ 30 s, the quote minute ± a few
+   seconds of context), the caption label `<Name> · <Channel> · <dd Ay yyyy> · <mm:ss>`, and the alt
+   text (quote + caption line). The clip replaces the card on that post. Max 1 clip post per day in the
+   first two weeks. Never for excluded people, live streams, or members-only videos. Mark the post
+   `Media: clip` instead of `Card:`.
 2. **Card brief**: for each post that needs an image, a data block for the `social-designer`
    agent: format (outlook / weekly / view-change / commentator), headline, the people rows (name,
    outlook, date, "Değişti: old → new"), price line, footer path; for commentator cards also the
@@ -58,13 +77,15 @@ to the owner and, only after the owner approves in chat, executes it in the brow
    render cards.
 3. **Replies (≤ 5)**: for each, the target post URL (only from accounts in the playbook categories,
    found via the commentators' public links or the Lead's brief), our reply text with one sourced
-   fact + link, and why it adds value. Skip if nothing genuinely adds value.
+   fact and at most one site link (none in the first reply to an account), and why it adds value.
+   Space them ≥ 15 minutes apart. Skip if nothing genuinely adds value.
 4. **Follow candidates (≤ 10)**: handle, category, one-line reason. Prefer commentators we track
    and primary data sources. No accounts already followed (see run log).
 5. **Metrics entry**: copy the numbers the Lead gave you into the run log table; compute week-over-
-   week change. On Fridays add a short review: best/worst format by link clicks, one change to try;
-   during the trial also compare A vs B (views, GA4 sessions by campaign, corrections).
-6. **Weekly Article draft (Fridays, playbook §3.2)**: title, one heading per instrument with the
+   week change. On Fridays add a short review: best/worst format by link clicks, one change to try,
+   and the spam-risk check (median views per post; below 15 for a week is a warning).
+6. **Weekly roundup draft (Fridays, playbook §3.2)**: one long post until the account has 100
+   followers, an X Article after that. Title, one heading per instrument with the
    site's explicit-view counts by direction and the week's view changes (person, old → new, date,
    link), the list of the week's post URLs to embed, closing line "Yatırım tavsiyesi değildir." and
    the site link with `utm_campaign=weekly_article`. Every number checked on the live site that day.
@@ -83,12 +104,16 @@ Status: draft (awaiting owner approval)
 
 ## Posts
 ### P1 — <format> — <time TR>
-Format: <A | B> (commentator posts during the long-post trial)
+Format: <A | B> (commentator posts; reason if A)
 <text, header line marked **…**>
-Chars: <n>/280 (B: first part <n>/280 · total <m>) · Link: <url> · Card: <path or none>
+Chars: <n>/280 (B: first part <n>/280 · total <m>) · Link: <the one url> · Card: <path>
+Send: <HH:MM TR> (≥ 2 h after <previous post time>)
 Data: <rows>
 
-## Weekly Article (Fridays)
+## Opening lines (7d)
+<first line of every post/reply sent in the last 7 days, to check for repeats>
+
+## Weekly roundup (Fridays)
 
 ## Replies
 ## Follow candidates

@@ -8,7 +8,8 @@ standards). Profile, formats and templates: `x-account-kit.md`, `launch-posts.md
 - **Who it is for**: Turkish retail readers who follow YouTube market commentators and want to know
   "kim ne bekliyor" for Dolar/TL, altın, BIST, Bitcoin, ABD borsaları, gümüş, petrol.
 - **What we offer**: the commentators' *explicit* views, with source (video + minute), and how
-  they changed. Curation + education, not our own calls. Every post ends in a site link.
+  they changed. Curation + education, not our own calls. Every commentator post carries two links: the
+  video at the minute and the site (§3.3).
 - **What we never do**: give our own forecast or investment advice, post hype ("BOMBA", "ŞOK"),
   argue with commentators, post off-topic memes or politics.
 
@@ -43,16 +44,17 @@ under "Görüşün tamamı" (`ViewDetails.tsx`), not only the one-sentence quote
 1. **Main post** (≤ 280): name + instrument + direction, the speaker's sentence in quote marks — `outlook_quote_clean` (the
    verbatim `outlook_quote` with fillers, repeats and false starts removed, same words; from 2026-10-26),
    falling back to `outlook_quote` only when the clean field is empty — the same sentence the site shows
-   (date), "▶ Videoda m:ss" link, site link. Unchanged.
+   (date), "▶ Videoda m:ss: <YouTube link with &t=Ns>" (owner, 2026-10-29: the minute link is back),
+   and the site link `/piyasa/<key>` (§3.3).
 2. **Reply under the main post (same thread)** — the full view:
    - Opens with `Görüşün tamamı (özet):` then `cleanSummary(summary)` — the opinion's `summary` with
      the leading "Konu:" prefix (≤ 40 chars before the first colon) removed. It is an AI summary, so
      **never put it in quote marks** and never call it a quote.
    - If `outlook_horizon` exists, end with `Vade: <horizon>.` Add up to 6 `key_levels` only when they
      are real price levels or dates (skip ages, durations like "1 ay", "%" without context).
-   - Last line: `Videonun tüm özeti 👉 https://dovizveri.com/haberler/<video_id>?utm_source=x&utm_medium=social&utm_campaign=full_view`
+   - No link in the replies (§3.3): the main post already carries the site link.
    - Split at sentence ends into ≤ 280-char parts (1–3 replies). Never cut a sentence; if it would
-     need more than 3 parts, drop the last sentences and keep the link.
+     need more than 3 parts, drop the last sentences.
 3. **Card** (v3.1 mobile-first, from 2026-10-27): commentator photo, name, instrument, big direction
    and, for a change, the previous view (see `design/README.md`). Quote and video minute are in the post
    text; the full view is only in the replies. Alt text carries the quote and the photo credit.
@@ -69,21 +71,41 @@ Why not the A/B trial: at about 17 views per post and 1 follower, two weeks give
 0–2 link clicks per format. Any difference would be noise. Reopen A vs B only when the median is
 ≥ 100 views per post.
 - **A — thread (current)**: main post ≤ 280 + 1–3 "Görüşün tamamı" replies, exactly as §3.1.
-  Links: `utm_campaign=commentator` and `full_view`.
+  Link: one, in the main post, `utm_campaign=commentator`.
 - **B — one long post**: the same content in a single post, in this order:
   1. The first 280 X characters, in at most 4 lines, are the complete main post of §3.1 (name,
-     instrument, direction, quote, date, "▶ Videoda m:ss" link, site link). The timeline shows only
+     instrument, direction, quote, date, "▶ Videoda m:ss: <YouTube link>", site link). The timeline shows only
      about that much before "Show more", and fewer characters when there are many line breaks. The
      post must work without expanding it.
   2. A blank line, then `Görüşün tamamı (özet):` and the same summary text as the A replies (never in
-     quote marks), `Vade: …`, real `key_levels`, and the `Videonun tüm özeti 👉` link.
-  Links: `utm_campaign=commentator_long` and `full_view_long`. Same card and alt text as A.
+     quote marks), `Vade: …` and real `key_levels`. No second link.
+  Link: one, in the first part, `utm_campaign=commentator_long`. Same card and alt text as A.
 - Both formats: the summary text must equal the site's text that day (§3.1 rule 4).
 - Keep the separate UTM campaigns, so the comparison can be made later from GA4 without changing links.
+  The `full_view` / `full_view_long` campaigns are retired with the one-link rule (2026-10-27).
 
-Cadence: **1–3 posts per day**, never more than 4. A post's "Görüşün tamamı" replies count as part
-of that post, not as extra posts. Quality over volume; skip a day rather than
+Cadence: **1–3 posts per day**, never more than 4, and **at least 2 hours between our own posts**
+(§3.3). A post's "Görüşün tamamı" replies count as part of that post, not as extra posts. Quality over volume; skip a day rather than
 post filler. Post times are a hypothesis (09:30 and 18:00 TR); re-check after 4 weeks of data.
+
+### 3.1b Thesis channels: post the video's main idea, not a direction (owner, 2026-10-28)
+Some channels argue one big thesis per video instead of making calls on instruments. Today that means
+**Erkan Öz**, **Yatırım 101** and **Barış Soydan** (owner, 2026-10-29: "barış soydan videolarında düşüş
+ çıkış gibi düşünme, genel hangi konulara değindi özetini post et"). For these channels:
+- No "Yükseliş / Düşüş / Yatay bekliyor" post per instrument, even when the tracker has an explicit row.
+- One post per video, presenting the channel and the main idea it tries to explain.
+  - Header: `<Kanal> · Videonun ana fikri`.
+  - Then the site's `short_summary` (story `/api/v1/news/stories/<id>`) as an AI summary, never in quote
+    marks, and the upload date.
+  - Links: `▶ Video: <YouTube link>` (owner, 2026-10-29) and `/haberler/<id>` with `utm_campaign=main_idea`.
+  - Long-post part: `Özet:` plus whole sentences from `long_summary`. Drop sentences with doubtful
+    numbers and log them as data issues.
+- Card: the v3.1 commentator card with the direction block replaced by "Videonun ana fikri · dd Eki" and a
+  neutral topic line (e.g. "Sınırsız para basımı ve sınırlı varlıklar"). No arrow, no direction colour,
+  no prediction words.
+- These posts are not counted as views. The Yatırım 101 exclusion from counts (growth plan §0) stays.
+Why: one generic sentence ("altını, gümüşü, Bitcoin'i savunuyoruz") read as three separate "yükseliş"
+calls (V4–V6, 28 Oct), which misstates what the video says.
 
 ## 3.2 X Premium features (tier checked 2026-10-27: **Premium, not Premium+**)
 Tier evidence, from the Lead's logged-in read of x.com on 2026-10-27:
@@ -151,13 +173,69 @@ in the composer.
   - Grok-generated images.
   - ID verification: owner only. The agent never handles identity documents.
 
+## 3.3 Spam-risk rules (from 2026-10-27)
+Why: X's platform-manipulation policy names duplicate links, bulk replies and repeated text as spam
+signals, and its reply ranking looks at the author's past behaviour (`help.x.com`, platform
+manipulation and "probable spam"). Our pattern on 24–27 Oct matched those signals: 2 links per post,
+the same home-page preview under every summary reply, bursts of 4 posts in 45 minutes, and the same
+fixed sentences. No restriction has been seen (Lead check 2026-10-27), so these are prevention rules.
+1. **Links per post: the video minute and the site.** Owner decision 2026-10-29 ("yenileri video
+   dakika linki ile gönder") reverses the 27 Oct one-link rule for commentator posts: the main post (or
+   B's first part) carries "▶ Videoda m:ss: <youtube.com/watch?v=<id>&t=<s>s>" plus the site link
+   `dovizveri.com/...` with UTM, and no other URL. Main-idea posts (§3.1b) carry "▶ Video: <YouTube link>" plus the
+   `/haberler/<id>` link; explainers keep one site link. Watch the §3.3 rule 5 signals; two links per post was one of the 24–27 Oct spam patterns.
+   Replies under our own post carry no link. A reply to someone else's post carries at most one site
+   link, and the first replies to a new account carry none (§4).
+2. **At least 2 hours between our own posts.** Measured from the previous post's send time. Our own
+   "Görüşün tamamı" replies go out right under their post and do not count. Corrections go out as soon
+   as they are ready. Replies to other accounts: at most 1 every 15 minutes.
+3. **No repeated template sentences.** Within 7 days, no fixed sentence appears word for word in two
+   posts or replies, other than the structural parts: the bold header line (`Ad · Enstrüman · Yön`),
+   `Görüşün tamamı (özet):`, `Vade:` and "Yatırım tavsiyesi değildir." Opening lines, link lead-ins
+   and corrections are written for each post. The run file lists the opening line of every post of
+   the last 7 days, so repeats can be checked.
+4. **D4 (per-page link previews) comes first among the dev items.** Every site link now shows the same
+   generic home-page card, which reads as a duplicated link. Until D4 is live: attach our own card
+   image to every post that has a site link, so X shows the image instead of the generic preview, and
+   never post a site link without a card. This moves D4 ahead of the growth plan's week-4 review.
+5. **Check after each week:** median views per post (falling below 15 for a week is a warning), and the
+   owner checks from a personal account whether our replies appear or sit under "Show probable spam".
+
+## 3.4 Video clips (owner decision 2026-11-01: own clips, with rules)
+A commentator post may carry a short clip of the video moment it quotes, uploaded as native video.
+Rights: YouTube's terms forbid downloading and redistributing content; our basis is the Turkish
+quotation right (FSEK art. 35: a short, attributed excerpt, as much as the purpose justifies) and X's
+copyright process (removal on a complaint, suspension for repeat complaints). The rules keep the
+excerpt defensible; they do not make it safe.
+1. **Length ≤ 30 s**, one clip per video, only the seconds in which the quoted sentence is said
+   (the `outlook_quote` minute ± context). Never a montage, never the intro or the channel's branding.
+2. **Caption bar on every clip** (`design/make_clip.sh`): name · channel · date · minute, the source
+   URL `youtube.com/watch?v=<id>`, `dovizveri.com` and "Yatırım tavsiyesi değildir". The post text
+   also names the person and the channel.
+3. **Keep the audio and picture as published**: no re-cut, speed change, music, zoom or subtitle that
+   alters the meaning. Burned-in Turkish captions of the speaker's own words are allowed.
+4. **The clip replaces the card** on that post (one media item), and the site link stays the post's
+   only link (§3.3). The video minute text "▶ Videoda m:ss" stays too.
+5. **Alt text / video description**: the quote and the caption line.
+6. **Owner approves every clip** before upload, like every post. The Lead uploads it through the
+   owner's Chrome (`design/README.md` step 4), ≤ 10 MB, 720p.
+7. **Takedown rule**: on any request from the channel or person, or a copyright notice, delete the
+   post the same day, log it in the run file, and stop clipping that channel. Do not argue.
+8. **Start small**: at most 1 clip post per day for the first two weeks; compare views and site
+   sessions against card posts at the Friday review before raising it.
+9. **Never clip**: paid, members-only or unlisted videos, live streams, or anyone under "Known
+   exclusions". Thesis channels (Erkan Öz, Yatırım 101) only with the main-idea sentence.
+Tools: `yt-dlp` and `ffmpeg` (Homebrew), `uv` for the caption; installed on the Lead's machine
+2026-11-01. The script fails on clips over 30 s.
+
 ## 4. Natural growth (no aggressive tactics)
 Allowed, with daily limits:
 - **Follow** ≤ 10 relevant accounts/day: tracked commentators, their channels, data sources
   (TCMB, TÜİK, BIST, AA Finans, Bloomberg HT, Reuters), economists. Never follow-for-follow,
   never mass-follow/unfollow.
 - **Replies** ≤ 5/day under commentators' or finance news posts, only when we add a sourced fact
-  ("Bu görüş sitedeki 6 yorumcudan 5'iyle aynı yönde: link"). No generic "Harika analiz!".
+  ("Bu görüş sitedeki 6 yorumcudan 5'iyle aynı yönde: link"). At most one link, none in the first
+  replies to an account, ≥ 15 minutes apart (§3.3). No generic "Harika analiz!".
 - **Quote posts** ≤ 1/day, only with added data.
 - **Lists**: maintain public X Lists "Takip edilen yorumcular" and "Veri kaynakları".
 - **Mentions**: may mention a commentator when their view changed; never tag people in bulk.
