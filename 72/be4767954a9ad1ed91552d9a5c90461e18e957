@@ -1,0 +1,21 @@
+docs/social/design/README.md
+  s_61d47f1aa62b24::t_e9b9094c028f11 62-74
+docs/social/runs/2026-11-01.md
+  s_61d47f1aa62b24::t_0fc6c8771d6f7d 27-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "72be4767954a9ad1ed91552d9a5c90461e18e957",
+  "prompts": {},
+  "sessions": {
+    "s_61d47f1aa62b24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b75f3865-4c0c-4fa6-a37e-95ce777b6f2a",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
