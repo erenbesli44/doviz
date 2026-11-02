@@ -100,9 +100,10 @@ Some channels argue one big thesis per video instead of making calls on instrume
   - Links: `▶ Video: <YouTube link>` (owner, 2026-10-29) and `/haberler/<id>` with `utm_campaign=main_idea`.
   - Long-post part: `Özet:` plus whole sentences from `long_summary`. Drop sentences with doubtful
     numbers and log them as data issues.
-- Card: the v3.1 commentator card with the direction block replaced by "Videonun ana fikri · dd Eki" and a
-  neutral topic line (e.g. "Sınırsız para basımı ve sınırlı varlıklar"). No arrow, no direction colour,
-  no prediction words.
+- Card: the v3.1 commentator card with the direction block replaced by **the main idea itself** in large
+  accent text (e.g. "Sınırsız para basımı ve sınırlı varlıklar") and a small "dd Ay yayını" line. Do not
+  write "Videonun ana fikri" on the card (owner, 2026-11-02). No arrow, no direction colour, no prediction
+  words.
 - These posts are not counted as views. The Yatırım 101 exclusion from counts (growth plan §0) stays.
 - **Yatırım 101** (owner, 2026-11-02): "insight değil ama ana fikir ve özetini card olarak paylaşılabilir". Its videos are
   never views, but each one may get a main-idea post with the card above (no clip).
