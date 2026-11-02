@@ -104,6 +104,9 @@ Some channels argue one big thesis per video instead of making calls on instrume
   neutral topic line (e.g. "Sınırsız para basımı ve sınırlı varlıklar"). No arrow, no direction colour,
   no prediction words.
 - These posts are not counted as views. The Yatırım 101 exclusion from counts (growth plan §0) stays.
+- **Yatırım 101** (owner, 2026-11-02): "insight değil ama ana fikir ve özetini card olarak paylaşılabilir". Its videos are
+  never views, but each one may get a main-idea post with the card above (no clip).
+- **Excluded people** (owner, 2026-11-02): **Murat Muratoğlu**: no posts, no clips.
 Why: one generic sentence ("altını, gümüşü, Bitcoin'i savunuyoruz") read as three separate "yükseliş"
 calls (V4–V6, 28 Oct), which misstates what the video says.
 
@@ -225,7 +228,7 @@ excerpt defensible; they do not make it safe.
 8. **Start small**: at most 1 clip post per day for the first two weeks; compare views and site
    sessions against card posts at the Friday review before raising it.
 9. **Never clip**: paid, members-only or unlisted videos, live streams, or anyone under "Known
-   exclusions". Thesis channels (Erkan Öz, Yatırım 101) only with the main-idea sentence.
+   exclusions". Thesis channels (Erkan Öz, Barış Soydan) only with the main-idea sentence; Yatırım 101 gets a card, no clip.
 Tools: `yt-dlp` and `ffmpeg` (Homebrew), `uv` for the caption; installed on the Lead's machine
 2026-11-01. The script fails on clips over 30 s.
 
