@@ -1,0 +1,21 @@
+docs/social/x-playbook.md
+  s_e3d31dfc87e665::t_474878a7b42356 107-109,231
+docs/social/runs/2026-11-02.md
+  s_e3d31dfc87e665::t_8425806df7f686 437-445
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "49091536f06912a6df845b1ef0366899a4782e5e",
+  "prompts": {},
+  "sessions": {
+    "s_e3d31dfc87e665": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "65bd1470-f602-4989-ae52-c101cf2c7d0a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
