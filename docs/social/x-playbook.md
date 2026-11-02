@@ -214,8 +214,9 @@ excerpt defensible; they do not make it safe.
    also names the person and the channel.
 3. **Keep the audio and picture as published**: no re-cut, speed change, music, zoom or subtitle that
    alters the meaning. Burned-in Turkish captions of the speaker's own words are allowed.
-4. **The clip replaces the card** on that post (one media item), and the site link stays the post's
-   only link (§3.3). The video minute text "▶ Videoda m:ss" stays too.
+4. **The clip replaces the card** on that post (one media item). **No card at all on a clip post**,
+   not even in a reply (owner, 2026-11-02). The card is only the fallback when no clip can be made.
+   The video minute text "▶ Videoda m:ss" stays too.
 5. **Alt text / video description**: the quote and the caption line.
 6. **Owner approves every clip** before upload, like every post. The Lead uploads it through the
    owner's Chrome (`design/README.md` step 4), ≤ 10 MB, 720p.
