@@ -1,0 +1,133 @@
+docs/social/design/README.md
+  s_61d47f1aa62b24::t_098a780d8b0262 28-29,51
+  s_e3d31dfc87e665::t_8b4a5d80e654bd 30
+docs/social/runs/2026-11-01.md
+  s_cbd324c69da71f::t_d833469e49feb8 181-182
+  s_cbd324c69da71f::t_87d5472d2a93a2 183
+docs/social/runs/2026-11-03.md
+  s_7fa775a160a465::t_b982d35206d87b 114
+  s_7fa775a160a465::t_b43b736f5be8ac 1-3,5-43,45-51,53-57,59-92,94-101,103-113,115-200,202-234,243
+  s_7fa775a160a465::t_0ad2fe74eb5c66 235-242
+  s_4f31a32c872b5c::t_6f7eb04f9d5351 244-250
+  s_7fa775a160a465::t_810315d5c21560 4,44,52,58,93,102
+  s_4f31a32c872b5c::t_4610d8a0736ab1 201
+docs/social/runs/2026-11-04.md
+  s_e2cd52c943bf44::t_35a492bd7464da 453-490
+  s_1d54db3e5c09d7::t_3618a908976664 441-452
+  s_1d54db3e5c09d7::t_d9394620fcf21d 277-440
+  s_ac37aed9999c71::t_d9b5c824337a80 70-71,108,160,252,268-275
+  s_ac37aed9999c71::t_67ed7d329648b0 1-69,72-107,109-159,161-251,253-267,276,491
+  s_e2cd52c943bf44::t_8bf5fd33e281e0 492-502
+docs/social/runs/2026-10-30.md
+  s_557cf9da29c310::t_b3140438b22b9c 468-472
+docs/social/design/card-commentator-v3.html
+  s_345697fba9b334::t_de1b6d6030639c 19,22,34
+docs/social/runs/2026-10-28.md
+  s_c73671d0b50a36::t_b65cb9f3bda9e1 462
+docs/social/design/card-explainer.html
+  s_2bc8058e49120f::t_a9fba24fb8c628 1-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "09f0c19f47ca56a4fcb33d8d915765f916c46ec3",
+  "prompts": {},
+  "sessions": {
+    "s_1d54db3e5c09d7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cfde9951-b6a7-4bff-94ea-4fcfe137756a",
+        "model": "unknown"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_2bc8058e49120f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a72904a646599efdf",
+        "model": "unknown"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_345697fba9b334": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4ee61287-21f2-4d5c-9b93-2a127b785fd4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_4f31a32c872b5c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8f90ef27-ee1f-486f-933c-fc2435e959b3",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_557cf9da29c310": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "094050e2-6da5-48b2-87ae-f14fabd5bb7a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_61d47f1aa62b24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b75f3865-4c0c-4fa6-a37e-95ce777b6f2a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_7fa775a160a465": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "54df6f08-3199-46e8-8090-dc8c1120919a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_ac37aed9999c71": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1bd397d7-df62-47d9-ac21-0d979aaed4ed",
+        "model": "unknown"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_c73671d0b50a36": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "746280ff-e641-42a6-be7d-2e4389bbdb2f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_cbd324c69da71f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f1945d19-12a9-446f-8187-cb64034689ac",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_e2cd52c943bf44": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da8a8604-1f25-4611-aa42-67e06d0ea3ab",
+        "model": "unknown"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_e3d31dfc87e665": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "65bd1470-f602-4989-ae52-c101cf2c7d0a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
