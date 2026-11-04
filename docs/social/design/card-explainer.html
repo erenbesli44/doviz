@@ -1,0 +1,35 @@
+<!doctype html><html lang="tr"><head>
+<!-- Explainer card, mobile-first (2026-10-29). Same tokens, font stack and navy bottom bar as
+     commentator v3.1. Shown ~295 px wide in the phone feed: every text >= 34 px at 1200 px.
+     Headline <= ~30 chars, max 3 rule lines (each <= ~28 chars), optional pill row.
+     No numbers, names, photos, prices or counts. Content below is the 2026-10-29 card. --><meta charset="utf-8"><style>
+:root{--bg:#FAFAF7;--text:#16181B;--muted:#555A62;--accent:#1F3A8A;--border:#E3E1DA;--bull:#15703D;--bull-bg:#E4F4EA;--bear:#B83227;--bear-bg:#FBE6E2;--flat:#4B5563;--flat-bg:#ECEDEE}
+*{box-sizing:border-box;margin:0}
+html,body{width:1200px;height:675px}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;display:flex;flex-direction:column}
+.main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:36px 64px 30px}
+h1{font-size:72px;font-weight:800;letter-spacing:-.02em;line-height:1.05;color:var(--accent)}
+ul{list-style:none;padding:0;margin-top:30px}
+li{display:flex;align-items:center;gap:26px;font-size:48px;font-weight:700;line-height:1.15;padding:9px 0}
+li::before{content:"";flex:none;width:18px;height:18px;border-radius:4px;background:var(--accent)}
+.pills{display:flex;gap:22px;margin-top:34px;padding-top:30px;border-top:3px solid var(--border)}
+.pill{font-size:46px;font-weight:800;padding:6px 28px 10px;border-radius:22px;line-height:1.1;white-space:nowrap}
+.up{color:var(--bull);background:var(--bull-bg)}.down{color:var(--bear);background:var(--bear-bg)}.flat{color:var(--flat);background:var(--flat-bg)}
+.bar{display:flex;justify-content:space-between;align-items:center;background:var(--accent);color:#fff;padding:20px 64px;font-size:38px;font-weight:600}
+.bar span{opacity:.9;font-weight:500}
+</style></head><body>
+<div class="main">
+ <h1>Görüşleri nasıl sayıyoruz?</h1>
+ <ul>
+  <li>Açıkça söylenen yön</li>
+  <li>Son 30 gün</li>
+  <li>Kişi başına en son görüş</li>
+ </ul>
+ <div class="pills">
+  <span class="pill up">↑ Yükseliş</span>
+  <span class="pill down">↓ Düşüş</span>
+  <span class="pill flat">→ Yatay seyir</span>
+ </div>
+</div>
+<div class="bar"><b>dovizveri.com</b><span>Yatırım tavsiyesi değildir.</span></div>
+</body></html>
