@@ -40,12 +40,17 @@ def fmt(s: float) -> str:
 
 
 def words_from_json3(path: Path) -> list[tuple[float, str]]:
+    """Auto-captions give one seg per word; some videos give whole cues (punctuation inside the
+    seg). Split every seg into words and spread them evenly up to the next seg or the cue end."""
     words = []
     for ev in json.loads(path.read_text())["events"]:
-        for seg in ev.get("segs", []):
-            text = seg["utf8"].strip()
-            if text:
-                words.append(((ev["tStartMs"] + seg.get("tOffsetMs", 0)) / 1000, text))
+        segs = [s for s in ev.get("segs", []) if s["utf8"].strip()]
+        t_end = ev["tStartMs"] + ev.get("dDurationMs", 0)
+        for k, seg in enumerate(segs):
+            t0 = ev["tStartMs"] + seg.get("tOffsetMs", 0)
+            t1 = ev["tStartMs"] + segs[k + 1].get("tOffsetMs", 0) if k + 1 < len(segs) else t_end
+            ws = seg["utf8"].split()
+            words += [((t0 + max(t1 - t0, 0) * n / len(ws)) / 1000, w) for n, w in enumerate(ws)]
     return words
 
 
