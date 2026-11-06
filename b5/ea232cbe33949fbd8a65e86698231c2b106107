@@ -1,0 +1,21 @@
+.claude/agents/social-manager.md
+  s_39c852c55df75b::t_6bcee3441653a2 68-70
+.claude/agents/social-designer.md
+  s_39c852c55df75b::t_6bcee3441653a2 31-33,37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b5ea232cbe33949fbd8a65e86698231c2b106107",
+  "prompts": {},
+  "sessions": {
+    "s_39c852c55df75b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fdc03afb-fac3-4484-a7a8-b32792db7584",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
