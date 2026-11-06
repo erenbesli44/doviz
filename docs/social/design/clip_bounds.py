@@ -21,7 +21,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-MAX_LEN, SNAP = 30.0, 1.5
+MAX_LEN, SNAP = 60.0, 1.5
 NOISE, MIN_PAUSE = "-32dB", 0.12
 # A sentence opening with these leans on the previous one; a clip ending with these is cut short.
 LEAD_WORDS = {"ama", "fakat", "ancak", "çünkü", "dolayısıyla", "yani", "ve", "işte", "hatta",

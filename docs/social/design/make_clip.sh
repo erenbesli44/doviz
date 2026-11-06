@@ -4,7 +4,7 @@
 # Times: m:ss, h:mm:ss or seconds, decimals allowed. Take them from clip_bounds.py (sentence ends).
 # Needs: yt-dlp, ffmpeg (brew install ffmpeg yt-dlp), uv (for Pillow).
 # Output: <out_dir>/<video_id>-<mss>.mp4 (720p, h264/aac, caption bar), a frame at 2 s and one
-# 0.5 s before the end. Fails if longer than 30 s or if either cut lands in speech.
+# 0.5 s before the end. Fails if longer than 60 s or if either cut lands in speech.
 set -euo pipefail
 [ $# -eq 5 ] || { sed -n 2,7p "$0"; exit 1; }
 vid=$1 out=$4 label=$5
@@ -52,7 +52,7 @@ rm -f "$raw" "$base-caption.png"
 
 size=$(stat -f %z "$base.mp4")
 echo "clip: $base.mp4  duration=${dur}s  size=${size}B  frames: $base-frame.png $base-end.png"
-awk -v d="$dur" 'BEGIN{ if (d > 30.5) { print "WARNING: longer than 30 s (playbook §3.4)"; exit 1 } }'
+awk -v d="$dur" 'BEGIN{ if (d > 60.5) { print "WARNING: longer than 60 s (playbook §3.4)"; exit 1 } }'
 
 # Both cuts must sit in a pause (§3.4 item 1a): silence at the first and the last 0.1 s.
 ffmpeg -hide_banner -nostats -i "$base.mp4" -af silencedetect=noise=-32dB:d=0.1 -f null - 2>&1 |

@@ -211,14 +211,17 @@ Rights: YouTube's terms forbid downloading and redistributing content; our basis
 quotation right (FSEK art. 35: a short, attributed excerpt, as much as the purpose justifies) and X's
 copyright process (removal on a complaint, suspension for repeat complaints). The rules keep the
 excerpt defensible; they do not make it safe.
-1. **Length ≤ 30 s**, one clip per video, only the seconds in which the quoted sentence is said
-   (the `outlook_quote` minute ± context). Never a montage, never the intro or the channel's branding.
+1. **Length ≤ 60 s** (owner 2026-11-06; was 30 s), one clip per video: the best watchable passage
+   for that view, i.e. the speaker's point with its reason, not only the quoted sentence (owner
+   2026-11-06: "find the best parts of the videos that users can watch and can be popular"; an 8.5 s
+   quote-only cut was too short). Read the whole transcript to choose it. Never a montage, never the
+   intro or the channel's branding. The longer the clip, the weaker the quotation-right basis above.
 1a. **Whole sentences, whole thought (owner 2026-11-04)**: the clip starts on the first word of a
    sentence and ends after the last word of a sentence, and both cuts sit in the speaker's pause.
    Never start or stop mid-sentence or mid-word. The first sentence opens the topic (not "Ama…",
    "Çünkü…", "Yani…" leaning on an unseen sentence, unless it is itself the topic opener) and the
    last one closes the thought (the next sentence is not "Dolayısıyla…" finishing it). If the whole
-   thought does not fit in 30 s, clip fewer whole sentences that still stand alone; if none do,
+   thought does not fit in 60 s, clip fewer whole sentences that still stand alone; if none do,
    use the card. Tools: `design/clip_bounds.py` picks the cuts from the captions' sentence ends
    and the audio pauses; `design/make_clip.sh` fails when a cut lands in speech. The owner sees
    the clip's first and last sentence with the frames.
@@ -240,7 +243,7 @@ excerpt defensible; they do not make it safe.
 9. **Never clip**: paid, members-only or unlisted videos, live streams, or anyone under "Known
    exclusions". Thesis channels (Erkan Öz, Barış Soydan) only with the main-idea sentence; Yatırım 101 gets a card, no clip.
 Tools: `yt-dlp` and `ffmpeg` (Homebrew), `uv` for the caption; installed on the Lead's machine
-2026-11-01. The script fails on clips over 30 s and on cuts in speech (item 1a).
+2026-11-01. The script fails on clips over 60 s and on cuts in speech (item 1a).
 
 ## 4. Natural growth (no aggressive tactics)
 Allowed, with daily limits:
