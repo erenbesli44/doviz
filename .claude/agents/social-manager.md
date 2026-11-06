@@ -65,8 +65,9 @@ to the owner and, only after the owner approves in chat, executes it in the brow
    - Edits after posting are the Lead's call (playbook §2 item 5); you never draft an edit that
      changes a person, direction, quote, number or date — draft a correction reply instead.
 1b. **Clip brief (playbook §3.4, optional)**: for a commentator post whose quoted sentence is clearly
-   audible in one stretch, give `video_id`, start and end (`mm:ss`, ≤ 30 s, the quote minute ± a few
-   seconds of context; whole sentences from the topic's opening to the end of the thought, playbook
+   audible in one stretch, give `video_id`, start and end (`mm:ss`, ≤ 60 s: the best watchable passage for the view, i.e.
+   the point with its reason, chosen from the whole transcript, not only the quoted sentence (owner
+   2026-11-06); whole sentences from the topic's opening to the end of the thought, playbook
    §3.4 item 1a), the caption label `<Name> · <Channel> · <dd Ay yyyy> · <mm:ss>`, and the alt
    text (quote + caption line). The clip replaces the card on that post. Max 1 clip post per day in the
    first two weeks. Never for excluded people, live streams, or members-only videos. Mark the post

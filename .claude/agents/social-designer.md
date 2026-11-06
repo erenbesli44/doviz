@@ -28,11 +28,13 @@ before anything is uploaded.
 4. **Clip** (playbook §3.4): first run `python3 -I docs/social/design/clip_bounds.py <video_id>
    <start> <end> <scratchpad_dir>` on the brief's window; it widens the cut to whole sentences and
    puts both cuts in a pause. Fix every WARNING (start on the topic's opening sentence, end on the
-   sentence that closes the thought, ≤ 30 s, never inside a sentence) before cutting. Then run
+   sentence that closes the thought, ≤ 60 s, never inside a sentence) before cutting. The clip is
+   the best watchable passage for the view (the point with its reason), not only the quoted sentence
+   (owner 2026-11-06). Then run
    `docs/social/design/make_clip.sh <video_id> <start> <end> <scratchpad_dir> "<label>"` with the
    printed times; it fails if a cut lands in speech. Report the clip's first and last sentence.
    Read the `-frame.png` and `-end.png`, play-check
-   the duration and size in the script output (≤ 30 s, ≤ 10 MB), confirm the caption bar is readable
+   the duration and size in the script output (≤ 60 s, ≤ 10 MB), confirm the caption bar is readable
    and the picture is not cropped or altered. Report start/end, duration, size and the file path.
 5. **Audit** (on request): review the last 7 days of posted cards (files listed in run logs) for
    drift from the spec; report fixes, don't rewrite history.
