@@ -1,0 +1,25 @@
+docs/social/design/card-report-drop.html
+  s_b59df1e6802e87::t_b0e045675623c0 1-69
+docs/social/runs/2026-11-06.md
+  s_b59df1e6802e87::t_2a4fd1ee46d2c3 209
+  s_b59df1e6802e87::t_a0214714ad8531 221
+  s_b59df1e6802e87::t_1d0295349ccdb9 185-208,210-212
+  s_b59df1e6802e87::t_2a201e1de3c52d 213-220,222-231
+  s_b59df1e6802e87::t_01516163435f56 232-240
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a39299442ab1984b6f75a6b3701a819f0cb2b758",
+  "prompts": {},
+  "sessions": {
+    "s_b59df1e6802e87": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cc4c2771-d82d-40a6-92c4-4ddb06af59b7",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
