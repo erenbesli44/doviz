@@ -107,6 +107,11 @@ Some channels argue one big thesis per video instead of making calls on instrume
 - These posts are not counted as views. The Yatırım 101 exclusion from counts (growth plan §0) stays.
 - **Yatırım 101** (owner, 2026-11-02): "insight değil ama ana fikir ve özetini card olarak paylaşılabilir". Its videos are
   never views, but each one may get a main-idea post with the card above (no clip).
+- **Kayıt Dışı İktisat** (`@Kayitdisi`, owner, 2026-11-05: "general topic, … share the summarization only"):
+  general economy and politics channel, tracked as summary-only (tracker `summary_only_channels`), so it
+  has no instrument views on the site. Each new upload may get one main-idea post with the card above
+  (no clip, no dolar/BIST/altın direction). Find new videos in `/api/v1/news/latest` by channel, not in
+  the opinions endpoints.
 - **Excluded people** (owner, 2026-11-02): **Murat Muratoğlu**: no posts, no clips.
 Why: one generic sentence ("altını, gümüşü, Bitcoin'i savunuyoruz") read as three separate "yükseliş"
 calls (V4–V6, 28 Oct), which misstates what the video says.
@@ -130,8 +135,8 @@ in the composer.
 
 - **Long posts:** the default for commentator posts (§3.1a). Anyone can read them; only Premium
   accounts can write them. They cannot be scheduled, which does not matter because we post manually.
-- **Native bold**, header line only: the first line of a commentator post (e.g. **Erkan Öz · Bitcoin ·
-  Düşüş bekliyor**) is set in bold with the composer's B button. No bold or italics anywhere else,
+- **Native bold**, header line only: the header of a commentator post (e.g. **Erkan Öz · Bitcoin ·
+  Görüş özeti**; from 2026-11-07 it is line 2, after the lead quote, §3.5) is set in bold with the composer's B button. No bold or italics anywhere else,
   and never Unicode "bold letters" (screen readers spell them out, search misses them). In run files
   the header is marked `**…**`; the Lead applies the formatting in the composer.
 - **Edit within 1 hour:** rules in §2 item 5. This is a second reason long posts are the default:
@@ -245,6 +250,49 @@ excerpt defensible; they do not make it safe.
 Tools: `yt-dlp` and `ffmpeg` (Homebrew), `uv` for the caption; installed on the Lead's machine
 2026-11-01. The script fails on clips over 60 s and on cuts in speech (item 1a).
 
+## 3.5 Post structure and spacing (owner decision 2026-11-07, after the guide review)
+Source: the owner's guide set (X Business basics, Buffer 2026 engagement study, xAI `x-algorithm`
+Oct 2026 notes, Buffer best-time study), reviewed against our own data on 2026-11-07. What was
+taken over, and what was not:
+- **Taken:** the For You ranker scores predicted time-spent and read-through per viewer, so the first
+  line must earn the read; per-post analytics at a fixed age; spacing instead of bursts; sourced
+  replies under commentators' posts as the reach lever; a chart format only when it states a finding.
+- **Not taken:** Buffer's format ranking (text 3.56 % > image > video > link) is a cross-niche median
+  over Buffer customers and says nothing at our size (median 50 views, n ≈ 28/week); "4 posts a week"
+  (our posts are event-driven); dropping links (owner rule §3.3 item 1); a global 9–11 a.m. slot for
+  commentator posts (they go out when the video lands).
+
+Rules from 2026-11-07:
+1. **Line 1 is the speaker's most striking sentence**, in quote marks, taken from `outlook_quote_clean`
+   or from the clip passage (whole sentence, verbatim, ≤ ~120 chars). It is the sentence a reader
+   would stop for: a level, a date, a condition, a contrast — never our paraphrase, never a direction
+   word of ours. **Line 2 is the header** `Ad · Enstrüman · Görüş özeti` (bold, §3.2), then the source
+   line, links and `Özet:` exactly as before (S1 layout, owner 2026-10-30). Main-idea posts (§3.1b):
+   line 1 = the main idea sentence itself, line 2 = `<Kanal> · Videonun ana fikri`. The first 280
+   characters must still work without "Show more".
+2. **Spacing, not fewer posts.** Every qualifying view is still posted (owner 2026-11-01), but
+   originals go out **≥ 30 minutes apart** (2 h stays the preference, §3.3 item 2), including the
+   separate posts of one multi-instrument video. Long posts cannot be scheduled on X (§3.2), so the
+   sender waits between posts; a run that cannot wait posts the first and leaves the rest as
+   DRAFTED-NOT-POSTED for the next run's coverage check. "Hepsini şimdi at" from the owner overrides
+   the spacing for that batch and is logged as a burst.
+3. **Per-post analytics at 48 h** (24–72 h window), read from the status URL's analytics view, never
+   from the profile scroll: impressions, engagements, detail expands, link clicks, profile visits,
+   video views, and new followers if shown. One row per post in the run file (`## Analytics 48 h`),
+   with the post's format (lead line yes/no, clip/card/chart, channel, send time, burst yes/no).
+   These rows feed the Friday table in §5; views alone no longer decide a format question. Account
+   analytics stays locked until 50 followers; GA4 by UTM is still the real goal.
+4. **Morning slot test** (08:30 routine): one non-time-bound post between 09:00 and 11:00 TR on
+   weekdays, the previous evening's best Özet or a "bu hafta kim ne dedi" line-up, paired against the
+   same type sent in the evening. Four pairs, then decide. Commentator posts are not moved.
+5. **Replies under commentators' own posts** (08:30 routine, §4 limits): up to 3 a day, each with a
+   sourced fact from the site and at most one link. Measured by reposts/quotes from the mentioned
+   accounts and profile visits, not by likes.
+6. **Level chart** (planned, template not built): for a view with real price `key_levels`, a chart of
+   the site's price series with the commentator's named level(s) and attribution, as a third media
+   option tested against the card (never against the clip). It states the speaker's level, not ours.
+   Social-designer owns the template; until it exists, item 6 is not used.
+
 ## 4. Natural growth (no aggressive tactics)
 Allowed, with daily limits:
 - **Follow** ≤ 10 relevant accounts/day: tracked commentators, their channels, data sources
@@ -273,6 +321,7 @@ repeatedly. These violate X rules and the brand.
 | Returning visitors from X | GA4 | real readers, not one-off clicks |
 | Corrections needed | run log | quality guard |
 | A vs B (only once median ≥ 100 views) | X post views + GA4 by `utm_campaign` | §3.1a |
+| Per post at 48 h: impressions, engagements, link clicks, profile visits, video views | post analytics view (§3.5 item 3), run file `## Analytics 48 h` | lead-line and media comparisons |
 | Weekly roundup clicks | GA4 `weekly_article` | keep or drop the format |
 
 Engagement alone is not success (a heated post can be wrong). Judge formats on clicks + returning
