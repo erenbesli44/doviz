@@ -288,10 +288,14 @@ Rules from 2026-11-07:
 5. **Replies under commentators' own posts** (08:30 routine, §4 limits): up to 3 a day, each with a
    sourced fact from the site and at most one link. Measured by reposts/quotes from the mentioned
    accounts and profile visits, not by likes.
-6. **Level chart** (planned, template not built): for a view with real price `key_levels`, a chart of
-   the site's price series with the commentator's named level(s) and attribution, as a third media
-   option tested against the card (never against the clip). It states the speaker's level, not ours.
-   Social-designer owns the template; until it exists, item 6 is not used.
+6. **Level chart** (template built 2026-11-07, commit d1d705c): for a view with real price `key_levels`,
+   a chart of the site's price series with the commentator's named level(s) and attribution, as a
+   third media option tested against the card (never against the clip). It states the speaker's level,
+   not ours. Template `design/card-level-chart.html`, fill/render `design/make_level_chart.py`, rules
+   in `design/README.md` (series per instrument key; gram-gold levels are skipped because `GAUTRY`
+   history returns no points, so altın charts carry only ons/USD levels). Social-designer owns it;
+   the owner approves each chart like a card. First use: the Friday review picks one card-fallback
+   post per week to run as a chart instead, for 4 weeks, compared on the 48 h rows.
 
 ## 4. Natural growth (no aggressive tactics)
 Allowed, with daily limits:
