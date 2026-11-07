@@ -29,6 +29,7 @@ Light theme only for images (X shows them on both themes; the light card has a c
 | Commentator card (**v3.1 mobile-first, from 2026-10-27**, owner decision) | 1200×675 | `card-commentator-v3.html` | left: commentator photo (280 px circle, the channel's own YouTube `channel_avatar_url`), name 58 px, "YouTube kanalı"; right: instrument 46 px, direction block 92 px ("↓ Düşüş" + "bekliyor · dd Eki"), and only for a view change one line "Önceki: ↑ Yükseliş · dd Eki" 46 px; then "Vade: <outlook_horizon>" 46 px when the row has a horizon (omit the line otherwise); the direction word is the site's own wording (e.g. "→ Yatay seyir", not "→ Yatay"); navy bottom bar "dovizveri.com" + "Yatırım tavsiyesi değildir." 38 px. **No quote, video minute, summary or source line on the card** — they are in the post text, replies and alt text. Why: the card is shown ~295 px wide in the phone feed (~25 %), so text < ~34 px is unreadable. Comparison: `v3-trial/README.md` |
 | Main-idea card (thesis channels, owner 2026-11-02) | 1200×675 | `card-commentator-v3.html` layout | left: channel photo or initials circle + name + "YouTube kanalı"; right: **the main idea itself**, 64 px 800 accent, balanced wrap, max ~660 px, + "dd Ay yayını" 38 px muted. No "Videonun ana fikri" label, no arrow/direction. Yatırım 101: card only, no clip. Clip posts never get a card |
 | Commentator card (v2, 2026-10-24 → 26) | 1200×675 | layout of `make_cards.py` `commentator` | superseded by v3: right "Görüşün tamamı" panel was unreadable at phone width. v2 showed the quote (`outlook_quote_clean`, else `outlook_quote` — same as the post) on the left and the summary panel on the right |
+| Level chart card (**from 2026-11-07**, playbook §3.5 item 6) | 1200×675 | `card-level-chart.html` + `make_level_chart.py` | the site's price series for the instrument with the speaker's named price level(s) as dashed navy lines and labelled pills; headline = the speaker's own sentence in quote marks (Charter 44 px, ≤ 95 chars; 38 px up to 130), attribution `Ad · Kanal · dd Ay` 34 px, legend with instrument, unit, granularity, period 30 px, navy bottom bar. No photo, no arrow, no direction colour: the only colours are navy (speaker's levels) and dark grey (price). Third media option, tested against the card only, never against the clip. Fill rules: § "Level chart card" below |
 | Avatar | 400×400 | `avatar-a.html` (**live** since 2026-10-24; `avatar-b.html` = unused option) | navy "DV" monogram; must read at 48 px |
 | Banner | 1500×500 | `banner-b.html` (**live** since 2026-10-24; `banner-a.html` = unused option) | "Kim ne bekliyor?" + dovizveri.com; keep x 0–420, y 300–500 clear (avatar overlap) |
 
@@ -50,6 +51,59 @@ Light theme only for images (X shows them on both themes; the light card has a c
 - Max 6 people per card; more → say "+N kişi daha" and link.
 
 | Video clip (from 2026-11-01, playbook §3.4) | 1280×720 mp4, ≤ 60 s (owner 2026-11-06), ≤ 10 MB | `clip_bounds.py` → `make_clip.sh` | whole sentences only, both cuts in a pause (playbook §3.4 item 1a); the quoted moment with an 84 px caption bar: name · channel · date · minute, source URL, dovizveri.com, disclaimer. Replaces the card on that post; uploaded like a card (step 4) |
+
+## Level chart card (playbook §3.5 item 6; built 2026-11-07)
+What it says: *the speaker named this level; here is where the site's price series is.* It never says
+where the price goes. One view per card.
+
+**Use it only when all of these hold** (otherwise the post keeps its clip, or the v3.1 card):
+1. The row is an explicit view (`outlook_explicit = true`, `outlook != none`) with a quote; the script
+   refuses anything else. Main-idea/summary posts do not get a chart.
+2. At least one `key_levels` entry is a **real price in the series' unit** (see the table): a number
+   with "dolar/$" for USD series, "lira/TL" for Dolar/TL, "puan" or bare for BIST. Percentages,
+   amounts ("150 milyar dolar"), durations ("3 ay"), moving averages ("200 günlük ortalama"), dates
+   and years are skipped automatically; the script prints what it skipped and why.
+3. **Every level drawn is in the speaker's own words**: in `outlook_quote_clean` or in the clip
+   passage. `key_levels` is an AI extraction and can carry numbers from elsewhere in the video
+   (e.g. video 810: key_levels "4.200-4.350" while the quote says "55 dolar"). The script warns when a
+   level's digits are not in the quote; then either confirm it in the clip passage or pass
+   `--levels` with only the confirmed ones. Max 3 levels (pills stack in the right gutter, a thin leader joins a moved pill to its line).
+4. The level sits within the series' range (3-month window by default; the script widens to 1 year
+   when a level is outside ±15 %, and stops when it is outside ±30 % of the 1-year range: a flat line
+   with a far-away target is not a chart). The headline is one whole sentence from the quote, verbatim,
+   ≤ 130 chars (`--headline` to pick another sentence of the same quote).
+
+| topic key | series (`/api/v1/quotes/<SYMBOL>/history`) | label · unit · decimals | notes |
+|---|---|---|---|
+| `altin` | `XAU-USD` | Ons altın · USD · 0 | "lira/TL" levels are gram gold: `GAUTRY` history returns 0 points (checked 2026-11-07), so they are skipped and named in the script output |
+| `gumus` | `XAG-USD` | Ons gümüş · USD · 2 | |
+| `dolar-tl` | `USD-TRY` | Dolar/TL · TL · 2 | bare numbers accepted when in range |
+| `bist` | `XU100` | BIST 100 · puan · 0 | BIST 30 levels are not BIST 100: drop them with `--levels` |
+| `bitcoin` | `BTC-USD` | Bitcoin · USD · 0 | |
+| `petrol-enerji` | `BRENT` | Brent petrol · USD · 2 | WTI levels are not Brent: drop them |
+| `us-markets` | `SPX` | S&P 500 · puan · 0 | key_levels often belong to Nasdaq/Dow: the script requires `--levels`, pass only S&P 500 numbers the speaker said |
+
+Period and granularity come from the response: `hours=2160` → daily closes ("günlük kapanış · son 3
+ay", ~75–90 points), `hours=8760` → weekly closes ("haftalık kapanış · son 1 yıl", ~64 points).
+The last point is the previous session's close (Yahoo, delayed), drawn as a dot with its value; the
+legend names the source as the site. The numbers on the card must match the site's chart on
+`/piyasa/<key>` the same day (editorial rule §2.1): check before handing over.
+
+Render:
+```
+python3 -I docs/social/design/make_level_chart.py --topic altin --video 830 --out <scratchpad>/lc830
+```
+Writes `lc830.html` (filled from `card-level-chart.html`), `lc830.png/.webp` via `render.sh`
+(WebP re-encoded down to `-q 70` to reach ≤ 45 KB), `lc830-phone.png` (375 px mockup: feed ~295 px
+and post page ~343 px, for the legibility check) and prints the alt text. Self-check as for other
+cards, plus: the level labels equal the post text, the levels are in the quote, no green/red anywhere,
+the attribution name equals `person_name`, the legend's instrument and unit match the levels.
+
+Alt text template (≤ 1000 chars, printed by the script):
+`Grafik: <Enstrüman> fiyatı, <dönem> (<günlük|haftalık> kapanış, <birim>), kaynak dovizveri.com.
+<Ad> (<Kanal> YouTube kanalı, <d Ay yyyy>) şu seviyeleri söyledi: <L1> ve <L2>. Son değer (<d Ay yyyy>
+itibarıyla): <son>. Alıntı: “<outlook_quote_clean>” Yatırım tavsiyesi değildir.` — the quote is cut at
+a word end with "…" only when the whole text would exceed 1000 chars.
 
 ## Pipeline
 1. Copy the closest template, fill the data, keep the structure.

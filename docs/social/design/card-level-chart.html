@@ -1,0 +1,45 @@
+<!doctype html><html lang="tr"><head>
+<!-- Level chart card (playbook §3.5 item 6, built 2026-11-07). 1200×675, light, same tokens and navy
+     bottom bar as commentator v3.1. Shown ~295 px wide in the phone feed: headline 44 px, level labels
+     36 px, attribution 34 px, axis/legend 30 px. Filled by make_level_chart.py, which replaces the
+     markup between the card:start / card:end markers with the site's price series and the speaker's
+     named levels. SAMPLE below: Selçuk Geçer, altın, video 830 (6 Nov 2026), levels 5.000 $ and 5.600 $,
+     1-year weekly XAU/USD series fetched 2026-11-07. No arrows, no direction colour: the dashed navy
+     lines are the speaker's levels, the dark line is the site's price series. --><meta charset="utf-8"><style>
+:root{--bg:#FAFAF7;--text:#16181B;--muted:#555A62;--accent:#1F3A8A;--border:#E3E1DA;--line:#2B2F36}
+*{box-sizing:border-box;margin:0}
+html,body{width:1200px;height:675px}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;display:flex;flex-direction:column}
+.main{flex:1;display:flex;flex-direction:column;padding:34px 64px 18px}
+h1{font-family:Charter,"Iowan Old Style",Georgia,serif;font-weight:600;font-size:44px;line-height:1.16;letter-spacing:-.01em;text-wrap:balance}
+h1.long{font-size:38px;line-height:1.14}
+.who{margin-top:10px;font-size:34px;color:var(--muted)}
+.who b{color:var(--text);font-weight:700}
+.chart{margin-top:14px;flex:1;display:flex;align-items:center}
+.chart svg{display:block;width:1072px;height:316px}
+.y{font-size:30px;fill:var(--muted);font-variant-numeric:tabular-nums}
+.x{font-size:30px;fill:var(--muted)}
+.grid{stroke:var(--border);stroke-width:2}
+.series{fill:none;stroke:var(--line);stroke-width:4;stroke-linejoin:round;stroke-linecap:round}
+.level{stroke:var(--accent);stroke-width:4;stroke-dasharray:14 12}
+.pill{fill:var(--accent)}
+.leader{stroke:var(--accent);stroke-width:2}.leader.last{stroke:var(--line)}
+.pill-t{font-size:36px;font-weight:700;fill:#fff;font-variant-numeric:tabular-nums}
+.last-dot{fill:var(--line)}
+.last-t{font-size:34px;font-weight:700;fill:var(--text);font-variant-numeric:tabular-nums}
+.legend{margin-top:4px;display:flex;flex-direction:column;gap:2px;font-size:30px;line-height:1.2;color:var(--muted);white-space:nowrap}
+.legend i{display:inline-block;width:40px;height:0;border-top:4px solid var(--line);vertical-align:middle;margin-right:10px}
+.legend i.l{border-top:4px dashed var(--accent)}
+.bar{display:flex;justify-content:space-between;align-items:center;background:var(--accent);color:#fff;padding:20px 64px;font-size:38px;font-weight:600}
+.bar span{opacity:.9;font-weight:500}
+</style></head><body>
+<div class="main">
+<!-- card:start -->
+<h1 class="">“5.000 seviyesinin çok uzak olmadığını görüyorum.”</h1>
+<div class="who"><b>Selçuk Geçer</b> · YouTube kanalı · 6 Kas</div>
+<div class="chart"><svg viewBox="0 0 1072 316" xmlns="http://www.w3.org/2000/svg"><line class="grid" x1="128" y1="206.7" x2="836" y2="206.7"/><text class="y" x="114" y="216.7" text-anchor="end">4.000</text><line class="grid" x1="128" y1="103.3" x2="836" y2="103.3"/><text class="y" x="114" y="113.3" text-anchor="end">5.000</text><line class="grid" x1="128" y1="274" x2="836" y2="274"/><text class="x" x="128.0" y="310" text-anchor="start">Ağu '25</text><text class="x" x="364.0" y="310" text-anchor="middle">Oca '26</text><text class="x" x="600.0" y="310" text-anchor="middle">Haz '26</text><text class="x" x="836.0" y="310" text-anchor="end">Kas '26</text><path class="series" d="M128.0,256.8 L139.2,242.6 L150.5,239.1 L161.7,237.1 L173.0,226.5 L184.2,216.1 L195.4,206.7 L206.7,184.7 L217.9,192.5 L229.1,207.1 L240.4,205.7 L251.6,197.0 L262.9,198.5 L274.1,180.4 L285.3,181.6 L296.6,172.8 L307.8,166.7 L319.0,149.6 L330.3,172.6 L341.5,154.9 L352.8,145.1 L364.0,105.4 L375.2,129.7 L386.5,105.4 L397.7,98.5 L409.0,94.9 L420.2,77.7 L431.4,86.9 L442.7,96.9 L453.9,147.3 L465.1,155.8 L476.4,136.4 L487.6,125.3 L498.9,115.7 L510.1,130.1 L521.3,140.1 L532.6,131.1 L543.8,148.6 L555.0,152.6 L566.3,145.4 L577.5,168.9 L588.8,182.0 L600.0,188.8 L611.2,196.8 L622.5,187.3 L633.7,195.0 L645.0,204.8 L656.2,199.4 L667.4,195.6 L678.7,165.4 L689.9,161.5 L701.1,136.3 L712.4,151.9 L723.6,157.4 L734.9,164.4 L746.1,162.8 L757.3,173.5 L768.6,189.9 L779.8,184.3 L791.0,188.0 L802.3,205.9 L813.5,217.2 L824.8,199.0 L836.0,199.0"/><line class="level" x1="128" y1="41.2" x2="842" y2="41.2"/><line class="leader" x1="842" y1="41.2" x2="850" y2="47.0"/><rect class="pill" x="850" y="24.0" width="182" height="46" rx="12"/><text class="pill-t" x="864" y="59.0">5.600 $</text><line class="level" x1="128" y1="103.3" x2="842" y2="103.3"/><rect class="pill" x="850" y="80.3" width="182" height="46" rx="12"/><text class="pill-t" x="864" y="115.3">5.000 $</text><circle class="last-dot" cx="836.0" cy="199.0" r="9"/><text class="last-t" x="862" y="211.0">4.075 $</text></svg></div>
+<div class="legend"><span><i></i>Ons altın, USD · haftalık kapanış · son 1 yıl</span><span><i class="l"></i>Selçuk Geçer'in söylediği seviyeler</span></div>
+<!-- card:end -->
+</div>
+<div class="bar"><b>dovizveri.com</b><span>Yatırım tavsiyesi değildir.</span></div>
+</body></html>
