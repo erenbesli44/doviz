@@ -1,0 +1,33 @@
+docs/social/design/make_level_chart.py
+  s_dc4d63931505f4::t_e3f1b91fda4b77 259-260,279,298,303
+  s_dc4d63931505f4::t_71fc200c862d5c 1-162,173-175,178-181,185-208,210-238,241-258,261-278,280-286,291-297,305-319
+  s_dc4d63931505f4::t_8f0f76d07a56ff 287-290
+  s_dc4d63931505f4::t_9e002f4582c177 299-302,304
+  s_dc4d63931505f4::t_dd8b4e5189d4ae 163-172,176-177,182-184,239-240
+  s_dc4d63931505f4::t_3f65ce96b13ae4 209
+docs/social/design/card-level-chart.html
+  s_dc4d63931505f4::t_0107ef9d5a0b5c 1-25,27-29,31-37,39,41-45
+  s_dc4d63931505f4::t_ad77ff3b737b78 38,40
+  s_dc4d63931505f4::t_e3f1b91fda4b77 30
+  s_dc4d63931505f4::t_dd8b4e5189d4ae 26
+docs/social/design/README.md
+  s_dc4d63931505f4::t_dd8b4e5189d4ae 70
+  s_dc4d63931505f4::t_9e002f4582c177 32,55-69,71-106
+  s_dc4d63931505f4::t_12bea3aa8ca44d 107
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d1d705c5dbef28eaea3af4f8adf2584364bdc4b7",
+  "prompts": {},
+  "sessions": {
+    "s_dc4d63931505f4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b467206-14cd-488d-99a6-6b1c0d985a50",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
