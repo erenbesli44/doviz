@@ -1,0 +1,24 @@
+docs/research/2026-11-05-youtube-channel-candidates.md
+  s_61d47f1aa62b24::t_f8c75876a30f9b 1-93
+docs/social/x-playbook.md
+  s_61d47f1aa62b24::t_973c446859aa19 138-139
+  s_61d47f1aa62b24::t_390c2c7dd0675f 253-295
+  s_61d47f1aa62b24::t_b0471d3fad9aa1 110-114
+  s_61d47f1aa62b24::t_c5064462970700 324
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "63cce863f2ab147f1b697b0b0040faf78dbb05b4",
+  "prompts": {},
+  "sessions": {
+    "s_61d47f1aa62b24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b75f3865-4c0c-4fa6-a37e-95ce777b6f2a",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
