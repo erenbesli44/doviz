@@ -326,6 +326,7 @@ repeatedly. These violate X rules and the brand.
 | Corrections needed | run log | quality guard |
 | A vs B (only once median ≥ 100 views) | X post views + GA4 by `utm_campaign` | §3.1a |
 | Per post at 48 h: impressions, engagements, link clicks, profile visits, video views | post analytics view (§3.5 item 3), run file `## Analytics 48 h` | lead-line and media comparisons |
+| GA4 weekly: X sessions (`x / social` + `t.co`), per campaign, per day vs post count | GA4 read in the owner's Chrome every Friday (08:30 routine; from 2026-11-07), run file `## GA4 — X (week)` | visits, not views, decide formats |
 | Weekly roundup clicks | GA4 `weekly_article` | keep or drop the format |
 
 Engagement alone is not success (a heated post can be wrong). Judge formats on clicks + returning
