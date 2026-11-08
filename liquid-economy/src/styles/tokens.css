@@ -1,9 +1,10 @@
 /*
  * Design tokens — Döviz Veri (reading-first editorial system)
  *
- * One palette, two themes. Every text/background pair below is verified
- * WCAG AA (>= 4.5:1) in both themes. Saturated color is reserved for the
- * accent and for market direction; everything else is ink on paper.
+ * One light palette (owner decision 2026-11-08: light only, no dark theme).
+ * Every text/background pair below is verified WCAG AA (>= 4.5:1). Saturated
+ * color is reserved for the accent and for market direction; everything else
+ * is ink on paper.
  */
 
 :root {
@@ -56,35 +57,7 @@
   --t-hover: 120ms ease-out;
   --t-bar:   240ms ease-out;
 
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg:           #111214;
-    --surface:      #18191C;
-    --surface-2:    #212327;
-    --border:       #2C2E34;
-    --rule:         #ECEAE4;
-
-    --text:         #ECEAE4;
-    --text-muted:   #A6AAB1;
-    --text-subtle:  #8E939B;
-
-    --accent:       #9DB4F0;
-    --on-accent:    #111214;
-    --accent-soft:  rgba(157, 180, 240, 0.12);
-    --focus-ring:   #9DB4F0;
-
-    --bull:         #4CC38A;
-    --bull-bg:      #10291C;
-    --bear:         #F0776B;
-    --bear-bg:      #2E1512;
-    --neutral:      #A8AEB8;
-    --neutral-bg:   #212327;
-    --warn:         #E5B454;
-    --warn-bg:      #2B2210;
-  }
+  color-scheme: light;
 }
 
 /* ─── Type utilities (legacy) ─────────────────────────── */
