@@ -2,9 +2,10 @@
  * SymbolDetail — /piyasa/:slug  (slug = topic_key: dolar-tl, bist, altin, …)
  *
  * "Dolar/TL: kim ne bekliyor?" — a one-line verdict over the shared counting
- * window, then one row per commentator with their latest clearly stated view,
- * what they said, a link to the video moment, and the view they held before
- * it. Views older than the window are listed below and not counted.
+ * window, then one section per camp (up, down, flat) with one row per
+ * commentator: their latest clearly stated view, what they said, a link to the
+ * video moment, and the view they held before it. Changes of view lead each
+ * camp. Views older than the window are listed below and not counted.
  */
 
 import { useMemo } from 'react';
@@ -20,7 +21,7 @@ import { PriceLine } from '../components/views/PriceLine';
 import { PersonBar, TallyLine, VerdictText } from '../components/views/Verdict';
 import {
   INSTRUMENTS, VIEW_WINDOW_DAYS, instrumentLabel, inWindow,
-  personViews, profileHref, quoteOf, type PersonView,
+  personViews, profileHref, quoteOf, type Direction, type PersonView,
 } from '../lib/views';
 
 const DAYS = 365; // history, so the previous view and older views can be shown
@@ -69,6 +70,36 @@ function ViewList({ views, channels, past = false }: { views: PersonView[]; chan
         />
       ))}
     </ul>
+  );
+}
+
+const CAMPS: { direction: Direction; title: string }[] = [
+  { direction: 'up', title: 'Yükseliş bekleyenler' },
+  { direction: 'down', title: 'Düşüş bekleyenler' },
+  { direction: 'flat', title: 'Yatay seyir bekleyenler' },
+];
+
+/** One section per direction present; changed views first, date order kept within each group (stable sort). */
+function CampSections({ views, channels }: { views: PersonView[]; channels: { name: string; slug: string }[] }) {
+  return (
+    <div className="space-y-8">
+      {CAMPS.map(({ direction, title }) => {
+        const camp = views
+          .filter((v) => v.current.direction === direction)
+          .sort((a, b) => Number(b.changed) - Number(a.changed));
+        if (camp.length === 0) return null;
+        return (
+          <section key={direction} aria-labelledby={`kamp-${direction}`}>
+            <div className="section-head">
+              <h2 id={`kamp-${direction}`}>{title} ({camp.length})</h2>
+            </div>
+            <div className="mt-3 rounded-[var(--r-hero)] border border-border bg-surface px-4 md:px-5">
+              <ViewList views={camp} channels={channels} />
+            </div>
+          </section>
+        );
+      })}
+    </div>
   );
 }
 
@@ -143,11 +174,7 @@ export default function SymbolDetail() {
         <p className="py-3 text-[15px] text-text-muted">Son {VIEW_WINDOW_DAYS} günde {label} için net yön belirten olmadı.</p>
       )}
 
-      {status === 'success' && list.length > 0 && (
-        <div className="rounded-[var(--r-hero)] border border-border bg-surface px-4 md:px-5">
-          <ViewList views={list} channels={channels} />
-        </div>
-      )}
+      {status === 'success' && list.length > 0 && <CampSections views={list} channels={channels} />}
 
       {status === 'success' && older.length > 0 && (
         <section aria-labelledby="eski-gorusler" className="mt-10">

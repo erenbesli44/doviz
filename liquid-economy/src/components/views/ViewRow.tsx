@@ -2,12 +2,14 @@
  * ViewRow — one person's view on one instrument.
  *
  *   [avatar] Name            ↑ Yükseliş bekliyor · 9 Eki · yıl sonuna kadar
- *            "short excerpt of what they said"      Videoda izle 8:46
- *            Önceki görüş: ↓ Düşüş · 22 Eyl · Görüşünü değiştirdi
+ *            "what they said, clamped to two lines when details can expand it"
+ *            [▶ Videoda izle 8:46]  Önceki görüş: ↓ Düşüş · 22 Eyl · Görüşünü değiştirdi
+ *            › Görüşün tamamı  (opening it un-clamps the quote above)
  */
 
 import { Link } from 'react-router-dom';
 import { ProAvatar } from '../consensus/ProAvatar';
+import Icon from '../ui/Icon';
 import { DirectionChip } from './DirectionChip';
 import { ViewDetails, type ViewDetailsProps } from './ViewDetails';
 import { ageLabel, formatClock, formatDate, videoMomentUrl, type Direction } from '../../lib/views';
@@ -58,23 +60,25 @@ export function ViewRow(p: ViewRowProps) {
   const clock = formatClock(p.startSec ?? null);
   const age = p.past ? ageLabel(p.date) : '';
   return (
-    <li className="flex gap-3 border-b border-border py-4 last:border-b-0">
+    <li className="group/row flex gap-3 border-b border-border py-3 last:border-b-0">
       <ProAvatar channelAvatarUrl={p.avatarUrl ?? undefined} name={p.person} size="lg" />
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[15px]">
           {name}
-          <DirectionChip direction={p.direction} past={p.past} />
+          <DirectionChip direction={p.direction} past={p.past} size="md" />
           <span className="text-[13px] text-text-muted">
             {formatDate(p.date)}{age && ` · ${age}`}
           </span>
           {p.horizon && <span className="text-[13px] text-text-muted">· {p.horizon}</span>}
         </div>
+        {/* Clamped only when "Görüşün tamamı" exists; opening it shows the full quote here. */}
         {p.quote && (
-          <p className={`mt-1.5 mb-0 font-serif text-[16px] leading-6 ${p.past ? 'text-text-muted' : 'text-text'}`}>“{p.quote}”</p>
+          <p className={`mt-1 mb-0 font-serif text-[16px] leading-6 ${p.details ? 'line-clamp-2 group-has-[details[open]]/row:line-clamp-none' : ''} ${p.past ? 'text-text-muted' : 'text-text'}`}>“{p.quote}”</p>
         )}
-        <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
+        <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
           {p.videoUrl && (
-            <a href={videoMomentUrl(p.videoUrl, p.startSec ?? null)} data-person={p.person} target="_blank" rel="noopener noreferrer" className="link no-underline hover:underline">
+            <a href={videoMomentUrl(p.videoUrl, p.startSec ?? null)} data-person={p.person} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1.5 rounded-[var(--r-chip)] border border-border px-3 font-semibold text-accent no-underline hover:bg-surface-2 md:min-h-8">
+              <Icon name="play" size={14} />
               Videoda izle{clock ? ` ${clock}` : ''}
             </a>
           )}
