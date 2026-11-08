@@ -1,0 +1,24 @@
+liquid-economy/src/styles/tokens.css
+  s_05ebb3f8c2e19e::t_80a84bedbe7949 5-7
+  s_05ebb3f8c2e19e::t_d3ab4cb8a77090 4,60
+liquid-economy/index.html
+  s_05ebb3f8c2e19e::t_d3ab4cb8a77090 7-8
+docs/product.md
+  s_05ebb3f8c2e19e::t_64f4d9f964a606 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "41faec199a87c0f7377d90f7d7184afaf594cc24",
+  "prompts": {},
+  "sessions": {
+    "s_05ebb3f8c2e19e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e506a83d-6508-4f82-bb00-6649b3f78a9d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
