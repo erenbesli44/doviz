@@ -1,0 +1,21 @@
+docs/agent-runs/open-items.md
+  s_05ebb3f8c2e19e::t_080104cfca07e8 36-41
+docs/research/2026-11-08-ux-critique.md
+  s_05ebb3f8c2e19e::t_1a390ace4d94e9 1-55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6076f7a2fbb531dd4e3b336d2b713a2a1383723b",
+  "prompts": {},
+  "sessions": {
+    "s_05ebb3f8c2e19e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e506a83d-6508-4f82-bb00-6649b3f78a9d",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
