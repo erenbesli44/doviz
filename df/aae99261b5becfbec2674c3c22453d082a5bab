@@ -1,0 +1,23 @@
+liquid-economy/src/components/views/DirectionChip.tsx
+  s_05ebb3f8c2e19e::t_3480a6883aebb7 14-23,26
+liquid-economy/src/components/views/ViewRow.tsx
+  s_05ebb3f8c2e19e::t_c0653ce886eed7 5-7,12,63,68,74,76,78,80-81
+liquid-economy/src/pages/SymbolDetail.tsx
+  s_05ebb3f8c2e19e::t_f50405c45bc29f 5-8,24,76-105,177
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dfaae99261b5becfbec2674c3c22453d082a5bab",
+  "prompts": {},
+  "sessions": {
+    "s_05ebb3f8c2e19e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e506a83d-6508-4f82-bb00-6649b3f78a9d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
