@@ -1,0 +1,21 @@
+docs/social/x-playbook.md
+  s_61d47f1aa62b24::t_e0d124239b5c99 332-333
+  s_61d47f1aa62b24::t_0c5af0ce8a0b48 299-319
+  s_61d47f1aa62b24::t_8d27c1300c1e5c 30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b3705a8ee5a7473e6c804c95c1da083f2b28d872",
+  "prompts": {},
+  "sessions": {
+    "s_61d47f1aa62b24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b75f3865-4c0c-4fa6-a37e-95ce777b6f2a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
