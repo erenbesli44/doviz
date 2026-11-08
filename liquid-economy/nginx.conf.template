@@ -96,7 +96,10 @@ server {
     }
 
     # ── SPA fallback ────────────────────────────────────────────────────────
+    # index.html names the hashed bundle, so browsers must revalidate it
+    # (ETag → 304) or they keep the previous release after a deploy (OI-040).
     location / {
+        add_header Cache-Control          "no-cache"                      always;
         add_header X-Content-Type-Options "nosniff"                       always;
         add_header X-Frame-Options        "SAMEORIGIN"                    always;
         add_header Referrer-Policy        "strict-origin-when-cross-origin" always;
