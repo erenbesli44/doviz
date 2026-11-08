@@ -7,6 +7,7 @@
  * Native <details> keeps it keyboard- and screen-reader-friendly with no state.
  */
 
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { cleanSummary, formatClock, videoMomentUrl } from '../../lib/views';
 
@@ -20,15 +21,17 @@ export interface ViewDetailsProps {
   compact?: boolean;
   /** the row above already links to the video moment */
   hideVideoLink?: boolean;
+  /** extra context shown first when opened (e.g. the previous view of an unchanged row) */
+  children?: ReactNode;
 }
 
 const MAX_LEVELS = 6;
 
-export function ViewDetails({ summary, keyLevels, horizon, videoUrl, startSec, storyHref, compact, hideVideoLink }: ViewDetailsProps) {
+export function ViewDetails({ summary, keyLevels, horizon, videoUrl, startSec, storyHref, compact, hideVideoLink, children }: ViewDetailsProps) {
   const text = cleanSummary(summary);
   const levels = (keyLevels ?? []).filter(Boolean).slice(0, MAX_LEVELS);
   const clock = formatClock(startSec ?? null);
-  if (!text && levels.length === 0 && !horizon && !storyHref) return null;
+  if (!text && levels.length === 0 && !horizon && !storyHref && !children) return null;
 
   return (
     <details className="group/details mt-1.5">
@@ -38,6 +41,7 @@ export function ViewDetails({ summary, keyLevels, horizon, videoUrl, startSec, s
       </summary>
 
       <div className={`mt-2 border-l-2 border-border pl-3 ${compact ? 'text-[13px] leading-5' : 'text-[14px] leading-6'} text-text`}>
+        {children && <div className="mb-2 text-[13px]">{children}</div>}
         {text && <p className="m-0">{text}</p>}
 
         {(levels.length > 0 || horizon) && (

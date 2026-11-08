@@ -4,7 +4,7 @@
  *   [avatar] Name            ↑ Yükseliş bekliyor · 9 Eki · yıl sonuna kadar
  *            "what they said, clamped to two lines when details can expand it"
  *            [▶ Videoda izle 8:46]  Önceki görüş: ↓ Düşüş · 22 Eyl · Görüşünü değiştirdi
- *            › Görüşün tamamı  (opening it un-clamps the quote above)
+ *            › Görüşün tamamı  (un-clamps the quote; holds the previous view when unchanged)
  */
 
 import { Link } from 'react-router-dom';
@@ -59,6 +59,22 @@ export function ViewRow(p: ViewRowProps) {
 
   const clock = formatClock(p.startSec ?? null);
   const age = p.past ? ageLabel(p.date) : '';
+  const previousLine = p.previous !== undefined && (
+    <span className="inline-flex flex-wrap items-center gap-2 text-text-muted">
+      Önceki görüş:
+      {p.previous ? (
+        <>
+          <DirectionChip direction={p.previous.direction} short past={p.past} />
+          <span>{formatDate(p.previous.date)}</span>
+          <ChangeTag changed={!!p.changed} past={p.past} />
+        </>
+      ) : (
+        <span className="text-text-subtle">ilk görüşü</span>
+      )}
+    </span>
+  );
+  // A change of view stays in the row; unchanged and first views move into "Görüşün tamamı".
+  const showPrevious = !!p.changed || !p.details;
   return (
     <li className="group/row flex gap-3 border-b border-border py-3 last:border-b-0">
       <ProAvatar channelAvatarUrl={p.avatarUrl ?? undefined} name={p.person} size="lg" />
@@ -83,22 +99,13 @@ export function ViewRow(p: ViewRowProps) {
             </a>
           )}
           {p.storyHref && !p.details && <Link to={p.storyHref} className="link no-underline hover:underline">Özeti oku</Link>}
-          {p.previous !== undefined && (
-            <span className="inline-flex flex-wrap items-center gap-2 text-text-muted">
-              Önceki görüş:
-              {p.previous ? (
-                <>
-                  <DirectionChip direction={p.previous.direction} short past={p.past} />
-                  <span>{formatDate(p.previous.date)}</span>
-                  <ChangeTag changed={!!p.changed} past={p.past} />
-                </>
-              ) : (
-                <span className="text-text-subtle">ilk görüşü</span>
-              )}
-            </span>
-          )}
+          {showPrevious && previousLine}
         </div>
-        {p.details && <ViewDetails {...p.details} hideVideoLink={!!p.videoUrl} />}
+        {p.details && (
+          <ViewDetails {...p.details} hideVideoLink={!!p.videoUrl}>
+            {!showPrevious && previousLine}
+          </ViewDetails>
+        )}
       </div>
     </li>
   );
