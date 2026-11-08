@@ -27,7 +27,7 @@ standards). Profile, formats and templates: `x-account-kit.md`, `launch-posts.md
    post with replies under it may not be editable either) for a typo, a broken or wrong link, or a wrong UTM tag. Never edit the
    person, instrument, direction, quote words, a number or a date: those get the correction reply,
    because edit history is public and a silent change of a view would mislead. Log every edit with its
-   reason under "Executed" in the run file.
+   reason under "Executed" in the run file. A missing hashtag is not an edit reason (§3.5 item 7).
 
 ## 3. Content mix (per week, starting hypothesis — adjust from data)
 | Format | Share | Notes |
@@ -296,6 +296,27 @@ Rules from 2026-11-07:
    history returns no points, so altın charts carry only ons/USD levels). Social-designer owns it;
    the owner approves each chart like a card. First use: the Friday review picks one card-fallback
    post per week to run as a chart instead, for 4 weeks, compared on the 48 h rows.
+7. **One topical hashtag on every instrument post** (owner 2026-11-08). What a hashtag does on X in
+   2026: it makes the post findable in X search and the tag's feed; it adds little or no reach in For
+   You, and 3+ tags read as spam (X help centre: ≤ 2 recommended; marketing studies: 3+ lower reach).
+   So it is a cheap search entry, not a growth lever: the lever stays the lead line, the clip and the
+   commentator's own audience (replies §4, mentions on view changes §4).
+   - **Map** (instrument key → tag): dolar-tl `#dolar` · altin `#altın` · gumus `#gümüş` · bist
+     `#borsa` · bitcoin `#bitcoin` · petrol-enerji `#petrol` · us-markets: the index the speaker names
+     (`#Nasdaq` or `#SP500`), none if no index is named. Main-idea and Kayıt Dışı posts: the tag of
+     the one instrument the main idea is about, none when it covers several or none. Line-up and
+     report posts: the instrument's tag.
+   - **Place**: its own last line after `Yatırım tavsiyesi değildir.` (X indexes the whole text, so
+     the tag needs no space in the first 280 characters, which belong to the lead).
+   - **Never**: a second tag; trending or unrelated tags to ride their traffic (X platform-manipulation
+     rules); a tag inside a sentence; a tag in replies under commentators' posts or in "Görüşün
+     tamamı" replies; a tag that carries a direction (#dolaryükseliyor). No edit just to add a
+     forgotten tag (an edit changes the status ID and splits the 48 h analytics row); it goes into
+     the draft.
+   - **Measure**: the 48 h row gets a `tag` cell. X does not split impressions by source, so the
+     tag cannot be credited directly. The Friday review of 2026-11-20 compares median impressions
+     of tagged posts (from 9 Nov) with the 21 untagged rows of 4–6 Nov, by clip/card, and keeps or
+     drops the rule. Keep it if impressions do not fall; the tag costs nothing otherwise.
 
 ## 4. Natural growth (no aggressive tactics)
 Allowed, with daily limits:
@@ -308,7 +329,8 @@ Allowed, with daily limits:
 - **Quote posts** ≤ 1/day, only with added data.
 - **Lists**: maintain public X Lists "Takip edilen yorumcular" and "Veri kaynakları".
 - **Mentions**: may mention a commentator when their view changed; never tag people in bulk.
-- **Hashtags**: ≤ 1 per post (#dolar, #altın, #borsa), only when topical.
+- **Hashtags**: exactly 1 topical hashtag per post when the post names an instrument (§3.5 item 7),
+  never more than 1.
 - **Site loop**: link the X profile from dovizveri.com (footer) — needs owner/dev decision.
 
 Forbidden: buying followers or engagement, follow/unfollow churn, DMs to strangers, automated
