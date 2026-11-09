@@ -1,0 +1,25 @@
+docs/research/2026-11-09-tcmb-digests-review-batch.md
+  s_c4902405432a21::t_2ca91833397748 1-331
+INFRASTRUCTURE.md
+  s_c4902405432a21::t_0c6cbcf4f72ac7 229-234
+docs/agent-runs/open-items.md
+  s_c4902405432a21::t_608ef0396ad408 45
+docs/research/2026-11-09-tcmb-blog-explainer-review.md
+  s_c4902405432a21::t_93fd8dbda5f709 3,333-358
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c0011c5f0f282243afeaa25edd76d5c6e87d5407",
+  "prompts": {},
+  "sessions": {
+    "s_c4902405432a21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a45eaaa3-ecac-4c3f-82b0-f760b2a6c7d6",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
