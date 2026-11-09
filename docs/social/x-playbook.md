@@ -318,6 +318,35 @@ Rules from 2026-11-07:
      of tagged posts (from 9 Nov) with the 21 untagged rows of 4–6 Nov, by clip/card, and keeps or
      drops the rule. Keep it if impressions do not fall; the tag costs nothing otherwise.
 
+## 3.6 Research digests: "Araştırma özeti" (owner chose X-first, 2026-11-09; draft rules)
+Source: the tracker's `research_watch` job (OI-041), first only the TCMB blog *Merkezin Güncesi*.
+Data: `GET /api/v1/research/digests` once the API is deployed (until then the tracker review queue
+`/jobs/research-watch/items`). Only digests with `review_status` `reviewed` (or `auto`) are posted;
+the owner reviews each digest against the post before it is drafted, and approves the post (§6).
+The digest is our AI-assisted summary of a staff analysis: it is **not a view**, never counted,
+and never "TCMB bekliyor": the blog's own disclaimer goes on every post.
+- **Line 1:** the digest `headline`, without quote marks (it is our sentence, like a main-idea
+  post, §3.1b). *Assumption pending the owner's answer (review doc §7 item 3): the alternative is
+  the authors' verbatim `quote` in quote marks.*
+- **Line 2 (bold):** `Merkezin Güncesi · <Kategori> · Araştırma özeti`.
+- Then `why_now`; `Ne bulmuşlar?` with the `findings` as `•` lines; `Ne anlama geliyor?` +
+  `so_what`; `Ne demiyor?` + `not_said`; at most one term line (`Terim: X = …`) if the post needs it.
+- **Source line:** authors · `d Ay yyyy` · link to the blog post; the site link with
+  `utm_campaign=research_digest` only after the site section exists (Phase 3).
+- **Closing lines:** `Yazarların görüşüdür; TCMB'nin resmi görüşü değildir.` then
+  `Yatırım tavsiyesi değildir.`; the §3.5 item 7 hashtag only when `topics` holds exactly one
+  instrument, otherwise none.
+- **Media:** no TCMB chart images. A card variant (headline + up to 3 numbers + "Merkezin Güncesi"
+  badge, no direction colour) is the social-designer's to build; until then text only. No clip.
+- **Reach:** when `@tcmbblog` has announced the post, quote-post that announcement instead of a
+  cold post.
+- **Spacing:** §3.5 item 2 applies; these posts are not time-bound, so they suit the morning slot
+  (§3.5 item 4).
+- **Measure:** 48 h row with `format = research_digest`; after 4 posts compare impressions and link
+  clicks with the main-idea posts' median. Keep the format if neither is below that median.
+- The social-manager role file does not read the research endpoint yet; adding it needs the
+  owner's approval (as with the OI-020 role edit).
+
 ## 4. Natural growth (no aggressive tactics)
 Allowed, with daily limits:
 - **Follow** ≤ 10 relevant accounts/day: tracked commentators, their channels, data sources

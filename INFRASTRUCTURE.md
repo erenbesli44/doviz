@@ -219,6 +219,25 @@ curl -sSI "https://dovizveri.com/$(curl -sS https://dovizveri.com/ | grep -oE 'a
 Note: routes that exist only in uncommitted local files will 404 in production.
 Deployment follows `main`, not your working tree.
 
+**Tracker scheduled task: research watch (OI-041, added 2026-11-09)** — plain-language digests
+of TCMB blog posts. Coolify → tracker app → Scheduled Tasks → New:
+
+| Field | Value |
+|---|---|
+| Name | `research-watch` |
+| Command | `python -m src.jobs.research_watch.runner` |
+| Frequency | `0 7 * * 1-5` (07:00 UTC = 10:00 TRT, weekdays; every 2026 post landed on a weekday) |
+| Container | the tracker API container |
+
+The job fetches tcmbblog.org **directly, never through a proxy** (owner rule; the HTTP client
+ignores proxy env vars), at most 2 runs per UTC day, ~2 requests per new post plus one MiniMax
+call (~7k tokens). Exit code 0 also for "skipped: daily limit". Check it with
+`GET /jobs/research-watch/runs` on the tracker (API key). If the first run from the server shows
+`HTTPStatusError` / `ConnectError` for tcmbblog.org while it works from a laptop, the F5 front
+door is refusing the datacenter IP: try the mirror (`www.tcmb.gov.tr/wps/wcm/connect/blog/tr/...`
+in `config/watched_research.yaml`), not a proxy. Without the Coolify terminal, a run or backfill
+can be started with `POST /jobs/research-watch/run[?since=YYYY-MM-DD&max_items=N]` (202).
+
 ---
 
 ## 6. Incident playbook
