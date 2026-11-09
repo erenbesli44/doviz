@@ -226,8 +226,12 @@ of TCMB blog posts. Coolify → tracker app → Scheduled Tasks → New:
 |---|---|
 | Name | `research-watch` |
 | Command | `python -m src.jobs.research_watch.runner` |
-| Frequency | `0 7 * * 1-5` (07:00 UTC = 10:00 TRT, weekdays; every 2026 post landed on a weekday) |
-| Container | the tracker API container |
+| Frequency | `0 8 * * 1-5` (server timezone UTC: 11:00 TRT, weekdays; one hour after `youtube-watch-daily` at 07:00 UTC) |
+| Timeout | 900 s |
+| Container | the tracker API container (default) |
+
+**Created 2026-11-09 09:1x UTC and enabled** (via the Livewire `scheduled-task.add` call, the UI
+buttons being dead).
 
 The job fetches tcmbblog.org **directly, never through a proxy** (owner rule; the HTTP client
 ignores proxy env vars), at most 2 runs per UTC day, ~2 requests per new post plus one MiniMax

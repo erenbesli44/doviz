@@ -1,6 +1,6 @@
 # Review: plain-language research digests ("TCMB blogu ne buldu?") for dovizveri.com and @dovizveri
 
-Date: 2026-11-09 · Author: Claude (Lead session) at the owner's request · Status: **owner chose option A the same day; Phase 1 built on branches, not deployed (§9)**
+Date: 2026-11-09 · Author: Claude (Lead session) at the owner's request · Status: **option A chosen; Phase 1 merged, deployed and scheduled 2026-11-09; 12 digests await the owner's review (§10)**
 Registered as **OI-041** (needs-owner). Companion precedent: the broker pilot (`2026-10-26-broker-reports-review.md`, OI-027), whose
 `broker_watch` job in the tracker is the pattern this plan reuses.
 
@@ -329,4 +329,30 @@ Owner: "the blog post extraction is new schedule task in coolify" · "pipeline +
 > Ünal Seven, Kadir Gürci · 4 Kas 2026 · <blog link>
 > Yazarların görüşüdür; TCMB'nin resmi görüşü değildir.
 > Yatırım tavsiyesi değildir.
+
+## 10. Deployed (2026-11-09, owner: "push and merge and deploy not need pr")
+
+| Step | Evidence |
+|---|---|
+| tracker `main` → `b6babf7` (fast-forward, pushed) | Coolify deployment `jt7s5wvdjidrkw40e8kbojkr`: "Rolling update completed" 09:05:34 UTC; restart marker `llm_usage_since_start.since` 09:05:35; `/research/digests` 404 → 200 `{"count":0}`; `/jobs/research-watch/runs` 200; `/brokers/` still 200 |
+| backfill 2026 from production | `POST /jobs/research-watch/run?since=2026-01-01&max_items=12` → run 1, 09:06–09:10 UTC, `success`: items_seen 12, items_new 12, digests_ok 10, digests_flagged 2, errors 0. **Phase 0 item 1 passed:** tcmbblog.org answers the Hetzner IP directly, no proxy |
+| doviz `main` → `14ac512` (rebased, fast-forward, pushed) | Coolify deployment `08irqmtysv4lbgddxgppqsx5` (doviz-api): "Rolling update completed" 09:08:05 UTC. During the roll the public route alternated 404/200 (old and new container both live) for ~1 min, then 5/5 × 200; `https://dovizveri.com/api/v1/research/digests` → `{"count":0,"items":[]}` (nothing reviewed yet, as intended); `/api/v1/brokers`, `/api/v1/news/latest`, `/healthz` 200 |
+| Coolify scheduled task | `research-watch` on tracker-api: `python -m src.jobs.research_watch.runner`, `0 8 * * 1-5` (UTC), timeout 900 s, enabled. Moved from the planned 07:00 to 08:00 UTC to stay clear of `youtube-watch-daily` (07:00 UTC) |
+
+The two flagged digests: #7 (Eşel mobil) quotes a sentence without its opening words, a real
+problem; #4 (Yeni Kiracı Kira Endeksi) writes "düzey-2 / düzey-1" where the post writes the levels
+differently, probably a false alarm. Review sheet: `docs/research/2026-11-09-tcmb-digests-review-batch.md`.
+
+Side effect to note: the first push of doviz `main` also published six local X-watcher run commits
+of 2026-11-08 (`6379a27`…`32c1634`, docs only) that had not been pushed yet; a fast-forward,
+nothing overwritten.
+
+**Post-release measurement plan**
+
+| Metric | Method | When | Who |
+|---|---|---|---|
+| Job health | `GET /jobs/research-watch/runs`: one run per weekday, `success`, 0 errors | daily tech check from 2026-11-10 | reliability-analyst |
+| Detection lag | first-seen run vs `published_at` of the next TCMB post | next post | Lead |
+| Digest accuracy | owner read of batch 1 (criterion G: ≥ 10/12 clean) | this week | owner |
+| X format | 48 h rows `format = research_digest` vs main-idea median | after 4 posts | social-manager |
 
