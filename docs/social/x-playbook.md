@@ -340,6 +340,16 @@ header line.
 4. **Source line:** `Kaynak: Merkezin Güncesi (TCMB blogu), <yazarlar>, <d Ay yyyy>. Yazarların
    görüşüdür.` and the blog link on the next line.
 
+**Reply thread (owner, 2026-11-09):** under the main post, 2–3 short replies, each one insight
+detail on its own topic, posted right after the main post as a thread.
+- One idea per reply, ≤ ~200 characters, one or two sentences, natural tone like the main post.
+- Content comes from what the main post left out: the remaining `findings`, a detail of `so_what`,
+  one `terms` explanation when the word matters, or the authors' limit (`not_said`) as the last
+  reply when it changes how the finding should be read.
+- No link, no hashtag, no "1/3" numbering, no repetition of the main post's numbers.
+- Fewer is better: two good replies beat three thin ones; no reply when the digest has nothing
+  the main post did not already say.
+
 Rules that do not change: every number and claim comes from the reviewed digest (which was checked
 against the post); never "TCMB bekliyor/istiyor", the authors are "TCMB araştırmacıları"; no
 forecast or direction of ours; the first 280 characters (hook + start of paragraph 2) must stand

@@ -17,7 +17,8 @@ curl -X PATCH -H "X-API-Key: $TRACKER_KEY" -H "Content-Type: application/json" \
 
 ## Örnek X paylaşımları (taslak, yayınlanmadı)
 
-Playbook §3.6 biçimi: çarpıcı bulgu → ne araştırılmış → çıkarım → kaynak. Bölüm başlığı yok.
+Playbook §3.6 biçimi: ana paylaşım (çarpıcı bulgu → ne araştırılmış → çıkarım → kaynak, bölüm başlığı yok),
+altında konu konu 2–3 kısa yanıt (her biri tek bir ayrıntı, ≤ ~200 karakter, link ve hashtag yok).
 Her sayı ve iddia ilgili özetten (ve o da yazıdan) geliyor; özet onaylanmadan paylaşılmaz.
 
 ### #12 · Fon tasfiyeleri (4 Kas 2026)
@@ -31,6 +32,12 @@ Her sayı ve iddia ilgili özetten (ve o da yazıdan) geliyor; özet onaylanmada
 > Kaynak: Merkezin Güncesi (TCMB blogu), Ünal Seven ve Kadir Gürci, 4 Kasım 2026. Yazarların görüşüdür.
 > https://tcmbblog.org/wps/wcm/connect/blog/tr/main+menu/analizler/fon_tasfiyeleri_ve_reel_sektor_firma_verileri_ne_soyluyor
 
+Altındaki yanıtlar:
+
+1. Tedarikçiler eklenince tablo biraz büyüyor: satışlarının %5'inden fazlası bu firmalara giden tedarikçiler, toplam istihdamın %1,2'sini oluşturuyor.
+2. Kredi tarafında sorun görünmüyor: bu firmaların kısa vadeli TL kredilerdeki payı artıyor, yani bankalar kredi vermeye devam ediyor.
+3. "Maruziyet" burada şunu ölçüyor: firmanın fondaki parasının, bir yıl içinde nakde dönebilecek varlıklarına oranı.
+
 ### #10 · Deprem bölgesinde kira (2 Eyl 2026)
 
 > Deprem bölgesinde konut teslimleri hızlanınca kira artışları da yavaşlamaya başlamış.
@@ -41,6 +48,11 @@ Her sayı ve iddia ilgili özetten (ve o da yazıdan) geliyor; özet onaylanmada
 >
 > Kaynak: Merkezin Güncesi (TCMB blogu), Ali Arda Dalseçkin, Muhammed Hamza Kayrıcı, Süreyya Güder Köşgeroğlu, 2 Eylül 2026. Yazarların görüşüdür.
 > https://tcmbblog.org/wps/wcm/connect/blog/tr/main+menu/analizler/deprem_bolgesi_konut_arzi_ve_bolgesel_kira_enflasyonu_gelismeleri
+
+Altındaki yanıtlar:
+
+1. Deprem bölgesinin yeni binalardaki payı da arttı: yapı kullanım izinlerinde deprem öncesi ortalama %12 civarındaydı, 2025'te %20'nin üzerine çıktı.
+2. Yavaşlama, konut teslimlerinin hızlandığı 2025'te başlıyor. Göç alan illerde de kira artışı göreli olarak yavaşlıyor.
 
 ### #2 · Hissedilen enflasyon (30 Oca 2026)
 
@@ -53,6 +65,12 @@ Her sayı ve iddia ilgili özetten (ve o da yazıdan) geliyor; özet onaylanmada
 > Kaynak: Merkezin Güncesi (TCMB blogu), Halil İbrahim Korkmaz, Ahmet Bilal Kurtoğlu, Furkan Höçük, 30 Ocak 2026. Yazarların görüşüdür.
 > https://tcmbblog.org/wps/wcm/connect/blog/tr/main+menu/analizler/hanehalki+enflasyon+beklentileri+ve+hissedilen+enflasyon
 
+Altındaki yanıtlar:
+
+1. 12 ay sonraki enflasyonu tahmin etmede en büyük hata payı hanehalkı beklentilerinde.
+2. Beklentiler %5, %10 gibi yuvarlak sayılarda toplanıyor; yazarlar buna yuvarlama etkisi diyor.
+3. Merkez bankası iletişiminin bu farkı kapatıp kapatmayacağı ise yazıda ölçülmüyor.
+
 ### #3 · Yeni TÜFE sepeti (4 Şub 2026)
 
 > TÜFE sepeti 2026'da değişti: hizmetlerin payı 7,4 puan arttı, enerjinin payı 3,2 puan azaldı.
@@ -64,6 +82,10 @@ Her sayı ve iddia ilgili özetten (ve o da yazıdan) geliyor; özet onaylanmada
 > Kaynak: Merkezin Güncesi (TCMB blogu), Dilara Ertuğ ve Nagihan Özlü, 4 Şubat 2026. Yazarların görüşüdür.
 > https://tcmbblog.org/wps/wcm/connect/blog/tr/main+menu/analizler/2026+yili+tuketici+fiyat+endeksindeki+guncellemeler+ve+etkileri
 
+Altındaki yanıtlar:
+
+1. Sepete yeni kalemler girdi: harcama grupları 12'den 13'e çıktı, çevrim içi hizmetler ve elektrikli otomobil şarjı artık ölçülüyor.
+2. Temel malların payı da 3,0 puan azaldı. Yani endekste hizmet fiyatlarının ağırlığı artık daha fazla.
 
 ## Özetler
 
