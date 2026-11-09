@@ -317,6 +317,14 @@ Rules from 2026-11-07:
      tag cannot be credited directly. The Friday review of 2026-11-20 compares median impressions
      of tagged posts (from 9 Nov) with the 21 untagged rows of 4–6 Nov, by clip/card, and keeps or
      drops the rule. Keep it if impressions do not fall; the tag costs nothing otherwise.
+8. **No URLs in posts** (owner 2026-11-09 ~21:40 TR: "video url ve dovizveri url paylaşmaya gerek
+   yok … bundan sonraki paylaşımlarda bu urller olmasın"). From this date no post or reply carries
+   the YouTube `▶ Videoda m:ss: …&t=` line or the `dovizveri.com/haberler/…?utm_…` line. View posts
+   are: lead quote · header · `<Kanal>, <dd Ay> yayını.` · blank · `Özet: …` · disclaimer · blank ·
+   tag. Main-idea posts: lead · header · source line (Özet stays a reply). The clip label already
+   names the minute. This overrides the 2026-10-29 "video minute link back" rule and the link lines
+   in §3.1a/§3.1b. Research digests (§3.6) keep their TCMB source link unless the owner decides otherwise.
+   Link clicks in the 48 h rows will be 0 by design from 9 Nov 21:49; compare impressions instead.
 
 ## 3.6 Research digests: "Araştırma özeti" (owner chose X-first, 2026-11-09; post shape set by the owner the same day)
 Source: the tracker's `research_watch` job (OI-041), first only the TCMB blog *Merkezin Güncesi*.
