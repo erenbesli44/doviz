@@ -1,0 +1,21 @@
+docs/social/x-playbook.md
+  s_c4902405432a21::t_c5ca1b106d6007 343-352
+docs/research/2026-11-09-tcmb-digests-review-batch.md
+  s_c4902405432a21::t_4f9ed4f1577016 20-21,35-40,52-56,68-73,85-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bfec1726db4a7e8b993d1e944d8fb8f4f2a54951",
+  "prompts": {},
+  "sessions": {
+    "s_c4902405432a21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a45eaaa3-ecac-4c3f-82b0-f760b2a6c7d6",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
