@@ -1,0 +1,45 @@
+docs/social/runs/2026-11-09.md
+  s_61d47f1aa62b24::t_a3d949002cbc63 460-467
+  s_61d47f1aa62b24::t_67fa39c484b4f9 476-487
+  s_1ec340c5d2ba7c::t_6ecb0cd1efe51e 524-529
+  s_61d47f1aa62b24::t_546920794014bd 473-475
+  s_b7c96c7a5a8bfd::t_e5d083f8e92936 502-523
+  s_61d47f1aa62b24::t_ee49ee46701d5a 468-472
+  s_b7c96c7a5a8bfd::t_3f33b64689189b 488-501
+  s_b7c96c7a5a8bfd::t_29da8ed42cac4b 530-545
+docs/social/x-playbook.md
+  s_b7c96c7a5a8bfd::t_37ab701b70ef3f 326
+  s_b7c96c7a5a8bfd::t_722b3ca9825cb6 320-325,327
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a033d3a187103d0272a8af4ae6cc8038dfd24b66",
+  "prompts": {},
+  "sessions": {
+    "s_1ec340c5d2ba7c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "145feaee-decf-4498-a984-93659eaa099a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_61d47f1aa62b24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b75f3865-4c0c-4fa6-a37e-95ce777b6f2a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_b7c96c7a5a8bfd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4a636379-3f66-437f-961f-96dbb7b0fc62",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
