@@ -325,6 +325,18 @@ Rules from 2026-11-07:
    names the minute. This overrides the 2026-10-29 "video minute link back" rule and the link lines
    in §3.1a/§3.1b. Research digests (§3.6) keep their TCMB source link unless the owner decides otherwise.
    Link clicks in the 48 h rows will be 0 by design from 9 Nov 21:49; compare impressions instead.
+9. **Altın + gümüş in one post** (owner 2026-11-09 ~22:4x TR: "altın ve gümüş yorumları varsa bunları
+   ayrı post olarak değil tek post içerisinde paylaş"). When one video has explicit views of the same
+   person on both altin and gumus, they go out as **one** post, not two (§3.1a "one post per
+   instrument" no longer applies to this pair; other instruments stay separate).
+   - Header: `<Ad> · Altın ve Gümüş · Görüş özeti`. Lead: the single most striking whole sentence
+     from either view (verbatim, as usual).
+   - Body: `Özet:` then `Altın: …` and `Gümüş: …` as two short paragraphs (each from its own row
+     summary, same sentence rules); one `Vade:` per paragraph when present.
+   - Clip: one clip ≤ 60 s; a whole-sentence passage that covers both metals if one exists, else the
+     altın passage (Lead's choice, logged). Tag: `#altın` only (one-tag rule, item 7), unless the
+     owner decides otherwise.
+   - A pair where only one side is explicit stays a single-instrument post.
 
 ## 3.6 Research digests: "Araştırma özeti" (owner chose X-first, 2026-11-09; post shape set by the owner the same day)
 Source: the tracker's `research_watch` job (OI-041), first only the TCMB blog *Merkezin Güncesi*.
