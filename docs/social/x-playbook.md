@@ -318,24 +318,36 @@ Rules from 2026-11-07:
      of tagged posts (from 9 Nov) with the 21 untagged rows of 4–6 Nov, by clip/card, and keeps or
      drops the rule. Keep it if impressions do not fall; the tag costs nothing otherwise.
 
-## 3.6 Research digests: "Araştırma özeti" (owner chose X-first, 2026-11-09; draft rules)
+## 3.6 Research digests: "Araştırma özeti" (owner chose X-first, 2026-11-09; post shape set by the owner the same day)
 Source: the tracker's `research_watch` job (OI-041), first only the TCMB blog *Merkezin Güncesi*.
 Data: `GET /api/v1/research/digests` once the API is deployed (until then the tracker review queue
 `/jobs/research-watch/items`). Only digests with `review_status` `reviewed` (or `auto`) are posted;
 the owner reviews each digest against the post before it is drafted, and approves the post (§6).
 The digest is our AI-assisted summary of a staff analysis: it is **not a view**, never counted,
-and never "TCMB bekliyor": the blog's own disclaimer goes on every post.
-- **Line 1:** the digest `headline`, without quote marks (it is our sentence, like a main-idea
-  post, §3.1b). *Assumption pending the owner's answer (review doc §7 item 3): the alternative is
-  the authors' verbatim `quote` in quote marks.*
-- **Line 2 (bold):** `Merkezin Güncesi · <Kategori> · Araştırma özeti`.
-- Then `why_now`; `Ne bulmuşlar?` with the `findings` as `•` lines; `Ne anlama geliyor?` +
-  `so_what`; `Ne demiyor?` + `not_said`; at most one term line (`Terim: X = …`) if the post needs it.
-- **Source line:** authors · `d Ay yyyy` · link to the blog post; the site link with
-  `utm_campaign=research_digest` only after the site section exists (Phase 3).
-- **Closing lines:** `Yazarların görüşüdür; TCMB'nin resmi görüşü değildir.` then
-  `Yatırım tavsiyesi değildir.`; the §3.5 item 7 hashtag only when `topics` holds exactly one
-  instrument, otherwise none.
+and never "TCMB bekliyor": the blog's own disclaimer ("Yazarların görüşüdür") goes on every post.
+**Post shape (owner, 2026-11-09: "doğal bir paylaşım olmalı", no "Ne anlama geliyor / Dayanak"
+labels).** A short, natural text of three small paragraphs plus a source line, ~400–650 characters,
+written in our own plain Turkish from the reviewed digest. No section labels, no bullets, no bold
+header line.
+1. **Hook (1–2 sentences):** the most striking finding, with its number, as a plain statement.
+   Not a question bait, not "şok", no emoji. It must be true on its own (from `headline` /
+   `findings`).
+2. **What was studied (1–2 sentences):** "TCMB araştırmacıları … bakmış/incelemiş" (`why_now`,
+   `basis` in everyday words) and the one or two numbers that carry the finding (`findings`).
+3. **Takeaway (1–2 sentences):** what it means for a reader, in plain words (`so_what`); add the
+   authors' own limit in half a sentence only when leaving it out would over-sell the result
+   (`not_said`), e.g. "toplam etkiyi ise ölçmüyorlar".
+4. **Source line:** `Kaynak: Merkezin Güncesi (TCMB blogu), <yazarlar>, <d Ay yyyy>. Yazarların
+   görüşüdür.` and the blog link on the next line.
+
+Rules that do not change: every number and claim comes from the reviewed digest (which was checked
+against the post); never "TCMB bekliyor/istiyor", the authors are "TCMB araştırmacıları"; no
+forecast or direction of ours; the first 280 characters (hook + start of paragraph 2) must stand
+alone. `Yatırım tavsiyesi değildir.` is added only when the post names an instrument we cover
+(dolar, altın, borsa, faiz…), together with that instrument's one hashtag (§3.5 item 7); otherwise
+no hashtag. Our site link (`utm_campaign=research_digest`) is added once the site section exists.
+Samples written from the 2026-11-09 batch: `docs/research/2026-11-09-tcmb-digests-review-batch.md`
+(top section).
 - **Media:** no TCMB chart images. A card variant (headline + up to 3 numbers + "Merkezin Güncesi"
   badge, no direction colour) is the social-designer's to build; until then text only. No clip.
 - **Reach:** when `@tcmbblog` has announced the post, quote-post that announcement instead of a

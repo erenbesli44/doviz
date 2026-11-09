@@ -15,6 +15,58 @@ curl -X PATCH -H "X-API-Key: $TRACKER_KEY" -H "Content-Type: application/json" \
 
 `rejected` hides it for good; `POST /jobs/research-watch/items/<id>/redigest` generates it again.
 
+## Örnek X paylaşımları (taslak, yayınlanmadı)
+
+Playbook §3.6 biçimi: çarpıcı bulgu → ne araştırılmış → çıkarım → kaynak. Bölüm başlığı yok.
+Her sayı ve iddia ilgili özetten (ve o da yazıdan) geliyor; özet onaylanmadan paylaşılmaz.
+
+### #12 · Fon tasfiyeleri (4 Kas 2026)
+
+> Tasfiyeye alınan fonlarda parası kalan firmaların ekonomideki payı küçük: reel sektör aktiflerinin %1,2'si, istihdamın %0,6'sı.
+>
+> TCMB araştırmacıları SPK kararıyla tasfiyeye alınan fonlarda yatırımı olan firmalara bakmış. Yaklaşık 3 bin firmanın bu fonlarda toplam 116 milyar TL'si var.
+>
+> Kısacası doğrudan etki sınırlı görünüyor ve bu firmaların krediye erişimi sürüyor. Yazarlar fon sorununun ekonomiye toplam etkisini ise ölçmediklerini vurguluyor.
+>
+> Kaynak: Merkezin Güncesi (TCMB blogu), Ünal Seven ve Kadir Gürci, 4 Kasım 2026. Yazarların görüşüdür.
+> https://tcmbblog.org/wps/wcm/connect/blog/tr/main+menu/analizler/fon_tasfiyeleri_ve_reel_sektor_firma_verileri_ne_soyluyor
+
+### #10 · Deprem bölgesinde kira (2 Eyl 2026)
+
+> Deprem bölgesinde konut teslimleri hızlanınca kira artışları da yavaşlamaya başlamış.
+>
+> TCMB araştırmacıları kiralık ilan fiyatlarıyla illeri üç grupta karşılaştırmış. TOKİ'nin tamamladığı deprem konutları 2025 başında 201 bindi, yıl sonunda yaklaşık 434 bine çıktı.
+>
+> Çıkarım: konut arzı toparlandıkça kira baskısı hafifliyor. Bu rahatlamanın diğer illere yansıması ise gecikmeli olabilir.
+>
+> Kaynak: Merkezin Güncesi (TCMB blogu), Ali Arda Dalseçkin, Muhammed Hamza Kayrıcı, Süreyya Güder Köşgeroğlu, 2 Eylül 2026. Yazarların görüşüdür.
+> https://tcmbblog.org/wps/wcm/connect/blog/tr/main+menu/analizler/deprem_bolgesi_konut_arzi_ve_bolgesel_kira_enflasyonu_gelismeleri
+
+### #2 · Hissedilen enflasyon (30 Oca 2026)
+
+> Enflasyonun düşük olduğu yıllarda bile hanehalkının beklentisi, gerçekleşen enflasyonun ortalama 10 puan üzerinde kalıyor.
+>
+> TCMB araştırmacıları hanehalkı beklentilerini hissedilen enflasyonla ve diğer ülkelerle karşılaştırmış. Birçok ülkede enflasyon %2 civarındayken bile hanehalkı %10 düzeyinde enflasyon bekliyor.
+>
+> Yani bu Türkiye'ye özgü değil: algıyı şekillendiren kalemlerin başında gıda, enerji ve kira geliyor.
+>
+> Kaynak: Merkezin Güncesi (TCMB blogu), Halil İbrahim Korkmaz, Ahmet Bilal Kurtoğlu, Furkan Höçük, 30 Ocak 2026. Yazarların görüşüdür.
+> https://tcmbblog.org/wps/wcm/connect/blog/tr/main+menu/analizler/hanehalki+enflasyon+beklentileri+ve+hissedilen+enflasyon
+
+### #3 · Yeni TÜFE sepeti (4 Şub 2026)
+
+> TÜFE sepeti 2026'da değişti: hizmetlerin payı 7,4 puan arttı, enerjinin payı 3,2 puan azaldı.
+>
+> TCMB araştırmacıları yeni ağırlıkların enflasyon ölçümüne etkisini hesaplamış. Eski ve yeni ağırlıklarla karşılaştırınca yeni sepet Ocak 2026 enflasyonunu yaklaşık 0,1 puan aşağı çekmiş.
+>
+> Kısacası sepet değişikliğinin ocak rakamına etkisi sınırlı kaldı. Yıllık enflasyona etkisi ise bu çalışmada ölçülmüyor.
+>
+> Kaynak: Merkezin Güncesi (TCMB blogu), Dilara Ertuğ ve Nagihan Özlü, 4 Şubat 2026. Yazarların görüşüdür.
+> https://tcmbblog.org/wps/wcm/connect/blog/tr/main+menu/analizler/2026+yili+tuketici+fiyat+endeksindeki+guncellemeler+ve+etkileri
+
+
+## Özetler
+
 | id | date | checks | headline |
 |---|---|---|---|
 | 12 | 2026-11-04 | pass | Tasfiye fonlarındaki reel sektör firmalarının ekonomi içindeki payı düşük |
