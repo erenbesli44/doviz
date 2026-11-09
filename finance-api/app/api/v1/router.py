@@ -8,6 +8,7 @@ from .inference import router as inference_router
 from .market import router as market_router
 from .news import router as news_router
 from .quotes import router as quotes_router
+from .research import router as research_router
 from .stream import router as stream_router
 
 v1_router = APIRouter(prefix="/v1")
@@ -19,5 +20,6 @@ v1_router.include_router(inference_router)
 v1_router.include_router(consensus_router)
 v1_router.include_router(channels_router)
 v1_router.include_router(brokers_router)
+v1_router.include_router(research_router)
 v1_router.include_router(health_router)
 v1_router.include_router(stream_router)
