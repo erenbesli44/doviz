@@ -1,0 +1,25 @@
+INFRASTRUCTURE.md
+  s_c4902405432a21::t_7c3362c3cffecc 222-240
+docs/agent-runs/open-items.md
+  s_c4902405432a21::t_4aae85dce68ebf 45
+docs/research/2026-11-09-tcmb-blog-explainer-review.md
+  s_c4902405432a21::t_10f51cb8b0be77 1-332
+docs/social/x-playbook.md
+  s_c4902405432a21::t_3d91b6196a7f05 321-349
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "355e9fc25bc48c037aff128f1e93da97638938be",
+  "prompts": {},
+  "sessions": {
+    "s_c4902405432a21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a45eaaa3-ecac-4c3f-82b0-f760b2a6c7d6",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
