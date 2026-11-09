@@ -1,0 +1,27 @@
+finance-api/app/api/v1/research.py
+  s_c4902405432a21::t_cf12b33adc06c4 1-52
+finance-api/app/api/v1/router.py
+  s_c4902405432a21::t_0bae63a976bf45 11,23
+finance-api/app/schemas/research.py
+  s_c4902405432a21::t_f05ae55f622ce8 1-49
+finance-api/app/services/research_service.py
+  s_c4902405432a21::t_a30a1c5f3111e8 1-94
+finance-api/tests/test_api/test_research.py
+  s_c4902405432a21::t_72cf6b826880ac 1-132
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c2aed91d0d3899d0bf756c499f1632de31feef47",
+  "prompts": {},
+  "sessions": {
+    "s_c4902405432a21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a45eaaa3-ecac-4c3f-82b0-f760b2a6c7d6",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
