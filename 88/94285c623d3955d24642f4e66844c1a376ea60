@@ -1,0 +1,19 @@
+docs/social/runs/2026-11-10.md
+  s_e251aefa29bf0d::t_239cd709e9c604 319-327
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8894285c623d3955d24642f4e66844c1a376ea60",
+  "prompts": {},
+  "sessions": {
+    "s_e251aefa29bf0d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "66e50e58-92ad-4f7c-8ace-2cc12bdc09b7",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
