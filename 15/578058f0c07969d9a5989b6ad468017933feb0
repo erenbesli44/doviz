@@ -1,0 +1,23 @@
+docs/social/design/make_banner_clip.py
+  s_e251aefa29bf0d::t_0d9752fceefb83 1,5,10-11,23-26,54,64-75,78-79,81-94,96-104,112-113,117
+  s_e251aefa29bf0d::t_84dfe7f5d76293 2-4,6-9,12-22,27-53,55-63,76-77,95,105-111,114-116,118-128
+  s_e251aefa29bf0d::t_0781d7633bb35d 80
+docs/social/runs/2026-11-10.md
+  s_e251aefa29bf0d::t_d2c4180540aca5 244-256
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "15578058f0c07969d9a5989b6ad468017933feb0",
+  "prompts": {},
+  "sessions": {
+    "s_e251aefa29bf0d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "66e50e58-92ad-4f7c-8ace-2cc12bdc09b7",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
