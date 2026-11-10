@@ -1,0 +1,26 @@
+docs/social/design/make_bulletin.py
+  s_e251aefa29bf0d::t_41450d1af71f8f 1-70,72-75,77-119,121-140,142-251
+  s_e251aefa29bf0d::t_37c3ce1c132bac 71,76,120,141
+docs/social/design/README.md
+  s_e251aefa29bf0d::t_68ce20680bf8a0 54
+docs/social/design/bulletin.md
+  s_e251aefa29bf0d::t_99aea929c2d16a 1-79
+docs/social/runs/2026-11-10.md
+  s_e251aefa29bf0d::t_119f8072c01990 366-372
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0dd87c98357c6c55a06be4dde7a396bdf931727f",
+  "prompts": {},
+  "sessions": {
+    "s_e251aefa29bf0d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "66e50e58-92ad-4f7c-8ace-2cc12bdc09b7",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
