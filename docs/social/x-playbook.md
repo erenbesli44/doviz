@@ -350,6 +350,22 @@ Rules from 2026-11-07:
    - Reply (posted right after the main post): `Özet:` … (+ `Vade:`) + `Yatırım tavsiyesi
      değildir.`, no tag. Main-idea posts: same layout, chip "Ana fikir" or the one instrument.
    - Card fallback (no clip possible) is unchanged.
+11. **Edit the banner line like a newspaper editor** (owner 2026-11-10 ~19:15 TR: "başlıklara
+   dikkat et, bir editör gibi başlığı review et … 'yani' konuşma dilinde normal olabilir ama bir
+   editör olarak başlığa koymaya gerek yok"). The banner quote (lead line) is a headline, not a
+   transcript line. Before showing a draft to the owner, review it as an editor:
+   - Remove spoken fillers and discourse openers that add nothing in print: "Yani", "Şimdi",
+     "İşte", "Zaten", "Bu durumda" (when it points to an unseen sentence), "eee", "E", "hani",
+     "şöyle", repeated words and false starts.
+   - Keep the speaker's own words and meaning: no paraphrase, no added words, no change of tense,
+     direction, numbers or hedges ("gibi görünüyor", "olabilir" stay). Fix only obvious ASR errors.
+   - Prefer one strong, self-contained sentence (a level, a date, a condition, a contrast). If the
+     sentence only works with the one before it, pick another sentence.
+   - Foreign words the speaker used stay (e.g. "fake") unless the speaker himself restates them in
+     Turkish in the next sentence; then the Turkish form may be used.
+   - Log the edit in the run file (verbatim caption → edited headline) and show both to the owner.
+     Example: caption "Yani dünkü yükseliş eee fake bir yükseliş gibi görünüyor." → headline
+     "Dünkü yükseliş fake bir yükseliş gibi görünüyor."
 
 ## 3.6 Research digests: "Araştırma özeti" (owner chose X-first, 2026-11-09; post shape set by the owner the same day)
 Source: the tracker's `research_watch` job (OI-041), first only the TCMB blog *Merkezin Güncesi*.
