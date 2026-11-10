@@ -6,7 +6,8 @@ spec.json:
   {"date": "10 Kasım 2026", "title": "Bugün kim ne dedi?",
    "segments": [{"clip", "topic", "chip", "name", "meta", "quote", "source", "avatar", "initials"}]}
   clip     raw cut (no caption bar), whole sentences, both cuts in a pause (clip_bounds.py)
-  topic    title of the topic card, e.g. "Altın"; chip = the label on the segment ("Altın", "Ana fikir")
+  topic    title of the topic card, e.g. "Altın"
+  chip     the label on the segment ("Altın", "Ana fikir")
   other keys as in make_banner_clip.py
 Structure: opening card with the rundown -> per segment: topic card -> segment -> closing card.
 The top strip (brand, date, progress bar) and the footer are the same pixels in every part, so the
@@ -220,7 +221,8 @@ def main() -> None:
         inputs += ["-i", str(p)]
     v, a = "[0:v]", "[0:a]"
     for k in range(1, len(parts)):
-        fc.append(f"{v}[{k}:v]xfade=transition=smoothleft:duration={XF}:offset={run - XF:.3f}[v{k}]")
+        off = f"{run - XF:.3f}"
+        fc.append(f"{v}[{k}:v]xfade=transition=smoothleft:duration={XF}:offset={off}[v{k}]")
         fc.append(f"{a}[{k}:a]acrossfade=d={XF}:c1=tri:c2=tri[a{k}]")
         v, a = f"[v{k}]", f"[a{k}]"
         run += parts[k][1] - XF
