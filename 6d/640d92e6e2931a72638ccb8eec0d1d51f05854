@@ -1,0 +1,19 @@
+docs/social/design/make_bulletin.py
+  s_e251aefa29bf0d::t_7730b7441123e8 9-10,224-225
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6d640d92e6e2931a72638ccb8eec0d1d51f05854",
+  "prompts": {},
+  "sessions": {
+    "s_e251aefa29bf0d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "66e50e58-92ad-4f7c-8ace-2cc12bdc09b7",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
