@@ -354,9 +354,14 @@ Rules from 2026-11-07:
    dikkat et, bir editör gibi başlığı review et … 'yani' konuşma dilinde normal olabilir ama bir
    editör olarak başlığa koymaya gerek yok"). The banner quote (lead line) is a headline, not a
    transcript line. Before showing a draft to the owner, review it as an editor:
-   - Remove spoken fillers and discourse openers that add nothing in print: "Yani", "Şimdi",
-     "İşte", "Zaten", "Bu durumda" (when it points to an unseen sentence), "eee", "E", "hani",
-     "şöyle", repeated words and false starts.
+   - Use the speaker's sentence, but read it as print (owner, same evening: "yayıncının cümlesini
+     kullan ama konuşmada doğal olan ama yazıda garip kaçabilecek durumlara dikkat et"). Remove what
+     is natural in speech but odd in writing: fillers and openers ("Yani", "Şimdi", "İşte",
+     "Zaten", "Bu durumda" pointing to an unseen sentence, "eee", "E", "hani", "şöyle"), tags
+     ("değil mi?", "biliyorsunuz"), vague tails ("falan", "filan", "vesaire"), repeated words,
+     false starts and self-corrections (keep the corrected form). If what is left still reads as
+     spoken (broken word order, a question to the audience, a half sentence), pick another
+     sentence instead of rewriting it.
    - Keep the speaker's own words and meaning: no paraphrase, no added words, no change of tense,
      direction, numbers or hedges ("gibi görünüyor", "olabilir" stay). Fix only obvious ASR errors.
    - Prefer one strong, self-contained sentence (a level, a date, a condition, a contrast). If the
