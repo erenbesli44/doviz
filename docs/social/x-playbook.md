@@ -423,6 +423,13 @@ Samples written from the 2026-11-09 batch: `docs/research/2026-11-09-tcmb-digest
 - The social-manager role file does not read the research endpoint yet; adding it needs the
   owner's approval (as with the OI-020 role edit).
 
+## 3.7 Daily bulletin: "Günün bülteni" (owner approved 2026-11-10)
+1. Once a day, after the evening batch (about 21:30–23:00 TR): one video with the day's posted views, like a news bulletin. No voice-over, no music, only the speakers' own audio.
+2. Design, editorial rules and pipeline: `docs/social/design/bulletin.md`; generator `docs/social/design/make_bulletin.py` (1080×1350, opening rundown → topic card + segment per view → closing card, fixed strip with progress bar, one soft wipe).
+3. Content: only views posted that day with the owner's approval, same editor-reviewed lead line and source, same exclusions; ≤ 6 segments, 10–22 s each, 60–120 s total; Turkish markets first, then gold/silver, then global, main ideas last; leave out views that the day's data has overtaken; card-only channels are not in it.
+4. Post: one post, no reply, no tag, no URL: `Günün bülteni · <d Ay yyyy>` / `Bugün kim ne dedi? <topics>.` / `Yatırım tavsiyesi değildir.` Exact-text approval of the post and the video is still required.
+5. First one: https://x.com/dovizveri/status/2120250692678082966 (10 Nov 23:22 TR). Measure it in the 48 h analytics like any post (format "bulletin").
+
 ## 4. Natural growth (no aggressive tactics)
 Allowed, with daily limits:
 - **Follow** ≤ 10 relevant accounts/day: tracked commentators, their channels, data sources

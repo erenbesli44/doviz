@@ -1,6 +1,6 @@
 # Daily bulletin clip ("Günün bülteni") — research and design, 2026-11-10
 
-Status: **prototype, awaiting the owner's decision.** Nothing is posted in this format yet.
+Status: **APPROVED by the owner 2026-11-10 (~23:1x TR): "very good, I liked it, post it, save the design and approach so we can post like this tomorrow too".** First bulletin: https://x.com/dovizveri/status/2120250692678082966 (10 Nov 23:22 TR). Default from 11 Nov: one bulletin per day.
 Owner request (10 Nov, ~22:4x TR): one end-of-day video that presents the day's views from
 different people on different topics like a news bulletin, with no voice-over and professional
 topic transitions; simple, clear, fitting a finance brand.
@@ -62,7 +62,14 @@ Canvas 1080×1350 (4:5), 30 fps, fixed for the whole video. Same tokens as the b
 5. No direction words added by us; the chip is the instrument or "Ana fikir", as in the posts.
 6. Card-only channels (Kayıt Dışı İktisat) have no clip, so they are not in the bulletin.
 
-## 4. Pipeline
+## 4. Pipeline (daily, from 11 Nov)
+1. In the 21:30 watcher run (or when the owner asks), list the day's POSTED clip views (run file).
+2. Apply §3 rules; pick ≤ 6 segments; for each, a 10–22 s whole-sentence cut around the lead line (`clip_bounds.py`, check pauses; a cut may sit in a ≥ 0.1 s gap, then fade 0.1–0.15 s).
+3. Write `spec.json` (keys in `make_bulletin.py`), render, read `<out>-sheet.png`.
+4. Show the owner the video, the sheet and the exact post text; post only after approval (`post1.sh <win> <mp4> <main.txt> -`).
+5. Log the cuts, lead lines and status in the run file.
+
+Tools:
 `clip_bounds.py` (sentence spans) → raw cuts → `make_bulletin.py <spec.json> <out.mp4>` → frame
 sheet `<out>-sheet.png` for review → owner approval of the video and the post text.
 
@@ -71,9 +78,15 @@ sheet `<out>-sheet.png` for review → owner approval of the video and the post 
 Tunç Şatıroğlu · ABD borsaları (20.1 s), Barış Soydan · Enflasyon ve tasarruf (13.8 s).
 Files are in the session scratchpad (`bul/`), not in the repo.
 
-## 6. Open decisions for the owner
-1. Go / no-go for the format, and the name ("Günün bülteni", title "Bugün kim ne dedi?").
-2. Burned-in subtitles of the speech (better for muted viewing, but auto-captions have errors, so
-   each one needs a manual check). Not in the prototype.
-3. Posting time (proposal: once a day, about 21:30 TR, after the evening batch) and the post text.
-4. Length cap (proposal: 6 segments, 120 s).
+## 6. Decisions
+- Decided 10 Nov: format, name "Günün bülteni", title "Bugün kim ne dedi?" approved as built.
+- Post text (approved 10 Nov), one post, no reply, no tag, no URL:
+  ```
+  Günün bülteni · <d Ay yyyy>
+  Bugün kim ne dedi? <topics of the segments, in order, lower case after the first>.
+  Yatırım tavsiyesi değildir.
+  ```
+- Still open (defaults until the owner decides):
+  1. Burned-in subtitles of the speech: not used (auto-captions have errors; each would need a manual check).
+  2. Posting time: once a day after the evening batch, about 21:30–23:00 TR.
+  3. Length cap: 6 segments, 120 s.
