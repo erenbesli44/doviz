@@ -55,8 +55,7 @@ Canvas 1080×1350 (4:5), 30 fps, fixed for the whole video. Same tokens as the b
    §3.5 item 11), same source, same exclusions (people and instruments the owner has excluded).
 2. One passage per speaker and topic, 10–22 s, whole sentences, both cuts in a pause. It is a
    shorter cut of the posted clip around the lead line, not the whole clip.
-3. Order: Turkish markets first (BIST, Dolar/TL), then Altın/Gümüş, then global (ABD, petrol,
-   bitcoin), main-idea segments last. At most 6 segments, 60–120 s in total.
+3. **Every posted clip view of the day goes in** (owner 2026-11-10: "diğerlerini bültene ekleyebilirsin, bundan sonraki paylaşımlar için aklında olsun"), across all sessions' posts, not only one session's clips. The only exclusions are rules 4–6. Order: Turkish markets first (BIST, Dolar/TL), then Altın/Gümüş, then global (ABD, petrol, bitcoin), main-idea segments last. No segment cap: if the total would pass about 150 s, shorten each segment towards 10 s instead of dropping views.
 4. Leave out a view that the same day's data has overtaken (example 10 Nov: Bora Özkent's
    expectation for the CPI release, recorded before the data came out).
 5. No direction words added by us; the chip is the instrument or "Ana fikir", as in the posts.
@@ -64,7 +63,7 @@ Canvas 1080×1350 (4:5), 30 fps, fixed for the whole video. Same tokens as the b
 
 ## 4. Pipeline (daily, from 11 Nov)
 1. In the 21:30 watcher run (or when the owner asks), list the day's POSTED clip views (run file).
-2. Apply §3 rules; pick ≤ 6 segments; for each, a 10–22 s whole-sentence cut around the lead line (`clip_bounds.py`, check pauses; a cut may sit in a ≥ 0.1 s gap, then fade 0.1–0.15 s).
+2. Apply §3 rules; take every qualifying posted view; for each, a 10–22 s whole-sentence cut around the lead line (`clip_bounds.py`, check pauses; a cut may sit in a ≥ 0.1 s gap, then fade 0.1–0.15 s).
 3. Write `spec.json` (keys in `make_bulletin.py`), render, read `<out>-sheet.png`.
 4. Show the owner the video, the sheet and the exact post text; post only after approval (`post1.sh <win> <mp4> <main.txt> -`).
 5. Log the cuts, lead lines and status in the run file.
@@ -89,4 +88,7 @@ Files are in the session scratchpad (`bul/`), not in the repo.
 - Still open (defaults until the owner decides):
   1. Burned-in subtitles of the speech: not used (auto-captions have errors; each would need a manual check).
   2. Posting time: once a day after the evening batch, about 21:30–23:00 TR.
-  3. Length cap: 6 segments, 120 s.
+  3. Length: all qualifying views (rule 3); segments shortened, never dropped, when it gets long.
+
+## 7. Lesson from the 10 Nov prototype
+Only 4 of the day's posted clip views were used (the clips of one session). Owner, same evening: Kayıt Dışı (card only) was rightly left out, but NCM Seans Başlarken, Atilla Yeşilada (BIST, petrol, ABD) and Taner Genek's other views should have been in. From 11 Nov: build the list from the run file's POSTED rows of the day, all sessions.
