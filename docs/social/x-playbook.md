@@ -337,6 +337,19 @@ Rules from 2026-11-07:
      altın passage (Lead's choice, logged). Tag: `#altın` only (one-tag rule, item 7), unless the
      owner decides otherwise.
    - A pair where only one side is explicit stays a single-instrument post.
+10. **Banner clip on every clip post, Özet in the reply** (owner 2026-11-10 ~18:05 TR: "all posts will
+   be like this design … all sessions should know this"). Supersedes the main-post layout of items
+   1 and 8 and the 84 px caption bar of §3.4 for every clip post.
+   - Media: `docs/social/design/make_banner_clip.py` (spec: `docs/social/design/README.md`, "Banner
+     clip"): speaker photo or grey initials + name + "Kanal · dd Kas yayını" + chip, the lead line on
+     top in large roman serif, the 16:9 clip uncropped, navy footer with dovizveri.com, the
+     disclaimer and "Kaynak: youtube.com/watch?v=<id> · dk m:ss" (the URL appears only on the media).
+     Cut times come from `clip_bounds.py` / `make_clip.sh` as before; the banner uses the raw cut.
+   - Main post text: `**<header>**` / `<Kanal>, dd Kas yayını.` / `Yatırım tavsiyesi değildir.` /
+     blank / the one tag (item 7). The lead line is on the banner, not repeated in the text.
+   - Reply (posted right after the main post): `Özet:` … (+ `Vade:`) + `Yatırım tavsiyesi
+     değildir.`, no tag. Main-idea posts: same layout, chip "Ana fikir" or the one instrument.
+   - Card fallback (no clip possible) is unchanged.
 
 ## 3.6 Research digests: "Araştırma özeti" (owner chose X-first, 2026-11-09; post shape set by the owner the same day)
 Source: the tracker's `research_watch` job (OI-041), first only the TCMB blog *Merkezin Güncesi*.
