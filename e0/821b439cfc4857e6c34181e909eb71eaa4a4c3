@@ -1,0 +1,50 @@
+docs/social/runs/2026-11-11.md
+  s_61d47f1aa62b24::t_146216c55128dc 298-306
+  s_61d47f1aa62b24::t_d286216999f1dd 296
+  s_775387728b658b::t_c02eb8c1fb6f20 307-464
+  s_afd16ed25a6031::t_4969881a577e84 1-232,272
+  s_9a4c21c706160a::t_ed0d5d2bb0c7e0 258,270
+  s_9a4c21c706160a::t_631911e98e7ba2 233-257,259-269,271
+  s_61d47f1aa62b24::t_94855e11cf81e3 273-295,297
+  s_775387728b658b::t_1e1774dbeb50c5 465-482
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e0821b439cfc4857e6c34181e909eb71eaa4a4c3",
+  "prompts": {},
+  "sessions": {
+    "s_61d47f1aa62b24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b75f3865-4c0c-4fa6-a37e-95ce777b6f2a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_775387728b658b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "316bb921-380f-4202-8056-9512c072f2be",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_9a4c21c706160a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6cafcc45-bf5a-440c-b703-42bb7607d7ed",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_afd16ed25a6031": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "59e857ac-a6bb-4d63-ae23-720b4465842a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
