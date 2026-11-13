@@ -113,6 +113,7 @@ Some channels argue one big thesis per video instead of making calls on instrume
   (no clip, no dolar/BIST/altın direction). Find new videos in `/api/v1/news/latest` by channel, not in
   the opinions endpoints.
 - **Excluded people** (owner, 2026-11-02): **Murat Muratoğlu**: no posts, no clips.
+- **NCM Investment TR "Seans Başlarken": excluded** (owner 2026-11-11): the daily morning show is never posted. That means no view post, no main-idea post, no clip, no card, no reply, and no segment in "Günün bülteni". Any video whose title contains "Seans Başlarken" (case-insensitive) is DROPPED with the reason "Seans Başlarken excluded". The tracker also skips these videos at ingestion from 11 Nov (status skipped_excluded). Older stored episodes (e.g. 849, 857, 865) are still on the site and must not be posted either.
 Why: one generic sentence ("altını, gümüşü, Bitcoin'i savunuyoruz") read as three separate "yükseliş"
 calls (V4–V6, 28 Oct), which misstates what the video says.
 
@@ -271,7 +272,7 @@ Rules from 2026-11-07:
    line 1 = the main idea sentence itself, line 2 = `<Kanal> · Videonun ana fikri`. The first 280
    characters must still work without "Show more".
 2. **Spacing, not fewer posts.** Every qualifying view is still posted (owner 2026-11-01), but
-   originals go out **≥ 30 minutes apart** (2 h stays the preference, §3.3 item 2), including the
+   originals go out **15 minutes apart** (owner 2026-11-11; supersedes ≥ 30 min and the 2 h preference), including the
    separate posts of one multi-instrument video. Long posts cannot be scheduled on X (§3.2), so the
    sender waits between posts; a run that cannot wait posts the first and leaves the rest as
    DRAFTED-NOT-POSTED for the next run's coverage check. "Hepsini şimdi at" from the owner overrides
@@ -317,6 +318,10 @@ Rules from 2026-11-07:
      tag cannot be credited directly. The Friday review of 2026-11-20 compares median impressions
      of tagged posts (from 9 Nov) with the 21 untagged rows of 4–6 Nov, by clip/card, and keeps or
      drops the rule. Keep it if impressions do not fall; the tag costs nothing otherwise.
+   - **Owner 2026-11-12 ("Konu ile ilgili etiket koymayı unutmayalım"): every original post gets one
+     topical tag, never none.** us-markets with no index named in the passage → `#Nasdaq` when the
+     video names Nasdaq, else `#SP500`. Main-idea posts about several instruments or none → one tag
+     for the video's main subject (e.g. `#BüyükSıfırlama`). Replies: still no tag. Bulletin (owner 2026-11-12): the segments' tags, deduplicated, in segment order, at most 3, on the last line.
 8. **No URLs in posts** (owner 2026-11-09 ~21:40 TR: "video url ve dovizveri url paylaşmaya gerek
    yok … bundan sonraki paylaşımlarda bu urller olmasın"). From this date no post or reply carries
    the YouTube `▶ Videoda m:ss: …&t=` line or the `dovizveri.com/haberler/…?utm_…` line. View posts
@@ -350,6 +355,11 @@ Rules from 2026-11-07:
    - Reply (posted right after the main post): `Özet:` … (+ `Vade:`) + `Yatırım tavsiyesi
      değildir.`, no tag. Main-idea posts: same layout, chip "Ana fikir" or the one instrument.
    - Card fallback (no clip possible) is unchanged.
+   - **Posts without a video carry the Özet in the main post** (owner 2026-11-13 ~20:05 TR: "video
+     olmayan gönderilerde yatırım 101 postu gibi özeti de ilk postta paylaş"). Card and image posts
+     (Yatırım 101, Kayıt Dışı İktisat, card fallbacks, market board) are one long post: lead · header ·
+     source line · blank · `Özet:` (+ `Vade:`) · disclaimer · blank · tag. No Özet reply. Never send an
+     image post whose alt-text step failed.
 11. **Edit the banner line like a newspaper editor** (owner 2026-11-10 ~19:15 TR: "başlıklara
    dikkat et, bir editör gibi başlığı review et … 'yani' konuşma dilinde normal olabilir ama bir
    editör olarak başlığa koymaya gerek yok"). The banner quote (lead line) is a headline, not a
@@ -426,8 +436,8 @@ Samples written from the 2026-11-09 batch: `docs/research/2026-11-09-tcmb-digest
 ## 3.7 Daily bulletin: "Günün bülteni" (owner approved 2026-11-10)
 1. Once a day, after the evening batch (about 21:30–23:00 TR): one video with the day's posted views, like a news bulletin. No voice-over, no music, only the speakers' own audio.
 2. Design, editorial rules and pipeline: `docs/social/design/bulletin.md`; generator `docs/social/design/make_bulletin.py` (1080×1350, opening rundown → topic card + segment per view → closing card, fixed strip with progress bar, one soft wipe).
-3. Content: **every** clip view posted that day with the owner's approval (all sessions; owner 2026-11-10), same editor-reviewed lead line and source, same exclusions; 10–22 s each, shortened towards 10 s instead of dropping views when the total passes about 150 s; Turkish markets first, then gold/silver, then global, main ideas last; leave out views that the day's data has overtaken; card-only channels are not in it.
-4. Post: one post, no reply, no tag, no URL: `Günün bülteni · <d Ay yyyy>` / `Bugün kim ne dedi? <topics>.` / `Yatırım tavsiyesi değildir.` Exact-text approval of the post and the video is still required.
+3. Content: **every** clip view posted that day with the owner's approval (all sessions; owner 2026-11-10), same editor-reviewed lead line and source, same exclusions; each segment is the speaker's most telling passage from the posted clip, in whole sentences, from where the point opens to where the main idea is clear; meaning before brevity: usually 20–40 s, longer (up to the full posted clip) when the idea needs it, never a cut that stops before the point is clear (owner 2026-11-12, refines 2026-11-11); Turkish markets first, then gold/silver, then global, main ideas last; leave out views that the day's data has overtaken; card-only channels are not in it.
+4. Post: one post, no reply, no URL: `Günün bülteni · <d Ay yyyy>` / `Bugün kim ne dedi? <topics>.` / `Yatırım tavsiyesi değildir.` / blank / the segments' tags (deduplicated, segment order, at most 3; owner 2026-11-12) Posted under the standing approval (§6); the owner gets the video and text after the send.
 5. First one: https://x.com/dovizveri/status/2120250692678082966 (10 Nov 23:22 TR). Measure it in the 48 h analytics like any post (format "bulletin").
 
 ## 4. Natural growth (no aggressive tactics)
@@ -435,12 +445,13 @@ Allowed, with daily limits:
 - **Follow** ≤ 10 relevant accounts/day: tracked commentators, their channels, data sources
   (TCMB, TÜİK, BIST, AA Finans, Bloomberg HT, Reuters), economists. Never follow-for-follow,
   never mass-follow/unfollow.
+- **Follow freeze + unfollow-all (owner 2026-11-13):** Following had grown to 353 vs 103 followers through unlogged follows (data issue CR). The owner ordered every account to be unfollowed at a rule-safe pace: ≤ 10 per batch, 25–60 s apart, 5 batches a day (09:15–17:15, ≤ 50/day), scheduled task `dovizveri-unfollow-batches`, log `~/.claude/scheduled-tasks/dovizveri-unfollow/log.tsv`, about 8 days. No new follows until the owner lifts the freeze.
 - **Replies** ≤ 5/day under commentators' or finance news posts, only when we add a sourced fact
   ("Bu görüş sitedeki 6 yorumcudan 5'iyle aynı yönde: link"). At most one link, none in the first
   replies to an account, ≥ 15 minutes apart (§3.3). No generic "Harika analiz!".
 - **Quote posts** ≤ 1/day, only with added data.
 - **Lists**: maintain public X Lists "Takip edilen yorumcular" and "Veri kaynakları".
-- **Mentions**: may mention a commentator when their view changed; never tag people in bulk.
+- **Mentions (owner 2026-11-13, supersedes "only when the view changed")**: every post about a person's view mentions that person, but only with a handle marked `verified` in `docs/social/handles.md`. The mention goes on the source line (`Ad (@handle) · Kanal, d Kas yayını.`) and never as the post's first character. No mention in replies, never more than 3 per post (bulletin), never added by edit. If the handle is unverified, use the name only and log it. Never tag people in bulk.
 - **Hashtags**: exactly 1 topical hashtag per post when the post names an instrument (§3.5 item 7),
   never more than 1.
 - **Site loop**: link the X profile from dovizveri.com (footer) — needs owner/dev decision.
@@ -468,6 +479,9 @@ readers + zero corrections. Initial 4-week target (hypothesis, not a promise): 1
 ≥ 1 site visit per 100 impressions.
 
 ## 6. Approval model
-- The **owner approves every public action** (post, reply, quote, follow batch, list change,
-  profile change) in chat, per batch. A draft is never published without that approval.
+- **Standing approval for our own posts (owner 2026-11-11: "Post paylaşımları için onay veriyorum, bekleme").**
+  - It covers originals, their own Özet replies and the daily bulletin, when the draft passes every rule in this playbook and the task prompts.
+  - Those posts are published without waiting for an answer in chat, and the owner is notified after each send.
+  - A draft that fails or is doubtful on any check stays DRAFTED-NOT-POSTED and is shown to the owner.
+- The owner still approves, per action, everything else: replies and quotes under other accounts, follow batches, list changes, profile changes, deletions, pinning, and anything paid.
 - Drafts, metrics and the run log may be prepared without asking.

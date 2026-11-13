@@ -30,6 +30,7 @@ Light theme only for images (X shows them on both themes; the light card has a c
 | Main-idea card (thesis channels, owner 2026-11-02) | 1200×675 | `card-commentator-v3.html` layout | left: channel photo or initials circle + name + "YouTube kanalı"; right: **the main idea itself**, 64 px 800 accent, balanced wrap, max ~660 px, + "dd Ay yayını" 38 px muted. No "Videonun ana fikri" label, no arrow/direction. Yatırım 101: card only, no clip. Clip posts never get a card |
 | Commentator card (v2, 2026-10-24 → 26) | 1200×675 | layout of `make_cards.py` `commentator` | superseded by v3: right "Görüşün tamamı" panel was unreadable at phone width. v2 showed the quote (`outlook_quote_clean`, else `outlook_quote` — same as the post) on the left and the summary panel on the right |
 | Level chart card (**from 2026-11-07**, playbook §3.5 item 6) | 1200×675 | `card-level-chart.html` + `make_level_chart.py` | the site's price series for the instrument with the speaker's named price level(s) as dashed navy lines and labelled pills; headline = the speaker's own sentence in quote marks (Charter 44 px, ≤ 95 chars; 38 px up to 130), attribution `Ad · Kanal · dd Ay` 34 px, legend with instrument, unit, granularity, period 30 px, navy bottom bar. No photo, no arrow, no direction colour: the only colours are navy (speaker's levels) and dark grey (price). Third media option, tested against the card only, never against the clip. Fill rules: § "Level chart card" below |
+| Market board (**proposed 2026-11-13**, owner idea; 3-image post) | 3 × 1200×1350 (4:5) | `make_market_board.py` | "ABD borsaları · Günün tablosu" on big US-market days. 1/3 Endeksler (S&P 500, Nasdaq 100, Dow Jones, VIX: level 64 px + % pill 50 px), 2/3 Büyük şirketler (treemap of 30 large caps, area ∝ market cap, diverging red/green clamped at ±6 %, ticker + % only where both fit at ≥ 34 px, else colour only; the 3 biggest unlabelled movers (≥ 1 %) in one "Küçük kutulardan:" line), 3/3 Sektörler (11 SPDR sector ETFs, Turkish names, bars from a zero axis sorted by %). Same header on all three (brand + n/3, Charter 60 px title, "<time> · seans içi, gecikmeli" or "kapanış"), navy footer "dovizveri.com · Kaynak: Yahoo Finance" + "Yatırım tavsiyesi değildir.". Colour shows the sign only (|%| ≤ 0,10 grey), **no arrows, no commentary, no forecast** on the images. Our own rendering from data: never copy a third-party heatmap's image or look. Numbers: `data.json` rounded to 2 decimals, Turkish comma, `%+0,59` / `%−1,12`. Details below |
 | Avatar | 400×400 | `avatar-a.html` (**live** since 2026-10-24; `avatar-b.html` = unused option) | navy "DV" monogram; must read at 48 px |
 | Banner | 1500×500 | `banner-b.html` (**live** since 2026-10-24; `banner-a.html` = unused option) | "Kim ne bekliyor?" + dovizveri.com; keep x 0–420, y 300–500 clear (avatar overlap) |
 
@@ -106,6 +107,25 @@ Alt text template (≤ 1000 chars, printed by the script):
 <Ad> (<Kanal> YouTube kanalı, <d Ay yyyy>) şu seviyeleri söyledi: <L1> ve <L2>. Son değer (<d Ay yyyy>
 itibarıyla): <son>. Alıntı: “<outlook_quote_clean>” Yatırım tavsiyesi değildir.` — the quote is cut at
 a word end with "…" only when the whole text would exceed 1000 chars.
+
+## Market board (proposed 2026-11-13)
+What it says: *how the US market is moving today, from a named data source.* It describes the session,
+never where it goes. Use it on big US-market days only (e.g. Nasdaq 100 or S&P 500 beyond ±1 %, or a
+large single-name move in the top caps); the post text is 1–2 short factual lines + one tag.
+
+Inputs: `data.json` from the Yahoo Finance fetch (yfinance; keys `indices` ^GSPC/^NDX/^DJI/^VIX,
+`sectors` 11 SPDR ETFs with `name` in Turkish, `stocks` 30 large caps with `pct` and `cap`), the fetch
+time in TR time and the session state.
+```
+python3 -I docs/social/design/make_market_board.py <data.json> <out_dir> --time "13 Kas 19:21 TR" --session "seans içi"
+```
+Writes `mb-1-ozet`, `mb-2-sirketler`, `mb-3-sektorler` (`.html`, `.png` 2×, `.webp` 1200×1350, each
+well under 1 MB), `mb-phone.png` (375 px: X 3-image grid + each image opened at ~343 px) and
+`mb-alt.txt` (one Turkish alt text per image, every number shown, ≤ 1000 chars). The script prints
+which tiles are labelled (font px, contrast) and which are colour-only. Self-check: numbers equal
+`data.json`; time and session match the post; no label clipped at a tile edge; contrast ≥ 4.5:1.
+In the feed grid X crops each image (the first one to a tall half, the other two to short strips),
+so the set is read when opened; the first image (Endeksler) must carry the story on its own.
 
 ## Pipeline
 1. Copy the closest template, fill the data, keep the structure.
