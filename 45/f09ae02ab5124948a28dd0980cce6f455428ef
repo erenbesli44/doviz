@@ -1,0 +1,62 @@
+docs/social/x-playbook.md
+  s_039a35d1d4e90e::t_7132190d6d6bb6 358-362
+  s_61d47f1aa62b24::t_5e13b4060a18d8 454
+  s_61d47f1aa62b24::t_9edadb909daa08 275,482-486
+  s_775387728b658b::t_022ff1f688a862 324,440
+  s_775387728b658b::t_55d620e76def65 439
+  s_61d47f1aa62b24::t_2872c963d6446d 448
+  s_b60ececffc9274::t_b84633ea20c60e 321-323
+  s_61d47f1aa62b24::t_dda17a5b5ad561 116
+docs/social/design/make_market_board.py
+  s_039a35d1d4e90e::t_ee06c9f22fcab6 50,57,199,204-207
+  s_039a35d1d4e90e::t_299d43ff38d13b 260,265
+  s_039a35d1d4e90e::t_2f104d3ce98160 1-49,51-56,58-59,61-190,192-197,203,208-215,225-259,261-264,266-300,302-306,308-326
+  s_039a35d1d4e90e::t_700aa37ecd0cc4 198,200-202
+  s_039a35d1d4e90e::t_e2d2cb5db58e5d 60,191,216-224,301,307
+docs/social/design/README.md
+  s_039a35d1d4e90e::t_e48419e4de0aae 111-128
+  s_039a35d1d4e90e::t_ece9c91778bd9a 33
+  s_039a35d1d4e90e::t_71688c0780d8a6 129
+docs/social/runs/2026-11-13.md
+  s_039a35d1d4e90e::t_9209a726887b0d 456-467
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "45f09ae02ab5124948a28dd0980cce6f455428ef",
+  "prompts": {},
+  "sessions": {
+    "s_039a35d1d4e90e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "903797ec-7369-44b5-b330-fbe7cec00ed4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_61d47f1aa62b24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b75f3865-4c0c-4fa6-a37e-95ce777b6f2a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_775387728b658b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "316bb921-380f-4202-8056-9512c072f2be",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_b60ececffc9274": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8786dcd8-a431-4d57-a976-b72d8f06f4f8",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
