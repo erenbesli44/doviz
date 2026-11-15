@@ -1,0 +1,39 @@
+docs/social/reports/2026-11-15-us-channel-test/post-drafts.md
+  s_b18fce9e689cd8::t_1ad855f05e9eac 1-67
+docs/social/x-playbook.md
+  s_b18fce9e689cd8::t_f7ebbf17a0d2ca 267-269
+  s_b18fce9e689cd8::t_e1592bc2fd787e 251-262,265-266
+  s_b18fce9e689cd8::t_b322f8dec6c05c 263-264
+docs/social/reports/2026-11-15-us-channel-test/subtitles.tsv
+  s_b18fce9e689cd8::t_abea6753d27b0e 1-15
+docs/social/design/clip_bounds.py
+  s_b18fce9e689cd8::t_68c159024b31a8 3-4,114,118,121,124,126,128
+docs/social/design/make_tr_voice_clip.py
+  s_b18fce9e689cd8::t_a1dd0392a3dde2 3
+  s_b18fce9e689cd8::t_c344741da35194 4-5,17,65-68,70-74,76-86,250-252
+  s_b18fce9e689cd8::t_343892396d5f3b 18
+  s_b18fce9e689cd8::t_bb570355c80015 1-2,6-16,19-64,69,75,87-99,102-103,105,110-249,253-267
+  s_b18fce9e689cd8::t_f9a218aeb1c98a 100-101,104,106-109
+docs/research/2026-11-15-youtube-channel-candidates-2.md
+  s_b18fce9e689cd8::t_dcf25492815745 1-37
+docs/research/2026-11-15-us-market-forecasters-track-record.md
+  s_b18fce9e689cd8::t_3c619ff4f6e8bd 1-46
+docs/social/design/README.md
+  s_b18fce9e689cd8::t_e4e29b9c885d88 55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c9ef4694415349bfe0a1a0326bb473888f90a0d1",
+  "prompts": {},
+  "sessions": {
+    "s_b18fce9e689cd8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1252c42e-fa1e-47bf-a399-063fb01943b5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
