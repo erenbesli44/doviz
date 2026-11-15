@@ -1,6 +1,7 @@
 """Pick clip cut points on sentence ends and audio pauses (playbook §3.4 item 1a).
 
-Usage: python3 -I clip_bounds.py <video_id> <approx start> <approx end> <out_dir>
+Usage: python3 -I clip_bounds.py <video_id> <approx start> <approx end> <out_dir> [lang]
+lang: caption language, default tr; en for English channels (Tom Lee, Joseph Carlson).
 Times: m:ss, h:mm:ss or seconds, decimals allowed (e.g. 3:49 or 229.4).
 Needs: yt-dlp, ffmpeg. Caches captions and the audio track in <out_dir>.
 
@@ -110,20 +111,21 @@ def first_word(text: str) -> str:
 
 
 def main() -> int:
-    if len(sys.argv) != 5:
+    if len(sys.argv) not in (5, 6):
         print(__doc__.split("\n\n")[1])
         return 1
     vid, a, b, out = sys.argv[1], to_sec(sys.argv[2]), to_sec(sys.argv[3]), Path(sys.argv[4])
+    lang = sys.argv[5] if len(sys.argv) == 6 else "tr"
     out.mkdir(parents=True, exist_ok=True)
     # yt-dlp prefers the uploader's own subtitles (often vtt only) over auto-captions (json3).
-    subs = [p for p in (out / f"{vid}.tr.json3", out / f"{vid}.tr.vtt") if p.exists()]
+    subs = [p for p in (out / f"{vid}.{lang}.json3", out / f"{vid}.{lang}.vtt") if p.exists()]
     if not subs:
         subprocess.run(["yt-dlp", "-q", "--no-warnings", "--skip-download", "--write-subs",
-                        "--write-auto-subs", "--sub-langs", "tr", "--sub-format", "json3/vtt",
+                        "--write-auto-subs", "--sub-langs", lang, "--sub-format", "json3/vtt",
                         "-o", str(out / vid), f"https://www.youtube.com/watch?v={vid}"], check=True)
-        subs = [p for p in (out / f"{vid}.tr.json3", out / f"{vid}.tr.vtt") if p.exists()]
+        subs = [p for p in (out / f"{vid}.{lang}.json3", out / f"{vid}.{lang}.vtt") if p.exists()]
     if not subs:
-        print(f"No Turkish captions for {vid}: pick the cut by ear or use the card (§3.4 item 4)")
+        print(f"No {lang} captions for {vid}: pick the cut by ear or use the card (§3.4 item 4)")
         return 1
     read = words_from_json3 if subs[0].suffix == ".json3" else words_from_vtt
     sents = sentences(read(subs[0]))

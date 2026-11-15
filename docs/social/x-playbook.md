@@ -248,6 +248,25 @@ excerpt defensible; they do not make it safe.
    sessions against card posts at the Friday review before raising it.
 9. **Never clip**: paid, members-only or unlisted videos, live streams, or anyone under "Known
    exclusions". Thesis channels (Erkan Öz, Barış Soydan) only with the main-idea sentence; Yatırım 101 gets a card, no clip.
+10. **English channels: Turkish voice-over + Turkish subtitles together** (owner 2026-11-15, after
+   the Tom Lee / Joseph Carlson test: "altyazılı ve dublaj birlikte paylaşılabilir"). Channels:
+   Fundstrat Capital (Tom Lee) and Joseph Carlson Show After Hours. This is the one exception to
+   item 3: the audio is a translation, so it must say so on the media.
+   - **Tool**: `design/make_tr_voice_clip.py` (`captions` → `clip_bounds.py … en` → `translate` →
+     editor pass → `render`), then `make_banner_clip.py` with the rendered clip as the raw cut.
+   - **Voice**: a stock MiniMax Turkish voice (`Turkish_Trustworthyman`), never a clone of the
+     speaker's voice. The original audio stays under it at 12 %. The pill "Yapay zekâ ile Türkçe
+     seslendirme" is on the video for its whole length; the banner source line ends "Çeviri: dovizveri".
+   - **Editor pass on every line** (`cues.json`): numbers, tickers, percentages and directions must
+     match the English word for word; rewrite stiff machine Turkish, never the meaning. The run file
+     logs each line as EN / MT / final. A line that cannot be checked → no clip, card fallback.
+   - **Lead line and quote**: the Turkish translation of the speaker's sentence, in quote marks. The
+     English original goes in the run file, not in the post (one language per post).
+   - **Single stocks** (Carlson): header `Ad · <Hisse> · Görüş özeti`, tag `#<Hisse>` (e.g. `#Nvidia`)
+     until the site has stock pages; index views keep `#Nasdaq` / `#SP500`.
+   - **Tags (owner 2026-11-15)**: no @mention of the speaker or channel and no channel/person
+     hashtag on English-channel posts; exactly one hashtag for the financial item (`#Nasdaq`,
+     `#SP500`, `#Nvidia`, or the instrument map tag). The channel name stays as plain text.
 Tools: `yt-dlp` and `ffmpeg` (Homebrew), `uv` for the caption; installed on the Lead's machine
 2026-11-01. The script fails on clips over 60 s and on cuts in speech (item 1a).
 
