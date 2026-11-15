@@ -1,0 +1,19 @@
+docs/social/runs/2026-11-15.md
+  s_bcfe30c38b0bcd::t_63d678e27bb37c 280-305
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "19e95d840a506940fd6cea89f549c2e07e7c9d9e",
+  "prompts": {},
+  "sessions": {
+    "s_bcfe30c38b0bcd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aaab8a3b-bef9-4d89-9ee0-a1ee9d2962c9",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
