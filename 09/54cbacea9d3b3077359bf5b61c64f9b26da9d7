@@ -1,0 +1,35 @@
+docs/social/runs/2026-11-17.md
+  s_22d189ef942240::t_1370b3a670b684 199-200
+  s_22d189ef942240::t_b4ac35c0c3ea89 209-213
+  s_97128b45e40216::t_bcfa360a606071 117
+  s_22d189ef942240::t_c5b2f229eca51f 214-215
+  s_97128b45e40216::t_43581bb734dd61 1-116,118-190
+  s_22d189ef942240::t_8f02618daf0dd8 194-198
+  s_22d189ef942240::t_3fa622ef8ccbdb 191-193
+  s_22d189ef942240::t_b551276ae60243 201-208
+  s_22d189ef942240::t_165b2e72587b75 216-257
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0954cbacea9d3b3077359bf5b61c64f9b26da9d7",
+  "prompts": {},
+  "sessions": {
+    "s_22d189ef942240": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b9f56aa6-5504-44b5-b5b6-55199ba791d6",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    },
+    "s_97128b45e40216": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9180b99a-9fe6-4fa9-be12-c420f67c1903",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
