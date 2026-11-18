@@ -1,0 +1,29 @@
+docs/research/2026-11-18-altin-dusus-ongorenler.md
+  s_61d47f1aa62b24::t_e2deb5f6918cff 14,16-17,86,109
+  s_61d47f1aa62b24::t_3c7720dea4ed44 1-13,15,18-85,87-108,110-118
+docs/social/runs/2026-11-18.md
+  s_61d47f1aa62b24::t_a617237e515c6f 161
+  s_61d47f1aa62b24::t_213e91faa370c6 162
+  s_61d47f1aa62b24::t_6f12c66e2cb261 163
+  s_61d47f1aa62b24::t_338564b36ad771 154-160
+  s_61d47f1aa62b24::t_fd87c4efef656d 164
+  s_61d47f1aa62b24::t_6806a19c581597 165-169
+docs/social/handles.md
+  s_61d47f1aa62b24::t_e89b472ca2b71c 31,34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4227b991dbfee4969662f8a77957ee8c3bcfa672",
+  "prompts": {},
+  "sessions": {
+    "s_61d47f1aa62b24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b75f3865-4c0c-4fa6-a37e-95ce777b6f2a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "erenbesli44 <eren5li@gmail.com>"
+    }
+  }
+}
