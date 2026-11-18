@@ -1,6 +1,6 @@
 from typing import Any
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, field_validator, model_validator
 
 
 class NewsChannel(BaseModel):
@@ -54,6 +54,13 @@ class NewsSummary(BaseModel):
     source: str
     created_at: str
     updated_at: str | None = None
+
+    @field_validator("highlights", mode="before")
+    @classmethod
+    def _null_highlights_to_empty(cls, v: object) -> object:
+        # The tracker stores highlights=None when the LLM returns no key points;
+        # rejecting that silently dropped the story from every news feed.
+        return [] if v is None else v
 
 
 class NewsStory(BaseModel):
